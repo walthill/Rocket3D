@@ -17,4 +17,7 @@ void InputSystem::processInput()
 		GameMessage* pMessage = new KeyDownMessage(ESC);
 		GameApp::getInstance()->addInputMessage(pMessage, 1);
 	}
+
+	//Check and call events
+	glfwPollEvents();
 }

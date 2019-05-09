@@ -2,11 +2,11 @@
 #define ROCKET_SHADER_H
 
 #include <glad/glad.h>
-
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
+//#include <RocketMath/MathUtils.h>
 
 class RocketShader 
 {
@@ -36,7 +36,7 @@ class RocketShader
 			try
 			{
 				//Constructor only needs file name and not path
-				char vFilePath[100], fFilePath[100];
+				char vFilePath[500], fFilePath[500];
 
 				strcpy_s(vFilePath, mSHADER_FILE_PATH);
 				strcat_s(vFilePath, mVertShaderPath);
@@ -44,8 +44,8 @@ class RocketShader
 				strcpy_s(fFilePath, mSHADER_FILE_PATH);
 				strcat_s(fFilePath, mFragShaderPath);
 
-				vertShaderFile.open(vFilePath);
-				fragShaderFile.open(fFilePath);
+				vertShaderFile.open(vFilePath, std::ifstream::in);
+				fragShaderFile.open(fFilePath, std::ifstream::in);
 
 				std::stringstream vShaderStream, fShaderStream;
 
@@ -148,10 +148,17 @@ class RocketShader
 			glUniform1i(glGetUniformLocation(shaderID, name.c_str()), value);
 		}
 
+		void setMat4(const std::string &name, const float* mat)
+		{
+			glUniformMatrix4fv(glGetUniformLocation(shaderID, name.c_str()), 
+													1, GL_TRUE, mat);
+		}
+
 	private:
 		//TODO: add ability to re-set bools, ints, floats - vectors that are reapplied on build?
 		//reapply vars w/ reassignVariables()
-		const char* mSHADER_FILE_PATH = "shaders/";
+
+		const char* mSHADER_FILE_PATH = "../RocketEngine/shader/glsl/";
 		const char* mVertShaderPath;
 		const char* mFragShaderPath;
 };

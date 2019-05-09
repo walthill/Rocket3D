@@ -1,9 +1,13 @@
 #include "EngineCore.h"
 #include <glad/glad.h>
 #include <glfw3.h>
+#include <RocketMath/MathUtils.h>
 #include "../asset/image/RocketImgLoader.h"
 #include <iostream>
 #include "../input/InputSystem.h"
+#include "../shader/ShaderBuild.h"
+#include "../shader/RocketShader.h"
+#include "../shader/ShaderManager.h"
 
 EngineCore::EngineCore()
 {
@@ -34,16 +38,20 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height) //TODO: 
 }
 
 
-bool EngineCore::initialize()
+void EngineCore::initGLFW()
 {
-
 	glfwInit();
 
 	//Init OpenGL version settings
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+}
 
+bool EngineCore::initialize(char* argv[])
+{
+	initGLFW();
+	
 	//Init window
 	window = glfwCreateWindow(800, 600, "Rocket3D", nullptr, nullptr);
 	
@@ -65,6 +73,25 @@ bool EngineCore::initialize()
 	}
 
 	mpInputSystem = new InputSystem(window);
+
+
+	//Shader live build init
+	liveload = new ShaderBuild();
+	mShaderManager = new ShaderManager();
+
+	std::wstring directory(argv[0], argv[0] + strlen(argv[0]));
+	directory.erase(directory.find_last_of(L'\\') + 1);
+
+	liveload->init(directory + L"RocketBuild.dll");
+	liveload->addFunctionToLiveLoad("live_shader_rebuild");
+
+
+//	ourShader = new RocketShader("vShader.glsl", "fShader.glsl");
+	mShaderManager->addShader(tutShaderId, new RocketShader("vShader.glsl", "fShader.glsl"));
+	// uncomment this call to draw in wireframe polygons.
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	
 
 	/*******
 		VERTEX SHADER
@@ -204,11 +231,6 @@ bool EngineCore::initialize()
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	stbi_set_flip_vertically_on_load(true);
-	//load image
-	int width, height, nrChannels;
-	unsigned char *data = stbi_load("../../assets/textures/container.jpg", &width, &height, &nrChannels, 0);
-
 	//TEXTURE SAMPLING
 	//Selects a texture pixel (texel) to map to
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -218,6 +240,11 @@ bool EngineCore::initialize()
 	//Downsample textures that are far away to save memory and decrease artifacting
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	//load image
+	int width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char *data = stbi_load("../../assets/textures/container.jpg", &width, &height, &nrChannels, 0);
 
 	if (data)
 	{
@@ -228,15 +255,13 @@ bool EngineCore::initialize()
 	{
 		std::cout << "Failed to load texture" << std::endl;
 	}
+	stbi_image_free(data);
 
 	//bind
 //	unsigned int texture1;
 	glGenTextures(1, &texture1);
 	glBindTexture(GL_TEXTURE_2D, texture1);
 
-
-	//load image
-	int width1, height1, nrChannels1;
 
 	//TEXTURE SAMPLING
 	//Selects a texture pixel (texel) to map to
@@ -249,6 +274,8 @@ bool EngineCore::initialize()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 
+	//load image
+	int width1, height1, nrChannels1;
 
 	unsigned char *data1 = stbi_load("../../assets/textures/awesomeface.png", &width1, &height1, &nrChannels1, 0);
 	if (data1)
@@ -257,10 +284,22 @@ bool EngineCore::initialize()
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 
-	stbi_image_free(data);
+	stbi_image_free(data1);
 
 
-	glBindVertexArray(VAO[1]);
+	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
+	// -------------------------------------------------------------------------------------------
+	
+	mShaderManager->useShaderByKey(tutShaderId);
+	mShaderManager->setShaderInt(tutShaderId, "texture1", 0);
+	mShaderManager->setShaderInt(tutShaderId, "texture2", 1);
+	//	ourShader->use(); // don't forget to activate/use the shader before setting uniforms!
+	// either set it manually like so:
+	// or set it via the texture class
+//	ourShader->setInt("texture1", 0);
+//	ourShader->setInt("texture2", 1); 
+
+	/*glBindVertexArray(VAO[1]);
 	//the buffer type of a vertex buffer object is GL_ARRAY_BUFFER
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
 	// copy user-defined data into the currently bound buffer
@@ -268,7 +307,7 @@ bool EngineCore::initialize()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
 	glEnableVertexAttribArray(0);
-
+	*/
 
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //unbind EBO
 	//glBindBuffer(GL_ARRAY_BUFFER, 0); //UNBIND VBO
@@ -280,7 +319,7 @@ bool EngineCore::initialize()
 		second two set width and height
 	*/
 	glViewport(0, 0, 800, 600);
-
+	
 	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
 	return true;
@@ -291,12 +330,16 @@ void EngineCore::update()
 {
 	//Input
 	mpInputSystem->processInput();
-	//processInput(window);
+
+	//Check for shader rebuild
+	//TODO: shader rebuild causes need to set shader values every frame. Should fix
+	//liveload->pollSourceForUpdates(man);
 }
 
 void EngineCore::render()
 {
 	//Rendering
+
 	glClearColor(0.4f, 0.6f, 0.6f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -312,10 +355,27 @@ void EngineCore::render()
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture1);
 
-//	man->useShaders();//ourShader.use();
-//		ourShader.setFloat("someUniform", 1.0f);
-//		ourShader.se
-	//ourShader->setInt("texture2", 1);
+
+	Mat4 trans = Mat4(1.0f);
+/*	trans = Mat4::rotate(Mat4::identity, DegToRad(90.0f), Vector3(0.0f, 0.0f, 1.0f));
+	trans = Mat4::scale(trans, Vector3(0.5f, 0.5f, 0.5f));
+	*/
+
+	trans = Mat4::translate(trans, Vector3(0.5f, -0.5f, 0.0f));
+	trans = Mat4::rotate(trans, (float)glfwGetTime(), Vector3(0.0f, 0.0f, 1.0f));
+
+	mShaderManager->useShaders();
+//	mShaderManager->setShaderInt(tutShaderId, "texture1", 0);
+//	mShaderManager->setShaderInt(tutShaderId, "texture2", 1);
+
+	mShaderManager->setShaderMat4(tutShaderId, "transform", trans.getMatrixValues());
+
+/*	old - moved into shader manager
+
+	RocketShader *sh = mShaderManager->getShader(tutShaderId);
+	unsigned int transformLoc = glGetUniformLocation(sh->shaderID, "transform");
+	glUniformMatrix4fv(transformLoc, 1, GL_TRUE, trans.getMatrixValues()); //GL_TRUE --> convert from row major to column major order
+*/
 
 	glBindVertexArray(VAO[0]);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -326,7 +386,6 @@ void EngineCore::render()
 	//glBindVertexArray(VAO[1]);
 	//glDrawArrays(GL_TRIANGLES, 0, 3); //draws primitives using currently active shader
 
-	//Check and call events, swap the buffers
+	// swap the buffers
 	glfwSwapBuffers(window);
-	glfwPollEvents();
 }

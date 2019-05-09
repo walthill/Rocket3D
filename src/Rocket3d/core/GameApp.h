@@ -8,9 +8,6 @@
 // As a general rule, file includes should be done in .cpp files  
 // Instead of includes, use forward declarations in header files
 
-class AppShaderBuild;
-class ShaderManager;
-class RocketShader;
 class EngineCore;
 class GameMessage;
 class GameMessageManager;
@@ -52,9 +49,6 @@ class GameApp : Trackable
 		#pragma endregion
 
 	private:
-		AppShaderBuild* liveload;
-		ShaderManager* man;// = new ShaderManager();
-		RocketShader* ourShader;
 
 		EngineCore* mRocketEngine;
 		GameMessageManager* mpGameMessageManager;

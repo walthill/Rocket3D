@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../RocketBuild/R3_ShaderBuild.h"
-
+#include "../../RocketBuild/R3_ShaderBuild.h"
 #include <cstdio>
 #include <string>
 #include <vector>
@@ -24,7 +23,7 @@ struct ReloadableCpp
 	std::map<std::string, void*> Procs;
 };
 
-class AppShaderBuild
+class ShaderBuild
 {
 public:
 	void init(std::wstring path)

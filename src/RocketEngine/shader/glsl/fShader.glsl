@@ -15,5 +15,6 @@ void main()
 
 	//The output of this fragment shader is then the (filtered) color of the texture at the (interpolated) texture coordinate.
 	//fragColor = texture(ourTexture, texCoord) * vec4(ourColor, 1.0);
-	fragColor = mix(texture(texture1, texCoord), texture(texture2, texCoord), 0.05); 
+
+	fragColor = mix(texture(texture1, texCoord), texture(texture2, texCoord), 0.25);
 };

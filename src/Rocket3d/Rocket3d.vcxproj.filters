@@ -30,9 +30,6 @@
     <ClCompile Include="glad.c">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="core\GameApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -47,15 +44,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RocketShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AppShaderBuild.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="core\GameApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -68,13 +56,5 @@
     <ClInclude Include="input\GameMessage.h">
       <Filter>Header Files\input</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="shaders\fShader.glsl">
-      <Filter>Shader Files</Filter>
-    </None>
-    <None Include="shaders\vShader.glsl">
-      <Filter>Shader Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

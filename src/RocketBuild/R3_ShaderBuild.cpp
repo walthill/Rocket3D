@@ -1,8 +1,6 @@
 #include "R3_ShaderBuild.h"
 
-#include <cstdio>
-
-#include "../Rocket3d/ShaderManager.h"
+#include "../RocketEngine/shader/ShaderManager.h"
 
 
 void live_shader_rebuild(buildfunc build)

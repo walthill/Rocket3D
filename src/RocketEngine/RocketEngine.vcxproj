@@ -22,10 +22,21 @@
     <ClInclude Include="asset\image\RocketImgLoader.h" />
     <ClInclude Include="core\EngineCore.h" />
     <ClInclude Include="input\InputSystem.h" />
+    <ClInclude Include="shader\RocketShader.h" />
+    <ClInclude Include="shader\ShaderBuild.h" />
+    <ClInclude Include="shader\ShaderManager.h" />
+    <ClInclude Include="util\EngineUtils.h" />
+    <ClInclude Include="window\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\EngineCore.cpp" />
     <ClCompile Include="input\InputSystem.cpp" />
+    <ClCompile Include="shader\ShaderManager.cpp" />
+    <ClCompile Include="window\Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\glsl\fShader.glsl" />
+    <None Include="shader\glsl\vShader.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
