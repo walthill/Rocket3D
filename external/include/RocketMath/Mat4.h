@@ -47,12 +47,13 @@ class Mat4
 			Mat4 newMatrix = Mat4::identity;
 
 			newMatrix.mMatrixValues[0] = scaleVec.getX();
- 			newMatrix.mMatrixValues[5] = scaleVec.getY();
+			newMatrix.mMatrixValues[5] = scaleVec.getY();
 			newMatrix.mMatrixValues[10] = scaleVec.getZ();
+			newMatrix.mMatrixValues[15] = 1;
 
-			newMatrix = newMatrix * matrix;
+//			newMatrix = newMatrix * matrix;
 
-			return newMatrix;
+			return matrix * newMatrix;
 		}
 
 		static Mat4 rotate(Mat4 matrix, float angle, Vector3 rotationAxis)

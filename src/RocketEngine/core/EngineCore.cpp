@@ -357,14 +357,14 @@ void EngineCore::render()
 
 
 	Mat4 trans = Mat4(1.0f);
-/*	trans = Mat4::rotate(Mat4::identity, DegToRad(90.0f), Vector3(0.0f, 0.0f, 1.0f));
-	trans = Mat4::scale(trans, Vector3(0.5f, 0.5f, 0.5f));
-	*/
+//	trans = Mat4::rotate(trans, DegToRad(90.0f), Vector3(0.0f, 0.0f, 1.0f));
+//	trans = Mat4::scale(trans, Vector3(0.5f, 0.5f, 0.5f));
+	
 
 	trans = Mat4::translate(trans, Vector3(0.5f, -0.5f, 0.0f));
 	trans = Mat4::rotate(trans, (float)glfwGetTime(), Vector3(0.0f, 0.0f, 1.0f));
-
-	mShaderManager->useShaders();
+	
+	//mShaderManager->useShaders();
 //	mShaderManager->setShaderInt(tutShaderId, "texture1", 0);
 //	mShaderManager->setShaderInt(tutShaderId, "texture2", 1);
 
@@ -378,6 +378,16 @@ void EngineCore::render()
 */
 
 	glBindVertexArray(VAO[0]);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	
+	float scaleVal = abs(sin((float)glfwGetTime()));
+	trans = Mat4::identity;
+	trans = Mat4::translate(trans, Vector3(-0.5f, 0.5f, 0.0f));
+	trans = Mat4::scale(trans, Vector3(scaleVal, scaleVal, scaleVal));
+
+	mShaderManager->setShaderMat4(tutShaderId, "transform", trans.getMatrixValues());
+
+	
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	//glDrawArrays(GL_TRIANGLES, 0, 3); //draws primitives using currently active shader
