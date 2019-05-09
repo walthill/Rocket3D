@@ -1,6 +1,8 @@
 #ifndef VEC2_H
 #define VEC2_H
 
+#include <ostream>
+#include <iostream>
 
 class Vector2
 {
@@ -111,9 +113,9 @@ public:
 	};
 
 	//Output overload
-	friend ostream& operator<<(ostream& os, const Vector2& vec)
+	friend std::ostream& operator<<(std::ostream& os, const Vector2& vec)
 	{
-		cout << "(" << vec.mX << ", " << vec.mY << ")";
+		std::cout << "(" << vec.mX << ", " << vec.mY << ")";
 		return os;
 	};
 

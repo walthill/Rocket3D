@@ -1,6 +1,9 @@
 #ifndef VEC4_H
 #define VEC4_H
 
+#include <ostream>
+#include <iostream>
+
 //TODO(low): worth moving code into cpp file?
 
 // Contains code for Vec2, Vec3, & Vec4 types
@@ -139,9 +142,9 @@ class Vector4
 		};
 
 		//Output overload
-		friend ostream& operator<<(ostream& os, const Vector4& vec)
+		friend std::ostream& operator<<(std::ostream& os, const Vector4& vec)
 		{
-			cout << "(" << vec.mX << ", " << vec.mY << ", " << vec.mZ << ", " << vec.mW << ")";
+			std::cout << "(" << vec.mX << ", " << vec.mY << ", " << vec.mZ << ", " << vec.mW << ")";
 			return os;
 		};
 

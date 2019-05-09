@@ -5,7 +5,7 @@
 #include <iostream>
 
 /*
-		Matrix
+		Matrix - single array, row major order
 
 		| 1 0 0 0 |
 		| 0 1 0 0 |

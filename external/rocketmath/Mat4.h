@@ -1,6 +1,9 @@
 #ifndef MAT4_H
 #define MAT4_H
 
+#include <ostream>
+#include <iostream>
+
 /*
 		Matrix
 
@@ -22,8 +25,8 @@ class Mat4
 				mMatrixValues[i] = arr[i];
 			}
 		};
-
-		Mat4(float val) // initializes values on the matrix's diagonal
+		// initializes values on the matrix's diagonal
+		Mat4(float val) 		
 		{
 			mMatrixValues[0] = val;
 			mMatrixValues[5] = val;
@@ -41,15 +44,21 @@ class Mat4
 
 		static Mat4 scale(Mat4 matrix, Vector3 scaleVec)
 		{
-			matrix.mMatrixValues[0] = scaleVec.getX();
-			matrix.mMatrixValues[5] = scaleVec.getY();
-			matrix.mMatrixValues[10] = scaleVec.getZ();
+			Mat4 newMatrix = Mat4::identity;
 
-			return matrix;
+			newMatrix.mMatrixValues[0] = scaleVec.getX();
+ 			newMatrix.mMatrixValues[5] = scaleVec.getY();
+			newMatrix.mMatrixValues[10] = scaleVec.getZ();
+
+			newMatrix = newMatrix * matrix;
+
+			return newMatrix;
 		}
 
 		static Mat4 rotate(Mat4 matrix, float angle, Vector3 rotationAxis)
 		{
+			//Mat4 newMatrix = Mat4::identity;
+
 			Vector3 normalizedAxis = rotationAxis.normalize();
 			float xAxisRotate = normalizedAxis.getX();
 			float yAxisRotate = normalizedAxis.getY();
@@ -61,7 +70,7 @@ class Mat4
 			else if (yAxisRotate != 0)
 			{
 			}
-			else if(zAxisRotate != 0)
+			else if (zAxisRotate != 0)
 			{
 				matrix.mMatrixValues[0] = cos(angle);
 				matrix.mMatrixValues[1] = -sin(angle);
@@ -69,11 +78,14 @@ class Mat4
 				matrix.mMatrixValues[5] = cos(angle);
 			}
 
+
 			return matrix;
 		}
 
 		static Mat4 translate(Mat4 matrix, Vector3 translationVec)
 		{
+			//Mat4 newMatrix = Mat4::identity;
+
 			matrix.mMatrixValues[3] = translationVec.getX();
 			matrix.mMatrixValues[7] = translationVec.getY();
 			matrix.mMatrixValues[11] = translationVec.getZ();
@@ -144,6 +156,8 @@ class Mat4
 			return newMat;
 		}
 
+
+
 		//Matrix-Vector operations
 		Vector3 operator*(Vector3 rhs)
 		{
@@ -183,12 +197,12 @@ class Mat4
 		}
 	
 		//Output overload
-		friend ostream& operator<<(ostream& os, const Mat4& mat)
+		friend std::ostream& operator<<(std::ostream& os, const Mat4& mat)
 		{
-			cout << " | " << mat.mMatrixValues[0] << "\t " << mat.mMatrixValues[1] << "\t " << mat.mMatrixValues[2]  << "\t " << mat.mMatrixValues[3] << " |" << endl
-			<< " | " << mat.mMatrixValues[4] << "\t " << mat.mMatrixValues[5] << "\t " << mat.mMatrixValues[6] << "\t " << mat.mMatrixValues[7] << " |" << endl
-			<< " | " << mat.mMatrixValues[8] << "\t " << mat.mMatrixValues[9] << "\t " << mat.mMatrixValues[10] << "\t " << mat.mMatrixValues[11] << " |" << endl
-			<< " | " << mat.mMatrixValues[12] << "\t " << mat.mMatrixValues[13] << "\t " << mat.mMatrixValues[14] << "\t " << mat.mMatrixValues[15] << " |" << endl << endl;
+			std::cout << " | " << mat.mMatrixValues[0] << "\t " << mat.mMatrixValues[1] << "\t " << mat.mMatrixValues[2]  << "\t " << mat.mMatrixValues[3] << " |" << std::endl
+			<< " | " << mat.mMatrixValues[4] << "\t " << mat.mMatrixValues[5] << "\t " << mat.mMatrixValues[6] << "\t " << mat.mMatrixValues[7] << " |" << std::endl
+			<< " | " << mat.mMatrixValues[8] << "\t " << mat.mMatrixValues[9] << "\t " << mat.mMatrixValues[10] << "\t " << mat.mMatrixValues[11] << " |" << std::endl
+			<< " | " << mat.mMatrixValues[12] << "\t " << mat.mMatrixValues[13] << "\t " << mat.mMatrixValues[14] << "\t " << mat.mMatrixValues[15] << " |" << std::endl << std::endl;
 
 			return os;
 		};
@@ -197,6 +211,8 @@ class Mat4
 		{
 
 		}
+
+		const float* getMatrixValues() const { return mMatrixValues; };
 
 		static Mat4 identity;
 

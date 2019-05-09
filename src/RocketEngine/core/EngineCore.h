@@ -15,9 +15,9 @@ class EngineCore
 		EngineCore();
 		~EngineCore();
 
+		void initGLFW();
 		bool initialize(char* argv[]); //pass in data for live shader rebuilds
 		void clean();
-		void initGLFW();
 		void update();
 		void render();
 
