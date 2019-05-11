@@ -8,6 +8,7 @@ class InputSystem;
 class ShaderBuild;
 class ShaderManager;
 class RocketShader;
+class Vector3;
 
 class EngineCore
 {
@@ -35,6 +36,7 @@ class EngineCore
 		unsigned int VBO[2], VAO[2]; //Vertex buffer object
 		unsigned int EBO;
 		unsigned int texture, texture1;
+		Vector3 *cubePositions;
 		ShaderKey tutShaderId = "tutShader";
 };
 

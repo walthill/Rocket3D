@@ -5,7 +5,7 @@
 #include <iostream>
 
 /*
-		Matrix
+		Matrix - coded in row major order
 
 		| 1 0 0 0 |
 		| 0 1 0 0 |
@@ -57,29 +57,41 @@ class Mat4
 
 		static Mat4 rotate(Mat4 matrix, float angle, Vector3 rotationAxis)
 		{
-			//Mat4 newMatrix = Mat4::identity;
+			Mat4 newMatrix = Mat4::identity;
 
 			Vector3 normalizedAxis = rotationAxis.normalize();
-			float xAxisRotate = normalizedAxis.getX();
-			float yAxisRotate = normalizedAxis.getY();
-			float zAxisRotate = normalizedAxis.getZ();
+			float x = normalizedAxis.getX();
+			float y = normalizedAxis.getY();
+			float z = normalizedAxis.getZ();
 
-			if (xAxisRotate != 0)
-			{
-			}
-			else if (yAxisRotate != 0)
-			{
-			}
-			else if (zAxisRotate != 0)
-			{
-				matrix.mMatrixValues[0] = cos(angle);
-				matrix.mMatrixValues[1] = -sin(angle);
-				matrix.mMatrixValues[4] = sin(angle);
-				matrix.mMatrixValues[5] = cos(angle);
-			}
+			float cosine = cos(angle);
+			float sine = sin(angle);
+			float cosDiff = 1 - cosine;
 
+			//Calculations to allow for non-uniform scaling
+			float scaleValue0 = (x * x) * cosDiff + cosine;
+			float scaleValue1 = (x * y) * cosDiff - z*sine;
+			float scaleValue2 = (x * z) * cosDiff + y*sine;
 
-			return matrix;
+			float scaleValue4 = (x * y) * cosDiff + z*sine;
+			float scaleValue5 = (y * y) * cosDiff + cosine;
+			float scaleValue6 = (y * z) * cosDiff - x*sine;
+
+			float scaleValue8 = (x * z) * cosDiff - y*sine;
+			float scaleValue9 = (y * z) * cosDiff + x*sine;
+			float scaleValue10 = (z * z)  * cosDiff + cosine;
+
+			newMatrix.mMatrixValues[0] = scaleValue0;
+			newMatrix.mMatrixValues[1] = scaleValue1;
+			newMatrix.mMatrixValues[2] = scaleValue2;
+			newMatrix.mMatrixValues[4] = scaleValue4;
+			newMatrix.mMatrixValues[5] = scaleValue5;
+			newMatrix.mMatrixValues[6] = scaleValue6;
+			newMatrix.mMatrixValues[8] = scaleValue8;
+			newMatrix.mMatrixValues[9] = scaleValue9;
+			newMatrix.mMatrixValues[10] = scaleValue10;
+
+			return matrix * newMatrix;
 		}
 
 		static Mat4 translate(Mat4 matrix, Vector3 translationVec)
@@ -213,7 +225,6 @@ class Mat4
 		}
 
 		const float* getMatrixValues() const { return mMatrixValues; };
-
 		static Mat4 identity;
 
 	private:
@@ -248,6 +259,64 @@ class Mat4
 		}
 };
 
+
+struct MatProj //Matrix Projection Math
+{
+	// Help with projection matrices here - http://www.songho.ca/opengl/gl_projectionmatrix.html
+	// and here -	http://www.songho.ca/opengl/gl_transform.html#matrix
+
+	struct ProjectionData //TODO: add documentation code here
+	{
+		float left, right, bottom, top,
+			  nearPlaneDistance, farPlaneDistance;
+	};
+
+	static Mat4 orthographic(ProjectionData data)
+	{
+		float projArr[16] = { 0 };
+
+		//Diagonal transformations
+		projArr[0] = 2 / (data.right - data.left);
+		projArr[5] = 2 / (data.top - data.bottom);
+		projArr[10] = -2 / (data.farPlaneDistance - data.nearPlaneDistance);
+
+		//4th column transformations
+		projArr[3] = -((data.right + data.left) / (data.right - data.left));
+		projArr[7] = -((data.top + data.bottom) / (data.top - data.bottom));
+		projArr[11] = -((data.farPlaneDistance + data.nearPlaneDistance) / (data.farPlaneDistance - data.nearPlaneDistance));
+
+		projArr[15] = 1;
+
+		return Mat4(projArr);
+	};
+
+	//*fov should be in RADIANS
+	//*aspectRatio should be screen width / screen height
+	static Mat4 perspective(float fov, float aspectRatio, float nearPlane, float farPlane) //TODO: comment documentation here
+	{
+		float projArr[16] = { 0 };
+
+		float height = nearPlane * tan(fov / 2);
+		float width = height * aspectRatio;	
+
+		ProjectionData data = { -width, width, -height, height, nearPlane, farPlane };
+
+		//Diagonal transformations
+		projArr[0] = 2 * data.nearPlaneDistance / (data.right - data.left);
+		projArr[5] = 2 * data.nearPlaneDistance / (data.top - data.bottom);
+		projArr[10] = -((data.farPlaneDistance + data.nearPlaneDistance) / (data.farPlaneDistance - data.nearPlaneDistance));
+		projArr[15] = 0;
+
+		//3rd column
+		projArr[2] = (data.right + data.left) / (data.right - data.left);
+		projArr[6] = (data.top + data.bottom) / (data.top - data.bottom);
+		projArr[14] = -1;
+
+		projArr[11] = -2 * data.farPlaneDistance * data.nearPlaneDistance / (data.farPlaneDistance - data.nearPlaneDistance);
+
+		return Mat4(projArr);
+	};
+};
 
 Mat4 Mat4::identity(1);
 

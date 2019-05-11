@@ -116,12 +116,70 @@ bool EngineCore::initialize(char* argv[])
 		};*/
 
 	float vertices[] = {
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+};
+	
+	cubePositions = new Vector3[10]{
+		Vector3(0.0f,  0.0f,  0.0f),
+		Vector3(2.0f,  5.0f, -15.0f),
+		Vector3(-1.5f, -2.2f, -2.5f),
+		Vector3(-3.8f, -2.0f, -12.3f),
+		Vector3(2.4f, -0.4f, -3.5f),
+		Vector3(-1.7f,  3.0f, -7.5f),
+		Vector3(1.3f, -2.0f, -2.5f),
+		Vector3(1.5f,  2.0f, -2.5f),
+		Vector3(1.5f,  0.2f, -1.5f),
+		Vector3(-1.3f,  1.0f, -1.5f)
+	};
+
+	//Plane
+/*	float vertices[] = {
 		// positions          // colors           // texture coords
 		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
 		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
 		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
 		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
-	};
+	};*/
 
 	float vertices2[] = {
 	-0.5f,  -0.5f, 0.0f,
@@ -210,8 +268,16 @@ bool EngineCore::initialize(char* argv[])
 		Param 6: Buffer offset
 	*/
 
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// texture coord attribute
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+
 	//position attributes
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+/*	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	//color attributes
@@ -220,7 +286,7 @@ bool EngineCore::initialize(char* argv[])
 
 	//texture attributes
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(2);*/
 
 
 	/*
@@ -319,6 +385,7 @@ bool EngineCore::initialize(char* argv[])
 		second two set width and height
 	*/
 	glViewport(0, 0, 800, 600);
+	glEnable(GL_DEPTH_TEST);
 	
 	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
@@ -341,60 +408,37 @@ void EngineCore::render()
 	//Rendering
 
 	glClearColor(0.4f, 0.6f, 0.6f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//		glUseProgram(shaderProgram);
-
-		//	float timeValue = glfwGetTime();
-		//	float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-			//int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-
-		//	glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture1);
 
 
-	Mat4 trans = Mat4(1.0f);
-//	trans = Mat4::rotate(trans, DegToRad(90.0f), Vector3(0.0f, 0.0f, 1.0f));
-//	trans = Mat4::scale(trans, Vector3(0.5f, 0.5f, 0.5f));
-	
+	Mat4 view = Mat4::identity;
+	view = Mat4::translate(view, Vector3(0.0f, 0.0f, -3.0f));
+	mShaderManager->setShaderMat4(tutShaderId, "view", view.getMatrixValues());
 
-	trans = Mat4::translate(trans, Vector3(0.5f, -0.5f, 0.0f));
-	trans = Mat4::rotate(trans, (float)glfwGetTime(), Vector3(0.0f, 0.0f, 1.0f));
-	
-	//mShaderManager->useShaders();
-//	mShaderManager->setShaderInt(tutShaderId, "texture1", 0);
-//	mShaderManager->setShaderInt(tutShaderId, "texture2", 1);
+	Mat4 proj;
+	proj = MatProj::perspective(DegToRad(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+	mShaderManager->setShaderMat4(tutShaderId, "projection", proj.getMatrixValues());
 
-	mShaderManager->setShaderMat4(tutShaderId, "transform", trans.getMatrixValues());
-
-/*	old - moved into shader manager
-
-	RocketShader *sh = mShaderManager->getShader(tutShaderId);
-	unsigned int transformLoc = glGetUniformLocation(sh->shaderID, "transform");
-	glUniformMatrix4fv(transformLoc, 1, GL_TRUE, trans.getMatrixValues()); //GL_TRUE --> convert from row major to column major order
-*/
 
 	glBindVertexArray(VAO[0]);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	
-	float scaleVal = abs(sin((float)glfwGetTime()));
-	trans = Mat4::identity;
-	trans = Mat4::translate(trans, Vector3(-0.5f, 0.5f, 0.0f));
-	trans = Mat4::scale(trans, Vector3(scaleVal, scaleVal, scaleVal));
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-	mShaderManager->setShaderMat4(tutShaderId, "transform", trans.getMatrixValues());
+	for (int i = 0; i < 10; i++)
+	{
+		Mat4 model = Mat4::identity;
+		model = Mat4::translate(model, cubePositions[i]);
+		float angle = i * 16;
+		model = Mat4::rotate(model, DegToRad(angle), Vector3(0.5f, 1.0f, 0.0f));
 
-	
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		mShaderManager->setShaderMat4(tutShaderId, "model", model.getMatrixValues());
 
-	//glDrawArrays(GL_TRIANGLES, 0, 3); //draws primitives using currently active shader
-
-	//glUseProgram(shaderProgram2);
-	//glBindVertexArray(VAO[1]);
-	//glDrawArrays(GL_TRIANGLES, 0, 3); //draws primitives using currently active shader
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
 
 	// swap the buffers
 	glfwSwapBuffers(window);
