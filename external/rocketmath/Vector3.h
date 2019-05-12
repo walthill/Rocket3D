@@ -44,9 +44,16 @@ class Vector3
 			float x = lhs.getX() * rhs.getX();
 			float y = lhs.getY() * rhs.getY();
 			float z = lhs.getZ() * rhs.getZ();
-
 			return acos(x + y + z);
 		};
+
+		static Vector3 cross(Vector3 a, Vector3 b)
+		{
+			float x = (a.getY() * b.getZ()) - (a.getZ() * b.getY());
+			float y = (a.getZ() * b.getX()) - (a.getX() * b.getZ());
+			float z = (a.getX() * b.getY()) - (a.getY() * b.getX());
+			return Vector3(x,y,z);
+		}
 
 		//comparison
 		bool operator==(const Vector3& rhs) { return mX == rhs.mX && mY == rhs.mY && mZ == rhs.mZ; };
