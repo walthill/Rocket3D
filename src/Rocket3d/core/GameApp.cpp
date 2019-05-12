@@ -21,7 +21,8 @@ bool GameApp::initialize(char* argv[])
 	mRocketEngine = new EngineCore();
 	mpGameMessageManager = new GameMessageManager();
 	
-	mRocketEngine->initialize(argv);
+	if (!mRocketEngine->initialize(argv))
+		return false;
 
 	mpMasterTimer = new Timer();
 

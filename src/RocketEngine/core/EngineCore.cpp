@@ -1,4 +1,5 @@
 #include "EngineCore.h"
+#include "../window/Window.h"
 #include <glad/glad.h>
 #include <glfw3.h>
 #include <RocketMath/MathUtils.h>
@@ -28,7 +29,6 @@ void EngineCore::clean()
 	glfwTerminate();
 }
 
-
 //Window resize callback prototype
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
@@ -36,7 +36,6 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height) //TODO: 
 {
 	glViewport(0, 0, width, height);
 }
-
 
 void EngineCore::initGLFW()
 {
@@ -51,29 +50,13 @@ void EngineCore::initGLFW()
 bool EngineCore::initialize(char* argv[])
 {
 	initGLFW();
+
+	mWindow = new Window();
 	
-	//Init window
-	window = glfwCreateWindow(800, 600, "Rocket3D", nullptr, nullptr);
-	
-	if (window == nullptr)
-	{
-		std::cout << "FAILED to create GLFW window" << std::endl;
-		glfwTerminate();
+	if(!mWindow->initialize(800, 600, "Rocket3D"))
 		return false;
-	}
 
-	glfwMakeContextCurrent(window);
-
-	//Init GLAD fuction pointer handling
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		std::cout << "FAILED to initialize GLAD" << std::endl;
-		glfwTerminate();
-		return false;
-	}
-
-	mpInputSystem = new InputSystem(window);
-
+	mpInputSystem = new InputSystem(mWindow->getWindowHandle());
 
 	//Shader live build init
 	liveload = new ShaderBuild();
@@ -85,13 +68,10 @@ bool EngineCore::initialize(char* argv[])
 	liveload->init(directory + L"RocketBuild.dll");
 	liveload->addFunctionToLiveLoad("live_shader_rebuild");
 
-
-//	ourShader = new RocketShader("vShader.glsl", "fShader.glsl");
 	mShaderManager->addShader(tutShaderId, new RocketShader("vShader.glsl", "fShader.glsl"));
-	// uncomment this call to draw in wireframe polygons.
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	
+	// uncomment this call to draw in wireframe polygons.
+	//mWindow->setWindowDrawMode(FRONT_AND_BACK, WIREFRAME);
 
 	/*******
 		VERTEX SHADER
@@ -384,10 +364,11 @@ bool EngineCore::initialize(char* argv[])
 		first two params set location of lower left corner
 		second two set width and height
 	*/
-	glViewport(0, 0, 800, 600);
+	
+	//glViewport(0, 0, 800, 600);
 	glEnable(GL_DEPTH_TEST);
 	
-	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+	glfwSetFramebufferSizeCallback(mWindow->getWindowHandle(), framebufferSizeCallback);
 
 	return true;
 }
@@ -407,9 +388,9 @@ void EngineCore::render()
 {
 	//Rendering
 
-	glClearColor(0.4f, 0.6f, 0.6f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	mWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
+	mWindow->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
+	
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glActiveTexture(GL_TEXTURE1);
@@ -441,5 +422,6 @@ void EngineCore::render()
 	}
 
 	// swap the buffers
-	glfwSwapBuffers(window);
+	mWindow->swapBuffers();
+
 }

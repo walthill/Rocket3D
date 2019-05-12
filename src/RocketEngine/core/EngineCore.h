@@ -3,7 +3,7 @@
 
 #include "../util/EngineUtils.h"
 
-struct GLFWwindow;
+class Window;
 class InputSystem;
 class ShaderBuild;
 class ShaderManager;
@@ -25,7 +25,7 @@ class EngineCore
 	private:
 		int mWindowWidth, mWindowHeight;
 
-		GLFWwindow *window;
+		Window *mWindow;
 		InputSystem *mpInputSystem;
 
 		ShaderBuild* liveload;
