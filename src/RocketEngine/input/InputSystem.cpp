@@ -10,14 +10,31 @@ InputSystem::InputSystem(GLFWwindow* window)
 
 void InputSystem::processInput()
 {
-	bool escapeKeyPressed = glfwGetKey(mpWindowHandle, GLFW_KEY_ESCAPE) == GLFW_PRESS;
-
-	if (escapeKeyPressed)
+	if (glfwGetKey(mpWindowHandle, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		GameMessage* pMessage = new KeyDownMessage(ESC);
 		GameApp::getInstance()->addInputMessage(pMessage, 1);
 	}
-
+	if (glfwGetKey(mpWindowHandle, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		GameMessage* pMessage = new KeyDownMessage(W_KEY);
+		GameApp::getInstance()->addInputMessage(pMessage, 1);
+	}
+	if (glfwGetKey(mpWindowHandle, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		GameMessage* pMessage = new KeyDownMessage(S_KEY);
+		GameApp::getInstance()->addInputMessage(pMessage, 1);
+	}
+	if (glfwGetKey(mpWindowHandle, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		GameMessage* pMessage = new KeyDownMessage(A_KEY);
+		GameApp::getInstance()->addInputMessage(pMessage, 1);
+	}
+	if (glfwGetKey(mpWindowHandle, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		GameMessage* pMessage = new KeyDownMessage(D_KEY);
+		GameApp::getInstance()->addInputMessage(pMessage, 1);
+	}
 	//Check and call events
 	glfwPollEvents();
 }

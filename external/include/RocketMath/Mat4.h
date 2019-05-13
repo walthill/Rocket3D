@@ -105,6 +105,42 @@ class Mat4
 			return matrix;
 		}
 
+		//Written with help from https://learnopengl.com/code_viewer.php?code=getting-started/camera-exercise2
+		static Mat4 lookAt(Vector3 pos, Vector3 target, Vector3 worldUp = Vector3::up)
+		{
+			//Calculate camera direction
+			Vector3 dir = pos - target;
+			Vector3 zAxis = dir.normalize();
+
+			//Positive right axis
+			Vector3 up = worldUp.normalize();
+			Vector3 xAxis = Vector3::cross(up, zAxis);
+			xAxis = xAxis.normalize();
+
+			//Camera up
+			Vector3 yAxis = Vector3::cross(zAxis, xAxis);
+
+			Mat4 translation = Mat4::identity, rotation = Mat4::identity;
+
+			translation.mMatrixValues[3] = -pos.getX();
+			translation.mMatrixValues[7] = -pos.getY();
+			translation.mMatrixValues[11] = -pos.getZ();
+
+			rotation.mMatrixValues[0] = xAxis.getX();
+			rotation.mMatrixValues[1] = xAxis.getY();
+			rotation.mMatrixValues[2] = xAxis.getZ();
+
+			rotation.mMatrixValues[4] = yAxis.getX();
+			rotation.mMatrixValues[5] = yAxis.getY();
+			rotation.mMatrixValues[6] = yAxis.getZ();
+
+			rotation.mMatrixValues[8] = zAxis.getX();
+			rotation.mMatrixValues[9] = zAxis.getY();
+			rotation.mMatrixValues[10] = zAxis.getZ();
+
+			return rotation * translation;
+		}
+
 		//Matrix scalar operations
 		Mat4 operator+(float val)
 		{

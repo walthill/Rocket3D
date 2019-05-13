@@ -70,6 +70,14 @@ class Vector3
 
 			return newVec;
 		};
+		Vector3 operator+=(const Vector3& rhs)
+		{
+			mX = mX + rhs.mX;
+			mY = mY + rhs.mY;
+			mZ = mZ + rhs.mZ;
+
+			return *this;
+		};
 		Vector3 operator-(const Vector3& rhs)
 		{
 			Vector3 newVec;
@@ -79,6 +87,14 @@ class Vector3
 			newVec.mZ = mZ - rhs.mZ;
 
 			return newVec;
+		}; 
+		Vector3 operator-=(const Vector3& rhs)
+		{
+			mX = mX - rhs.mX;
+			mY = mY - rhs.mY;
+			mZ = mZ - rhs.mZ;
+
+			return *this;
 		};
 		Vector3 operator/(const Vector3& rhs)
 		{
@@ -139,9 +155,6 @@ class Vector3
 			std::cout << "(" << vec.mX << ", " << vec.mY << ", " << vec.mZ << ")";
 			return os;
 		};
-
-	
-
 
 		float getX() const { return mX; };
 		float getY() const { return mY; };

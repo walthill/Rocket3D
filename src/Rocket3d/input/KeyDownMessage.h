@@ -7,6 +7,10 @@ enum KeyCode
 {
 	INVALID_KEY = -1,
 	ESC, 
+	W_KEY,
+	A_KEY,
+	S_KEY,
+	D_KEY,
 	NUM_KEYCODES
 };
 

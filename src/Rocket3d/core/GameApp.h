@@ -7,7 +7,6 @@
 
 // As a general rule, file includes should be done in .cpp files  
 // Instead of includes, use forward declarations in header files
-
 class EngineCore;
 class GameMessage;
 class GameMessageManager;
@@ -45,20 +44,27 @@ class GameApp : Trackable
 		#pragma region Getters and Setters
 		void addInputMessage(GameMessage* msg, int delay);
 		double getCurrentTime();
+		void moveForward();
+		void moveBack();
+		void moveRight();
+		void moveLeft();
 		void quit() { mShouldExit = true; };
 		#pragma endregion
 
 	private:
 
-		EngineCore* mRocketEngine;
+		EngineCore* mpRocketEngine;
 		GameMessageManager* mpGameMessageManager;
-	
+		
+
+		//Game state vars
 		static GameApp* mpGameApp;
 		bool mShouldExit;
 
 		//Performance tracker data
 		Timer *mpFrameTimer;
 		Timer *mpMasterTimer;
+		int mFPS;
 		const std::string mINIT_TRACKER_NAME = "init";
 		const std::string mDRAW_TRACKER_NAME = "draw";
 		const std::string mLOOP_TRACKER_NAME = "loop";

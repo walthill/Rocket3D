@@ -3,12 +3,12 @@
 
 #include "../util/EngineUtils.h"
 
+class Vector3;
 class Window;
 class InputSystem;
 class ShaderBuild;
 class ShaderManager;
 class RocketShader;
-class Vector3;
 
 class EngineCore
 {
@@ -22,9 +22,21 @@ class EngineCore
 		void update();
 		void render();
 
+		void moveCameraLeft();
+		void moveCameraRight();
+		void moveCameraForward();
+		void moveCameraBack();
+
+		float deltaTime = 0.0f;	// Time between current frame and last frame
 	private:
 		int mWindowWidth, mWindowHeight;
 
+		float lastFrame = 0.0f; // Time of last frame
+		float cameraSpeed = 0.25f;
+		Vector3* cameraPos;// = Vector3(0.0f, 0.0f, 3.0f);
+		Vector3* cameraFront;// = Vector3(0.0f, 0.0f, -1.0f);
+		Vector3* cameraUp;// = Vector3(0.0f, 1.0f, 0.0f);
+		
 		Window *mWindow;
 		InputSystem *mpInputSystem;
 

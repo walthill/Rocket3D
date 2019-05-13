@@ -145,7 +145,7 @@ class RocketShader
 
 		void setFloat(const std::string &name, float value) const
 		{
-			glUniform1i(glGetUniformLocation(shaderID, name.c_str()), value);
+			glUniform1i(glGetUniformLocation(shaderID, name.c_str()), (GLint)value);
 		}
 
 		void setMat4(const std::string &name, const float* mat)

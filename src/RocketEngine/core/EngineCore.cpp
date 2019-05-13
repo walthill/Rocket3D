@@ -57,10 +57,12 @@ bool EngineCore::initialize(char* argv[])
 		return false;
 
 	mpInputSystem = new InputSystem(mWindow->getWindowHandle());
-
-	//Shader live build init
 	liveload = new ShaderBuild();
 	mShaderManager = new ShaderManager();
+
+	cameraPos = new Vector3(0.0f, 0.0f, 3.0f);
+	cameraFront = new Vector3(0.0f, 0.0f, -1.0f);
+	cameraUp = new Vector3(0.0f, 1.0f, 0.0f);
 
 	std::wstring directory(argv[0], argv[0] + strlen(argv[0]));
 	directory.erase(directory.find_last_of(L'\\') + 1);
@@ -339,6 +341,11 @@ bool EngineCore::initialize(char* argv[])
 	mShaderManager->useShaderByKey(tutShaderId);
 	mShaderManager->setShaderInt(tutShaderId, "texture1", 0);
 	mShaderManager->setShaderInt(tutShaderId, "texture2", 1);
+
+	Mat4 proj = Mat4::identity;
+	proj = MatProj::perspective(DegToRad(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+	mShaderManager->setShaderMat4(tutShaderId, "projection", proj.getMatrixValues());
+
 	//	ourShader->use(); // don't forget to activate/use the shader before setting uniforms!
 	// either set it manually like so:
 	// or set it via the texture class
@@ -376,6 +383,11 @@ bool EngineCore::initialize(char* argv[])
 
 void EngineCore::update()
 {
+	float currentFrame = (float)glfwGetTime();
+	deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
+	cameraSpeed = 2.5f * deltaTime;
+	
 	//Input
 	mpInputSystem->processInput();
 
@@ -396,14 +408,45 @@ void EngineCore::render()
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture1);
 
+//	mShaderManager->useShaderByKey(tutShaderId);
 
-	Mat4 view = Mat4::identity;
-	view = Mat4::translate(view, Vector3(0.0f, 0.0f, -3.0f));
+	/*Vector3 camPos(0.0f, 0.0f, 3.0f);
+	Vector3 camTarget(0.0f, 0.0f, 3.0f);
+	Vector3 camDir = camPos-camTarget;
+	camDir = camDir.normalize();
+
+	Vector3 camRight = Vector3::cross(Vector3::up, camDir);
+	camRight = camRight.normalize();
+	Vector3 camUp = Vector3::cross(camDir, camRight);
+	
+	Mat4 view;
+	view = Mat4::lookAt(Vector3(0.0f, 0.0f, 3.0f),
+						Vector3::zero,
+						Vector3::up);
+	*/
+	//Vector3 cameraPos = Vector3(0.0f, 0.0f, 3.0f);
+	//Vector3 cameraFront = Vector3::back;// (0.0f, 0.0f, -1.0f);
+//	Vector3 cameraUp = Vector3::up;
+
+	float rad = 10.0f;
+	float camX = (float)sin(glfwGetTime()) * rad;
+	float camZ = (float)cos(glfwGetTime()) * rad;
+
+	Mat4 view = Mat4::identity;	
+	//view = Mat4::lookAt(Vector3(camX, 0.0f, camZ), Vector3::zero);
+
+	view = Mat4::lookAt(*cameraPos, *cameraPos + *cameraFront);
+
+	//view = Mat4::translate(view, Vector3(0.0f, 0.0f, -3.0f));
+	
 	mShaderManager->setShaderMat4(tutShaderId, "view", view.getMatrixValues());
 
-	Mat4 proj;
+	/*Mat4 proj;
 	proj = MatProj::perspective(DegToRad(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 	mShaderManager->setShaderMat4(tutShaderId, "projection", proj.getMatrixValues());
+	*/
+
+	//mShaderManager->setShaderMat4(tutShaderId, "view", view.getMatrixValues());
 
 
 	glBindVertexArray(VAO[0]);
@@ -413,7 +456,7 @@ void EngineCore::render()
 	{
 		Mat4 model = Mat4::identity;
 		model = Mat4::translate(model, cubePositions[i]);
-		float angle = i * 16;
+		float angle = (float)i * 16;
 		model = Mat4::rotate(model, DegToRad(angle), Vector3(0.5f, 1.0f, 0.0f));
 
 		mShaderManager->setShaderMat4(tutShaderId, "model", model.getMatrixValues());
@@ -425,3 +468,27 @@ void EngineCore::render()
 	mWindow->swapBuffers();
 
 }
+
+void EngineCore::moveCameraLeft()
+{
+	Vector3 vec = Vector3::cross(*cameraFront, *cameraUp);
+	*cameraPos -= vec.normalize() * cameraSpeed;
+
+}
+
+void EngineCore::moveCameraRight()
+{
+	Vector3 vec = Vector3::cross(*cameraFront, *cameraUp);
+	*cameraPos += (vec.normalize() * cameraSpeed);
+}
+
+void EngineCore::moveCameraForward()
+{
+	*cameraPos += (*cameraFront * cameraSpeed);
+}
+
+void EngineCore::moveCameraBack() //S
+{
+	*cameraPos -= *cameraFront * cameraSpeed;
+}
+

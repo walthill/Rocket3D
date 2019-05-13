@@ -18,13 +18,17 @@ bool GameApp::initialize(char* argv[])
 	PerformanceTracker* pPerformanceTracker = new PerformanceTracker;
 	pPerformanceTracker->startTracking(mINIT_TRACKER_NAME);
 
-	mRocketEngine = new EngineCore();
+	mpRocketEngine = new EngineCore();
 	mpGameMessageManager = new GameMessageManager();
-	
-	if (!mRocketEngine->initialize(argv))
+	mpMasterTimer = new Timer();
+
+	if (!mpRocketEngine->initialize(argv))
 		return false;
 
-	mpMasterTimer = new Timer();
+/*	cameraPos = new Vector3(0.0f, 0.0f, 3.0f);
+	cameraFront = new Vector3(0.0f, 0.0f, -1.0f);
+	cameraUp = new Vector3(0.0f, 1.0f, 0.0f);
+*/
 
 	pPerformanceTracker->stopTracking(mINIT_TRACKER_NAME);
 	std::cout << std::endl << "Time to Init: " << pPerformanceTracker->getElapsedTime(mINIT_TRACKER_NAME) << " ms" << std::endl;
@@ -41,7 +45,7 @@ bool GameApp::initialize(char* argv[])
 void GameApp::clean()
 {
 	delete mpGameMessageManager;
-	delete mRocketEngine;
+	delete mpRocketEngine;
 }
 
 bool GameApp::processLoop()
@@ -69,9 +73,10 @@ bool GameApp::processLoop()
 		mpFrameTimer->sleepUntilElapsed(m30_FRAME_TIME);
 		pPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
 
-		//		mFPS = (1000.0 / pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
-//		cout << "loop took:" << pPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME) << "ms";
-//		cout << " draw took:" << pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME) << "ms\n";
+		mFPS = (int)(1000.0 / pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
+		std::cout << "loop took:" << pPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME) << "ms";
+		std::cout << " draw took:" << pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME) << "ms\n";
+		std::cout << "FPS: " << mFPS << "\n";
 
 	}
 
@@ -80,14 +85,13 @@ bool GameApp::processLoop()
 
 void GameApp::update()
 {
-	mRocketEngine->update();
 	mpGameMessageManager->processMessagesForThisFrame();
-
+	mpRocketEngine->update(); 
 }
 
 void GameApp::render()
 {
-	mRocketEngine->render();
+	mpRocketEngine->render();
 }
 
 void GameApp::addInputMessage(GameMessage* msg, int delay)
@@ -99,3 +103,24 @@ double GameApp::getCurrentTime()
 { 
 	return mpMasterTimer->getElapsedTime(); 
 };
+
+void GameApp::moveForward()
+{
+	mpRocketEngine->moveCameraForward();
+}
+
+void GameApp::moveBack()
+{
+	mpRocketEngine->moveCameraBack();
+}
+
+void GameApp::moveRight()
+{
+	mpRocketEngine->moveCameraRight();
+}
+
+void GameApp::moveLeft()
+{
+	mpRocketEngine->moveCameraLeft();
+}
+
