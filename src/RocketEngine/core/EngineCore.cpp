@@ -2,7 +2,8 @@
 #include "../window/Window.h"
 #include <glad/glad.h>
 #include <glfw3.h>
-#include <RocketMath/MathUtils.h>
+#include "../render/Camera.h"
+//#include <RocketMath/MathUtils.h>
 #include "../asset/image/RocketImgLoader.h"
 #include <iostream>
 #include "../input/InputSystem.h"
@@ -29,12 +30,48 @@ void EngineCore::clean()
 	glfwTerminate();
 }
 
-//Window resize callback prototype
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height) //TODO: move to callback class
 {
 	glViewport(0, 0, width, height);
+}
+
+//Help found here https://stackoverflow.com/questions/27387040/referencing-glfws-callback-functions-from-a-class
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	EngineCore* wind = reinterpret_cast<EngineCore*>(glfwGetWindowUserPointer(window));
+	wind->r3_mouse_callback(xpos, ypos);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	EngineCore* wind = reinterpret_cast<EngineCore*>(glfwGetWindowUserPointer(window));
+	wind->r3_scroll_callback(xoffset, yoffset);
+}
+
+void EngineCore::r3_scroll_callback(double xoffset, double yoffset)
+{
+	mpCam->processMouseScroll(yoffset);
+}
+
+void EngineCore::r3_mouse_callback(double xpos, double ypos)
+{	
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xOffset = xpos - lastX;
+	float yOffset = lastY - ypos;
+	lastY = ypos;
+	lastX = xpos;
+
+	mpCam->processMouseMovement(xOffset, yOffset);
 }
 
 void EngineCore::initGLFW()
@@ -51,26 +88,28 @@ bool EngineCore::initialize(char* argv[])
 {
 	initGLFW();
 
-	mWindow = new Window();
+	mpWindow = new Window();
 	
-	if(!mWindow->initialize(800, 600, "Rocket3D"))
+	if(!mpWindow->initialize(800, 600, "Rocket3D"))
 		return false;
 
-	mpInputSystem = new InputSystem(mWindow->getWindowHandle());
-	liveload = new ShaderBuild();
-	mShaderManager = new ShaderManager();
+	//hide cursor
+	glfwSetInputMode(mpWindow->getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//set this to use callbacks w/in member function
+	glfwSetWindowUserPointer(mpWindow->getWindowHandle(), reinterpret_cast<void*>(this));//<--- right here
 
-	cameraPos = new Vector3(0.0f, 0.0f, 3.0f);
-	cameraFront = new Vector3(0.0f, 0.0f, -1.0f);
-	cameraUp = new Vector3(0.0f, 1.0f, 0.0f);
+	mpCam = new Camera(Vector3(0.0f, 0.0f, 3.0f));
+	mpInputSystem = new InputSystem(mpWindow->getWindowHandle());
+	mpLiveload = new ShaderBuild();
+	mpShaderManager = new ShaderManager();
 
 	std::wstring directory(argv[0], argv[0] + strlen(argv[0]));
 	directory.erase(directory.find_last_of(L'\\') + 1);
 
-	liveload->init(directory + L"RocketBuild.dll");
-	liveload->addFunctionToLiveLoad("live_shader_rebuild");
+	mpLiveload->init(directory + L"RocketBuild.dll");
+	mpLiveload->addFunctionToLiveLoad("live_shader_rebuild");
 
-	mShaderManager->addShader(tutShaderId, new RocketShader("vShader.glsl", "fShader.glsl"));
+	mpShaderManager->addShader(tutShaderId, new RocketShader("vShader.glsl", "fShader.glsl"));
 
 	// uncomment this call to draw in wireframe polygons.
 	//mWindow->setWindowDrawMode(FRONT_AND_BACK, WIREFRAME);
@@ -338,13 +377,10 @@ bool EngineCore::initialize(char* argv[])
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
 	// -------------------------------------------------------------------------------------------
 	
-	mShaderManager->useShaderByKey(tutShaderId);
-	mShaderManager->setShaderInt(tutShaderId, "texture1", 0);
-	mShaderManager->setShaderInt(tutShaderId, "texture2", 1);
+	mpShaderManager->useShaderByKey(tutShaderId);
+	mpShaderManager->setShaderInt(tutShaderId, "texture1", 0);
+	mpShaderManager->setShaderInt(tutShaderId, "texture2", 1);
 
-	Mat4 proj = Mat4::identity;
-	proj = MatProj::perspective(DegToRad(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-	mShaderManager->setShaderMat4(tutShaderId, "projection", proj.getMatrixValues());
 
 	//	ourShader->use(); // don't forget to activate/use the shader before setting uniforms!
 	// either set it manually like so:
@@ -375,7 +411,9 @@ bool EngineCore::initialize(char* argv[])
 	//glViewport(0, 0, 800, 600);
 	glEnable(GL_DEPTH_TEST);
 	
-	glfwSetFramebufferSizeCallback(mWindow->getWindowHandle(), framebufferSizeCallback);
+	glfwSetFramebufferSizeCallback(mpWindow->getWindowHandle(), framebufferSizeCallback);
+	glfwSetCursorPosCallback(mpWindow->getWindowHandle(), mouse_callback);
+	glfwSetScrollCallback(mpWindow->getWindowHandle(), scroll_callback);
 
 	return true;
 }
@@ -383,25 +421,28 @@ bool EngineCore::initialize(char* argv[])
 
 void EngineCore::update()
 {
-	float currentFrame = (float)glfwGetTime();
-	deltaTime = currentFrame - lastFrame;
-	lastFrame = currentFrame;
-	cameraSpeed = 2.5f * deltaTime;
-	
 	//Input
 	mpInputSystem->processInput();
+	calculateDeltaTime();
 
 	//Check for shader rebuild
 	//TODO: shader rebuild causes need to set shader values every frame. Should fix
 	//liveload->pollSourceForUpdates(man);
 }
 
+void EngineCore::calculateDeltaTime()
+{
+	float currentFrame = (float)glfwGetTime();
+	deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
+}
+
 void EngineCore::render()
 {
 	//Rendering
 
-	mWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
-	mWindow->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
+	mpWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
+	mpWindow->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
 	
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -428,18 +469,23 @@ void EngineCore::render()
 	//Vector3 cameraFront = Vector3::back;// (0.0f, 0.0f, -1.0f);
 //	Vector3 cameraUp = Vector3::up;
 
-	float rad = 10.0f;
-	float camX = (float)sin(glfwGetTime()) * rad;
-	float camZ = (float)cos(glfwGetTime()) * rad;
+//	float rad = 10.0f;
+//	float camX = (float)sin(glfwGetTime()) * rad;
+//	float camZ = (float)cos(glfwGetTime()) * rad;
 
 	Mat4 view = Mat4::identity;	
+	view = mpCam->getViewMatrix();
+	mpShaderManager->setShaderMat4(tutShaderId, "view", view.getMatrixValues());
+	
 	//view = Mat4::lookAt(Vector3(camX, 0.0f, camZ), Vector3::zero);
 
-	view = Mat4::lookAt(*cameraPos, *cameraPos + *cameraFront);
+	//view = Mat4::lookAt(*cameraPos, *cameraPos + *cameraFront);
 
 	//view = Mat4::translate(view, Vector3(0.0f, 0.0f, -3.0f));
 	
-	mShaderManager->setShaderMat4(tutShaderId, "view", view.getMatrixValues());
+	Mat4 proj = Mat4::identity;
+	proj = MatProj::perspective(R3_Math::degToRad(mpCam->getFov()), 800.0f / 600.0f, 0.1f, 100.0f);
+	mpShaderManager->setShaderMat4(tutShaderId, "projection", proj.getMatrixValues());
 
 	/*Mat4 proj;
 	proj = MatProj::perspective(DegToRad(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
@@ -457,38 +503,35 @@ void EngineCore::render()
 		Mat4 model = Mat4::identity;
 		model = Mat4::translate(model, cubePositions[i]);
 		float angle = (float)i * 16;
-		model = Mat4::rotate(model, DegToRad(angle), Vector3(0.5f, 1.0f, 0.0f));
+		model = Mat4::rotate(model, R3_Math::degToRad(angle), Vector3(0.5f, 1.0f, 0.0f));
 
-		mShaderManager->setShaderMat4(tutShaderId, "model", model.getMatrixValues());
+		mpShaderManager->setShaderMat4(tutShaderId, "model", model.getMatrixValues());
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 
 	// swap the buffers
-	mWindow->swapBuffers();
+	mpWindow->swapBuffers();
 
 }
 
 void EngineCore::moveCameraLeft()
 {
-	Vector3 vec = Vector3::cross(*cameraFront, *cameraUp);
-	*cameraPos -= vec.normalize() * cameraSpeed;
-
+	mpCam->moveCameraLeft(deltaTime);
 }
 
 void EngineCore::moveCameraRight()
 {
-	Vector3 vec = Vector3::cross(*cameraFront, *cameraUp);
-	*cameraPos += (vec.normalize() * cameraSpeed);
+	mpCam->moveCameraRight(deltaTime);
 }
 
 void EngineCore::moveCameraForward()
 {
-	*cameraPos += (*cameraFront * cameraSpeed);
+	mpCam->moveCameraForward(deltaTime);
 }
 
 void EngineCore::moveCameraBack() //S
 {
-	*cameraPos -= *cameraFront * cameraSpeed;
+	mpCam->moveCameraBack(deltaTime);
 }
 

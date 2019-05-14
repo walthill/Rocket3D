@@ -68,8 +68,8 @@ class GameApp : Trackable
 		const std::string mINIT_TRACKER_NAME = "init";
 		const std::string mDRAW_TRACKER_NAME = "draw";
 		const std::string mLOOP_TRACKER_NAME = "loop";
-		const double m60_FRAME_TIME = 16.7;
-		const double m30_FRAME_TIME = 33.3;
+		const double m60FPS_FRAME_TIME = 16.7;
+		const double m30FPS_FRAME_TIME = 33.3;
 
 		GameApp() {}; //Empty constuctor
 		~GameApp();

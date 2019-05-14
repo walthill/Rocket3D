@@ -4,6 +4,7 @@
 #include "../util/EngineUtils.h"
 
 class Vector3;
+class Camera;
 class Window;
 class InputSystem;
 class ShaderBuild;
@@ -27,29 +28,30 @@ class EngineCore
 		void moveCameraForward();
 		void moveCameraBack();
 
+		void r3_scroll_callback(double xoffset, double yoffset);
+		void r3_mouse_callback(double xpos, double ypos);
+
 		float deltaTime = 0.0f;	// Time between current frame and last frame
 	private:
 		int mWindowWidth, mWindowHeight;
-
+		bool firstMouse = true;
+		float lastX = 400, lastY = 300; //last mouse offset, half of width & height
 		float lastFrame = 0.0f; // Time of last frame
-		float cameraSpeed = 0.25f;
-		Vector3* cameraPos;// = Vector3(0.0f, 0.0f, 3.0f);
-		Vector3* cameraFront;// = Vector3(0.0f, 0.0f, -1.0f);
-		Vector3* cameraUp;// = Vector3(0.0f, 1.0f, 0.0f);
 		
-		Window *mWindow;
+		Window *mpWindow;
 		InputSystem *mpInputSystem;
+		Camera* mpCam;
 
-		ShaderBuild* liveload;
-		ShaderManager* mShaderManager;
-		RocketShader* ourShader;
-
-
+		ShaderBuild* mpLiveload;
+		ShaderManager* mpShaderManager;
+		
 		unsigned int VBO[2], VAO[2]; //Vertex buffer object
 		unsigned int EBO;
 		unsigned int texture, texture1;
 		Vector3 *cubePositions;
 		ShaderKey tutShaderId = "tutShader";
+
+		void calculateDeltaTime();
 };
 
 #endif // !ENGINE_CORE_H

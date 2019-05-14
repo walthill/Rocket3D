@@ -25,11 +25,6 @@ bool GameApp::initialize(char* argv[])
 	if (!mpRocketEngine->initialize(argv))
 		return false;
 
-/*	cameraPos = new Vector3(0.0f, 0.0f, 3.0f);
-	cameraFront = new Vector3(0.0f, 0.0f, -1.0f);
-	cameraUp = new Vector3(0.0f, 1.0f, 0.0f);
-*/
-
 	pPerformanceTracker->stopTracking(mINIT_TRACKER_NAME);
 	std::cout << std::endl << "Time to Init: " << pPerformanceTracker->getElapsedTime(mINIT_TRACKER_NAME) << " ms" << std::endl;
 
@@ -54,7 +49,7 @@ bool GameApp::processLoop()
 
 	mpFrameTimer = new Timer();
 	
-	while (!mShouldExit)//!glfwWindowShouldClose(window))
+	while (!mShouldExit)
 	{
 		pPerformanceTracker->clearTracker(mLOOP_TRACKER_NAME);
 		pPerformanceTracker->startTracking(mLOOP_TRACKER_NAME);
@@ -68,16 +63,14 @@ bool GameApp::processLoop()
 		update();
 		render();
 
-
 		pPerformanceTracker->stopTracking(mDRAW_TRACKER_NAME);
-		mpFrameTimer->sleepUntilElapsed(m30_FRAME_TIME);
+		mpFrameTimer->sleepUntilElapsed(m60FPS_FRAME_TIME);
 		pPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
 
-		mFPS = (int)(1000.0 / pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
 		std::cout << "loop took:" << pPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME) << "ms";
 		std::cout << " draw took:" << pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME) << "ms\n";
-		std::cout << "FPS: " << mFPS << "\n";
-
+		//mFPS = (int)(1000.0 / pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
+		//std::cout << "FPS: " << mFPS << "\n";
 	}
 
 	return false;

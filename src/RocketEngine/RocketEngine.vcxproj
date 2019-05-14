@@ -22,6 +22,7 @@
     <ClInclude Include="asset\image\RocketImgLoader.h" />
     <ClInclude Include="core\EngineCore.h" />
     <ClInclude Include="input\InputSystem.h" />
+    <ClInclude Include="render\Camera.h" />
     <ClInclude Include="shader\RocketShader.h" />
     <ClInclude Include="shader\ShaderBuild.h" />
     <ClInclude Include="shader\ShaderManager.h" />

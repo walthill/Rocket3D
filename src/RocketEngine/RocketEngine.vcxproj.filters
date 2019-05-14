@@ -45,6 +45,9 @@
     <ClInclude Include="window\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="render\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\EngineCore.cpp">

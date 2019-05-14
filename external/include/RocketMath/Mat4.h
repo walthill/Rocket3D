@@ -53,7 +53,7 @@ class Mat4
 			newMatrix = newMatrix * matrix;
 
 			return newMatrix;
-		}
+		};
 
 		static Mat4 rotate(Mat4 matrix, float angle, Vector3 rotationAxis)
 		{
@@ -92,7 +92,7 @@ class Mat4
 			newMatrix.mMatrixValues[10] = scaleValue10;
 
 			return matrix * newMatrix;
-		}
+		};
 
 		static Mat4 translate(Mat4 matrix, Vector3 translationVec)
 		{
@@ -103,7 +103,7 @@ class Mat4
 			matrix.mMatrixValues[11] = translationVec.getZ();
 			
 			return matrix;
-		}
+		};
 
 		//Written with help from https://learnopengl.com/code_viewer.php?code=getting-started/camera-exercise2
 		static Mat4 lookAt(Vector3 pos, Vector3 target, Vector3 worldUp = Vector3::up)
@@ -139,7 +139,7 @@ class Mat4
 			rotation.mMatrixValues[10] = zAxis.getZ();
 
 			return rotation * translation;
-		}
+		};
 
 		//Matrix scalar operations
 		Mat4 operator+(float val)
@@ -150,7 +150,7 @@ class Mat4
 				newMat.mMatrixValues[i] += val;
 
 			return newMat;
-		}
+		};
 		Mat4 operator-(float val)
 		{
 			Mat4 newMat = *this;
@@ -159,7 +159,7 @@ class Mat4
 				newMat.mMatrixValues[i] -= val;
 
 			return newMat;
-		}
+		};
 		Mat4 operator*(float val)
 		{
 			Mat4 newMat = *this;
@@ -168,7 +168,7 @@ class Mat4
 				newMat.mMatrixValues[i] *= val;
 
 			return newMat;
-		}
+		};
 
 		//Matrix-matrix operations
 		Mat4 operator*(Mat4 rhs)
@@ -202,7 +202,7 @@ class Mat4
 			}
 
 			return newMat;
-		}
+		};
 
 
 
@@ -223,7 +223,7 @@ class Mat4
 			  				 newMat.mMatrixValues[2]);
 
 			return newVec;
-		}
+		};
 
 		//Matrix-Vector operations
 		Vector4 operator*(Vector4 rhs)
@@ -242,7 +242,7 @@ class Mat4
 							 newMat.mMatrixValues[2], newMat.mMatrixValues[3]);
 
 			return newVec;
-		}
+		};
 	
 		//Output overload
 		friend std::ostream& operator<<(std::ostream& os, const Mat4& mat)
@@ -254,11 +254,6 @@ class Mat4
 
 			return os;
 		};
-
-		float* toArray()
-		{
-
-		}
 
 		const float* getMatrixValues() const { return mMatrixValues; };
 		static Mat4 identity;
