@@ -17,7 +17,7 @@ struct Vertex {
 
 struct Texture {
     TextureId id;
-    std::string type;
+    std::string type, path;
 };
 
 struct MeshData {
@@ -44,6 +44,7 @@ class Mesh
 			unsigned int specularNr = 1;
 			unsigned int normalNr = 1;
 			unsigned int heightNr = 1;
+
 			for (unsigned int i = 0; i < mMeshData.textures.size(); i++)
 			{
 				glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding

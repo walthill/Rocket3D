@@ -48,6 +48,12 @@
     <ClInclude Include="render\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="render\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="asset\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\EngineCore.cpp">
