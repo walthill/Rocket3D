@@ -55,6 +55,17 @@ class Vector3
 			return Vector3(x,y,z);
 		}
 
+		float* toArray()
+		{
+			float *arr = new float[3];
+
+			arr[0] = mX;
+			arr[1] = mY;
+			arr[2] = mZ;
+
+			return arr;
+		}
+
 		//comparison
 		bool operator==(const Vector3& rhs) { return mX == rhs.mX && mY == rhs.mY && mZ == rhs.mZ; };
 		bool operator!=(const Vector3& rhs) { return (mX != rhs.mX) || (mY == rhs.mY) || (mZ != rhs.mZ); };

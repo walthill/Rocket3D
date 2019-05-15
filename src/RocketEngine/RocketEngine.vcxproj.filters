@@ -72,5 +72,7 @@
   <ItemGroup>
     <None Include="shader\glsl\fShader.glsl" />
     <None Include="shader\glsl\vShader.glsl" />
+    <None Include="shader\glsl\fLighting.glsl" />
+    <None Include="shader\glsl\vLighting.glsl" />
   </ItemGroup>
 </Project>

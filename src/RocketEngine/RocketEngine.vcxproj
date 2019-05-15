@@ -39,6 +39,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\glsl\fShader.glsl" />
+    <None Include="shader\glsl\fLighting.glsl" />
+    <None Include="shader\glsl\vLighting.glsl" />
     <None Include="shader\glsl\vShader.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

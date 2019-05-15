@@ -90,6 +90,18 @@ void ShaderManager::setShaderMat4(ShaderKey key, std::string matrixName, const f
 	}
 }
 
+void ShaderManager::setShaderVec3(ShaderKey key, std::string vecName, float x, float y, float z)
+{
+	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(key);
+
+	if (iter != mShaderList.end())
+	{
+		float* arr = new float[3]{ x,y,z };
+		iter->second->setVec3(vecName, arr);
+	}
+}
+
+
 
 RocketShader* ShaderManager::getShaderByKey(ShaderKey key)
 {

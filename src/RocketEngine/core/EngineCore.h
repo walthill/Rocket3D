@@ -45,11 +45,13 @@ class EngineCore
 		ShaderBuild* mpLiveload;
 		ShaderManager* mpShaderManager;
 		
-		unsigned int VBO[2], VAO[2]; //Vertex buffer object
+		unsigned int lightVAO;
+
+		unsigned int VBO, cubeVAO; //Vertex buffer object
 		unsigned int EBO;
 		unsigned int texture, texture1;
 		Vector3 *cubePositions;
-		ShaderKey tutShaderId = "tutShader";
+		ShaderKey tutShaderId = "tutShader", lampShaderId = "lamp";
 
 		void calculateDeltaTime();
 };
