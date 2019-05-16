@@ -47,7 +47,7 @@ class Camera
 
 		Mat4 getViewMatrix() { return Mat4::lookAt(mPos, mPos + mFront, mUp); };
 		float getFov() { return mZoom; };
-		
+		Vector3 getPosition() { return mPos; };
 		void moveCameraLeft(float deltaTime) 
 		{ 
 			mPos -= mRight * mMoveSpeed * deltaTime;

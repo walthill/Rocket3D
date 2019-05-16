@@ -113,47 +113,47 @@ bool EngineCore::initialize(char* argv[])
 
 
 	float vertices[] = {
-		-0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f,  0.5f, -0.5f,
-		 0.5f,  0.5f, -0.5f,
-		-0.5f,  0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-		-0.5f, -0.5f,  0.5f,
-		 0.5f, -0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		-0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
 
-		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-		 0.5f,  0.5f,  0.5f,
-		 0.5f,  0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
-		-0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f,  0.5f,
-		 0.5f, -0.5f,  0.5f,
-		-0.5f, -0.5f,  0.5f,
-		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
-		-0.5f,  0.5f, -0.5f,
-		 0.5f,  0.5f, -0.5f,
-		 0.5f,  0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 	};
 	
 	//Init cube vertices
@@ -166,8 +166,12 @@ bool EngineCore::initialize(char* argv[])
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	glBindVertexArray(cubeVAO);
 	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	//Param 6 is the "stride", the step between the vertex attribute
+	//Param 5 is the overall size of a single vertex array in bytes
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	//Init lamp vertices
 	glGenVertexArrays(1, &lightVAO);
@@ -175,7 +179,7 @@ bool EngineCore::initialize(char* argv[])
 	// we only need to bind to the VBO, the container's VBO's data already contains the correct data.
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	// set the vertex attributes (only position data for our lamp)
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 
@@ -210,15 +214,20 @@ void EngineCore::calculateDeltaTime()
 void EngineCore::render()
 {
 	//Rendering
-	Vector3 lightPos(4.5f, 1.0f, 2.0f);
-
+	Vector3 lightPos(1.0f + cos(glfwGetTime()) * 5.0f, 1.0f, sin(glfwGetTime() / 2.0f) * 5.0f);
+	// change the light's position values over time (can be done anywhere in the render loop actually, but try to do it at least before using the light source positions)
+	
+	 sin(glfwGetTime() / 2.0f) * 1.0f;
 	mpWindow->clearToColor(0.1f, 0.1f, 0.1f);
 	mpWindow->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
 
-	//Cube object
+	//Cube w/ Lighting shader applied
 	mpShaderManager->useShaderByKey(tutShaderId);
 	mpShaderManager->setShaderVec3(tutShaderId, "objectColor", 1.0f, 0.5f, 0.31f);
 	mpShaderManager->setShaderVec3(tutShaderId, "lightColor", 1.0f, 1.0f, 1.0f);
+	mpShaderManager->setShaderVec3(tutShaderId, "lightPos", lightPos.getX(), lightPos.getY(), lightPos.getZ());
+	mpShaderManager->setShaderVec3(tutShaderId, "viewPos", mpCam->getPosition().getX(), mpCam->getPosition().getY(), mpCam->getPosition().getZ());
+
 
 	//Set properties of cube object in 3d space
 	Mat4 proj = Mat4::identity;
@@ -237,7 +246,7 @@ void EngineCore::render()
 	glBindVertexArray(cubeVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
-	//Lamp - light sources
+	//Lamp - light source
 	//Set 3d properties
 	mpShaderManager->useShaderByKey(lampShaderId);
 	mpShaderManager->setShaderMat4(lampShaderId, "projection", proj.getMatrixValues());
