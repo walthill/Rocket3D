@@ -16,7 +16,7 @@
     <Filter Include="Header Files\shader">
       <UniqueIdentifier>{a195a598-4083-44a6-bdf6-9d21d9e0129b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\shader">
+    <Filter Include="shader">
       <UniqueIdentifier>{3487b5b2-40ac-48a1-a28d-e32edd1ebd21}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -70,9 +70,17 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\glsl\fShader.glsl" />
-    <None Include="shader\glsl\vShader.glsl" />
-    <None Include="shader\glsl\fLighting.glsl" />
-    <None Include="shader\glsl\vLighting.glsl" />
+    <None Include="shader\glsl\vShader.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\vLighting.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\fShader.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\fLighting.glsl">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

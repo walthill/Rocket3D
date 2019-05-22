@@ -46,7 +46,7 @@ class EngineCore
 		ShaderManager* mpShaderManager;
 		
 		unsigned int lightVAO;
-
+		unsigned int diffuseMap, specMap;
 		unsigned int VBO, cubeVAO; //Vertex buffer object
 		unsigned int EBO;
 		unsigned int texture, texture1;

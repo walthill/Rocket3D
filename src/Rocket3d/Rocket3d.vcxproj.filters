@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Shader Files">
-      <UniqueIdentifier>{1efa953b-8e8b-4e44-ae44-150eaea10269}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\input">
       <UniqueIdentifier>{48cb462e-03f3-49ff-9836-d672d75ffaac}</UniqueIdentifier>
     </Filter>
