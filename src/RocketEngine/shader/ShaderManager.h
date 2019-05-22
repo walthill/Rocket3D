@@ -27,8 +27,9 @@ class ShaderManager
 		void setShaderInt(ShaderKey shader, std::string intName, int value);
 		void setShaderBool(ShaderKey shader, std::string boolName, bool value);
 		void setShaderFloat(ShaderKey shader, std::string floatName, float value);
-		void setShaderMat4(ShaderKey shader, std::string matrixName, const float* mat);
-		void setShaderVec3(ShaderKey shader, std::string vecName, float x, float y, float z);
+		void setShaderMat4(ShaderKey shader, std::string matrixName, const float *mat);
+		void setShaderVec3(ShaderKey shader, std::string vecName, float x, float y, float z); //Use three float values
+		void setShaderVec3(ShaderKey shader, std::string vecName, const float *vec); //Overload to use Vector object in param
 
 		RocketShader* getShaderByKey(ShaderKey key);
 		std::map<ShaderKey, RocketShader*> getShaderList() { return mShaderList; };

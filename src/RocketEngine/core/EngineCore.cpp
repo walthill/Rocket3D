@@ -214,19 +214,35 @@ void EngineCore::calculateDeltaTime()
 void EngineCore::render()
 {
 	//Rendering
-	Vector3 lightPos(1.0f + cos(glfwGetTime()) * 5.0f, 1.0f, sin(glfwGetTime() / 2.0f) * 5.0f);
+	//Vector3 lightPos(3.5f, 0.0f, 2.0f); //side
+	Vector3 lightPos(0.0f, 2.5f, 20.0f); //behind, overhead
+	//Vector3 lightPos(1.0f + cos(glfwGetTime()) * 5.0f, 1.0f, sin(glfwGetTime() / 2.0f) * 5.0f);
 	// change the light's position values over time (can be done anywhere in the render loop actually, but try to do it at least before using the light source positions)
 	
-	 sin(glfwGetTime() / 2.0f) * 1.0f;
 	mpWindow->clearToColor(0.1f, 0.1f, 0.1f);
 	mpWindow->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
 
+	Vector3 lightColor( 
+	sinf(glfwGetTime() * 2.0f),
+	sinf(glfwGetTime() * 0.7f),
+	sinf(glfwGetTime() * 1.3f));
+
+	Vector3 diffuseColor = lightColor * Vector3(0.5f, 0.5f, 0.5f); // decrease the influence
+	Vector3 ambientColor = diffuseColor * Vector3(0.2f, 0.2f, 0.2f); // low influence
+
 	//Cube w/ Lighting shader applied
 	mpShaderManager->useShaderByKey(tutShaderId);
-	mpShaderManager->setShaderVec3(tutShaderId, "objectColor", 1.0f, 0.5f, 0.31f);
-	mpShaderManager->setShaderVec3(tutShaderId, "lightColor", 1.0f, 1.0f, 1.0f);
-	mpShaderManager->setShaderVec3(tutShaderId, "lightPos", lightPos.getX(), lightPos.getY(), lightPos.getZ());
-	mpShaderManager->setShaderVec3(tutShaderId, "viewPos", mpCam->getPosition().getX(), mpCam->getPosition().getY(), mpCam->getPosition().getZ());
+	mpShaderManager->setShaderVec3(tutShaderId, "lightPos", lightPos.toArray());
+	mpShaderManager->setShaderVec3(tutShaderId, "viewPos", mpCam->getPosition().toArray());
+
+	mpShaderManager->setShaderVec3(tutShaderId, "material.ambient", 1.0f, 0.5f, 0.31f);
+	mpShaderManager->setShaderVec3(tutShaderId, "material.diffuse", 1.0f, 0.5f, 0.31f);
+	mpShaderManager->setShaderVec3(tutShaderId, "material.specular", 0.5f, 0.5f, 0.5f);
+	mpShaderManager->setShaderFloat(tutShaderId, "material.shininess", 32.0f);
+
+	mpShaderManager->setShaderVec3(tutShaderId, "light.ambient", ambientColor.toArray());
+	mpShaderManager->setShaderVec3(tutShaderId, "light.diffuse", diffuseColor.toArray());
+	mpShaderManager->setShaderVec3(tutShaderId, "light.specular", 1.0f, 1.0f, 1.0f);
 
 
 	//Set properties of cube object in 3d space

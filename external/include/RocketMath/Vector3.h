@@ -55,7 +55,9 @@ class Vector3
 			return Vector3(x,y,z);
 		}
 
-		float* toArray()
+		//Convert Vector object into float collection 
+		//(NOTE): Good for referencing uniform values on shaders
+		const float* toArray()
 		{
 			float *arr = new float[3];
 
@@ -114,6 +116,16 @@ class Vector3
 			newVec.mX = mX / rhs.mX;
 			newVec.mY = mY / rhs.mY;
 			newVec.mZ = mZ / rhs.mZ;
+
+			return newVec;
+		};
+		Vector3 operator*(const Vector3& rhs)
+		{
+			Vector3 newVec;
+
+			newVec.mX = mX * rhs.mX;
+			newVec.mY = mY * rhs.mY;
+			newVec.mZ = mZ * rhs.mZ;
 
 			return newVec;
 		};
