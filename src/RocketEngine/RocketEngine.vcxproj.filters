@@ -94,11 +94,10 @@
     <None Include="shader\glsl\fLighting.glsl">
       <Filter>shader</Filter>
     </None>
-    <None Include="shader\glsl\vShader.glsl">
-      <Filter>shader</Filter>
+    <None Include="README.md">
+      <Filter>Resource Files</Filter>
     </None>
-    <None Include="shader\glsl\fShader.glsl">
-      <Filter>shader</Filter>
-    </None>
+    <None Include="shader\glsl\fShader.glsl" />
+    <None Include="shader\glsl\vShader.glsl" />
   </ItemGroup>
 </Project>
