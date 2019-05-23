@@ -6,7 +6,6 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-//#include <RocketMath/MathUtils.h>
 
 class RocketShader 
 {
@@ -133,25 +132,30 @@ class RocketShader
 			glUseProgram(shaderID);
 		}
 
-		void setBool(const std::string &name, bool value) const
+		void setBool(const std::string &name, const bool &value) const
 		{
 			glUniform1i(glGetUniformLocation(shaderID, name.c_str()), (int)value);
 		}
 
-		void setInt(const std::string &name, int value) const
+		void setInt(const std::string &name, const int &value) const
 		{
 			glUniform1i(glGetUniformLocation(shaderID, name.c_str()), value);
 		}
 
-		void setFloat(const std::string &name, float value) const
+		void setFloat(const std::string &name, const float &value) const
 		{
-			glUniform1i(glGetUniformLocation(shaderID, name.c_str()), (GLint)value);
+			glUniform1f(glGetUniformLocation(shaderID, name.c_str()), value);
 		}
 
-		void setMat4(const std::string &name, const float* mat)
+		void setMat4(const std::string &name, const float *mat)
 		{
 			glUniformMatrix4fv(glGetUniformLocation(shaderID, name.c_str()), 
 													1, GL_TRUE, mat);
+		}
+
+		void setVec3(const std::string &name, const float *value)
+		{	
+			glUniform3fv(glGetUniformLocation(shaderID, name.c_str()), 1, value);
 		}
 
 	private:

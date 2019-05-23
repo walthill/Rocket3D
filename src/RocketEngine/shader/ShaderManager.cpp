@@ -45,13 +45,14 @@ void ShaderManager::useShaderByKey(ShaderKey key)
 	if (iter != mShaderList.end())
 	{
 		iter->second->use();
+		mShaderInUse = key;
 	}
 }
 
 
-void ShaderManager::setShaderInt(ShaderKey key, std::string intName, int value)
+void ShaderManager::setShaderInt(std::string intName, int value)
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(key);
+	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(mShaderInUse);
 
 	if (iter != mShaderList.end())
 	{
@@ -60,9 +61,9 @@ void ShaderManager::setShaderInt(ShaderKey key, std::string intName, int value)
 
 }
 
-void ShaderManager::setShaderBool(ShaderKey key, std::string boolName, bool value)
+void ShaderManager::setShaderBool(std::string boolName, bool value)
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(key);
+	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(mShaderInUse);
 
 	if (iter != mShaderList.end())
 	{
@@ -70,9 +71,9 @@ void ShaderManager::setShaderBool(ShaderKey key, std::string boolName, bool valu
 	}
 }
 
-void ShaderManager::setShaderFloat(ShaderKey key, std::string floatName, float value)
+void ShaderManager::setShaderFloat(std::string floatName, float value)
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(key);
+	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(mShaderInUse);
 
 	if (iter != mShaderList.end())
 	{
@@ -80,9 +81,10 @@ void ShaderManager::setShaderFloat(ShaderKey key, std::string floatName, float v
 	}
 }
 
-void ShaderManager::setShaderMat4(ShaderKey key, std::string matrixName, const float *mat)
+
+void ShaderManager::setShaderMat4(std::string matrixName, const float *mat)
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(key);
+	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(mShaderInUse);
 
 	if (iter != mShaderList.end())
 	{
@@ -90,6 +92,26 @@ void ShaderManager::setShaderMat4(ShaderKey key, std::string matrixName, const f
 	}
 }
 
+void ShaderManager::setShaderVec3(std::string vecName, const float *vec)
+{
+	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(mShaderInUse);
+
+	if (iter != mShaderList.end())
+	{
+		iter->second->setVec3(vecName, vec);
+	}
+}
+
+void ShaderManager::setShaderVec3(std::string vecName, float x, float y, float z)
+{
+	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(mShaderInUse);
+
+	if (iter != mShaderList.end())
+	{
+		float* arr = new float[3]{ x,y,z };
+		iter->second->setVec3(vecName, arr);
+	}
+}
 
 RocketShader* ShaderManager::getShaderByKey(ShaderKey key)
 {

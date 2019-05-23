@@ -70,6 +70,30 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="shader\glsl\fSoftSpotlight.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\fSpotlight.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\fPointLight.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\fDirectionalLight.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\fLamp.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\vLamp.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\vLighting.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\fLighting.glsl">
+      <Filter>shader</Filter>
+    </None>
     <None Include="shader\glsl\vShader.glsl">
       <Filter>shader</Filter>
     </None>

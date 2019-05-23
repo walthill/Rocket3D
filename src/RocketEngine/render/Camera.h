@@ -47,6 +47,7 @@ class Camera
 
 		Mat4 getViewMatrix() { return Mat4::lookAt(mPos, mPos + mFront, mUp); };
 		float getFov() { return mZoom; };
+		Vector3 getPosition() { return mPos; };
 		
 		void moveCameraLeft(float deltaTime) { mPos -= mRight * mMoveSpeed * deltaTime; };
 		void moveCameraRight(float deltaTime) { mPos += mRight * mMoveSpeed * deltaTime; };
@@ -74,6 +75,8 @@ class Camera
 			mPos += Vector3::cross(mUp, mRight).normalize() * mMoveSpeed * deltaTime;
 //			mPos -= Vector3::cross(mWorldUp, mRight).normalize() * mMoveSpeed * deltaTime;
 		};
+
+		Vector3* getFront() { return &mFront; };
 
 	private:
 		// Camera Attributes
