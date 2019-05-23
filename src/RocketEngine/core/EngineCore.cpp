@@ -161,7 +161,7 @@ void EngineCore::render()
 
 	//Cube w/ Lighting shader applied
 	mpShaderManager->useShaderByKey(tutShaderId);
-	mpShaderManager->setShaderVec3("viewPos", mpCam->getPosition().toArray());
+	mpShaderManager->setShaderVec3("viewPos", mpCam->getPosition()->toArray());
 	mpShaderManager->setShaderFloat("material.shininess", 32.0f);
 
 	// directional light
@@ -202,7 +202,7 @@ void EngineCore::render()
 	mpShaderManager->setShaderFloat("pointLights[3].linear", 0.09);
 	mpShaderManager->setShaderFloat("pointLights[3].quadratic", 0.032);
 	// spotLight
-	mpShaderManager->setShaderVec3("spotLight.position", mpCam->getPosition().toArray());
+	mpShaderManager->setShaderVec3("spotLight.position", mpCam->getPosition()->toArray());
 	mpShaderManager->setShaderVec3("spotLight.direction", mpCam->getFront()->toArray());
 	mpShaderManager->setShaderVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
 	mpShaderManager->setShaderVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
@@ -227,7 +227,7 @@ void EngineCore::render()
 	Mat4 model = Mat4::identity;
 	model = Mat4::translate(model, Vector3(0.0f, -2.75f, 0.0f));
 	model = Mat4::scale(model, Vector3(0.2f, 0.2f, 0.2f));
-	mpShaderManager->setShaderMat4(tutShaderId, "model", model.getMatrixValues());
+	mpShaderManager->setShaderMat4("model", model.getMatrixValues());
 	mModel->drawModel(mpShaderManager->getShaderByKey(tutShaderId));
 
 	//Lamp - light source
@@ -235,11 +235,6 @@ void EngineCore::render()
 	mpShaderManager->useShaderByKey(lampShaderId);
 	mpShaderManager->setShaderMat4("projection", proj.getMatrixValues());
 	mpShaderManager->setShaderMat4("view", view.getMatrixValues());
-
-//	model = Mat4::identity;
-	//model = Mat4::translate(model, lightPos);
-	//model = Mat4::scale(model, Vector3(0.2f, 0.2f, 0.2f));
-	//mpShaderManager->setShaderMat4("model", model.getMatrixValues());
 
 	//Draw
 	glBindVertexArray(lightVAO);
