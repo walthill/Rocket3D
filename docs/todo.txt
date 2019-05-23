@@ -1,3 +1,5 @@
 TODO
-- Add math code to project
-- Finish tutorial on transformations
+======================
+*Merge lighting and model code
+*Logging
+*Lighting class?
