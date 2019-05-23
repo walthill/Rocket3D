@@ -50,7 +50,7 @@ class Mat4
  			newMatrix.mMatrixValues[5] = scaleVec.getY();
 			newMatrix.mMatrixValues[10] = scaleVec.getZ();
 
-			newMatrix = newMatrix * matrix;
+			newMatrix = matrix * newMatrix;
 
 			return newMatrix;
 		};

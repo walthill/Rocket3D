@@ -48,19 +48,8 @@ class Camera
 		Mat4 getViewMatrix() { return Mat4::lookAt(mPos, mPos + mFront, mUp); };
 		float getFov() { return mZoom; };
 		
-		void moveCameraLeft(float deltaTime) 
-		{ 
-			mPos -= mRight * mMoveSpeed * deltaTime;
-			mPos = Vector3(mPos.getX(), 0.0f, mPos.getZ());
-
-		};
-
-		void moveCameraRight(float deltaTime) 
-		{ 
-			mPos += mRight * mMoveSpeed * deltaTime;
-			mPos = Vector3(mPos.getX(), 0.0f, mPos.getZ());
-
-		};
+		void moveCameraLeft(float deltaTime) { mPos -= mRight * mMoveSpeed * deltaTime; };
+		void moveCameraRight(float deltaTime) { mPos += mRight * mMoveSpeed * deltaTime; };
 
 		/*
 			BenjiHor  @ Learn OpenGl - https://learnopengl.com/Getting-started/Camera
@@ -76,14 +65,14 @@ class Camera
 
 		void moveCameraForward(float deltaTime) 
 		{ 
-			mPos += Vector3::cross(mWorldUp, mRight).normalize() * mMoveSpeed * deltaTime;
-			mPos = Vector3(mPos.getX(), 0.0f, mPos.getZ());
+			mPos += Vector3::cross(mUp, mRight).normalize() * mMoveSpeed * deltaTime;
+	//		mPos += Vector3::cross(mWorldUp, mRight).normalize() * mMoveSpeed * deltaTime;
 		};
 		
 		void moveCameraBack(float deltaTime) 
 		{ 
-			mPos -= Vector3::cross(mWorldUp, mRight).normalize() * mMoveSpeed * deltaTime;
-			mPos = Vector3(mPos.getX(), 0.0f, mPos.getZ());
+			mPos += Vector3::cross(mUp, mRight).normalize() * mMoveSpeed * deltaTime;
+//			mPos -= Vector3::cross(mWorldUp, mRight).normalize() * mMoveSpeed * deltaTime;
 		};
 
 	private:

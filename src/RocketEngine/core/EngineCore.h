@@ -10,6 +10,7 @@ class InputSystem;
 class ShaderBuild;
 class ShaderManager;
 class RocketShader;
+class Model;
 
 class EngineCore
 {
@@ -50,7 +51,7 @@ class EngineCore
 		unsigned int texture, texture1;
 		Vector3 *cubePositions;
 		ShaderKey tutShaderId = "tutShader";
-
+		Model* mModel;
 		void calculateDeltaTime();
 };
 

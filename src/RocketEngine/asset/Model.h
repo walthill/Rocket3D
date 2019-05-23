@@ -1,11 +1,11 @@
 #ifndef MODEL_H
 #define MODEL_H
 
+#include "../render/Mesh.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "image/RocketImgLoader.h"
-#include "../render/Mesh.h"
 
 struct ModelData {
 	std::vector<Mesh> meshes;
@@ -113,7 +113,7 @@ class Model
 				data.textures.insert(data.textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
 				//Specular maps
-				std::vector<Texture> specularMaps = getTexturesFromMaterial(material, aiTextureType_DIFFUSE, "texture_specular");
+				std::vector<Texture> specularMaps = getTexturesFromMaterial(material, aiTextureType_SPECULAR, "texture_specular");
 				data.textures.insert(data.textures.end(), specularMaps.begin(), specularMaps.end());
 
 
@@ -128,14 +128,14 @@ class Model
 			std::vector<Texture> textures;
 			for (auto i = 0; i < mat->GetTextureCount(type); i++)
 			{
-				std::string str;
-				mat->GetTexture(type, i, &(aiString)str);
+				aiString str;
+				mat->GetTexture(type, i, &str);
 				bool loadFromMemory = false;
 
 				//Check if texture has alread been loaded and use that data if so
 				for (auto j = 0; j < texturesLoaded.size(); j++)
 				{
-					if (std::strcmp(texturesLoaded[j].path.data(), str.c_str()) == 0)
+					if (std::strcmp(texturesLoaded[j].path.data(), str.C_Str()) == 0)
 					{
 						textures.push_back(texturesLoaded[j]);
 						loadFromMemory = true;
@@ -146,57 +146,67 @@ class Model
 				if (!loadFromMemory) //load in new texture from file
 				{
 					Texture texture;
-					texture.id = TextureFromFile(str.c_str(), mModelData.directory);
+					std::string str2 = (std::string)str.C_Str();
+
+					// Remove directory if present.
+					// Do this before extension removal incase directory has a period character.
+					const size_t last_slash_idx = str2.find_last_of("\\/");
+					if (std::string::npos != last_slash_idx)
+					{
+						str2.erase(0, last_slash_idx + 1);
+					}
+					texture.id = TextureFromFile(str2.c_str(), mModelData.directory);
 					texture.type = typeName;
-					texture.path = str;
+					texture.path = str2.c_str();
 					textures.push_back(texture);
 					texturesLoaded.push_back(texture); // add to loaded textures
 				}
 			}
 			return textures;
 		};
-
-		unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false)
-		{
-			std::string filename = (std::string)path;
-			filename = directory + '/' + filename;
-
-			TextureId id;
-			glGenTextures(1, &id);
-
-			int width, height, nrComponents;
-			unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-			
-			if (data)
-			{
-				GLenum format;
-				if (nrComponents == 1)
-					format = GL_RED;
-				else if (nrComponents == 3)
-					format = GL_RGB;
-				else if (nrComponents == 4)
-					format = GL_RGBA;
-
-				glBindTexture(GL_TEXTURE_2D, id);
-				glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-				glGenerateMipmap(GL_TEXTURE_2D);
-
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-				stbi_image_free(data);
-			}
-			else
-			{
-				std::cout << "ERROR::Texture::Failed to load at path: " << path << std::endl;
-				stbi_image_free(data);
-			}
-
-			return id;
-		}
-
 };
+
+
+unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma)
+{
+	std::string filename = (std::string)path;
+	filename = directory + '/' + filename;
+
+	TextureId id;
+	glGenTextures(1, &id);
+
+	int width, height, nrComponents;
+	unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+
+	if (data)
+	{
+		GLenum format;
+		if (nrComponents == 1)
+			format = GL_RED;
+		else if (nrComponents == 3)
+			format = GL_RGB;
+		else if (nrComponents == 4)
+			format = GL_RGBA;
+
+		glBindTexture(GL_TEXTURE_2D, id);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(data);
+	}
+	else
+	{
+		std::cout << "ERROR::Texture::Failed to load at path: " << path << std::endl;
+		stbi_image_free(data);
+	}
+
+	return id;
+}
+
 
 #endif // !MODEL_H
