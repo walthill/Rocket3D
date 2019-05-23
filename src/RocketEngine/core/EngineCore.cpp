@@ -109,8 +109,8 @@ bool EngineCore::initialize(char* argv[])
 	mpLiveload->init(directory + L"RocketBuild.dll");
 	mpLiveload->addFunctionToLiveLoad("live_shader_rebuild");
 
-	mpShaderManager->addShader(tutShaderId, new RocketShader("vShader.glsl", "fSoftSpotlight.glsl"));
-	mpShaderManager->addShader("lamp", new RocketShader("vLighting.glsl", "fLighting.glsl"));
+	mpShaderManager->addShader(tutShaderId, new RocketShader("vLighting.glsl", "fLighting.glsl"));
+	mpShaderManager->addShader("lamp", new RocketShader("vLamp.glsl", "fLamp.glsl"));
 
 
 	float vertices[] = {
@@ -169,6 +169,13 @@ bool EngineCore::initialize(char* argv[])
 	Vector3(1.5f,  2.0f, -2.5f),
 	Vector3(1.5f,  0.2f, -1.5f),
 	Vector3(-1.3f,  1.0f, -1.5f)
+	};
+
+	pointLightPositions = new Vector3[4]{
+		Vector3(0.7f,  0.2f,  2.0f),
+		Vector3(2.3f, -3.3f, -4.0f),
+		Vector3(-4.0f,  2.0f, -12.0f),
+		Vector3(0.0f,  0.0f, -3.0f)
 	};
 
 	//Init cube vertices
@@ -240,7 +247,7 @@ void EngineCore::render()
 {
 	//Rendering
 	//Vector3 lightPos(3.5f, 0.0f, 2.0f); //side
-	Vector3 lightPos(0.0f, 0.0f, 10.0f); //behind, overhead
+	//Vector3 lightPos(0.0f, 0.0f, 10.0f); //behind, overhead
 	//Vector3 lightPos(1.0f + cos(glfwGetTime()) * 5.0f, 1.0f, sin(glfwGetTime() / 2.0f) * 5.0f);
 	// change the light's position values over time (can be done anywhere in the render loop actually, but try to do it at least before using the light source positions)
 	
@@ -249,24 +256,57 @@ void EngineCore::render()
 
 	//Cube w/ Lighting shader applied
 	mpShaderManager->useShaderByKey(tutShaderId);
-	mpShaderManager->setShaderVec3("light.position", mpCam->getPosition().toArray());
 	mpShaderManager->setShaderVec3("viewPos", mpCam->getPosition().toArray());
+	mpShaderManager->setShaderFloat("material.shininess", 32.0f);
 
-	mpShaderManager->setShaderVec3("light.direction", mpCam->getFront()->toArray());
-	mpShaderManager->setShaderFloat("light.cutoff", cos(R3_Math::degToRad(12.5f)));
-	mpShaderManager->setShaderFloat("light.outerCutoff", cos(R3_Math::degToRad(17.5f)));
-
-	mpShaderManager->setShaderVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-	mpShaderManager->setShaderVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-	mpShaderManager->setShaderVec3("light.specular", 1.0f, 1.0f, 1.0f);
-
-	mpShaderManager->setShaderFloat("light.constant", 1.0f);
-	mpShaderManager->setShaderFloat("light.linear", 0.09f);
-	mpShaderManager->setShaderFloat("light.quadratic", 0.032f);
-
-
-	mpShaderManager->setShaderVec3("material.specular", 0.5f, 0.5f, 0.5f);
-	mpShaderManager->setShaderFloat("material.shininess", 64.0f);
+	// directional light
+	mpShaderManager->setShaderVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+	mpShaderManager->setShaderVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+	mpShaderManager->setShaderVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+	mpShaderManager->setShaderVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+	// point light 1
+	mpShaderManager->setShaderVec3("pointLights[0].position", pointLightPositions[0].toArray());
+	mpShaderManager->setShaderVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+	mpShaderManager->setShaderVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+	mpShaderManager->setShaderVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+	mpShaderManager->setShaderFloat("pointLights[0].constant", 1.0f);
+	mpShaderManager->setShaderFloat("pointLights[0].linear", 0.09);
+	mpShaderManager->setShaderFloat("pointLights[0].quadratic", 0.032);
+	// point light 2
+	mpShaderManager->setShaderVec3("pointLights[1].position", pointLightPositions[1].toArray());
+	mpShaderManager->setShaderVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+	mpShaderManager->setShaderVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+	mpShaderManager->setShaderVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+	mpShaderManager->setShaderFloat("pointLights[1].constant", 1.0f);
+	mpShaderManager->setShaderFloat("pointLights[1].linear", 0.09);
+	mpShaderManager->setShaderFloat("pointLights[1].quadratic", 0.032);
+	// point light 3
+	mpShaderManager->setShaderVec3("pointLights[2].position", pointLightPositions[2].toArray());
+	mpShaderManager->setShaderVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+	mpShaderManager->setShaderVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+	mpShaderManager->setShaderVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+	mpShaderManager->setShaderFloat("pointLights[2].constant", 1.0f);
+	mpShaderManager->setShaderFloat("pointLights[2].linear", 0.09);
+	mpShaderManager->setShaderFloat("pointLights[2].quadratic", 0.032);
+	// point light 4
+	mpShaderManager->setShaderVec3("pointLights[3].position", pointLightPositions[3].toArray());
+	mpShaderManager->setShaderVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+	mpShaderManager->setShaderVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+	mpShaderManager->setShaderVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+	mpShaderManager->setShaderFloat("pointLights[3].constant", 1.0f);
+	mpShaderManager->setShaderFloat("pointLights[3].linear", 0.09);
+	mpShaderManager->setShaderFloat("pointLights[3].quadratic", 0.032);
+	// spotLight
+	mpShaderManager->setShaderVec3("spotLight.position", mpCam->getPosition().toArray());
+	mpShaderManager->setShaderVec3("spotLight.direction", mpCam->getFront()->toArray());
+	mpShaderManager->setShaderVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+	mpShaderManager->setShaderVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+	mpShaderManager->setShaderVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+	mpShaderManager->setShaderFloat("spotLight.constant", 1.0f);
+	mpShaderManager->setShaderFloat("spotLight.linear", 0.09);
+	mpShaderManager->setShaderFloat("spotLight.quadratic", 0.032);
+	mpShaderManager->setShaderFloat("spotLight.cutOff", cos(R3_Math::degToRad(12.5f)));
+	mpShaderManager->setShaderFloat("spotLight.outerCutOff", cos(R3_Math::degToRad(15.0f)));
 
 
 	//Set properties of cube object in 3d space
@@ -279,8 +319,8 @@ void EngineCore::render()
 	mpShaderManager->setShaderMat4("view", view.getMatrixValues());
 	
 	Mat4 model = Mat4::identity;
-	model = Mat4::scale(model, Vector3(0.6f, 0.6f, 0.6f));
-	mpShaderManager->setShaderMat4("model", model.getMatrixValues());
+	//model = Mat4::scale(model, Vector3(0.6f, 0.6f, 0.6f));
+	//mpShaderManager->setShaderMat4("model", model.getMatrixValues());
 
 	//bind texture
 	glActiveTexture(GL_TEXTURE0);
@@ -307,14 +347,22 @@ void EngineCore::render()
 	mpShaderManager->setShaderMat4("projection", proj.getMatrixValues());
 	mpShaderManager->setShaderMat4("view", view.getMatrixValues());
 
-	model = Mat4::identity;
-	model = Mat4::translate(model, lightPos);
-	model = Mat4::scale(model, Vector3(0.2f, 0.2f, 0.2f));
-	mpShaderManager->setShaderMat4("model", model.getMatrixValues());
+//	model = Mat4::identity;
+	//model = Mat4::translate(model, lightPos);
+	//model = Mat4::scale(model, Vector3(0.2f, 0.2f, 0.2f));
+	//mpShaderManager->setShaderMat4("model", model.getMatrixValues());
 
 	//Draw
 	glBindVertexArray(lightVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+	for (unsigned int i = 0; i < 4; i++)
+	{
+		model = Mat4(1.0f);
+		model = Mat4::translate(model, pointLightPositions[i]);
+		model = Mat4::scale(model, Vector3(0.2f, 0.2f, 0.2f));
+		mpShaderManager->setShaderMat4("model", model.getMatrixValues());
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
 
 	// swap the buffers
 	mpWindow->swapBuffers();

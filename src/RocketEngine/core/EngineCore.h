@@ -50,7 +50,7 @@ class EngineCore
 		unsigned int VBO, cubeVAO; //Vertex buffer object
 		unsigned int EBO;
 		unsigned int texture, texture1;
-		Vector3 *cubePositions;
+		Vector3 *cubePositions, *pointLightPositions;
 		ShaderKey tutShaderId = "tutShader", lampShaderId = "lamp";
 
 		void calculateDeltaTime();
