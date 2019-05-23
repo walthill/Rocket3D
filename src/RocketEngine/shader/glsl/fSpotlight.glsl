@@ -24,20 +24,20 @@ uniform Light light;
 
 void main()
 { 
-	//vec3 lightDir = normalize(light.position - FragPos);
+	vec3 lightDir = normalize(light.position - FragPos);
 
-	//float theta = dot(lightDir, normalize(-light.direction));
-	//float epsilon = light.cutoff - light.outerCutoff;
-	//float instensity = clamp((theta-light.outerCutoff) / epsilon, 0.0, 1.0);
+	float theta = dot(lightDir, normalize(-light.direction));
+	float epsilon = light.cutoff - light.outerCutoff;
+	float instensity = clamp((theta-light.outerCutoff) / epsilon, 0.0, 1.0);
 
-	//if(theta > light.cutoff)
+	if(theta > light.cutoff)
 	{
 		// ambient
 		vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
   	
 		// diffuse 
 		vec3 norm = normalize(Normal);
-	    vec3 lightDir = normalize(light.position - FragPos);
+    
 		//vec3 lightDir = normalize(-light.direction);
 	
 		float diff = max(dot(norm, lightDir), 0.0);
@@ -61,16 +61,16 @@ void main()
 		float dist = length(light.position - FragPos);
 		float attenuation = 1.0 / (light.constant + light.linear * dist + light.quadratic * (dist*dist));
 
-		ambient *= attenuation;
+		//ambient *= attenuation;
 		diffuse *= attenuation;
 		specular *= attenuation;
 
 		vec3 result = ambient + diffuse + specular;
 		fragColor = vec4(result, 1.0);
 	}
-	//else
+	else
 	{
-		//fragColor = vec4(light.ambient * texture(material.diffuse, TexCoords).rgb, 1.0);
+		fragColor = vec4(light.ambient * texture(material.diffuse, TexCoords).rgb, 1.0);
 	}
  
 };

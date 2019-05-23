@@ -109,7 +109,7 @@ bool EngineCore::initialize(char* argv[])
 	mpLiveload->init(directory + L"RocketBuild.dll");
 	mpLiveload->addFunctionToLiveLoad("live_shader_rebuild");
 
-	mpShaderManager->addShader(tutShaderId, new RocketShader("vShader.glsl", "fShader.glsl"));
+	mpShaderManager->addShader(tutShaderId, new RocketShader("vShader.glsl", "fSoftSpotlight.glsl"));
 	mpShaderManager->addShader("lamp", new RocketShader("vLighting.glsl", "fLighting.glsl"));
 
 
@@ -158,6 +158,19 @@ bool EngineCore::initialize(char* argv[])
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 	};
 	
+	cubePositions = new Vector3[10]{
+	Vector3(0.0f,  0.0f,  0.0f),
+	Vector3(2.0f,  5.0f, -15.0f),
+	Vector3(-1.5f, -2.2f, -2.5f),
+	Vector3(-3.8f, -2.0f, -12.3f),
+	Vector3(2.4f, -0.4f, -3.5f),
+	Vector3(-1.7f,  3.0f, -7.5f),
+	Vector3(1.3f, -2.0f, -2.5f),
+	Vector3(1.5f,  2.0f, -2.5f),
+	Vector3(1.5f,  0.2f, -1.5f),
+	Vector3(-1.3f,  1.0f, -1.5f)
+	};
+
 	//Init cube vertices
 	glGenVertexArrays(1, &cubeVAO);
 	glGenBuffers(1, &VBO);
@@ -183,22 +196,8 @@ bool EngineCore::initialize(char* argv[])
 	// we only need to bind to the VBO, the container's VBO's data already contains the correct data.
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	// set the vertex attributes (only position data for our lamp)
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-
-	//Texture init
-	glGenTextures(1, &diffuseMap);
-	glBindTexture(GL_TEXTURE_2D, diffuseMap);
-
-	//TEXTURE SAMPLING
-	//Selects a texture pixel (texel) to map to
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	//MIPMAPS & MIPMAP FILTERING
-	//Downsample textures that are far away to save memory and decrease artifacting
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//load image
 	diffuseMap = loadTexture("../../assets/textures/container2.png");
@@ -207,8 +206,8 @@ bool EngineCore::initialize(char* argv[])
 	glEnable(GL_DEPTH_TEST);
 
 	mpShaderManager->useShaderByKey(tutShaderId);
-	mpShaderManager->setShaderInt(tutShaderId, "material.diffuse", 0);
-	mpShaderManager->setShaderInt(tutShaderId, "material.specular", 1);
+	mpShaderManager->setShaderInt("material.diffuse", 0);
+	mpShaderManager->setShaderInt("material.specular", 1);
 
 
 	glfwSetFramebufferSizeCallback(mpWindow->getWindowHandle(), framebufferSizeCallback);
@@ -241,7 +240,7 @@ void EngineCore::render()
 {
 	//Rendering
 	//Vector3 lightPos(3.5f, 0.0f, 2.0f); //side
-	Vector3 lightPos(0.0f, 2.5f, 20.0f); //behind, overhead
+	Vector3 lightPos(0.0f, 0.0f, 10.0f); //behind, overhead
 	//Vector3 lightPos(1.0f + cos(glfwGetTime()) * 5.0f, 1.0f, sin(glfwGetTime() / 2.0f) * 5.0f);
 	// change the light's position values over time (can be done anywhere in the render loop actually, but try to do it at least before using the light source positions)
 	
@@ -250,30 +249,38 @@ void EngineCore::render()
 
 	//Cube w/ Lighting shader applied
 	mpShaderManager->useShaderByKey(tutShaderId);
-	mpShaderManager->setShaderVec3(tutShaderId, "light.position", lightPos.toArray());
-	mpShaderManager->setShaderVec3(tutShaderId, "viewPos", mpCam->getPosition().toArray());
+	mpShaderManager->setShaderVec3("light.position", mpCam->getPosition().toArray());
+	mpShaderManager->setShaderVec3("viewPos", mpCam->getPosition().toArray());
+
+	mpShaderManager->setShaderVec3("light.direction", mpCam->getFront()->toArray());
+	mpShaderManager->setShaderFloat("light.cutoff", cos(R3_Math::degToRad(12.5f)));
+	mpShaderManager->setShaderFloat("light.outerCutoff", cos(R3_Math::degToRad(17.5f)));
+
+	mpShaderManager->setShaderVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+	mpShaderManager->setShaderVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+	mpShaderManager->setShaderVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+	mpShaderManager->setShaderFloat("light.constant", 1.0f);
+	mpShaderManager->setShaderFloat("light.linear", 0.09f);
+	mpShaderManager->setShaderFloat("light.quadratic", 0.032f);
 
 
-	mpShaderManager->setShaderVec3(tutShaderId, "light.ambient", 0.2f, 0.2f, 0.2f);
-	mpShaderManager->setShaderVec3(tutShaderId, "light.diffuse", 0.5f, 0.5f, 0.5f);
-	mpShaderManager->setShaderVec3(tutShaderId, "light.specular", 1.0f, 1.0f, 1.0f);
-	
-	mpShaderManager->setShaderVec3(tutShaderId, "material.specular", 0.5f, 0.5f, 0.5f);
-	mpShaderManager->setShaderFloat(tutShaderId, "material.shininess", 64.0f);
+	mpShaderManager->setShaderVec3("material.specular", 0.5f, 0.5f, 0.5f);
+	mpShaderManager->setShaderFloat("material.shininess", 64.0f);
 
 
 	//Set properties of cube object in 3d space
 	Mat4 proj = Mat4::identity;
 	proj = MatProj::perspective(R3_Math::degToRad(mpCam->getFov()), 800.0f / 600.0f, 0.1f, 100.0f);
-	mpShaderManager->setShaderMat4(tutShaderId, "projection", proj.getMatrixValues());
+	mpShaderManager->setShaderMat4("projection", proj.getMatrixValues());
 
 	Mat4 view = Mat4::identity;	
 	view = mpCam->getViewMatrix();
-	mpShaderManager->setShaderMat4(tutShaderId, "view", view.getMatrixValues());
+	mpShaderManager->setShaderMat4("view", view.getMatrixValues());
 	
 	Mat4 model = Mat4::identity;
 	model = Mat4::scale(model, Vector3(0.6f, 0.6f, 0.6f));
-	mpShaderManager->setShaderMat4(tutShaderId, "model", model.getMatrixValues());
+	mpShaderManager->setShaderMat4("model", model.getMatrixValues());
 
 	//bind texture
 	glActiveTexture(GL_TEXTURE0);
@@ -283,18 +290,27 @@ void EngineCore::render()
 
 	//draw cube
 	glBindVertexArray(cubeVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+	for (unsigned int i = 0; i < 10; i++)
+	{
+		model = Mat4(1.0f);
+		model = Mat4::translate(model, cubePositions[i]);
+		float angle = 20.0f * i;
+		model = Mat4::rotate(model, R3_Math::degToRad(angle), Vector3(1.0f, 0.3f, 0.5f));
+		mpShaderManager->setShaderMat4("model", model.getMatrixValues());
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
 
 	//Lamp - light source
 	//Set 3d properties
 	mpShaderManager->useShaderByKey(lampShaderId);
-	mpShaderManager->setShaderMat4(lampShaderId, "projection", proj.getMatrixValues());
-	mpShaderManager->setShaderMat4(lampShaderId, "view", view.getMatrixValues());
+	mpShaderManager->setShaderMat4("projection", proj.getMatrixValues());
+	mpShaderManager->setShaderMat4("view", view.getMatrixValues());
 
 	model = Mat4::identity;
 	model = Mat4::translate(model, lightPos);
 	model = Mat4::scale(model, Vector3(0.2f, 0.2f, 0.2f));
-	mpShaderManager->setShaderMat4(lampShaderId, "model", model.getMatrixValues());
+	mpShaderManager->setShaderMat4("model", model.getMatrixValues());
 
 	//Draw
 	glBindVertexArray(lightVAO);

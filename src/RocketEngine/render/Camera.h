@@ -86,6 +86,8 @@ class Camera
 			mPos = Vector3(mPos.getX(), 0.0f, mPos.getZ());
 		};
 
+		Vector3* getFront() { return &mFront; };
+
 	private:
 		// Camera Attributes
 		Vector3 mPos;

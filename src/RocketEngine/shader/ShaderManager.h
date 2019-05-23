@@ -24,12 +24,17 @@ class ShaderManager
 		void useShaderByKey(ShaderKey key);
 
 		void addShader(ShaderKey id, RocketShader* shader) { mShaderList[id] = shader; };
-		void setShaderInt(ShaderKey shader, std::string intName, int value);
-		void setShaderBool(ShaderKey shader, std::string boolName, bool value);
-		void setShaderFloat(ShaderKey shader, std::string floatName, float value);
-		void setShaderMat4(ShaderKey shader, std::string matrixName, const float *mat);
-		void setShaderVec3(ShaderKey shader, std::string vecName, float x, float y, float z); //Use three float values
-		void setShaderVec3(ShaderKey shader, std::string vecName, const float *vec); //Overload to use Vector object in param
+		
+		/***************************************
+			Assign value to the shader currently in use
+		****************************************/
+
+		void setShaderInt(std::string intName, int value);
+		void setShaderBool(std::string boolName, bool value);
+		void setShaderFloat(std::string floatName, float value);
+		void setShaderMat4(std::string matrixName, const float *mat);
+		void setShaderVec3(std::string vecName, float x, float y, float z); //Use three float values
+		void setShaderVec3(std::string vecName, const float *vec); //Overload to use Vector object in param
 
 		RocketShader* getShaderByKey(ShaderKey key);
 		std::map<ShaderKey, RocketShader*> getShaderList() { return mShaderList; };
@@ -37,6 +42,7 @@ class ShaderManager
 	private:
 		//TODO: make this a map with shader string-based ID's
 		static std::map<ShaderKey, RocketShader*> mShaderList;
+		ShaderKey mShaderInUse;
 
 };
 
