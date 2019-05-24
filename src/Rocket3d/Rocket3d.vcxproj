@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>../RocketEngine;../../external/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../../external/DeanLib/lib;../../external/lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>../../external/lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)bin-int\$(Configuration)-$(Platform)\$(ProjectName)\</IntDir>
   </PropertyGroup>
@@ -88,6 +88,12 @@
       </EntryPointSymbol>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)-$(Platform)\RocketEngine\;Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /Y "$(SolutionDir)..\..\external\lib\assimp-vc141-mtd.dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\assimp-vc141-mtd.dll"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copying assimp-vc141-mtd.dll to $(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
