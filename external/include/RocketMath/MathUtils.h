@@ -6,7 +6,7 @@
 #include "Vector4.h"
 #include "Mat4.h"
 
-namespace R3_Math
+namespace RK_Math
 {
 	constexpr auto PI = 3.141592653589793238463f;
 

@@ -1,5 +1,5 @@
-#ifndef ROCKET_SHADER_H
-#define ROCKET_SHADER_H
+#ifndef RK_SHADER_H
+#define RK_SHADER_H
 
 #include <glad/glad.h>
 #include <string>
@@ -7,13 +7,13 @@
 #include <sstream>
 #include <iostream>
 
-class RocketShader 
+class RK_Shader 
 {
 	public:
 		
 		unsigned int shaderID; //program ID
 
-		RocketShader(const GLchar* vertexPath, const GLchar* fragmentPath)
+		RK_Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
 		{
 			mVertShaderPath = vertexPath;
 			mFragShaderPath = fragmentPath;
@@ -167,4 +167,4 @@ class RocketShader
 		const char* mFragShaderPath;
 };
 
-#endif // !ROCKET_SHADER_H
+#endif // !RK_SHADER_H

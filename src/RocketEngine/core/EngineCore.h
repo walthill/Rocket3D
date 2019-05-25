@@ -8,8 +8,10 @@ class Camera;
 class Window;
 class InputSystem;
 class ShaderBuild;
+class Lighting;
+class DirectionalLight;
 class ShaderManager;
-class RocketShader;
+class RK_Shader;
 
 class EngineCore
 {
@@ -44,6 +46,9 @@ class EngineCore
 
 		ShaderBuild* mpLiveload;
 		ShaderManager* mpShaderManager;
+
+		DirectionalLight* d;
+		Lighting* lighting;
 		
 		unsigned int lightVAO;
 		unsigned int diffuseMap, specMap;

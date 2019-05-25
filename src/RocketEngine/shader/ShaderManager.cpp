@@ -1,7 +1,7 @@
 #include "ShaderManager.h"
-#include "RocketShader.h"
+#include "RK_Shader.h"
 
-std::map<ShaderKey, RocketShader*> ShaderManager::mShaderList;
+std::map<ShaderKey, RK_Shader*> ShaderManager::mShaderList;
 
 ShaderManager::~ShaderManager()
 {
@@ -10,7 +10,7 @@ ShaderManager::~ShaderManager()
 
 void ShaderManager::clean()
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter;
+	std::map<ShaderKey, RK_Shader*>::iterator iter;
 
 	for (iter = mShaderList.begin(); iter != mShaderList.end(); ++iter)
 	{
@@ -20,7 +20,7 @@ void ShaderManager::clean()
 
 void ShaderManager::buildShaders()
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.begin();
+	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.begin();
 
 	if (iter != mShaderList.end())
 	{
@@ -30,7 +30,7 @@ void ShaderManager::buildShaders()
 
 void ShaderManager::useShaders()
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.begin();
+	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.begin();
 
 	if (iter != mShaderList.end())
 	{
@@ -40,7 +40,7 @@ void ShaderManager::useShaders()
 
 void ShaderManager::useShaderByKey(ShaderKey key)
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(key);
+	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(key);
 
 	if (iter != mShaderList.end())
 	{
@@ -52,7 +52,7 @@ void ShaderManager::useShaderByKey(ShaderKey key)
 
 void ShaderManager::setShaderInt(std::string intName, int value)
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(mShaderInUse);
+	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(mShaderInUse);
 
 	if (iter != mShaderList.end())
 	{
@@ -63,7 +63,7 @@ void ShaderManager::setShaderInt(std::string intName, int value)
 
 void ShaderManager::setShaderBool(std::string boolName, bool value)
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(mShaderInUse);
+	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(mShaderInUse);
 
 	if (iter != mShaderList.end())
 	{
@@ -73,7 +73,7 @@ void ShaderManager::setShaderBool(std::string boolName, bool value)
 
 void ShaderManager::setShaderFloat(std::string floatName, float value)
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(mShaderInUse);
+	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(mShaderInUse);
 
 	if (iter != mShaderList.end())
 	{
@@ -84,7 +84,7 @@ void ShaderManager::setShaderFloat(std::string floatName, float value)
 
 void ShaderManager::setShaderMat4(std::string matrixName, const float *mat)
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(mShaderInUse);
+	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(mShaderInUse);
 
 	if (iter != mShaderList.end())
 	{
@@ -92,19 +92,19 @@ void ShaderManager::setShaderMat4(std::string matrixName, const float *mat)
 	}
 }
 
-void ShaderManager::setShaderVec3(std::string vecName, const float *vec)
+void ShaderManager::setShaderVec3(std::string vecName, const Vector3 &vec)
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(mShaderInUse);
+	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(mShaderInUse);
 
 	if (iter != mShaderList.end())
 	{
-		iter->second->setVec3(vecName, vec);
+		iter->second->setVec3(vecName, vec.toArray());
 	}
 }
 
 void ShaderManager::setShaderVec3(std::string vecName, float x, float y, float z)
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(mShaderInUse);
+	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(mShaderInUse);
 
 	if (iter != mShaderList.end())
 	{
@@ -113,9 +113,9 @@ void ShaderManager::setShaderVec3(std::string vecName, float x, float y, float z
 	}
 }
 
-RocketShader* ShaderManager::getShaderByKey(ShaderKey key)
+RK_Shader* ShaderManager::getShaderByKey(ShaderKey key)
 {
-	std::map<ShaderKey, RocketShader*>::iterator iter = mShaderList.find(key);
+	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(key);
 
 	if (iter != mShaderList.end())
 	{

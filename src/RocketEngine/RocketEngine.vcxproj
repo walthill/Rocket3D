@@ -24,8 +24,13 @@
     <ClInclude Include="core\EngineCore.h" />
     <ClInclude Include="input\InputSystem.h" />
     <ClInclude Include="render\Camera.h" />
+    <ClInclude Include="render\light\DirectionalLight.h" />
+    <ClInclude Include="render\light\Light.h" />
+    <ClInclude Include="render\light\Lighting.h" />
+    <ClInclude Include="render\light\PointLight.h" />
+    <ClInclude Include="render\light\SpotLight.h" />
     <ClInclude Include="render\Mesh.h" />
-    <ClInclude Include="shader\RocketShader.h" />
+    <ClInclude Include="shader\RK_Shader.h" />
     <ClInclude Include="shader\ShaderBuild.h" />
     <ClInclude Include="shader\ShaderManager.h" />
     <ClInclude Include="util\EngineUtils.h" />
@@ -34,7 +39,12 @@
   <ItemGroup>
     <ClCompile Include="core\EngineCore.cpp" />
     <ClCompile Include="input\InputSystem.cpp" />
+    <ClCompile Include="render\light\DirectionalLight.cpp" />
+    <ClCompile Include="render\light\Lighting.cpp" />
     <ClCompile Include="shader\ShaderManager.cpp" />
+    <ClCompile Include="util\Mat4.cpp" />
+    <ClCompile Include="util\Vector2.cpp" />
+    <ClCompile Include="util\Vector3.cpp" />
     <ClCompile Include="window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -99,7 +109,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>../../external/include;$(IncludePath)</IncludePath>
+    <IncludePath>../../../../extermal/include;../../../extermal/include;../../external/include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
