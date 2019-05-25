@@ -10,6 +10,7 @@ Lighting::Lighting(ShaderKey key, ShaderManager* man)
 	mLightingShaderKey = key;
 	mShaderManagerHandle = man;
 	initMaterialData();
+	initLightingData(4); //TODO: make parameter
 }
 
 void Lighting::initialize(ShaderKey key, ShaderManager* man)
@@ -17,6 +18,7 @@ void Lighting::initialize(ShaderKey key, ShaderManager* man)
 	mLightingShaderKey = key;
 	mShaderManagerHandle = man;
 	initMaterialData();
+	initLightingData(4);
 };
 
 void Lighting::initMaterialData()
@@ -27,25 +29,30 @@ void Lighting::initMaterialData()
 	mShaderManagerHandle->setShaderFloat(shininess, SHINY_VALUE);
 }
 
+void Lighting::initLightingData(int numPointLights)
+{
+	mShaderManagerHandle->setShaderInt(pointLightNumVar, numPointLights);
+}
 
 
 void Lighting::addLight(DirectionalLight *light)
 {
-		DirectionalLight* dirLight = dynamic_cast<DirectionalLight*>(light);
-		directionalLights.push_back(dirLight);
+		directionalLights.push_back(light);
 }
 
 void Lighting::addLight(PointLight *light)
 {
-	PointLight* pointLight = dynamic_cast<PointLight*>(light);
-	pointLights.push_back(pointLight);
+	pointLights.push_back(light);
+	
+	int size = pointLights.size();
+	light->setIndex(size - 1);
 }
 
 
-void Lighting::addLight(SpotLight *light)
+void Lighting::addLight(SpotLight *light, Camera* cam)
 {
-	SpotLight* spotLight = dynamic_cast<SpotLight*>(light);
-	spotLights.push_back(spotLight);
+	spotLight = light;
+	spotLight->initFlashlight(cam);
 }
 
 
@@ -66,6 +73,6 @@ void Lighting::processLighting(Camera* cam)
 		pointLights[i]->processLightingData(shaderInUse);
 
 	//spot light data
-	for (unsigned int i = 0; i < spotLights.size(); i++)
-		spotLights[i]->processLightingData(shaderInUse);
+	if(spotLight != nullptr)
+		spotLight->processLightingData(shaderInUse);
 }

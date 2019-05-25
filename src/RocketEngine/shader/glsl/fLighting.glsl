@@ -14,7 +14,7 @@ struct PointLight {
 	vec3 position, ambient, diffuse, specular;
 	float constant, linear, quadratic;
 };
-#define NUM_POINT_LIGHTS 4
+#define MAX_NUM_POINT_LIGHTS 30
 
 struct SpotLight {
 	vec3 position;
@@ -28,10 +28,11 @@ in vec3 Normal;
 in vec3 FragPos;
 in vec2 TexCoords;
 
+uniform int numPointLights; //number of point lights in use
 uniform vec3 viewPos;
 uniform Material material;
 uniform DirectionalLight dirLight;
-uniform PointLight pointLights[NUM_POINT_LIGHTS];
+uniform PointLight pointLights[MAX_NUM_POINT_LIGHTS];
 uniform SpotLight spotLight;
 
 //Prototypes
@@ -128,7 +129,7 @@ void main()
     // phase 1: Directional lighting
     vec3 color = CalculateDirectionalLight(dirLight, norm, viewDir);
     // phase 2: Point lights
-    for(int i = 0; i < NUM_POINT_LIGHTS; i++)
+    for(int i = 0; i < numPointLights; i++)
         color += CalculatePointLight(pointLights[i], norm, FragPos, viewDir);    
     // phase 3: Spot light
     color += CalculateSpotLight(spotLight, norm, FragPos, viewDir);    

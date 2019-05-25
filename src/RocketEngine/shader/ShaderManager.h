@@ -2,11 +2,11 @@
 #define R3_SHADER_MAN_H
 
 #include <RocketMath/Vector3.h>
+#include <RocketMath/Mat4.h>
 #include "../util/EngineUtils.h"
 #include <map>
 
 class RK_Shader;
-
 class ShaderManager
 {
 	public:
@@ -31,9 +31,9 @@ class ShaderManager
 		void setShaderInt(std::string intName, int value);
 		void setShaderBool(std::string boolName, bool value);
 		void setShaderFloat(std::string floatName, float value);
-		void setShaderMat4(std::string matrixName, const float *mat);
+		void setShaderMat4(std::string matrixName, const Mat4 &mat);
 		void setShaderVec3(std::string vecName, float x, float y, float z); //Use three float values
-		void setShaderVec3(std::string vecName, const Vector3& vec); //use Vector object in param
+		void setShaderVec3(std::string vecName, const Vector3 &vec); //use Vector object in param
 
 		RK_Shader* getShaderInUse() { return getShaderByKey(mShaderInUse); };
 		RK_Shader* getShaderByKey(ShaderKey key);

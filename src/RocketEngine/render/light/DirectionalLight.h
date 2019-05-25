@@ -18,9 +18,8 @@ class DirectionalLight : Light
 		const Vector3*  getDirection() const { return &mDirection; };
 	
 	private:
-		const std::string directionVar = "dirLight.direction", ambientVar = "dirLight.ambient",
-						  diffuseVar = "dirLight.diffuse", specularVar = "dirLight.specular";
-
+		std::string ambientVar = "dirLight.ambient", diffuseVar = "dirLight.diffuse", specularVar = "dirLight.specular";
+		const std::string directionVar = "dirLight.direction";
 
 		Vector3 mDirection;
 };

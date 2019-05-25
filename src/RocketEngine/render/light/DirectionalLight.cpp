@@ -11,9 +11,10 @@ void DirectionalLight::processLightingData(RK_Shader* shader)
 	// send directional light data to shader/gpu
 	// no need to call use() here as that is called by the lighting class
 
-	shader->setVec3(directionVar, mDirection.toArray());
-	shader->setVec3(ambientVar, mAmbientLight.toArray());
-	shader->setVec3(diffuseVar, mDiffuseLight.toArray());
-	shader->setVec3(specularVar, mSpecularLight.toArray());
+	shader->setVec3(directionVar, mDirection);
+
+	shader->setVec3(ambientVar, mAmbientLight);
+	shader->setVec3(diffuseVar, mDiffuseLight);
+	shader->setVec3(specularVar, mSpecularLight);
 
 }

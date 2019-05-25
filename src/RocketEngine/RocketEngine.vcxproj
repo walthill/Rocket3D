@@ -41,6 +41,8 @@
     <ClCompile Include="input\InputSystem.cpp" />
     <ClCompile Include="render\light\DirectionalLight.cpp" />
     <ClCompile Include="render\light\Lighting.cpp" />
+    <ClCompile Include="render\light\PointLight.cpp" />
+    <ClCompile Include="render\light\SpotLight.cpp" />
     <ClCompile Include="shader\ShaderManager.cpp" />
     <ClCompile Include="util\Mat4.cpp" />
     <ClCompile Include="util\Vector2.cpp" />

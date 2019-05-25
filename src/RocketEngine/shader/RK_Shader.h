@@ -6,6 +6,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <RocketMath/MathUtils.h>
 
 class RK_Shader 
 {
@@ -147,15 +148,15 @@ class RK_Shader
 			glUniform1f(glGetUniformLocation(shaderID, name.c_str()), value);
 		}
 
-		void setMat4(const std::string &name, const float *mat)
+		void setMat4(const std::string &name, const Mat4 &mat)
 		{
 			glUniformMatrix4fv(glGetUniformLocation(shaderID, name.c_str()), 
-													1, GL_TRUE, mat);
+													1, GL_TRUE, mat.getMatrixValues());
 		}
 
-		void setVec3(const std::string &name, const float *value)
+		void setVec3(const std::string &name, const Vector3 &value)
 		{	
-			glUniform3fv(glGetUniformLocation(shaderID, name.c_str()), 1, value);
+			glUniform3fv(glGetUniformLocation(shaderID, name.c_str()), 1, value.toArray());
 		}
 
 	private:

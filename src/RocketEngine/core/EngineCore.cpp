@@ -309,11 +309,11 @@ void EngineCore::render()
 	//Set properties of cube object in 3d space
 	Mat4 proj = Mat4::identity;
 	proj = MatProj::perspective(RK_Math::degToRad(mpCam->getFov()), 800.0f / 600.0f, 0.1f, 100.0f);
-	mpShaderManager->setShaderMat4("projection", proj.getMatrixValues());
+	mpShaderManager->setShaderMat4("projection", proj);
 
 	Mat4 view = Mat4::identity;	
 	view = mpCam->getViewMatrix();
-	mpShaderManager->setShaderMat4("view", view.getMatrixValues());
+	mpShaderManager->setShaderMat4("view", view);
 	
 	Mat4 model = Mat4::identity;
 	
@@ -331,7 +331,7 @@ void EngineCore::render()
 		model = Mat4::translate(model, cubePositions[i]);
 		float angle = 20.0f * i;
 		model = Mat4::rotate(model, RK_Math::degToRad(angle), Vector3(1.0f, 0.3f, 0.5f));
-		mpShaderManager->setShaderMat4("model", model.getMatrixValues());
+		mpShaderManager->setShaderMat4("model", model);
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
@@ -339,8 +339,8 @@ void EngineCore::render()
 	//Lamp - light source
 	//Set 3d properties
 	mpShaderManager->useShaderByKey(lampShaderId);
-	mpShaderManager->setShaderMat4("projection", proj.getMatrixValues());
-	mpShaderManager->setShaderMat4("view", view.getMatrixValues());
+	mpShaderManager->setShaderMat4("projection", proj);
+	mpShaderManager->setShaderMat4("view", view);
 
 	//Draw
 	glBindVertexArray(lightVAO);
@@ -349,7 +349,7 @@ void EngineCore::render()
 		model = Mat4(1.0f);
 		model = Mat4::translate(model, pointLightPositions[i]);
 		model = Mat4::scale(model, Vector3(0.2f, 0.2f, 0.2f));
-		mpShaderManager->setShaderMat4("model", model.getMatrixValues());
+		mpShaderManager->setShaderMat4("model", model);
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}

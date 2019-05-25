@@ -82,7 +82,7 @@ void ShaderManager::setShaderFloat(std::string floatName, float value)
 }
 
 
-void ShaderManager::setShaderMat4(std::string matrixName, const float *mat)
+void ShaderManager::setShaderMat4(std::string matrixName, const Mat4 &mat)
 {
 	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(mShaderInUse);
 
@@ -98,7 +98,7 @@ void ShaderManager::setShaderVec3(std::string vecName, const Vector3 &vec)
 
 	if (iter != mShaderList.end())
 	{
-		iter->second->setVec3(vecName, vec.toArray());
+		iter->second->setVec3(vecName, vec);
 	}
 }
 
@@ -108,8 +108,8 @@ void ShaderManager::setShaderVec3(std::string vecName, float x, float y, float z
 
 	if (iter != mShaderList.end())
 	{
-		float* arr = new float[3]{ x,y,z };
-		iter->second->setVec3(vecName, arr);
+		Vector3 vec = Vector3(x,y,z);
+		iter->second->setVec3(vecName, vec);
 	}
 }
 
