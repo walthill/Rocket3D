@@ -15,7 +15,7 @@ class PointLight : Light
 		void setIndex(int ind) 
 		{
 			indexInPointLightList = ind; 
-			varIndex = "pointLights[ " + std::to_string(indexInPointLightList) + "].";
+			varIndex = "pointLights[" + std::to_string(indexInPointLightList) + "].";
 			positionVar = varIndex + positionVar;
 			constantVar = varIndex + constantVar;
 			linearVar = varIndex + linearVar;

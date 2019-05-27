@@ -10,6 +10,8 @@ class InputSystem;
 class ShaderBuild;
 class Lighting;
 class DirectionalLight;
+class PointLight;
+class SpotLight;
 class ShaderManager;
 class RK_Shader;
 
@@ -48,6 +50,8 @@ class EngineCore
 		ShaderManager* mpShaderManager;
 
 		DirectionalLight* d;
+		PointLight* p;
+		SpotLight* s;
 		Lighting* lighting;
 		
 		unsigned int lightVAO;

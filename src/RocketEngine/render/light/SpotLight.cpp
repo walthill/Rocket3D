@@ -2,9 +2,9 @@
 #include "../../shader/RK_Shader.h"
 #include "../Camera.h"
 
-SpotLight::SpotLight(Vector3 pos, Vector3 dir, Vector3 amb, Vector3 diff, Vector3 spec, float c, float l, float q, float cut, float outerCut)
+SpotLight::SpotLight(Vector3 dir, Vector3 amb, Vector3 diff, Vector3 spec, float c, float l, float q, float cut, float outerCut)
 	:Light(amb, diff, spec),
-	position(pos), direction(dir), cutoff(cut), outerCutoff(outerCut),
+	direction(dir), cutoff(cut), outerCutoff(outerCut),
 	constant(c), linear(l), quadratic(q)
 {
 	mpCamHandle = nullptr;

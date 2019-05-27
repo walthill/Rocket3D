@@ -130,9 +130,11 @@ void main()
     vec3 color = CalculateDirectionalLight(dirLight, norm, viewDir);
     // phase 2: Point lights
     for(int i = 0; i < numPointLights; i++)
-        color += CalculatePointLight(pointLights[i], norm, FragPos, viewDir);    
+		if(pointLights[i].constant != 0)
+			color += CalculatePointLight(pointLights[i], norm, FragPos, viewDir);    
     // phase 3: Spot light
-    color += CalculateSpotLight(spotLight, norm, FragPos, viewDir);    
-    
+	if(spotLight.constant != 0)
+	    color += CalculateSpotLight(spotLight, norm, FragPos, viewDir);    
+   
     FragColor = vec4(color, 1.0);
 };

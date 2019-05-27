@@ -12,6 +12,8 @@
 #include "../shader/ShaderManager.h"
 #include "../render/light/DirectionalLight.h"
 #include "../render/light/Lighting.h"
+#include "../render/light/PointLight.h"
+#include "../render/light/SpotLight.h"
 
 EngineCore::EngineCore()
 {
@@ -215,17 +217,35 @@ bool EngineCore::initialize(char* argv[])
 	glEnable(GL_DEPTH_TEST);
 
 
-	Vector3 dir, ambient, diffuse, specular;
+	lighting = new Lighting(tutShaderId, mpShaderManager);
+
+
+	Vector3 dir, pos, ambient, diffuse, specular;
+	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f, cutoff = cos(RK_Math::degToRad(12.5f)), outerCutoff = cos(RK_Math::degToRad(15.0f));
+
 	dir = Vector3(-0.2f, -1.0f, -0.3f);
 	ambient = Vector3(0.05f, 0.05f, 0.05f);
 	diffuse = Vector3(0.4f, 0.4f, 0.4f);
 	specular = Vector3(0.5f, 0.5f, 0.5f);
 
 	d = new DirectionalLight(dir, ambient, diffuse, specular);
+	lighting->addLight(new DirectionalLight(dir, ambient, diffuse, specular));
 
-	lighting = new Lighting(tutShaderId, mpShaderManager);
-	lighting->addLight(d);
+	diffuse = Vector3(0.8f, 0.8f, 0.8f);
+	specular = Vector3(1.0f, 1.0f, 1.0f);
 
+	p = new PointLight(pointLightPositions[0], ambient, diffuse, specular, constant, linear, quadratic);
+	lighting->addLight(p);
+	p = new PointLight(pointLightPositions[1], ambient, diffuse, specular, constant, linear, quadratic);
+	lighting->addLight(p);
+	p = new PointLight(pointLightPositions[2], ambient, diffuse, specular, constant, linear, quadratic);
+	lighting->addLight(p);
+	p = new PointLight(pointLightPositions[3], ambient, diffuse, specular, constant, linear, quadratic);
+	lighting->addLight(p);
+
+	s = new SpotLight(*mpCam->getFront(), Vector3::zero, Vector3::one, Vector3::one, constant, linear, quadratic, cutoff, outerCutoff);
+	lighting->addLight(s, mpCam);
+	
 	glfwSetFramebufferSizeCallback(mpWindow->getWindowHandle(), framebufferSizeCallback);
 	glfwSetCursorPosCallback(mpWindow->getWindowHandle(), mouse_callback);
 	glfwSetScrollCallback(mpWindow->getWindowHandle(), scroll_callback);
@@ -241,52 +261,6 @@ void EngineCore::update()
 	calculateDeltaTime();
 
 	lighting->processLighting(mpCam);
-
-	// point light 1
-	mpShaderManager->setShaderVec3("pointLights[0].position", pointLightPositions[0]);
-	mpShaderManager->setShaderVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
-	mpShaderManager->setShaderVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
-	mpShaderManager->setShaderVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-	mpShaderManager->setShaderFloat("pointLights[0].constant", 1.0f);
-	mpShaderManager->setShaderFloat("pointLights[0].linear", 0.09);
-	mpShaderManager->setShaderFloat("pointLights[0].quadratic", 0.032);
-	// point light 2
-	mpShaderManager->setShaderVec3("pointLights[1].position", pointLightPositions[1]);
-	mpShaderManager->setShaderVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
-	mpShaderManager->setShaderVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
-	mpShaderManager->setShaderVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
-	mpShaderManager->setShaderFloat("pointLights[1].constant", 1.0f);
-	mpShaderManager->setShaderFloat("pointLights[1].linear", 0.09);
-	mpShaderManager->setShaderFloat("pointLights[1].quadratic", 0.032);
-	// point light 3
-	mpShaderManager->setShaderVec3("pointLights[2].position", pointLightPositions[2]);
-	mpShaderManager->setShaderVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
-	mpShaderManager->setShaderVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
-	mpShaderManager->setShaderVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
-	mpShaderManager->setShaderFloat("pointLights[2].constant", 1.0f);
-	mpShaderManager->setShaderFloat("pointLights[2].linear", 0.09);
-	mpShaderManager->setShaderFloat("pointLights[2].quadratic", 0.032);
-	// point light 4
-	mpShaderManager->setShaderVec3("pointLights[3].position", pointLightPositions[3]);
-	mpShaderManager->setShaderVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-	mpShaderManager->setShaderVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-	mpShaderManager->setShaderVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
-	mpShaderManager->setShaderFloat("pointLights[3].constant", 1.0f);
-	mpShaderManager->setShaderFloat("pointLights[3].linear", 0.09);
-	mpShaderManager->setShaderFloat("pointLights[3].quadratic", 0.032);
-	// spotLight
-	mpShaderManager->setShaderVec3("spotLight.position", mpCam->getPosition());
-	mpShaderManager->setShaderVec3("spotLight.direction", *mpCam->getFront());
-	mpShaderManager->setShaderVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
-	mpShaderManager->setShaderVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
-	mpShaderManager->setShaderVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
-	mpShaderManager->setShaderFloat("spotLight.constant", 1.0f);
-	mpShaderManager->setShaderFloat("spotLight.linear", 0.09);
-	mpShaderManager->setShaderFloat("spotLight.quadratic", 0.032);
-	mpShaderManager->setShaderFloat("spotLight.cutOff", cos(RK_Math::degToRad(12.5f)));
-	mpShaderManager->setShaderFloat("spotLight.outerCutOff", cos(RK_Math::degToRad(15.0f)));
-
-
 
 	//Check for shader rebuild
 	//TODO: shader rebuild causes need to set shader values every frame. Should fix

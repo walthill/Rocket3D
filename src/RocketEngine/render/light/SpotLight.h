@@ -13,7 +13,7 @@ class Camera;
 class SpotLight : Light
 {	
 	public:
-		SpotLight(Vector3 pos, Vector3 dir, Vector3 amb, Vector3 diff, Vector3 spec, float c, float l, float q, float cut, float outerCut);
+		SpotLight(Vector3 dir, Vector3 amb, Vector3 diff, Vector3 spec, float c, float l, float q, float cut, float outerCut);
 		void processLightingData(RK_Shader* man);
 
 		void initFlashlight(Camera* cam);
