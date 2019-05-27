@@ -3,7 +3,6 @@
 #include <glad/glad.h>
 #include <glfw3.h>
 #include "../render/Camera.h"
-//#include <RocketMath/MathUtils.h>
 #include "../asset/image/RocketImgLoader.h"
 #include <iostream>
 #include "../input/InputSystem.h"
@@ -47,21 +46,21 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height) //TODO: 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	EngineCore* wind = reinterpret_cast<EngineCore*>(glfwGetWindowUserPointer(window));
-	wind->r3_mouse_callback(xpos, ypos);
+	wind->rk_mouse_callback(xpos, ypos);
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	EngineCore* wind = reinterpret_cast<EngineCore*>(glfwGetWindowUserPointer(window));
-	wind->r3_scroll_callback(xoffset, yoffset);
+	wind->rk_scroll_callback(xoffset, yoffset);
 }
 
-void EngineCore::r3_scroll_callback(double xoffset, double yoffset)
+void EngineCore::rk_scroll_callback(double xoffset, double yoffset)
 {
-	mpCam->processMouseScroll(yoffset);
+	mpCam->processMouseScroll((float)yoffset);
 }
 
-void EngineCore::r3_mouse_callback(double xpos, double ypos)
+void EngineCore::rk_mouse_callback(double xpos, double ypos)
 {	
 	if (firstMouse)
 	{
@@ -70,8 +69,8 @@ void EngineCore::r3_mouse_callback(double xpos, double ypos)
 		firstMouse = false;
 	}
 
-	float xOffset = xpos - lastX;
-	float yOffset = lastY - ypos;
+	float xOffset = (float)(xpos - lastX);
+	float yOffset = (float)(lastY - ypos);
 	lastY = ypos;
 	lastX = xpos;
 
@@ -88,12 +87,47 @@ void EngineCore::initGLFW()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
+void EngineCore::initLighting()
+{
+	int numPointLights = 4;
+	pointLightPositions = new Vector3[4]{
+		Vector3(0.7f,  0.2f,  2.0f),
+		Vector3(2.3f, -3.3f, -4.0f),
+		Vector3(-4.0f,  2.0f, -12.0f),
+		Vector3(0.0f,  0.0f, -3.0f)
+	};
+
+	lighting = new Lighting(tutShaderId, mpShaderManager, numPointLights);
+
+	Vector3 dir, pos, ambient, diffuse, specular;
+	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f, cutoff = cos(RK_Math::degToRad(12.5f)), outerCutoff = cos(RK_Math::degToRad(15.0f));
+
+	dir = Vector3(-0.2f, -1.0f, -0.3f);
+	ambient = Vector3(0.05f, 0.05f, 0.05f);
+	diffuse = Vector3(0.4f, 0.4f, 0.4f);
+	specular = Vector3(0.5f, 0.5f, 0.5f);
+
+	lighting->addDirectionalLight(new DirectionalLight(dir, ambient, diffuse, specular));
+
+	diffuse = Vector3(0.8f, 0.8f, 0.8f);
+	specular = Vector3(1.0f, 1.0f, 1.0f);
+
+	PointLight *p;
+	for(int i =0; i < numPointLights; i++)
+	{
+		p = new PointLight(pointLightPositions[i], ambient, diffuse, specular, constant, linear, quadratic);
+		lighting->addPointLight(p);
+	}
+
+	SpotLight *s = new SpotLight(*mpCam->getFront(), Vector3::zero, Vector3::one, Vector3::one, constant, linear, quadratic, cutoff, outerCutoff);
+	lighting->addSpotLight(s, mpCam);
+}
+
 bool EngineCore::initialize(char* argv[])
 {
 	initGLFW();
 
 	mpWindow = new Window();
-	
 	if(!mpWindow->initialize(800, 600, "Rocket3D"))
 		return false;
 
@@ -104,18 +138,19 @@ bool EngineCore::initialize(char* argv[])
 
 	mpCam = new Camera(Vector3(0.0f, 0.0f, 3.0f));
 	mpInputSystem = new InputSystem(mpWindow->getWindowHandle());
-	mpLiveload = new ShaderBuild();
+	//mpLiveload = new ShaderBuild();
 	mpShaderManager = new ShaderManager();
 
-	std::wstring directory(argv[0], argv[0] + strlen(argv[0]));
-	directory.erase(directory.find_last_of(L'\\') + 1);
+	//std::wstring directory(argv[0], argv[0] + strlen(argv[0]));
+	//directory.erase(directory.find_last_of(L'\\') + 1);
 
-	mpLiveload->init(directory + L"RocketBuild.dll");
-	mpLiveload->addFunctionToLiveLoad("live_shader_rebuild");
+	//mpLiveload->init(directory + L"RocketBuild.dll");
+	//mpLiveload->addFunctionToLiveLoad("live_shader_rebuild");
 
 	mpShaderManager->addShader(tutShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
 	mpShaderManager->addShader("lamp", new RK_Shader("vLamp.glsl", "fLamp.glsl"));
 
+	initLighting();
 
 	float vertices[] = {
 		// positions          // normals           // texture coords
@@ -175,13 +210,6 @@ bool EngineCore::initialize(char* argv[])
 	Vector3(-1.3f,  1.0f, -1.5f)
 	};
 
-	pointLightPositions = new Vector3[4]{
-		Vector3(0.7f,  0.2f,  2.0f),
-		Vector3(2.3f, -3.3f, -4.0f),
-		Vector3(-4.0f,  2.0f, -12.0f),
-		Vector3(0.0f,  0.0f, -3.0f)
-	};
-
 	//Init cube vertices
 	glGenVertexArrays(1, &cubeVAO);
 	glGenBuffers(1, &VBO);
@@ -216,36 +244,6 @@ bool EngineCore::initialize(char* argv[])
 
 	glEnable(GL_DEPTH_TEST);
 
-
-	lighting = new Lighting(tutShaderId, mpShaderManager);
-
-
-	Vector3 dir, pos, ambient, diffuse, specular;
-	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f, cutoff = cos(RK_Math::degToRad(12.5f)), outerCutoff = cos(RK_Math::degToRad(15.0f));
-
-	dir = Vector3(-0.2f, -1.0f, -0.3f);
-	ambient = Vector3(0.05f, 0.05f, 0.05f);
-	diffuse = Vector3(0.4f, 0.4f, 0.4f);
-	specular = Vector3(0.5f, 0.5f, 0.5f);
-
-	d = new DirectionalLight(dir, ambient, diffuse, specular);
-	lighting->addLight(new DirectionalLight(dir, ambient, diffuse, specular));
-
-	diffuse = Vector3(0.8f, 0.8f, 0.8f);
-	specular = Vector3(1.0f, 1.0f, 1.0f);
-
-	p = new PointLight(pointLightPositions[0], ambient, diffuse, specular, constant, linear, quadratic);
-	lighting->addLight(p);
-	p = new PointLight(pointLightPositions[1], ambient, diffuse, specular, constant, linear, quadratic);
-	lighting->addLight(p);
-	p = new PointLight(pointLightPositions[2], ambient, diffuse, specular, constant, linear, quadratic);
-	lighting->addLight(p);
-	p = new PointLight(pointLightPositions[3], ambient, diffuse, specular, constant, linear, quadratic);
-	lighting->addLight(p);
-
-	s = new SpotLight(*mpCam->getFront(), Vector3::zero, Vector3::one, Vector3::one, constant, linear, quadratic, cutoff, outerCutoff);
-	lighting->addLight(s, mpCam);
-	
 	glfwSetFramebufferSizeCallback(mpWindow->getWindowHandle(), framebufferSizeCallback);
 	glfwSetCursorPosCallback(mpWindow->getWindowHandle(), mouse_callback);
 	glfwSetScrollCallback(mpWindow->getWindowHandle(), scroll_callback);

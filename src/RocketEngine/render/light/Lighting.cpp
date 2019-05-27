@@ -5,20 +5,20 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 
-Lighting::Lighting(ShaderKey key, ShaderManager* man)
+Lighting::Lighting(ShaderKey key, ShaderManager* man, int numberOfPointLights)
 {
 	mLightingShaderKey = key;
 	mShaderManagerHandle = man;
 	initMaterialData();
-	initLightingData(4); //TODO: make parameter
+	initLightingData(numberOfPointLights); //TODO: make parameter
 }
 
-void Lighting::initialize(ShaderKey key, ShaderManager* man)
+void Lighting::initialize(ShaderKey key, ShaderManager* man, int numberOfPointLights)
 {
 	mLightingShaderKey = key;
 	mShaderManagerHandle = man;
 	initMaterialData();
-	initLightingData(4);
+	initLightingData(numberOfPointLights);
 };
 
 void Lighting::initMaterialData()
@@ -35,21 +35,21 @@ void Lighting::initLightingData(int numPointLights)
 }
 
 
-void Lighting::addLight(DirectionalLight *light)
+void Lighting::addDirectionalLight(DirectionalLight *light)
 {
-		directionalLights.push_back(light);
+	directionalLights.push_back(light);
 }
 
-void Lighting::addLight(PointLight *light)
+void Lighting::addPointLight(PointLight *light)
 {
 	pointLights.push_back(light);
 	
 	int size = pointLights.size();
-	light->setIndex(size - 1);
+	light->setUniformIndex(size - 1);
 }
 
 
-void Lighting::addLight(SpotLight *light, Camera* cam)
+void Lighting::addSpotLight(SpotLight *light, Camera* cam)
 {
 	spotLight = light;
 	spotLight->initFlashlight(cam);

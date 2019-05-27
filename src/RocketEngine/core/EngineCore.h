@@ -20,8 +20,10 @@ class EngineCore
 	public:
 		EngineCore();
 		~EngineCore();
-
+		
+		void initLighting();
 		void initGLFW();
+
 		bool initialize(char* argv[]); //pass in data for live shader rebuilds
 		void clean();
 		void update();
@@ -32,14 +34,14 @@ class EngineCore
 		void moveCameraForward();
 		void moveCameraBack();
 
-		void r3_scroll_callback(double xoffset, double yoffset);
-		void r3_mouse_callback(double xpos, double ypos);
+		void rk_scroll_callback(double xoffset, double yoffset);
+		void rk_mouse_callback(double xpos, double ypos);
 
 		float deltaTime = 0.0f;	// Time between current frame and last frame
 	private:
 		int mWindowWidth, mWindowHeight;
 		bool firstMouse = true;
-		float lastX = 400, lastY = 300; //last mouse offset, half of width & height
+		double lastX = 400, lastY = 300; //last mouse offset, half of width & height
 		float lastFrame = 0.0f; // Time of last frame
 		
 		Window *mpWindow;
@@ -49,9 +51,6 @@ class EngineCore
 		ShaderBuild* mpLiveload;
 		ShaderManager* mpShaderManager;
 
-		DirectionalLight* d;
-		PointLight* p;
-		SpotLight* s;
 		Lighting* lighting;
 		
 		unsigned int lightVAO;

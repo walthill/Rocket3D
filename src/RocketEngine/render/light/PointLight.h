@@ -12,7 +12,7 @@ class PointLight : Light
 		PointLight(Vector3 position, Vector3 ambient, Vector3 diffuse, Vector3 specular, float constant, float linear, float quadratic);
 		void processLightingData(RK_Shader* man);
 
-		void setIndex(int ind) 
+		void setUniformIndex(int ind) 
 		{
 			indexInPointLightList = ind; 
 			varIndex = "pointLights[" + std::to_string(indexInPointLightList) + "].";
