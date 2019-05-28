@@ -52,10 +52,8 @@ class GameApp : Trackable
 		#pragma endregion
 
 	private:
-
 		EngineCore* mpRocketEngine;
 		GameMessageManager* mpGameMessageManager;
-		
 
 		//Game state vars
 		static GameApp* mpGameApp;

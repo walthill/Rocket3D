@@ -4,6 +4,7 @@
 #include <DeanLib/PerformanceTracker.h>
 #include "../input/GameMessage.h"
 #include "../input/GameMessageManager.h"
+#include "../../RocketEngine/logging/RK_Log.h"
 
 GameApp* GameApp::mpGameApp = nullptr;
 
@@ -26,8 +27,8 @@ bool GameApp::initialize(char* argv[])
 		return false;
 
 	pPerformanceTracker->stopTracking(mINIT_TRACKER_NAME);
-	std::cout << std::endl << "Time to Init: " << pPerformanceTracker->getElapsedTime(mINIT_TRACKER_NAME) << " ms" << std::endl;
-
+	RK_INFO_ALL("Time to init: " + std::to_string(pPerformanceTracker->getElapsedTime(mINIT_TRACKER_NAME)) + "ms\n");
+	
 	delete pPerformanceTracker;
 
 	mShouldExit = false;
@@ -67,10 +68,10 @@ bool GameApp::processLoop()
 		mpFrameTimer->sleepUntilElapsed(m60FPS_FRAME_TIME);
 		pPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
 
-		std::cout << "loop took:" << pPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME) << "ms";
-		std::cout << " draw took:" << pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME) << "ms\n";
-		//mFPS = (int)(1000.0 / pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
-		//std::cout << "FPS: " << mFPS << "\n";
+//		RK_INFO_C("loop took:" + std::to_string(pPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) + 
+//				  "ms draw took:" +  std::to_string(pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) +"ms\n");
+//		mFPS = (int)(1000.0 / pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
+//		RK_INFO_C("FPS: " + std::to_string(mFPS));
 	}
 
 	return false;

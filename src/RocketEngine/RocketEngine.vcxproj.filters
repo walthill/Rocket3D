@@ -54,6 +54,9 @@
     <ClInclude Include="asset\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="logging\RK_Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\EngineCore.cpp">
@@ -66,6 +69,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="window\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="logging\RK_Log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
