@@ -10,6 +10,7 @@
 #include "../shader/ShaderBuild.h"
 #include "../shader/RK_Shader.h"
 #include "../shader/ShaderManager.h"
+#include "../logging/RK_Log.h"
 #include "../render/light/DirectionalLight.h"
 #include "../render/light/Lighting.h"
 #include "../render/light/PointLight.h"
@@ -126,6 +127,9 @@ void EngineCore::initLighting()
 
 bool EngineCore::initialize(char* argv[])
 {
+	RK_LOGGER_INIT();
+	RK_CORE_INFO_ALL("Rocket Engine Logger initialized");
+
 	initGLFW();
 
 	mpWindow = new Window();
