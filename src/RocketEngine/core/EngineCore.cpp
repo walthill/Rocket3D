@@ -87,6 +87,7 @@ void EngineCore::initGLFW()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 }
 
 void EngineCore::initLighting()
@@ -250,6 +251,7 @@ bool EngineCore::initialize(char* argv[])
 	mModel = new Model("../../assets/models/nanosuit/scene.fbx");
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_MULTISAMPLE);
 	
 	glfwSetFramebufferSizeCallback(mpWindow->getWindowHandle(), framebufferSizeCallback);
 	glfwSetCursorPosCallback(mpWindow->getWindowHandle(), mouse_callback);
