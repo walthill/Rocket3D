@@ -24,7 +24,7 @@ class Model
 		{
 			initialize(path);
 		};
-		void drawModel(RocketShader* shader)
+		void drawModel(RK_Shader* shader)
 		{
 			for (auto i = 0; i < mModelData.meshes.size(); i++)
 				mModelData.meshes[i].drawMesh(shader);

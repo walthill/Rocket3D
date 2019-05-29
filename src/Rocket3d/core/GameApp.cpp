@@ -67,8 +67,8 @@ bool GameApp::processLoop()
 		mpFrameTimer->sleepUntilElapsed(m60FPS_FRAME_TIME);
 		pPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
 
-		std::cout << "loop took:" << pPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME) << "ms";
-		std::cout << " draw took:" << pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME) << "ms\n";
+//		std::cout << "loop took:" << pPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME) << "ms";
+//		std::cout << " draw took:" << pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME) << "ms\n";
 		//mFPS = (int)(1000.0 / pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
 		//std::cout << "FPS: " << mFPS << "\n";
 	}

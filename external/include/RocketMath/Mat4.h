@@ -3,6 +3,8 @@
 
 #include <ostream>
 #include <iostream>
+#include "Vector3.h"
+#include "Vector4.h"
 
 /*
 		Matrix - coded in row major order
@@ -348,7 +350,5 @@ struct MatProj //Matrix Projection Math
 		return Mat4(projArr);
 	};
 };
-
-Mat4 Mat4::identity(1);
 
 #endif // !MAT4_H

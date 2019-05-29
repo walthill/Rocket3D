@@ -32,7 +32,7 @@ class Camera
 			mPitch += yOffset;
 
 			if(constrainPitch)
-				mPitch = R3_Math::clamp(mPitch, -89.0f, 89.0f);
+				mPitch = RK_Math::clamp(mPitch, -89.0f, 89.0f);
 
 			updateCameraVectors();
 		};
@@ -42,7 +42,7 @@ class Camera
 			if (mZoom >= 1.0f && mZoom <= 45.0f)
 				mZoom -= yOffset;
 
-			mZoom = R3_Math::clamp(mZoom, 1.0f, 45.0f);
+			mZoom = RK_Math::clamp(mZoom, 1.0f, 45.0f);
 		};
 
 		Mat4 getViewMatrix() { return Mat4::lookAt(mPos, mPos + mFront, mUp); };
@@ -99,9 +99,9 @@ class Camera
 		{
 			Vector3 front;
 			front = Vector3(
-				cos(R3_Math::degToRad(mYaw)) * cos(R3_Math::degToRad(mPitch)),
-				sin(R3_Math::degToRad(mPitch)),
-				sin(R3_Math::degToRad(mYaw)) * cos(R3_Math::degToRad(mPitch)));
+				cos(RK_Math::degToRad(mYaw)) * cos(RK_Math::degToRad(mPitch)),
+				sin(RK_Math::degToRad(mPitch)),
+				sin(RK_Math::degToRad(mYaw)) * cos(RK_Math::degToRad(mPitch)));
 
 			mFront = front.normalize();
 

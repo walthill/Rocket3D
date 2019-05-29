@@ -57,7 +57,7 @@ class Vector3
 
 		//Convert Vector object into float collection 
 		//(NOTE): Good for referencing uniform values on shaders
-		const float* toArray()
+		const float* toArray() const 
 		{
 			float *arr = new float[3];
 
@@ -189,22 +189,4 @@ class Vector3
 	private:
 		float mX = 0, mY = 0, mZ = 0;
 };
-
-//Vector value (0.0f, 0.0f, 0.0f)
-Vector3 Vector3::zero(0.0f, 0.0f, 0.0f);
-//Vector value (1.0f, 1.0f, 1.0f)
-Vector3 Vector3::one(1.0f, 1.0f, 1.0f);
-//Vector value (-1.0f, 0.0f, 0.0f)
-Vector3 Vector3::left(-1.0f, 0.0f, 0.0f);
-//Vector value (1.0f, 0.0f, 0.0f)
-Vector3 Vector3::right(1.0f, 0.0f, 0.0f);
-//Vector value (0.0f, 1.0f, 0.0f)
-Vector3 Vector3::up(0.0f, 1.0f, 0.0f);
-//Vector value (0.0f, -1.0f, 0.0f)
-Vector3 Vector3::down(0.0f, -1.0f, 0.0f);
-//Vector value (0.0f, 0.0f, 1.0f)
-Vector3 Vector3::forward(0.0f, 0.0f, 1.0f);
-//Vector value (0.0f, 0.0f, -1.0f)
-Vector3 Vector3::back(0.0f, 0.0f, -1.0f);
-
 #endif // !VEC3_H

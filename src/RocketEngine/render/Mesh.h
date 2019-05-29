@@ -5,7 +5,7 @@
 #include <RocketMath/Vector3.h>
 #include <vector>
 #include <string>
-#include "../shader/RocketShader.h"
+#include "../shader/RK_Shader.h"
 #include <glad/glad.h>
 
 typedef unsigned int TextureId;
@@ -37,7 +37,7 @@ class Mesh
 			initialize();
 		};
 
-		void drawMesh(RocketShader* shader)
+		void drawMesh(RK_Shader* shader)
 		{
 			// bind appropriate textures
 			unsigned int diffuseNr = 1;
