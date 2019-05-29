@@ -10,6 +10,7 @@
 #include "../shader/ShaderBuild.h"
 #include "../shader/RocketShader.h"
 #include "../shader/ShaderManager.h"
+#include "../logging/RK_Log.h"
 
 EngineCore::EngineCore()
 {
@@ -86,6 +87,9 @@ void EngineCore::initGLFW()
 
 bool EngineCore::initialize(char* argv[])
 {
+	RK_LOGGER_INIT();
+	RK_CORE_INFO_ALL("Rocket Engine Logger initialized");
+
 	initGLFW();
 
 	mpWindow = new Window();
