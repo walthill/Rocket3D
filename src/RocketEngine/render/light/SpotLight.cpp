@@ -17,7 +17,7 @@ void SpotLight::initFlashlight(Camera* cam)
 
 void SpotLight::processLightingData(RK_Shader * man)
 {
-	man->setVec3(positionVar, mpCamHandle->getPosition()); //TODO: throw error here
+	man->setVec3(positionVar, *mpCamHandle->getPosition()); //TODO: throw error here
 
 	man->setVec3(directionVar, *mpCamHandle->getFront());
 	man->setFloat(constantVar, constant);

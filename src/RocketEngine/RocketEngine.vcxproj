@@ -116,8 +116,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>../../external/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../../external/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>../../../external/include;../../external/include;$(IncludePath)</IncludePath>
+    <LibraryPath>../../../external/lib;../../external/lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)bin-int\$(Configuration)-$(Platform)\$(ProjectName)\</IntDir>
   </PropertyGroup>

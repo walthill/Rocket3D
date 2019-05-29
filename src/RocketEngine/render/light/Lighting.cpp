@@ -59,7 +59,7 @@ void Lighting::addSpotLight(SpotLight *light, Camera* cam)
 void Lighting::processLighting(Camera* cam)
 {
 	mShaderManagerHandle->useShaderByKey(mLightingShaderKey);
-	mShaderManagerHandle->setShaderVec3(viewPosition, cam->getPosition());
+	mShaderManagerHandle->setShaderVec3(viewPosition, *cam->getPosition());
 	
 	//send directional, point, and spotlight data to shader
 	RK_Shader* shaderInUse = mShaderManagerHandle->getShaderInUse();
