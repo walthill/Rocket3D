@@ -18,22 +18,22 @@ void InputSystem::processInput()
 	}
 	if (glfwGetKey(mpWindowHandle, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		GameMessage* pMessage = new KeyDownMessage(W_KEY);
+		GameMessage* pMessage = new KeyDownMessage(KEY_W);
 		GameApp::getInstance()->getGameMessageManager()->addMessage(pMessage, 1);
 	}
 	if (glfwGetKey(mpWindowHandle, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		GameMessage* pMessage = new KeyDownMessage(S_KEY);
+		GameMessage* pMessage = new KeyDownMessage(KEY_S);
 		GameApp::getInstance()->getGameMessageManager()->addMessage(pMessage, 1);
 	}
 	if (glfwGetKey(mpWindowHandle, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		GameMessage* pMessage = new KeyDownMessage(A_KEY);
+		GameMessage* pMessage = new KeyDownMessage(KEY_A);
 		GameApp::getInstance()->getGameMessageManager()->addMessage(pMessage, 1);
 	}
 	if (glfwGetKey(mpWindowHandle, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		GameMessage* pMessage = new KeyDownMessage(D_KEY);
+		GameMessage* pMessage = new KeyDownMessage(KEY_D);
 		GameApp::getInstance()->getGameMessageManager()->addMessage(pMessage, 1);
 	}
 	if (glfwGetKey(mpWindowHandle, GLFW_KEY_1) == GLFW_PRESS)

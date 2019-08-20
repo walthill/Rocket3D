@@ -23,19 +23,19 @@ void KeyDownMessage::process()
 		{
 			pGame->quit();
 		}
-		if (mKeyCode == W_KEY)
+		if (mKeyCode == KEY_W)
 		{
 			pGame->moveForward();
 		}
-		if (mKeyCode == A_KEY)
+		if (mKeyCode == KEY_A)
 		{
 			pGame->moveLeft();
 		}
-		if (mKeyCode == S_KEY)
+		if (mKeyCode == KEY_S)
 		{
 			pGame->moveBack();
 		}
-		if (mKeyCode == D_KEY)
+		if (mKeyCode == KEY_D)
 		{
 			pGame->moveRight();
 		}
