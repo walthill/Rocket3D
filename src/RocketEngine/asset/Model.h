@@ -26,7 +26,7 @@ class Model
 		};
 		void drawModel(RK_Shader* shader)
 		{
-			for (auto i = 0; i < mModelData.meshes.size(); i++)
+			for (unsigned i = 0; i < mModelData.meshes.size(); i++)
 				mModelData.meshes[i].drawMesh(shader);
 		};
 
@@ -71,7 +71,7 @@ class Model
 			MeshData data;
 
 			//Fill mesh vertices
-			for (auto i = 0; i < mesh->mNumVertices; i++)
+			for (unsigned i = 0; i < mesh->mNumVertices; i++)
 			{
 				Vertex vert;
 				Vector3 vector;
@@ -97,10 +97,10 @@ class Model
 			}
 			
 			//Fill mesh indices
-			for (auto i = 0; i < mesh->mNumFaces; i++)
+			for (unsigned i = 0; i < mesh->mNumFaces; i++)
 			{
 				aiFace face = mesh->mFaces[i];
-				for (auto j = 0; j < face.mNumIndices; j++)
+				for (unsigned  j = 0; j < face.mNumIndices; j++)
 					data.indices.push_back(face.mIndices[j]);
 			}
 
@@ -126,14 +126,14 @@ class Model
 		std::vector<Texture> getTexturesFromMaterial(aiMaterial *mat, aiTextureType type, std::string typeName)
 		{
 			std::vector<Texture> textures;
-			for (auto i = 0; i < mat->GetTextureCount(type); i++)
+			for (unsigned  i = 0; i < mat->GetTextureCount(type); i++)
 			{
 				aiString str;
 				mat->GetTexture(type, i, &str);
 				bool loadFromMemory = false;
 
 				//Check if texture has alread been loaded and use that data if so
-				for (auto j = 0; j < texturesLoaded.size(); j++)
+				for (unsigned j = 0; j < texturesLoaded.size(); j++)
 				{
 					if (std::strcmp(texturesLoaded[j].path.data(), str.C_Str()) == 0)
 					{

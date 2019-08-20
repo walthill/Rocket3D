@@ -34,6 +34,7 @@ class EngineCore
 		void moveCameraRight();
 		void moveCameraForward();
 		void moveCameraBack();
+		void toggleWireframe(bool showWireframe);
 
 		void rk_scroll_callback(double xoffset, double yoffset);
 		void rk_mouse_callback(double xpos, double ypos);

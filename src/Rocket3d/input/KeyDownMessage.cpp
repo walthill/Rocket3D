@@ -39,5 +39,13 @@ void KeyDownMessage::process()
 		{
 			pGame->moveRight();
 		}
+		if (mKeyCode == KEY_1)
+		{
+			pGame->toggleView(false);
+		}
+		if (mKeyCode == KEY_2)
+		{
+			pGame->toggleView(true);
+		}
 	}
 }

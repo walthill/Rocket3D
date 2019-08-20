@@ -42,12 +42,14 @@ class GameApp : Trackable
 		bool processLoop();
 
 		#pragma region Getters and Setters
-		void addInputMessage(GameMessage* msg, int delay);
+		inline EngineCore* getRocketEngine() { return mpRocketEngine; };
+		inline GameMessageManager* getGameMessageManager() { return mpGameMessageManager; };
 		double getCurrentTime();
 		void moveForward();
 		void moveBack();
 		void moveRight();
 		void moveLeft();
+		void toggleView(bool displayWireframeMode);
 		void quit() { mShouldExit = true; };
 		#pragma endregion
 

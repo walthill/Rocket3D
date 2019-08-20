@@ -44,8 +44,9 @@ class Mesh
 			unsigned int specularNr = 1;
 			unsigned int normalNr = 1;
 			unsigned int heightNr = 1;
-
-			for (unsigned int i = 0; i < mMeshData.textures.size(); i++)
+			
+			unsigned int i;
+			for (i = 0; i < mMeshData.textures.size(); i++)
 			{
 				glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
 				// retrieve texture number (the N in diffuse_textureN)
@@ -62,7 +63,7 @@ class Mesh
 					number = std::to_string(heightNr++); // transfer unsigned int to stream
 
 														 // now set the sampler to the correct texture unit
-				shader->setFloat((name + number).c_str(), i);
+				shader->setFloat((name + number), i);
 				// and finally bind the texture
 				glBindTexture(GL_TEXTURE_2D, mMeshData.textures[i].id);
 			}

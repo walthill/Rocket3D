@@ -11,6 +11,8 @@ enum KeyCode
 	A_KEY,
 	S_KEY,
 	D_KEY,
+	KEY_1,
+	KEY_2,
 	NUM_KEYCODES
 };
 

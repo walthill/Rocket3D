@@ -60,7 +60,6 @@ bool GameApp::processLoop()
 		pPerformanceTracker->clearTracker(mDRAW_TRACKER_NAME);
 		pPerformanceTracker->startTracking(mDRAW_TRACKER_NAME);
 	
-
 		update();
 		render();
 
@@ -68,8 +67,8 @@ bool GameApp::processLoop()
 		mpFrameTimer->sleepUntilElapsed(m60FPS_FRAME_TIME);
 		pPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
 
-//		RK_INFO_C("loop took:" + std::to_string(pPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) + 
-//				  "ms draw took:" +  std::to_string(pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) +"ms\n");
+		RK_INFO_C("loop took:" + std::to_string(pPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) + 
+				  "ms draw took:" +  std::to_string(pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) +"ms\n");
 //		mFPS = (int)(1000.0 / pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
 //		RK_INFO_C("FPS: " + std::to_string(mFPS));
 	}
@@ -88,17 +87,16 @@ void GameApp::render()
 	mpRocketEngine->render();
 }
 
-void GameApp::addInputMessage(GameMessage* msg, int delay)
-{ 
-	mpGameMessageManager->addMessage(msg, delay); 
-};
-
 double GameApp::getCurrentTime() 
 { 
 	return mpMasterTimer->getElapsedTime(); 
 };
 
-void GameApp::moveForward()
+//TODO: everything below this point should be moved into separate classes and accessed via accessor
+// -----------------------------------
+
+
+void GameApp::moveForward() //TODO: add movement functions to a player class
 {
 	mpRocketEngine->moveCameraForward();
 }
@@ -118,3 +116,7 @@ void GameApp::moveLeft()
 	mpRocketEngine->moveCameraLeft();
 }
 
+void GameApp::toggleView(bool displayWireframeMode)
+{
+	mpRocketEngine->toggleWireframe(displayWireframeMode);
+}
