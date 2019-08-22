@@ -62,10 +62,8 @@ class Mesh
 				else if (name == "texture_height")
 					number = std::to_string(heightNr++); // transfer unsigned int to stream
 
-														 // now set the sampler to the correct texture unit
-				shader->setFloat((name + number), i);
-				// and finally bind the texture
-				glBindTexture(GL_TEXTURE_2D, mMeshData.textures[i].id);
+				shader->setFloat(name.append(number), i); // now set the sampler to the correct texture unit
+				glBindTexture(GL_TEXTURE_2D, mMeshData.textures[i].id); // and finally bind the texture
 			}
 
 			// draw mesh
