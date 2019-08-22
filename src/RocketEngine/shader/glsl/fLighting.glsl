@@ -90,12 +90,12 @@ vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewD
 
 vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
-	    vec3 lightDir = normalize(light.position - FragPos);
+	    vec3 lightDir = normalize(light.position - fragPos);
 		//Diffuse shading calculations	
 		float diff = max(dot(normal, lightDir), 0.0);
 	
 		//Specular shading calculations	
-		vec3 reflectDir = normalize(reflect(-lightDir, normal));  
+		vec3 reflectDir = reflect(-lightDir, normal);  
 		float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
 		//attenuation
@@ -105,7 +105,7 @@ vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir
 		//spotlight intesity 
 		float theta = dot(lightDir, normalize(-light.direction));
 		float epsilon = light.cutoff - light.outerCutoff;
-		float intensity = clamp((theta-light.outerCutoff) / epsilon, 0.0, 1.0);
+		float intensity = clamp((theta - light.outerCutoff) / epsilon, 0.0, 1.0);
 	
 		//combine calculations
 		vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
@@ -130,10 +130,10 @@ void main()
     vec3 color = CalculateDirectionalLight(dirLight, norm, viewDir);
     // phase 2: Point lights
     for(int i = 0; i < numPointLights; i++)
-		if(pointLights[i].constant != 0)
+		if(pointLights[i].constant != 0) //run only if point lights exist
 			color += CalculatePointLight(pointLights[i], norm, FragPos, viewDir);    
     // phase 3: Spot light
-	if(spotLight.constant != 0)
+	if(spotLight.constant != 0) //run only if spot light exist
 	    color += CalculateSpotLight(spotLight, norm, FragPos, viewDir);    
    
     FragColor = vec4(color, 1.0);

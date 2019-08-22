@@ -26,7 +26,7 @@ class Model
 		};
 		void drawModel(RK_Shader* shader)
 		{
-			for (unsigned i = 0; i < mModelData.meshes.size(); i++)
+			for (unsigned int i = 0; i < mModelData.meshes.size(); i++)
 				mModelData.meshes[i].drawMesh(shader);
 		};
 
@@ -37,7 +37,7 @@ class Model
 		void initialize(std::string path)
 		{
 			Assimp::Importer importer;
-			const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+			const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
 
 			if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -52,15 +52,16 @@ class Model
 
 		void processNode(aiNode* node, const aiScene *scene)
 		{
+			unsigned int i;
 			// process all the node's meshes (if any)
-			for (unsigned int i = 0; i < node->mNumMeshes; i++)
+			for (i = 0; i < node->mNumMeshes; i++)
 			{
 				aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
 				mModelData.meshes.push_back(assimpToMesh(mesh, scene));
 			}
 
 			// process meshes for each child
-			for (unsigned int i = 0; i < node->mNumChildren; i++)
+			for (i = 0; i < node->mNumChildren; i++)
 				processNode(node->mChildren[i], scene);
 		};
 
@@ -69,14 +70,15 @@ class Model
 		Mesh assimpToMesh(aiMesh *mesh, const aiScene *scene)
 		{
 			MeshData data;
+			
+			Vertex vert;
+			Vector3 vector;
+			Vector2 texVector;
+			unsigned int i;
 
 			//Fill mesh vertices
-			for (unsigned i = 0; i < mesh->mNumVertices; i++)
+			for (i = 0; i < mesh->mNumVertices; i++)
 			{
-				Vertex vert;
-				Vector3 vector;
-				Vector2 texVector;
-
 				//Set position
 				vector = Vector3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 				vert.position = vector;
@@ -97,10 +99,10 @@ class Model
 			}
 			
 			//Fill mesh indices
-			for (unsigned i = 0; i < mesh->mNumFaces; i++)
+			for (i = 0; i < mesh->mNumFaces; i++)
 			{
 				aiFace face = mesh->mFaces[i];
-				for (unsigned  j = 0; j < face.mNumIndices; j++)
+				for (unsigned int j = 0; j < face.mNumIndices; j++)
 					data.indices.push_back(face.mIndices[j]);
 			}
 
@@ -126,14 +128,14 @@ class Model
 		std::vector<Texture> getTexturesFromMaterial(aiMaterial *mat, aiTextureType type, std::string typeName)
 		{
 			std::vector<Texture> textures;
-			for (unsigned  i = 0; i < mat->GetTextureCount(type); i++)
+			for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 			{
 				aiString str;
 				mat->GetTexture(type, i, &str);
 				bool loadFromMemory = false;
 
 				//Check if texture has alread been loaded and use that data if so
-				for (unsigned j = 0; j < texturesLoaded.size(); j++)
+				for (unsigned int j = 0; j < texturesLoaded.size(); j++)
 				{
 					if (std::strcmp(texturesLoaded[j].path.data(), str.C_Str()) == 0)
 					{
@@ -146,7 +148,7 @@ class Model
 				if (!loadFromMemory) //load in new texture from file
 				{
 					Texture texture;
-					std::string str2 = (std::string)str.C_Str();
+					/*std::string str2 = (std::string)str.C_Str();
 
 					// Remove directory if present.
 					// Do this before extension removal incase directory has a period character.
@@ -154,10 +156,11 @@ class Model
 					if (std::string::npos != last_slash_idx)
 					{
 						str2.erase(0, last_slash_idx + 1);
-					}
-					texture.id = TextureFromFile(str2.c_str(), mModelData.directory);
+					}*/
+
+					texture.id = TextureFromFile(str.C_Str(), mModelData.directory);
 					texture.type = typeName;
-					texture.path = str2.c_str();
+					texture.path = str.C_Str();
 					textures.push_back(texture);
 					texturesLoaded.push_back(texture); // add to loaded textures
 				}

@@ -96,17 +96,18 @@ void EngineCore::initLighting()
 		Vector3(0.7f,  0.2f,  2.0f),
 		Vector3(2.3f, -3.3f, -4.0f),
 		Vector3(-4.0f,  2.0f, -12.0f),
-		Vector3(0.0f,  0.0f, -3.0f)
+		Vector3(0.0f,  -1.0f, -1.0f)
 	};
 
 	lighting = new Lighting(tutShaderId, mpShaderManager, numPointLights);
 
 	Vector3 dir, pos, ambient, diffuse, specular;
-	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f, cutoff = cos(RK_Math::degToRad(12.5f)), outerCutoff = cos(RK_Math::degToRad(15.0f));
+	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f, 
+		  cutoff = cos(RK_Math::degToRad(12.5f)), outerCutoff = cos(RK_Math::degToRad(17.5f));
 
 	dir = Vector3(-0.2f, -1.0f, -0.3f);
-	ambient = Vector3(0.05f, 0.05f, 0.05f);
-	diffuse = Vector3(0.4f, 0.4f, 0.4f);
+	ambient = Vector3(0.075f, 0.075f, 0.075f);
+	diffuse = Vector3(0.8f, 0.8f, 0.8f);
 	specular = Vector3(0.5f, 0.5f, 0.5f);
 
 	lighting->addDirectionalLight(new DirectionalLight(dir, ambient, diffuse, specular));
@@ -121,6 +122,7 @@ void EngineCore::initLighting()
 		lighting->addPointLight(p);
 	}
 
+	//Currently acts as a flashlight
 	SpotLight *s = new SpotLight(*mpCam->getFront(), Vector3::zero, Vector3::one, Vector3::one, constant, linear, quadratic, cutoff, outerCutoff);
 	lighting->addSpotLight(s, mpCam);
 }
@@ -247,7 +249,7 @@ bool EngineCore::initialize(char* argv[])
 	mpShaderManager->setShaderInt("material.diffuse", 0);
 	mpShaderManager->setShaderInt("material.specular", 1);
 
-	mModel = new Model("../../assets/models/nanosuit/scene.fbx");
+	mModel = new Model("../../assets/models/nanosuit/nanosuit.obj");
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
