@@ -1,9 +1,11 @@
 #ifndef INPUT_SYS_H
 #define INPUT_SYS_H
 
+#include <DeanLib/Trackable.h>
+
 struct GLFWwindow;
 
-class InputSystem
+class InputSystem : public Trackable
 {
 	public:
 		InputSystem(GLFWwindow* window);

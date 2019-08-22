@@ -7,7 +7,8 @@
 #include <map>
 
 class RK_Shader;
-class ShaderManager
+
+class ShaderManager : public Trackable
 {
 	public:
 		ShaderManager() { mShaderList = {}; };

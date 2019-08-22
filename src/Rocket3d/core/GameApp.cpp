@@ -1,3 +1,19 @@
+/********
+	=========================
+			 ROCKET3D
+	=========================
+	File Created By: Walter Hill
+
+	Rocket3D is an open source 3D game engine written using C++ & OpenGL.
+
+	This code is open source under the Apache 2.0 license.
+	(https://github.com/walthill/Rocket3D/blob/master/LICENSE)
+
+	=========================
+			 GameApp.cpp
+	=========================
+********/
+
 #include "GameApp.h"
 #include <core/EngineCore.h>
 #include <iostream>
@@ -40,6 +56,8 @@ bool GameApp::initialize(char* argv[])
 
 void GameApp::clean()
 {
+	delete mpFrameTimer;
+	delete mpMasterTimer;
 	delete mpGameMessageManager;
 	delete mpRocketEngine;
 }
@@ -72,6 +90,8 @@ bool GameApp::processLoop()
 //		mFPS = (int)(1000.0 / pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
 //		RK_INFO_C("FPS: " + std::to_string(mFPS));
 	}
+
+	delete pPerformanceTracker;
 
 	return false;
 }

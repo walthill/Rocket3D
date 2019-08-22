@@ -10,7 +10,28 @@ Lighting::Lighting(ShaderKey key, ShaderManager* man, int numberOfPointLights)
 	mLightingShaderKey = key;
 	mShaderManagerHandle = man;
 	initMaterialData();
-	initLightingData(numberOfPointLights); //TODO: make parameter
+	initLightingData(numberOfPointLights);
+}
+
+Lighting::~Lighting()
+{
+	clean();
+}
+
+void Lighting::clean()
+{
+	//directional light data
+	for (unsigned int i = 0; i < mpDirectionalLights.size(); i++)
+		delete mpDirectionalLights[i];
+
+	//Point light data
+	for (unsigned int i = 0; i < mpPointLights.size(); i++)
+		delete mpPointLights[i];
+
+	mpDirectionalLights.clear();
+	mpPointLights.clear();
+
+	delete mpSpotLight;
 }
 
 void Lighting::initialize(ShaderKey key, ShaderManager* man, int numberOfPointLights)
@@ -37,22 +58,22 @@ void Lighting::initLightingData(int numPointLights)
 
 void Lighting::addDirectionalLight(DirectionalLight *light)
 {
-	directionalLights.push_back(light);
+	mpDirectionalLights.push_back(light);
 }
 
 void Lighting::addPointLight(PointLight *light)
 {
-	pointLights.push_back(light);
+	mpPointLights.push_back(light);
 	
-	int size = pointLights.size();
+	int size = mpPointLights.size();
 	light->setUniformIndex(size - 1);
 }
 
 
 void Lighting::addSpotLight(SpotLight *light, Camera* cam)
 {
-	spotLight = light;
-	spotLight->initFlashlight(cam);
+	mpSpotLight = light;
+	mpSpotLight->initFlashlight(cam);
 }
 
 
@@ -65,14 +86,14 @@ void Lighting::processLighting(Camera* cam)
 	RK_Shader* shaderInUse = mShaderManagerHandle->getShaderInUse();
 
 	//directional light data
-	for (unsigned int i = 0; i < directionalLights.size(); i++)
-		directionalLights[i]->processLightingData(shaderInUse);
+	for (unsigned int i = 0; i < mpDirectionalLights.size(); i++)
+		mpDirectionalLights[i]->processLightingData(shaderInUse);
 	
 	//Point light data
-	for (unsigned int i = 0; i < pointLights.size(); i++)
-		pointLights[i]->processLightingData(shaderInUse);
+	for (unsigned int i = 0; i < mpPointLights.size(); i++)
+		mpPointLights[i]->processLightingData(shaderInUse);
 
 	//spot light data
-	if(spotLight != nullptr)
-		spotLight->processLightingData(shaderInUse);
+	if(mpSpotLight != nullptr)
+		mpSpotLight->processLightingData(shaderInUse);
 }

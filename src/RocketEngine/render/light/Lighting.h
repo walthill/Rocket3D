@@ -11,13 +11,15 @@ class SpotLight;
 
 enum LightType { DIR_LIGHT , POINT_LIGHT, SPOT_LIGHT };
 
-class Lighting //Used to init lighting shader variables
+class Lighting : public Trackable //Used to init lighting shader variables
 {
 	public:
 		Lighting(ShaderKey key, ShaderManager* man, int numberOfPointLights = 0);
-		//TODO: cleanup pointers
+		~Lighting();
+
 		void initialize(ShaderKey lightingShader, ShaderManager* man, int numberOfPointLights = 0);
-		
+		void clean();
+
 		void processLighting(Camera* cam);
 
 		void addDirectionalLight(DirectionalLight* light);
@@ -36,9 +38,9 @@ class Lighting //Used to init lighting shader variables
 		ShaderManager* mShaderManagerHandle;
 		ShaderKey mLightingShaderKey;
 
-		std::vector<DirectionalLight*> directionalLights;
-		std::vector<PointLight*> pointLights;
-		SpotLight* spotLight; //flashlight
+		std::vector<DirectionalLight*> mpDirectionalLights;
+		std::vector<PointLight*> mpPointLights;
+		SpotLight* mpSpotLight; //flashlight
 
 		void initMaterialData();
 		void initLightingData(int numPointLights);

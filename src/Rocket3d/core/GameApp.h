@@ -1,12 +1,32 @@
+/********
+	=========================
+			 ROCKET3D
+	=========================
+	File Created By: Walter Hill
+
+	Rocket3D is an open source 3D game engine written using C++ & OpenGL.
+
+	This code is open source under the Apache 2.0 license.
+	(https://github.com/walthill/Rocket3D/blob/master/LICENSE)
+
+	=========================
+			 GameApp.h
+	=========================
+	This file contains function prototypes and class variables for the GameApp class.
+
+	NOTE: As a general rule, file includes should be done in .cpp files.
+		  Instead of includes, use forward declarations in header files.
+
+********/
+
 #ifndef GAME_APP_H
 #define GAME_APP_H
 
 #include <DeanLib/Trackable.h>
+#include <DeanLib/MemoryTracker.h>
 #include <string>
 #include <cassert>
 
-// As a general rule, file includes should be done in .cpp files  
-// Instead of includes, use forward declarations in header files
 class EngineCore;
 class GameMessage;
 class GameMessageManager;
@@ -15,12 +35,19 @@ class Timer;
 class GameApp : Trackable
 {
 	public:
+		
 		#pragma region Static Class Functions
+		/***
+			* Initializes the global static instance of the GameApp class
+		***/
 		static void initInstance()
 		{
 			mpGameApp = new GameApp;
 		}
 
+		/***
+			* Destroys the global static instance of the GameApp class
+		***/
 		static void cleanInstance()
 		{
 			if (mpGameApp != nullptr)
@@ -30,6 +57,9 @@ class GameApp : Trackable
 			}
 		}
 
+		/***
+			* Accesses the global static instance of the GameApp class.
+		***/
 		static GameApp* getInstance()
 		{
 			assert(mpGameApp != nullptr);
@@ -37,13 +67,39 @@ class GameApp : Trackable
 		}
 		#pragma endregion
 
+		/***
+			* Instatiate engine, logging, timing, & game variables
+			* Returns true on successful initialization, false on failure
+		***/
 		bool initialize(char * argv[]);
+		
+		/***
+			* Destruction & garbage collection of engine, logging, timing, & game variables
+		***/
 		void clean();
+		
+		/***
+			* Performs logic updates & rendering every frame. Can run at 30/60fps 
+			* Returns true as long as game loop is running. Returns false if user exits game loop.
+		***/
 		bool processLoop();
 
 		#pragma region Getters and Setters
+		/***
+			* Accessor for the EngineCore class. Allows for function calls to engine components.
+			* Returns a pointer to the EngineCore class.
+		***/
 		inline EngineCore* getRocketEngine() { return mpRocketEngine; };
+		
+		/***
+			* Accessor for the GameMessageManager class. Allows for function calls to the message system.
+			* Returns a pointer to the GameMessageManager class.
+		***/
 		inline GameMessageManager* getGameMessageManager() { return mpGameMessageManager; };
+		
+		/***
+			* Returns a double representing the runtime of the engine since startup.
+		***/
 		double getCurrentTime();
 		void moveForward();
 		void moveBack();

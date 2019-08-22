@@ -3,12 +3,13 @@
 
 #include <ostream>
 #include <iostream>
+#include <DeanLib/Trackable.h>
 
 //TODO(low): worth moving code into cpp file?
 
 // Contains code for Vec2, Vec3, & Vec4 types
 
-class Vector3
+class Vector3 : public Trackable
 {
 	public:
 		Vector3() { mX = 0; mY = 0; mZ = 0; };

@@ -1,13 +1,15 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include <DeanLib/Trackable.h>
+
 struct GLFWwindow;
 
 enum WindowBufferType {	COLOR_BUFFER = 1, DEPTH_BUFFER, ACCUM_BUFFER, STENCIL_BUFFER };
 enum WindowDrawMode { WIREFRAME = 1, VERTICES, FILL };
 enum WindowDrawFace { FRONT = 1, BACK, FRONT_AND_BACK };
 
-class Window
+class Window : public Trackable
 {
 	public:
 		Window();

@@ -6,16 +6,16 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "image/RocketImgLoader.h"
+#include <DeanLib/Trackable.h>
 
 struct ModelData {
 	std::vector<Mesh> meshes;
 	std::string directory;
 };
 
-
 unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
 
-class Model
+class Model : public Trackable
 {
 	//TODO: add gamma correction code after lighting tutorial
 

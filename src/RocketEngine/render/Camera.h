@@ -2,8 +2,9 @@
 #define CAMERA_H
 
 #include <RocketMath/MathUtils.h>
+#include <DeanLib/Trackable.h>
 
-class Camera
+class Camera : public Trackable
 {
 	//Help from Learn OpenGL code https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/camera.h
 

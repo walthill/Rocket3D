@@ -27,6 +27,16 @@ EngineCore::~EngineCore()
 
 void EngineCore::clean()
 {
+	delete[] pointLightPositions;
+	delete[] cubePositions;
+
+	delete mpModel;
+	delete mpLighting;
+	delete mpShaderManager;
+	delete mpInputSystem;
+	delete mpCam;
+	delete mpWindow;
+
 	//De-allocate all vertex data
 	glDeleteVertexArrays(1, &cubeVAO);
 	glDeleteBuffers(1, &VBO);
@@ -99,8 +109,8 @@ void EngineCore::initLighting()
 		Vector3(0.0f,  -1.0f, -1.0f)
 	};
 
-	lighting = new Lighting(tutShaderId, mpShaderManager, numPointLights);
-
+	mpLighting = new Lighting(tutShaderId, mpShaderManager, numPointLights);
+	
 	Vector3 dir, pos, ambient, diffuse, specular;
 	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f, 
 		  cutoff = cos(RK_Math::degToRad(12.5f)), outerCutoff = cos(RK_Math::degToRad(17.5f));
@@ -110,7 +120,7 @@ void EngineCore::initLighting()
 	diffuse = Vector3(0.8f, 0.8f, 0.8f);
 	specular = Vector3(0.5f, 0.5f, 0.5f);
 
-	lighting->addDirectionalLight(new DirectionalLight(dir, ambient, diffuse, specular));
+	mpLighting->addDirectionalLight(new DirectionalLight(dir, ambient, diffuse, specular));
 
 	diffuse = Vector3(0.8f, 0.8f, 0.8f);
 	specular = Vector3(1.0f, 1.0f, 1.0f);
@@ -119,22 +129,23 @@ void EngineCore::initLighting()
 	for(int i =0; i < numPointLights; i++)
 	{
 		p = new PointLight(pointLightPositions[i], ambient, diffuse, specular, constant, linear, quadratic);
-		lighting->addPointLight(p);
+		mpLighting->addPointLight(p);
 	}
 
 	//Currently acts as a flashlight
 	SpotLight *s = new SpotLight(*mpCam->getFront(), Vector3::zero, Vector3::one, Vector3::one, constant, linear, quadratic, cutoff, outerCutoff);
-	lighting->addSpotLight(s, mpCam);
+	mpLighting->addSpotLight(s, mpCam);
 }
 
 bool EngineCore::initialize(char* argv[])
 {
-	RK_LOGGER_INIT();
-	RK_CORE_INFO_ALL("Rocket Engine Logger initialized");
+//	RK_LOGGER_INIT();
+//	RK_CORE_INFO_ALL("Rocket Engine Logger initialized");
 
 	initGLFW();
 
 	mpWindow = new Window();
+	
 	if(!mpWindow->initialize(800, 600, "Rocket3D"))
 		return false;
 
@@ -144,6 +155,7 @@ bool EngineCore::initialize(char* argv[])
 	glfwSetWindowUserPointer(mpWindow->getWindowHandle(), reinterpret_cast<void*>(this));//<--- right here
 
 	mpCam = new Camera(Vector3(0.0f, 0.0f, 3.0f));
+
 	mpInputSystem = new InputSystem(mpWindow->getWindowHandle());
 	//mpLiveload = new ShaderBuild();
 	mpShaderManager = new ShaderManager();
@@ -156,6 +168,7 @@ bool EngineCore::initialize(char* argv[])
 
 	mpShaderManager->addShader(tutShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
 	mpShaderManager->addShader("lamp", new RK_Shader("vLamp.glsl", "fLamp.glsl"));
+
 
 	initLighting();
 
@@ -249,8 +262,8 @@ bool EngineCore::initialize(char* argv[])
 	mpShaderManager->setShaderInt("material.diffuse", 0);
 	mpShaderManager->setShaderInt("material.specular", 1);
 
-	mModel = new Model("../../assets/models/nanosuit/nanosuit.obj");
-
+	mpModel = new Model("../../assets/models/nanosuit/nanosuit.obj");
+	
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
 	
@@ -268,7 +281,7 @@ void EngineCore::update()
 	mpInputSystem->processInput();
 	calculateDeltaTime();
 
-	lighting->processLighting(mpCam);
+	mpLighting->processLighting(mpCam);
 
 	//Check for shader rebuild
 	//TODO: shader rebuild causes need to set shader values every frame. Should fix
@@ -302,7 +315,7 @@ void EngineCore::render()
 	model = Mat4::translate(model, Vector3(0.0f, -2.75f, 0.0f));
 	model = Mat4::scale(model, Vector3(0.2f, 0.2f, 0.2f));
 	mpShaderManager->setShaderMat4("model", model);
-	mModel->drawModel(mpShaderManager->getShaderByKey(tutShaderId));
+	mpModel->drawModel(mpShaderManager->getShaderByKey(tutShaderId));
 
 	//Lamp - "emitters" these objects are not affected by lighting shader
 	//Set 3d properties

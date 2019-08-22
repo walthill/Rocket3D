@@ -16,7 +16,7 @@ class ShaderManager;
 class RK_Shader;
 class Model;
 
-class EngineCore
+class EngineCore : public Trackable
 {
 	public:
 		EngineCore();
@@ -50,10 +50,10 @@ class EngineCore
 		InputSystem *mpInputSystem;
 		Camera* mpCam;
 
-		ShaderBuild* mpLiveload;
+		//ShaderBuild* mpLiveload;
 		ShaderManager* mpShaderManager;
 
-		Lighting* lighting;
+		Lighting* mpLighting;
 		
 		unsigned int lightVAO;
 		unsigned int diffuseMap, specMap;
@@ -62,7 +62,7 @@ class EngineCore
 		unsigned int texture, texture1;
 		Vector3 *cubePositions, *pointLightPositions;
 		ShaderKey tutShaderId = "tutShader", lampShaderId = "lamp";
-		Model* mModel;
+		Model* mpModel;
 		void calculateDeltaTime();
 };
 
