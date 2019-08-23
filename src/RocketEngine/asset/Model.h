@@ -1,3 +1,27 @@
+/********
+	=========================
+			 ROCKET ENGINE
+	=========================
+	File Created By: Walter Hill
+
+	The Rocket Engine code was written with
+	help from the Learn OpenGL tutorials
+	(https://learnopengl.com)
+
+	This file makes use of the Assimp library to load models.
+	(http://assimp.org/)
+
+	Rocket3D is an open source 3D game engine written using C++ & OpenGL.
+
+	This code is open source under the Apache 2.0 license.
+	(https://github.com/walthill/Rocket3D/blob/master/LICENSE)
+
+	=========================
+			 Model.h
+	=========================
+
+********/
+
 #ifndef MODEL_H
 #define MODEL_H
 
@@ -6,24 +30,32 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "image/RocketImgLoader.h"
+#include "../logging/RK_Log.h"
 #include <DeanLib/Trackable.h>
+
+unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
 
 struct ModelData {
 	std::vector<Mesh> meshes;
 	std::string directory;
 };
 
-unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
-
 class Model : public Trackable
 {
 	//TODO: add gamma correction code after lighting tutorial
 
 	public:
+		/*
+			* Constructor requires a path to the model for initialization
+		*/
 		Model(std::string path)
 		{
 			initialize(path);
 		};
+
+		/*
+			* Render meshes to display model on-screen
+		*/
 		void drawModel(RK_Shader* shader)
 		{
 			for (unsigned int i = 0; i < mModelData.meshes.size(); i++)
@@ -34,6 +66,9 @@ class Model : public Trackable
 		ModelData mModelData;
 		std::vector<Texture> texturesLoaded;
 
+		/*
+			* Initialize model data and store in a ModelData struct 
+		*/
 		void initialize(std::string path)
 		{
 			Assimp::Importer importer;
@@ -50,6 +85,10 @@ class Model : public Trackable
 			processNode(scene->mRootNode, scene);
 		};
 
+		/*
+			* Recursive function that creates a tree of mesh nodes 
+			from the model files to be stored in a vector
+		*/
 		void processNode(aiNode* node, const aiScene *scene)
 		{
 			unsigned int i;
@@ -66,7 +105,9 @@ class Model : public Trackable
 		};
 
 
-		// process Assimp's data into a Mesh class object
+		/*
+			* Process Assimp-based vertex data and store in a Mesh class object
+		*/
 		Mesh assimpToMesh(aiMesh *mesh, const aiScene *scene)
 		{
 			MeshData data;
@@ -125,6 +166,9 @@ class Model : public Trackable
 			return Mesh(data);
 		};
 
+		/*
+			* Takes in a material object. Accesses & stores textures from that material
+		*/
 		std::vector<Texture> getTexturesFromMaterial(aiMaterial *mat, aiTextureType type, std::string typeName)
 		{
 			std::vector<Texture> textures;
@@ -145,31 +189,25 @@ class Model : public Trackable
 					}
 				}
 
-				if (!loadFromMemory) //load in new texture from file
+				//load in new texture from file
+				if (!loadFromMemory) 
 				{
 					Texture texture;
-					/*std::string str2 = (std::string)str.C_Str();
-
-					// Remove directory if present.
-					// Do this before extension removal incase directory has a period character.
-					const size_t last_slash_idx = str2.find_last_of("\\/");
-					if (std::string::npos != last_slash_idx)
-					{
-						str2.erase(0, last_slash_idx + 1);
-					}*/
-
 					texture.id = TextureFromFile(str.C_Str(), mModelData.directory);
 					texture.type = typeName;
 					texture.path = str.C_Str();
 					textures.push_back(texture);
-					texturesLoaded.push_back(texture); // add to loaded textures
+					texturesLoaded.push_back(texture); 
 				}
 			}
 			return textures;
 		};
 };
 
-
+/*
+	* Loads in textures from the given file path and 
+	stores the textures in an OpenGL-compatible form
+*/
 unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma)
 {
 	std::string filename = (std::string)path;
@@ -204,7 +242,7 @@ unsigned int TextureFromFile(const char *path, const std::string &directory, boo
 	}
 	else
 	{
-		std::cout << "ERROR::Texture::Failed to load at path: " << path << std::endl;
+		RK_CORE_ERROR_ALL("ERROR::Texture::Failed to load at path: " + (std::string)path);
 		stbi_image_free(data);
 	}
 
