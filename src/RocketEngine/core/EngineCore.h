@@ -41,6 +41,8 @@ class EngineCore : public Trackable
 
 		float deltaTime = 0.0f;	// Time between current frame and last frame
 	private:
+		const std::string mMODEL_PATH = "../../assets/models/";
+
 		int mWindowWidth, mWindowHeight;
 		bool firstMouse = true;
 		double lastX = 400, lastY = 300; //last mouse offset, half of width & height
@@ -52,17 +54,14 @@ class EngineCore : public Trackable
 
 		//ShaderBuild* mpLiveload;
 		ShaderManager* mpShaderManager;
-
 		Lighting* mpLighting;
 		
-		unsigned int lightVAO;
-		unsigned int diffuseMap, specMap;
-		unsigned int VBO, cubeVAO; //Vertex buffer object
-		unsigned int EBO;
-		unsigned int texture, texture1;
-		Vector3 *cubePositions, *pointLightPositions;
-		ShaderKey tutShaderId = "tutShader", lampShaderId = "lamp";
+		Vector3 *pointLightPositions;
+		ShaderKey lightingShaderId = "lightingShader", emitterShaderId = "emmiter";
+		
 		Model* mpModel;
+		std::vector<Model*> mLamps;
+
 		void calculateDeltaTime();
 };
 
