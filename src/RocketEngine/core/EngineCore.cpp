@@ -1,3 +1,20 @@
+/********
+	=========================
+			 ROCKET ENGINE
+	=========================
+	File Created By: Walter Hill
+
+	Rocket3D is an open source 3D game engine written using C++ & OpenGL.
+
+	This code is open source under the Apache 2.0 license.
+	(https://github.com/walthill/Rocket3D/blob/master/LICENSE)
+
+	=========================
+			 EngineCore.cpp
+	=========================
+
+********/
+
 #include "EngineCore.h"
 #include "../window/Window.h"
 #include <glad/glad.h>
@@ -5,9 +22,8 @@
 #include "../render/Camera.h"
 #include "../asset/Model.h"
 #include "../asset/image/RocketImgLoader.h"
-#include <iostream>
 #include "../input/InputSystem.h"
-#include "../shader/ShaderBuild.h"
+//#include "../shader/ShaderBuild.h"
 #include "../shader/RK_Shader.h"
 #include "../shader/ShaderManager.h"
 #include "../logging/RK_Log.h"

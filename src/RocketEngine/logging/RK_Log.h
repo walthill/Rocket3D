@@ -1,3 +1,25 @@
+/********
+	=========================
+			 ROCKET ENGINE
+	=========================
+	File Created By: Walter Hill
+
+	Rocket3D is an open source 3D game engine written using C++ & OpenGL.
+
+	This class makes use of the spdlog logging library
+	(https://github.com/gabime/spdlog)
+
+	This code is open source under the Apache 2.0 license.
+	(https://github.com/walthill/Rocket3D/blob/master/LICENSE)
+
+	=========================
+			 RK_Log.h
+	=========================
+	This class is utlized as a static class. It incorporates spdlog
+	in order to output info and errors to the console and to log files.
+
+********/
+
 #ifndef RK_LOG_H
 #define RK_LOG_H
 
@@ -11,11 +33,17 @@ class RK_Log : public Trackable
 {
 	public:
 		#pragma region Static Class Functions
+		/***
+			* Initializes the global static instance of the RK_Log class
+		***/
 		static void initInstance()
 		{
 			mpLog = new RK_Log;
 		}
 
+		/***
+			* Destroys the global static instance of the RK_Log class
+		***/
 		static void cleanInstance()
 		{
 			if (mpLog != nullptr)
@@ -25,6 +53,10 @@ class RK_Log : public Trackable
 			}
 		}
 
+		/***
+			* Access the global static instance of the RK_Log class 
+			  in order to call functions from across the engine
+		***/
 		static RK_Log* getInstance()
 		{
 			assert(mpLog != nullptr);
@@ -32,12 +64,31 @@ class RK_Log : public Trackable
 		}
 		#pragma endregion
 		
+		/***
+			* Initializes loggers for console and file outputs
+		***/
 		static void initialize();
-		void cleanup();
 
+		/***
+			* Cleanup console and file loggers
+		***
+		void cleanup();*/
+
+		/***
+			* Access console logger for engine core
+		***/
 		inline static std::shared_ptr<spdlog::logger>& getConsoleCoreLogger() { return console_CoreLogger; };
+		/***
+			* Access console logger for game app
+		***/
 		inline static std::shared_ptr<spdlog::logger>& getConsoleClientLogger() { return console_ClientLogger; };
+		/***
+			* Access file logger for engine core
+		***/
 		inline static std::shared_ptr<spdlog::logger>& getFileCoreLogger() { return file_CoreLogger; };
+		/***
+			* Access file logger for game app
+		***/
 		inline static std::shared_ptr<spdlog::logger>& getFileClientLogger() { return file_ClientLogger; };
 
 	private:	

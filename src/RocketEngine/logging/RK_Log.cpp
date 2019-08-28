@@ -1,3 +1,19 @@
+/********
+	=========================
+			 ROCKET ENGINE
+	=========================
+	File Created By: Walter Hill
+
+	This code is open source under the Apache 2.0 license.
+	(https://github.com/walthill/Rocket3D/blob/master/LICENSE)
+
+	=========================
+			 RK_Log.cpp
+	=========================
+
+********/
+
+
 #include "RK_Log.h"
 #include <iostream>
 
