@@ -1,3 +1,23 @@
+/********
+	=========================
+			 ROCKET ENGINE
+	=========================
+	File Created By: Walter Hill
+
+	Rocket3D is an open source 3D game engine written using C++ & OpenGL.
+
+	This class makes use of tutorials from Learn OpenGL
+	(https://learnopengl.com)
+
+	This code is open source under the Apache 2.0 license.
+	(https://github.com/walthill/Rocket3D/blob/master/LICENSE)
+
+	=========================
+			 DirectionalLight.cpp
+	=========================
+
+********/
+
 #include "DirectionalLight.h"
 #include "../../shader/RK_Shader.h"
 

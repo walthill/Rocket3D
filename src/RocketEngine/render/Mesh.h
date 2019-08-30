@@ -1,3 +1,23 @@
+/********
+	=========================
+			 ROCKET ENGINE
+	=========================
+	File Created By: Walter Hill
+
+	Rocket3D is an open source 3D game engine written using C++ & OpenGL.
+
+	This class makes use of tutorials from Learn OpenGL
+	(https://learnopengl.com)
+
+	This code is open source under the Apache 2.0 license.
+	(https://github.com/walthill/Rocket3D/blob/master/LICENSE)
+
+	=========================
+			 Mesh.h
+	=========================
+
+********/
+
 #ifndef MESH_H
 #define MESH_H
 
@@ -10,16 +30,19 @@
 
 typedef unsigned int TextureId;
 
+/* Vertex Data */
 struct Vertex {
     Vector3 position, normal;
     Vector2 texCoords;
 };
 
+/* Texture Data */
 struct Texture {
     TextureId id;
     std::string type, path;
 };
 
+/* Contains all the mesh's vertices, indices, & textures */
 struct MeshData {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -29,6 +52,9 @@ struct MeshData {
 class Mesh
 {
 	public:
+		/***
+			* Constructor that initializes mesh and sets mesh data
+		***/
 		Mesh(MeshData data)
 		{
 			this->mMeshData.vertices = data.vertices;
@@ -37,6 +63,9 @@ class Mesh
 			initialize();
 		};
 
+		/***
+			* Render mesh triangles and set texture values on the fragment shader
+		***/
 		void drawMesh(RK_Shader* shader)
 		{
 			// bind appropriate textures
@@ -79,6 +108,9 @@ class Mesh
 		MeshData mMeshData;
 		unsigned int VAO, VBO, EBO;
 
+		/***
+			* Initializes mesh vertex positions, normals, and texture coordinates using OpenGL functions
+		***/
 		void initialize()
 		{
 			glGenVertexArrays(1, &VAO);

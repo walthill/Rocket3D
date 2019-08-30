@@ -77,7 +77,9 @@ class Model : public Trackable
 
 			if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 			{
-				std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+				std::string err = "ERROR::ASSIMP::";
+				err.append(importer.GetErrorString());
+				RK_CORE_ERROR_ALL(err);
 				return;
 			}
 			mModelData.directory = path.substr(0, path.find_last_of('/'));

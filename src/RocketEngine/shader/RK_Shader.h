@@ -1,3 +1,25 @@
+/********
+	=========================
+			 ROCKET ENGINE
+	=========================
+	File Created By: Walter Hill
+
+	Rocket3D is an open source 3D game engine written using C++ & OpenGL.
+
+	This class makes use of tutorials from Learn OpenGL
+	(https://learnopengl.com)
+
+	This code is open source under the Apache 2.0 license.
+	(https://github.com/walthill/Rocket3D/blob/master/LICENSE)
+
+	=========================
+			 RK_Shader.h
+	=========================
+	This class encapsulates OpenGL vertex and fragment shaders. 
+	Shaders are written in GLSL. 
+
+********/
+
 #ifndef RK_SHADER_H
 #define RK_SHADER_H
 
@@ -6,6 +28,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "../logging/RK_Log.h"
 #include <RocketMath/MathUtils.h>
 
 class RK_Shader 
@@ -14,6 +37,9 @@ class RK_Shader
 		
 		unsigned int shaderID; //program ID
 
+		/***
+			* Constructor that takes in vertex and fragment shader and calls init()
+		***/
 		RK_Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
 		{
 			mVertShaderPath = vertexPath;
@@ -22,6 +48,9 @@ class RK_Shader
 			init();
 		}
 
+		/***
+			* Initialize shader by reading GLSL code from file, compiling, and linking shaders  
+		***/
 		void init()
 		{
 			std::string vertexCode;
@@ -62,7 +91,7 @@ class RK_Shader
 			}
 			catch (std::ifstream::failure e)
 			{
-				std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+				RK_CORE_ERROR_ALL("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ");
 			}
 
 			const char* vertShaderCode = vertexCode.c_str();
@@ -89,7 +118,7 @@ class RK_Shader
 			if (!success)
 			{
 				glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-				std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+				RK_CORE_ERROR_ALL("ERROR::SHADER::VERTEX::COMPILATION_FAILED");
 			}
 			else { std::cout << "COMPILATION >>>>>>> [SUCCESSFUL]" << std::endl; }
 
@@ -104,7 +133,7 @@ class RK_Shader
 			if (!success)
 			{
 				glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-				std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+				RK_CORE_ERROR_ALL("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED");
 			}
 			else { std::cout << "COMPILATION >>>>>>> [SUCCESSFUL]" << std::endl; }
 
@@ -121,39 +150,61 @@ class RK_Shader
 			if (!success)
 			{
 				glGetProgramInfoLog(shaderID, 512, NULL, infoLog);
-				std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+				RK_CORE_ERROR_ALL("ERROR::SHADER::PROGRAM::LINKING_FAILED");
 			}
-			else { std::cout << "LINKING >>>>>>> [SUCCESSFUL]" << std::endl << std::endl; }
+			else 
+			{ 
+				std::cout << "LINKING >>>>>>> [SUCCESSFUL]" << std::endl << std::endl; 
+			}
+
 			glDeleteShader(vertexShader);
 			glDeleteShader(fragmentShader);
 		}
 
+		/***
+			* Execute shader
+		***/
 		void use()
 		{
 			glUseProgram(shaderID);
 		}
 
+		/***
+			* Set boolean uniform in the shader
+		***/
 		void setBool(const std::string &name, const bool &value) const
 		{
 			glUniform1i(glGetUniformLocation(shaderID, name.c_str()), (int)value);
 		}
 
+		/***
+			* Set int uniform in the shader
+		***/
 		void setInt(const std::string &name, const int &value) const
 		{
 			glUniform1i(glGetUniformLocation(shaderID, name.c_str()), value);
 		}
 
+		/***
+			* Set float uniform in the shader
+		***/
 		void setFloat(const std::string &name, const float &value) const
 		{
 			glUniform1f(glGetUniformLocation(shaderID, name.c_str()), value);
 		}
 
+		/***
+			* Set Matrix4 uniform in the shader
+		***/
 		void setMat4(const std::string &name, const Mat4 &mat)
 		{
 			glUniformMatrix4fv(glGetUniformLocation(shaderID, name.c_str()), 
 													1, GL_TRUE, mat.getMatrixValues());
 		}
 
+		/***
+			* Set Vector3 uniform in the shader
+		***/
 		void setVec3(const std::string &name, const Vector3 &value)
 		{	
 			glUniform3fv(glGetUniformLocation(shaderID, name.c_str()), 1, value.toArray());

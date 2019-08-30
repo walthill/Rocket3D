@@ -20,6 +20,8 @@
 #ifndef ENGINE_UTLIS_H
 #define ENGINE_UTLIS_H
 
+#define PURE_VIRTUAL =0
+
 #include <string>
 #include <vector>
 #include <DeanLib/Trackable.h>

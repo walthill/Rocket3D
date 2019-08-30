@@ -1,3 +1,22 @@
+/********
+	=========================
+			 ROCKET ENGINE
+	=========================
+	File Created By: Walter Hill
+
+	Rocket3D is an open source 3D game engine written using C++ & OpenGL.
+
+	This class makes use of tutorials from Learn OpenGL
+	(https://learnopengl.com)
+
+	This code is open source under the Apache 2.0 license.
+	(https://github.com/walthill/Rocket3D/blob/master/LICENSE)
+
+	=========================
+			 SpotLight.cpp
+	=========================
+	
+********/
 #include "SpotLight.h"
 #include "../../shader/RK_Shader.h"
 #include "../Camera.h"
@@ -17,7 +36,9 @@ void SpotLight::initFlashlight(Camera* cam)
 
 void SpotLight::processLightingData(RK_Shader * man)
 {
-	man->setVec3(positionVar, *mpCamHandle->getPosition()); //TODO: throw error here
+	// no need to call use() here as that is called by the lighting class
+
+	man->setVec3(positionVar, *mpCamHandle->getPosition()); 
 
 	man->setVec3(directionVar, *mpCamHandle->getFront());
 	man->setFloat(constantVar, constant);

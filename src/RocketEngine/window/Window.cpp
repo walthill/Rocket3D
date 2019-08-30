@@ -1,8 +1,27 @@
+/********
+	=========================
+			 ROCKET ENGINE
+	=========================
+	File Created By: Walter Hill
+
+	Rocket3D is an open source 3D game engine written using C++ & OpenGL.
+
+	This class makes use of tutorials from Learn OpenGL
+	(https://learnopengl.com)
+
+	This code is open source under the Apache 2.0 license.
+	(https://github.com/walthill/Rocket3D/blob/master/LICENSE)
+
+	=========================
+			 Window.cpp
+	=========================
+
+********/
+
 #include "Window.h"
 #include <glad/glad.h>
 #include <glfw3.h>
-#include <iostream>
-
+#include "../logging/RK_Log.h"
 
 Window::Window()
 {
@@ -27,7 +46,7 @@ bool Window::initialize(int width, int height, const char* windowName)
 
 	if (mWindow == nullptr)
 	{
-		std::cout << "FAILED to create GLFW window" << std::endl;
+		RK_CORE_ERROR_ALL("ERROR::WINDOW::FAILED to create GLFW Window");
 		glfwTerminate();
 		return false;
 	}
@@ -37,7 +56,7 @@ bool Window::initialize(int width, int height, const char* windowName)
 	//Init GLAD fuction pointer handling - requires a window for some reason?
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cout << "FAILED to initialize GLAD" << std::endl;
+		RK_CORE_ERROR_ALL("ERROR::WINDOW::FAILED to initialize GLAD");
 		glfwTerminate();
 		return false;
 	}

@@ -24,7 +24,7 @@
 #ifndef GAME_MSG_H
 #define GAME_MSG_H
 
-#define PURE_VIRTUAL =0
+#include "../../RocketEngine/util/EngineUtils.h"
 
 enum GameMessageType
 {
