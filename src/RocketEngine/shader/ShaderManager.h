@@ -26,6 +26,8 @@
 
 class RK_Shader;
 
+const ShaderKey STANDARD_SHADER_KEY = "standardLightingShader";
+
 class ShaderManager : public Trackable
 {
 	public:

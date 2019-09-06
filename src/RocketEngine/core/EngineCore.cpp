@@ -21,7 +21,7 @@
 #include <glfw3.h>
 #include "../render/Camera.h"
 #include "../asset/Model.h"
-#include "../asset/image/RocketImgLoader.h"
+//#include "../asset/image/RocketImgLoader.h"
 #include "../input/InputSystem.h"
 //#include "../shader/ShaderBuild.h"
 #include "../shader/RK_Shader.h"
@@ -120,7 +120,7 @@ void EngineCore::initLighting()
 		Vector3(0.0f,  -1.0f, -1.0f)
 	};
 
-	mpLighting = new Lighting(lightingShaderId, mpShaderManager, numPointLights);
+	mpLighting = new Lighting(standardLightingShaderId, mpShaderManager, numPointLights);
 	
 	Vector3 dir, pos, ambient, diffuse, specular;
 	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f, 
@@ -147,7 +147,7 @@ void EngineCore::initLighting()
 	SpotLight *s = new SpotLight(*mpCam->getFront(), Vector3::zero, Vector3::one, Vector3::one, constant, linear, quadratic, cutoff, outerCutoff);
 	mpLighting->addSpotLight(s, mpCam);
 
-	mpShaderManager->useShaderByKey(lightingShaderId);
+	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	mpShaderManager->setShaderInt("material.diffuse", 0);
 	mpShaderManager->setShaderInt("material.specular", 1);
 }
@@ -178,16 +178,16 @@ bool EngineCore::initialize(char* argv[])
 	//mpLiveload->init(directory + L"RocketBuild.dll");
 	//mpLiveload->addFunctionToLiveLoad("live_shader_rebuild");
 
-	mpShaderManager->addShader(lightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
+	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
 	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
 
 	initLighting();
 
-	mpModel = new Model(mMODEL_PATH + "nanosuit/nanosuit.obj");
+	//mpModel = new Model(mMODEL_PATH + "nanosuit/nanosuit.obj");
 
 	for (size_t i = 0; i < 4; i++)
 	{
-		mLamps.push_back(new Model(mMODEL_PATH + "cube/cube.obj"));
+		//mLamps.push_back(new Model(mMODEL_PATH + "cube/cube.obj"));
 	}
 	
 	glEnable(GL_DEPTH_TEST);
@@ -238,11 +238,11 @@ void EngineCore::render()
 	mpShaderManager->setShaderMat4("view", view);
 	
 	Mat4 model = Mat4::identity;
-	model = Mat4::translate(model, Vector3(0.0f, -2.75f, 0.0f));
+	/*	model = Mat4::translate(model, Vector3(0.0f, -2.75f, 0.0f));
 	model = Mat4::scale(model, Vector3(0.2f, 0.2f, 0.2f));
 	mpShaderManager->setShaderMat4("model", model);
-	mpModel->drawModel(mpShaderManager->getShaderByKey(lightingShaderId));
-
+	mpModel->drawModel(mpShaderManager->getShaderByKey(standardLightingShaderId));
+*/
 	// Light "emitters" these objects are not affected by 
 	// the lighting shader and mark the location of the light sources
 	mpShaderManager->useShaderByKey(emitterShaderId);
@@ -256,11 +256,11 @@ void EngineCore::render()
 		model = Mat4::scale(model, Vector3(0.1f, 0.1f, 0.1f));
 		mpShaderManager->setShaderMat4("model", model);
 
-		mLamps[i]->drawModel(mpShaderManager->getShaderByKey(emitterShaderId));
+		//mLamps[i]->drawModel(mpShaderManager->getShaderByKey(emitterShaderId));
 	}
 
 	// swap the buffers
-	mpWindow->swapBuffers();
+	//mpWindow->swapBuffers();
 }
 
 void EngineCore::moveCameraLeft()
@@ -289,4 +289,9 @@ void EngineCore::toggleWireframe(bool showWireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
+void EngineCore::swapBuffers()
+{
+	mpWindow->swapBuffers();
 }

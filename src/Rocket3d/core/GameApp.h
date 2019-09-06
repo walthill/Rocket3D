@@ -31,6 +31,7 @@ class EngineCore;
 class GameMessage;
 class GameMessageManager;
 class Timer;
+class GameObject;
 
 class GameApp : Trackable
 {
@@ -112,7 +113,9 @@ class GameApp : Trackable
 	private:
 		EngineCore* mpRocketEngine;
 		GameMessageManager* mpGameMessageManager;
-
+	
+		GameObject* g;
+			
 		//Game state vars
 		static GameApp* mpGameApp;
 		bool mShouldExit;

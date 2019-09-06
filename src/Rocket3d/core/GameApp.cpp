@@ -21,6 +21,9 @@
 #include "../input/GameMessage.h"
 #include "../input/GameMessageManager.h"
 #include "../../RocketEngine/logging/RK_Log.h"
+#include "GameObject.h"
+#include "../component/MaterialComponent.h"
+#include "../component/MeshComponent.h"
 
 GameApp* GameApp::mpGameApp = nullptr;
 
@@ -42,6 +45,8 @@ bool GameApp::initialize(char* argv[])
 	if (!mpRocketEngine->initialize(argv))
 		return false;
 
+	g = new GameObject(new MeshComponent("cube"), new MaterialComponent(mpRocketEngine->getShaderManager(), STANDARD_SHADER));
+
 	pPerformanceTracker->stopTracking(mINIT_TRACKER_NAME);
 	RK_INFO_ALL("Time to init: " + std::to_string(pPerformanceTracker->getElapsedTime(mINIT_TRACKER_NAME)) + "ms\n");
 	
@@ -56,6 +61,8 @@ bool GameApp::initialize(char* argv[])
 
 void GameApp::clean()
 {
+	delete g;
+
 	delete mpFrameTimer;
 	delete mpMasterTimer;
 	delete mpGameMessageManager;
@@ -105,6 +112,10 @@ void GameApp::update()
 void GameApp::render()
 {
 	mpRocketEngine->render();
+
+	g->render();
+
+	mpRocketEngine->swapBuffers();
 }
 
 double GameApp::getCurrentTime() 

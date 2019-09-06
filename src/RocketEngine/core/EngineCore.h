@@ -22,6 +22,11 @@
 #ifndef ENGINE_CORE_H
 #define ENGINE_CORE_H
 
+//See RocketImgLoader.h
+#ifndef STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
+#endif
+
 #include "../util/EngineUtils.h"
 
 class Vector3;
@@ -107,6 +112,10 @@ class EngineCore : public Trackable
 		***/
 		void rk_mouse_callback(double xpos, double ypos);
 
+		ShaderManager* getShaderManager() { return mpShaderManager; };
+		void swapBuffers();
+
+
 		// Time between current frame and last frame
 		float deltaTime = 0.0f;	
 
@@ -127,7 +136,7 @@ class EngineCore : public Trackable
 		Lighting* mpLighting;
 		
 		Vector3 *pointLightPositions;
-		ShaderKey lightingShaderId = "lightingShader", emitterShaderId = "emmiter";
+		ShaderKey standardLightingShaderId = "standardLightingShader", emitterShaderId = "emmiter";
 		
 		Model* mpModel;
 		std::vector<Model*> mLamps;

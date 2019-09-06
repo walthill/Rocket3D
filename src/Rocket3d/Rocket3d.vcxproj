@@ -132,7 +132,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="component\MaterialComponent.cpp" />
+    <ClCompile Include="component\MeshComponent.cpp" />
     <ClCompile Include="core\GameApp.cpp" />
+    <ClCompile Include="core\GameObject.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="input\GameMessage.cpp" />
     <ClCompile Include="input\GameMessageManager.cpp" />
@@ -140,7 +143,10 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="component\MaterialComponent.h" />
+    <ClInclude Include="component\MeshComponent.h" />
     <ClInclude Include="core\GameApp.h" />
+    <ClInclude Include="core\GameObject.h" />
     <ClInclude Include="input\GameMessage.h" />
     <ClInclude Include="input\GameMessageManager.h" />
     <ClInclude Include="input\KeyDownMessage.h" />

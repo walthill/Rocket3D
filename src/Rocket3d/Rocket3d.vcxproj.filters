@@ -39,6 +39,15 @@
     <ClCompile Include="input\GameMessage.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
+    <ClCompile Include="core\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="component\MaterialComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="component\MeshComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\GameApp.h">
@@ -52,6 +61,15 @@
     </ClInclude>
     <ClInclude Include="input\GameMessage.h">
       <Filter>Header Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="core\GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="component\MeshComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="component\MaterialComponent.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
