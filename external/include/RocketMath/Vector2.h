@@ -10,6 +10,7 @@ public:
 	Vector2() {};
 	Vector2(float x, float y) { mX = x; mY = y; };
 	Vector2(int x, int y) { mX = (float)x; mY = (float)y; };
+	Vector2(unsigned int x, unsigned int y) { mX = (float)x; mY = (float)y; };
 
 	float getMagnitude() { return sqrtf((mX*mX) + (mY*mY)); };
 	float getSqrMagnitude() { return getMagnitude() * getMagnitude(); };

@@ -60,9 +60,11 @@
     <None Include="shader\glsl\fShader.glsl" />
     <None Include="shader\glsl\fSoftSpotlight.glsl" />
     <None Include="shader\glsl\fSpotlight.glsl" />
+    <None Include="shader\glsl\fTextRender.glsl" />
     <None Include="shader\glsl\vLamp.glsl" />
     <None Include="shader\glsl\vLighting.glsl" />
     <None Include="shader\glsl\vShader.glsl" />
+    <None Include="shader\glsl\vTextRender.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

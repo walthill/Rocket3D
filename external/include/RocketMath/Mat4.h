@@ -304,9 +304,15 @@ struct MatProj //Matrix Projection Math
 			  nearPlaneDistance, farPlaneDistance;
 	};
 
-	static Mat4 orthographic(ProjectionData data)
+	static Mat4 orthographic(float fov, float aspectRatio, float nearPlane, float farPlane)
 	{
 		float projArr[16] = { 0 };
+
+		//Generate projection data
+		float height = nearPlane * tan(fov / 2);
+		float width = height * aspectRatio;
+
+		ProjectionData data = { -width, width, -height, height, nearPlane, farPlane };
 
 		//Diagonal transformations
 		projArr[0] = 2 / (data.right - data.left);
@@ -329,6 +335,7 @@ struct MatProj //Matrix Projection Math
 	{
 		float projArr[16] = { 0 };
 
+		//Generate projection data
 		float height = nearPlane * tan(fov / 2);
 		float width = height * aspectRatio;	
 
