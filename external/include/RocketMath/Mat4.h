@@ -7,13 +7,18 @@
 #include "Vector4.h"
 
 /*
-		Matrix - coded in row major order
+		Matrix - coded/calculated in row major order
 
 		| 1 0 0 0 |
 		| 0 1 0 0 |
 		| 0 0 1 0 |
 		| 0 0 0 1 |
 
+		 Index breakdown
+		|  0  1  2  3   |
+		|  4  5  6  7   |
+		|  8  9  10 11  |
+		|  12 13 14 15  |
 */
 
 class Mat4
@@ -304,27 +309,19 @@ struct MatProj //Matrix Projection Math
 			  nearPlaneDistance, farPlaneDistance;
 	};
 
-	static Mat4 orthographic(float fov, float aspectRatio, float nearPlane, float farPlane)
+	static Mat4 orthographic(float left, float right, float bottom, float top)
 	{
 		float projArr[16] = { 0 };
 
-		//Generate projection data
-		float height = nearPlane * tan(fov / 2);
-		float width = height * aspectRatio;
-
-		ProjectionData data = { -width, width, -height, height, nearPlane, farPlane };
-
-		//Diagonal transformations
-		projArr[0] = 2 / (data.right - data.left);
-		projArr[5] = 2 / (data.top - data.bottom);
-		projArr[10] = -2 / (data.farPlaneDistance - data.nearPlaneDistance);
-
-		//4th column transformations
-		projArr[3] = -((data.right + data.left) / (data.right - data.left));
-		projArr[7] = -((data.top + data.bottom) / (data.top - data.bottom));
-		projArr[11] = -((data.farPlaneDistance + data.nearPlaneDistance) / (data.farPlaneDistance - data.nearPlaneDistance));
-
+		//Diagonal transformations (1, 5, 10 in column major)
+		projArr[0] = 2 / (right - left);
+		projArr[5] = 2 / (top - bottom);
+		projArr[10] = -1;
 		projArr[15] = 1;
+
+		//Bottom left transformations (3,7 in column major)
+		projArr[3] = -(right + left) / (right - left);
+		projArr[7] = -(top + bottom) / (top - bottom);
 
 		return Mat4(projArr);
 	};
