@@ -21,7 +21,6 @@ GameObject::GameObject(MeshComponent* mesh, MaterialComponent* material)
 		mMesh = mesh;
 		mMesh->linkMaterialComponent(mMaterial);
 	}
-
 }
 
 GameObject::~GameObject()

@@ -22,9 +22,9 @@ void MeshComponent::render(Vector3 position, Vector3 scale, Vector3 rotatonAxis,
 {	
 	modelMatrixValues = Mat4::identity;
 
-	modelMatrixValues = Mat4::translate(modelMatrixValues, Vector3(0.0f, -2.75f, 0.0f));
-	modelMatrixValues = Mat4::rotate(modelMatrixValues, 45.0f, Vector3::up); //TODO: test this
-	modelMatrixValues = Mat4::scale(modelMatrixValues, scale * 0.5);
+	modelMatrixValues = Mat4::translate(modelMatrixValues, position);
+	modelMatrixValues = Mat4::rotate(modelMatrixValues, rotationAngle, rotatonAxis);
+	modelMatrixValues = Mat4::scale(modelMatrixValues, scale);
 
 	mMaterialComponent->setMeshProperties(modelMatrixValues); //assume this is model matrix
 	mMesh->drawModel(mMaterialComponent->getShader());
