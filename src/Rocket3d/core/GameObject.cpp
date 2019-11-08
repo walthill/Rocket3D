@@ -42,8 +42,11 @@ void GameObject::update()
 
 void GameObject::render()
 {
-	mMesh->render(mTransform.position, mTransform.scale, 
-				  mTransform.rotation.rotationAxis, mTransform.rotation.angle);
+	if(mMesh != nullptr) 
+	{
+		mMesh->render(mTransform.position, mTransform.scale,
+			mTransform.rotation.rotationAxis, mTransform.rotation.angle);
+	}
 }
 
 void GameObject::setRotation(Vector3 rotationAxis, float angle)
