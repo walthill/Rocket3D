@@ -29,13 +29,14 @@ class GameObject : public Trackable
 		void update();
 		void render();
 
-		void setPosition(Vector3 pos);
-		void setScale(Vector3 scale);
+		inline Vector3 getPosition() { return mTransform.position; };
+		inline Vector3 getScale() { return mTransform.scale; };
+
+		inline void setPosition(Vector3 pos) { mTransform.position = pos; };
+		inline void setScale(Vector3 scale) { mTransform.scale = scale; };
 		void setRotation(Vector3 rotationAxis, float angle); //TODO(low): Quaternions??
 
 	private:
-		void setScale();
-
 		Transform mTransform;
 		MeshComponent* mMesh;
 		MaterialComponent* mMaterial;

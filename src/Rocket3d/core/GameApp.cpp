@@ -46,6 +46,8 @@ bool GameApp::initialize(char* argv[])
 		return false;
 
 	g = new GameObject(new MeshComponent("cube"), new MaterialComponent(mpRocketEngine->getShaderManager(), STANDARD_SHADER));
+//	Vector3 scale = g->getScale();
+//	g->setScale(scale * 5);
 
 	pPerformanceTracker->stopTracking(mINIT_TRACKER_NAME);
 	RK_INFO_ALL("Time to init: " + std::to_string(pPerformanceTracker->getElapsedTime(mINIT_TRACKER_NAME)) + "ms\n");

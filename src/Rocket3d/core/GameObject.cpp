@@ -46,7 +46,8 @@ void GameObject::render()
 				  mTransform.rotation.rotationAxis, mTransform.rotation.angle);
 }
 
-void GameObject::setScale()
+void GameObject::setRotation(Vector3 rotationAxis, float angle)
 {
-
+	mTransform.rotation.rotationAxis = rotationAxis;
+	mTransform.rotation.angle = angle;
 }
