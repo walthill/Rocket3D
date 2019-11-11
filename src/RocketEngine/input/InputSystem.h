@@ -34,12 +34,29 @@ class InputSystem : public Trackable
 		InputSystem(GLFWwindow* window);
 
 		/***
+			* Callback for resizing the window
+		***/
+		void rk_scroll_callback(double xoffset, double yoffset);
+
+		/***
+			* Callback for moving the mouse
+		***/
+		void rk_mouse_click_callback(int button, int action, int modifier);
+
+		/***
+			* Callback for mouse movement
+		***/
+		void rk_mouse_move_callback(double xpos, double ypos);
+
+		/***
 			* Checks for inputs every frame and queues input message
 		***/
 		void processInput();
 
 	private:
 		GLFWwindow* mpWindowHandle;
+		bool firstMouse;
+		double lastX, lastY;
 };
 
 #endif // !INPUT_SYS_H

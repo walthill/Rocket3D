@@ -105,14 +105,18 @@ class EngineCore : public Trackable
 		/***
 			* Callback for resizing the window
 		***/
-		void rk_scroll_callback(double xoffset, double yoffset);
+	//	void rk_scroll_callback(double xoffset, double yoffset);
+
+		//void rk_mouse_click_callback(int button, int action, int modifier);
+
 
 		/***
 			* Callback for mouse movement
 		***/
-		void rk_mouse_callback(double xpos, double ypos);
+		//void rk_mouse_move_callback(double xpos, double ypos);
 
 		ShaderManager* getShaderManager() { return mpShaderManager; };
+		Camera* getCamera() { return mpCam; }
 		void swapBuffers();
 
 

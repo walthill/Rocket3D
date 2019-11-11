@@ -32,6 +32,9 @@
 #include "../render/light/PointLight.h"
 #include "../render/light/SpotLight.h"
 
+//mouse selection: http://antongerdelan.net/opengl/raycasting.html
+// also helpful? https://www.bfilipek.com/2012/06/select-mouse-opengl.html
+
 EngineCore::EngineCore()
 {
 }
@@ -53,50 +56,6 @@ void EngineCore::clean()
 	delete mpWindow;
 
 	glfwTerminate();
-}
-
-void framebufferSizeCallback(GLFWwindow* window, int width, int height);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-
-void framebufferSizeCallback(GLFWwindow* window, int width, int height) //TODO: move to callback class
-{
-	glViewport(0, 0, width, height);
-}
-
-//Help found here https://stackoverflow.com/questions/27387040/referencing-glfws-callback-functions-from-a-class
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	EngineCore* wind = reinterpret_cast<EngineCore*>(glfwGetWindowUserPointer(window));
-	wind->rk_mouse_callback(xpos, ypos);
-}
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-	EngineCore* wind = reinterpret_cast<EngineCore*>(glfwGetWindowUserPointer(window));
-	wind->rk_scroll_callback(xoffset, yoffset);
-}
-
-void EngineCore::rk_scroll_callback(double xoffset, double yoffset)
-{
-	mpCam->processMouseScroll((float)yoffset);
-}
-
-void EngineCore::rk_mouse_callback(double xpos, double ypos)
-{	
-	if (firstMouse)
-	{
-		lastX = xpos;
-		lastY = ypos;
-		firstMouse = false;
-	}
-
-	float xOffset = (float)(xpos - lastX);
-	float yOffset = (float)(lastY - ypos);
-	lastY = ypos;
-	lastX = xpos;
-
-	mpCam->processMouseMovement(xOffset, yOffset);
 }
 
 void EngineCore::initGLFW()
@@ -150,7 +109,7 @@ void EngineCore::initLighting()
 	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	mpShaderManager->setShaderInt("material.diffuse", 0);
 	mpShaderManager->setShaderInt("material.specular", 1);
-}
+} 
 
 bool EngineCore::initialize(char* argv[])
 {
@@ -158,13 +117,9 @@ bool EngineCore::initialize(char* argv[])
 
 	mpWindow = new Window();
 	
-	if(!mpWindow->initialize(800, 600, "Rocket3D"))
+	//Init window size, name, features, and cursor 
+	if(!mpWindow->initialize(800, 600, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE, false))
 		return false;
-
-	//hide cursor
-	glfwSetInputMode(mpWindow->getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	//set this to use callbacks w/in member function
-	glfwSetWindowUserPointer(mpWindow->getWindowHandle(), reinterpret_cast<void*>(this));//<--- right here
 
 	mpCam = new Camera(Vector3(0.0f, 0.0f, 3.0f));
 
@@ -189,13 +144,6 @@ bool EngineCore::initialize(char* argv[])
 	{
 		//mLamps.push_back(new Model(mMODEL_PATH + "cube/cube.obj"));
 	}
-	
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_MULTISAMPLE);
-	
-	glfwSetFramebufferSizeCallback(mpWindow->getWindowHandle(), framebufferSizeCallback);
-	glfwSetCursorPosCallback(mpWindow->getWindowHandle(), mouse_callback);
-	glfwSetScrollCallback(mpWindow->getWindowHandle(), scroll_callback);
 
 	return true;
 }
@@ -285,10 +233,7 @@ void EngineCore::moveCameraBack()
 
 void EngineCore::toggleWireframe(bool showWireframe)
 {
-	if (showWireframe)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	else
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	mpWindow->toggleWireframe(showWireframe);
 }
 
 void EngineCore::swapBuffers()

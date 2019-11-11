@@ -29,6 +29,7 @@ struct GLFWwindow;
 enum WindowBufferType {	COLOR_BUFFER = 1, DEPTH_BUFFER, ACCUM_BUFFER, STENCIL_BUFFER };
 enum WindowDrawMode { WIREFRAME = 1, VERTICES, FILL };
 enum WindowDrawFace { FRONT = 1, BACK, FRONT_AND_BACK };
+enum WindowCapabilityFlags { AA_MULTISAMPLE = 1, DEPTH_TEST, CULL_FACE, BLEND };
 
 class Window : public Trackable
 {
@@ -42,7 +43,12 @@ class Window : public Trackable
 		/***
 			* Initialize GLFW Window and OpenGL base
 		****/
-		bool initialize(int width, int height, const char* windowName);
+		bool initialize(int width, int height, const char* windowName, int settingsFlags = 0, bool showCursor = true);
+
+		/***
+			* Set window OpenGL capabilities
+		***/
+		void enableOpenGLWindowFlags(int settingsToEnable);
 
 		void clean();
 
@@ -60,18 +66,31 @@ class Window : public Trackable
 			* Set size of this window
 		***/
 		void setViewport(int x, int y, int width, int height);
+		
 		/***
 			* Flip double buffer and display rendered visuals
 		***/
 		void swapBuffers();
+		
 		/***
 			* Set this window as the in-focus window
 		***/
 		void setWindowToCurrent();
+		
 		/***
 			* Set how window draws faces and vertices
 		***/
 		void setWindowDrawMode(WindowDrawFace faceToDraw, WindowDrawMode drawMode); //TODO(low): call this w/ user input
+
+		/***
+			* Set cursor visibility
+		***/
+		void setCursor(bool shouldAppear);
+
+		/***
+			* Show full polygons or vertex wireframe
+		***/
+		void toggleWireframe(bool showWireframe);
 
 		/***
 			* Returns pointer to the window

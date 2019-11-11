@@ -140,6 +140,8 @@
     <ClCompile Include="input\GameMessage.cpp" />
     <ClCompile Include="input\GameMessageManager.cpp" />
     <ClCompile Include="input\KeyDownMessage.cpp" />
+    <ClCompile Include="input\MouseDownMessage.cpp" />
+    <ClCompile Include="input\MouseMoveMessage.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +152,8 @@
     <ClInclude Include="input\GameMessage.h" />
     <ClInclude Include="input\GameMessageManager.h" />
     <ClInclude Include="input\KeyDownMessage.h" />
+    <ClInclude Include="input\MouseDownMessage.h" />
+    <ClInclude Include="input\MouseMoveMessage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
