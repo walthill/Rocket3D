@@ -89,7 +89,8 @@
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)-$(Platform)\RocketEngine\;Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(SolutionDir)..\..\external\lib\assimp-vc141-mtd.dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\assimp-vc141-mtd.dll"</Command>
+      <Command>copy /Y "$(SolutionDir)..\..\external\lib\assimp-vc141-mtd.dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\assimp-vc141-mtd.dll"
+IF not exist log ( mkdir log &amp;&amp; type nul &gt; log/applog.txt &amp;&amp; type nul &gt; log/enginelog.txt)</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copying assimp-vc141-mtd.dll to $(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)</Message>
