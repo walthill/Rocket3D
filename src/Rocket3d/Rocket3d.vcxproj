@@ -83,7 +83,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>assimp-vc141-mtd.lib;RocketEngine.lib;DeanLibDebug.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype.lib;assimp-vc141-mtd.lib;RocketEngine.lib;DeanLibDebug.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)-$(Platform)\RocketEngine\;Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

@@ -25,6 +25,8 @@
     <ClInclude Include="input\InputSystem.h" />
     <ClInclude Include="logging\RK_Log.h" />
     <ClInclude Include="render\Camera.h" />
+    <ClInclude Include="render\Color.h" />
+    <ClInclude Include="render\Text.h" />
     <ClInclude Include="render\light\DirectionalLight.h" />
     <ClInclude Include="render\light\Light.h" />
     <ClInclude Include="render\light\Lighting.h" />
@@ -41,6 +43,8 @@
     <ClCompile Include="core\EngineCore.cpp" />
     <ClCompile Include="input\InputSystem.cpp" />
     <ClCompile Include="logging\RK_Log.cpp" />
+    <ClCompile Include="render\Color.cpp" />
+    <ClCompile Include="render\Text.cpp" />
     <ClCompile Include="render\light\DirectionalLight.cpp" />
     <ClCompile Include="render\light\Lighting.cpp" />
     <ClCompile Include="render\light\PointLight.cpp" />
@@ -60,9 +64,11 @@
     <None Include="shader\glsl\fShader.glsl" />
     <None Include="shader\glsl\fSoftSpotlight.glsl" />
     <None Include="shader\glsl\fSpotlight.glsl" />
+    <None Include="shader\glsl\fTextRender.glsl" />
     <None Include="shader\glsl\vLamp.glsl" />
     <None Include="shader\glsl\vLighting.glsl" />
     <None Include="shader\glsl\vShader.glsl" />
+    <None Include="shader\glsl\vTextRender.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -36,6 +36,8 @@ class SpotLight;
 class ShaderManager;
 class RK_Shader;
 class Model;
+class Text;
+
 
 class EngineCore : public Trackable
 {
@@ -112,7 +114,7 @@ class EngineCore : public Trackable
 
 	private:
 		const std::string mMODEL_PATH = "../../assets/models/";
-
+		uint32 VAO, VBO;
 		int mWindowWidth, mWindowHeight;
 		bool firstMouse = true;
 		double lastX = 400, lastY = 300; //last mouse offset, half of width & height
@@ -126,9 +128,13 @@ class EngineCore : public Trackable
 		ShaderManager* mpShaderManager;
 		Lighting* mpLighting;
 		
+		Text* textObj;
+		Text* textObj2;
+
 		Vector3 *pointLightPositions;
 		ShaderKey lightingShaderId = "lightingShader", emitterShaderId = "emmiter";
-		
+		ShaderKey textShaderId = "textShader";
+
 		Model* mpModel;
 		std::vector<Model*> mLamps;
 
@@ -141,6 +147,8 @@ class EngineCore : public Trackable
 			* Calculate real time between frames
 		***/
 		void calculateDeltaTime();
+		void RenderText(RK_Shader &s, std::string text, float x, float y, float scale, Vector3 color);
+
 };
 
 #endif // !ENGINE_CORE_H

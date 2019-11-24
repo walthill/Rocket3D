@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 #include <DeanLib/Trackable.h>
-
+typedef unsigned int uint32;
 typedef std::string ShaderKey;
 
 #endif // !ENGINE_UTLIS_H

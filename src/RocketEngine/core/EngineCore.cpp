@@ -14,11 +14,10 @@
 	=========================
 
 ********/
-
-#include "EngineCore.h"
-#include "../window/Window.h"
 #include <glad/glad.h>
 #include <glfw3.h>
+#include "EngineCore.h"
+#include "../window/Window.h"
 #include "../render/Camera.h"
 #include "../asset/Model.h"
 #include "../asset/image/RocketImgLoader.h"
@@ -31,6 +30,7 @@
 #include "../render/light/Lighting.h"
 #include "../render/light/PointLight.h"
 #include "../render/light/SpotLight.h"
+#include "../render/Text.h"
 
 EngineCore::EngineCore()
 {
@@ -44,7 +44,8 @@ EngineCore::~EngineCore()
 void EngineCore::clean()
 {
 	delete[] pointLightPositions;
-
+	delete textObj;
+	delete textObj2;
 	delete mpModel;
 	delete mpLighting;
 	delete mpShaderManager;
@@ -180,22 +181,42 @@ bool EngineCore::initialize(char* argv[])
 
 	mpShaderManager->addShader(lightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
 	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
+	mpShaderManager->addShader(textShaderId, new RK_Shader("vTextRender.glsl", "fTextRender.glsl"));
 
 	initLighting();
 
-	mpModel = new Model(mMODEL_PATH + "nanosuit/nanosuit.obj");
+	mpModel = new Model(mMODEL_PATH + "cube/cube.obj");
 
 	for (size_t i = 0; i < 4; i++)
 	{
 		mLamps.push_back(new Model(mMODEL_PATH + "cube/cube.obj"));
 	}
 	
+	// Set OpenGL options
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
-	
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glfwSetFramebufferSizeCallback(mpWindow->getWindowHandle(), framebufferSizeCallback);
 	glfwSetCursorPosCallback(mpWindow->getWindowHandle(), mouse_callback);
 	glfwSetScrollCallback(mpWindow->getWindowHandle(), scroll_callback);
+
+	textObj = new Text("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId));
+	TextData data = { "This is sample text", Color(127, 204, 51), Vector2(25.0f, 25.0f), 1.0f };
+	textObj->initTextData(data);
+
+	textObj2 = new Text("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId));
+	data = { "(C) Rocket3d", Color(76.5f, 178.5f, 229.5f), Vector2(540.0f, 570.0f), 0.5f };
+	textObj2->initTextData(data);
+
+
+	// Compile and setup the shader
+	//Shader shader("shaders/text.vs", "shaders/text.frag");
+	Mat4 projection = MatProj::orthographic(0.0f, 800.0f, 0.0f, 600.0f);
+	mpShaderManager->useShaderByKey(textShaderId);
+	mpShaderManager->getShaderInUse()->setMat4("projection", projection);
 
 	return true;
 }
@@ -224,6 +245,8 @@ void EngineCore::calculateDeltaTime()
 void EngineCore::render()
 {
 	//Rendering
+
+	//TODO: review render cycle - stop setting uniforms every frame?
 
 	mpWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
 	mpWindow->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
@@ -258,6 +281,9 @@ void EngineCore::render()
 
 		mLamps[i]->drawModel(mpShaderManager->getShaderByKey(emitterShaderId));
 	}
+
+	textObj->renderText();
+	textObj2->renderText();
 
 	// swap the buffers
 	mpWindow->swapBuffers();
