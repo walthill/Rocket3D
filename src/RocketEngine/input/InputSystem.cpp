@@ -15,8 +15,9 @@
 
 ********/
 
-#include "InputSystem.h"
+#include <glad/glad.h>
 #include <glfw3.h>
+#include "InputSystem.h"
 #include "../logging/RK_Log.h"
 #include "../../Rocket3d/core/GameApp.h"
 #include "../core/EngineCore.h"
