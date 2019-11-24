@@ -7,6 +7,7 @@
 //TODO(low): worth moving code into cpp file?
 
 // Contains code for Vec2, Vec3, & Vec4 types
+#include "Vector3.h"
 
 class Vector4
 {

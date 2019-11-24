@@ -36,7 +36,7 @@ class SpotLight;
 class ShaderManager;
 class RK_Shader;
 class Model;
-
+class Text;
 
 
 class EngineCore : public Trackable
@@ -128,6 +128,9 @@ class EngineCore : public Trackable
 		ShaderManager* mpShaderManager;
 		Lighting* mpLighting;
 		
+		Text* textObj;
+		Text* textObj2;
+
 		Vector3 *pointLightPositions;
 		ShaderKey lightingShaderId = "lightingShader", emitterShaderId = "emmiter";
 		ShaderKey textShaderId = "textShader";

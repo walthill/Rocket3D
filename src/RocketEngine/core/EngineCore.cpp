@@ -14,11 +14,10 @@
 	=========================
 
 ********/
-
-#include "EngineCore.h"
-#include "../window/Window.h"
 #include <glad/glad.h>
 #include <glfw3.h>
+#include "EngineCore.h"
+#include "../window/Window.h"
 #include "../render/Camera.h"
 #include "../asset/Model.h"
 #include "../asset/image/RocketImgLoader.h"
@@ -31,16 +30,7 @@
 #include "../render/light/Lighting.h"
 #include "../render/light/PointLight.h"
 #include "../render/light/SpotLight.h"
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
-struct Character {
-	uint32 textureId;
-	Vector2 size;
-	Vector2 bearing;
-	uint32 advance;
-};
-std::map<char, Character> characters;
+#include "../render/Text.h"
 
 EngineCore::EngineCore()
 {
@@ -54,7 +44,8 @@ EngineCore::~EngineCore()
 void EngineCore::clean()
 {
 	delete[] pointLightPositions;
-
+	delete textObj;
+	delete textObj2;
 	delete mpModel;
 	delete mpLighting;
 	delete mpShaderManager;
@@ -212,83 +203,20 @@ bool EngineCore::initialize(char* argv[])
 	glfwSetCursorPosCallback(mpWindow->getWindowHandle(), mouse_callback);
 	glfwSetScrollCallback(mpWindow->getWindowHandle(), scroll_callback);
 
+	textObj = new Text("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId));
+	TextData data = { "This is sample text", Color(127, 204, 51), Vector2(25.0f, 25.0f), 1.0f };
+	textObj->initTextData(data);
+
+	textObj2 = new Text("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId));
+	data = { "(C) Rocket3d", Color(76.5f, 178.5f, 229.5f), Vector2(540.0f, 570.0f), 0.5f };
+	textObj2->initTextData(data);
+
+
 	// Compile and setup the shader
 	//Shader shader("shaders/text.vs", "shaders/text.frag");
 	Mat4 projection = MatProj::orthographic(0.0f, 800.0f, 0.0f, 600.0f);
 	mpShaderManager->useShaderByKey(textShaderId);
 	mpShaderManager->getShaderInUse()->setMat4("projection", projection);
-
-	// FreeType
-	FT_Library ft;
-	// All functions return a value different than 0 whenever an error occurred
-	if (FT_Init_FreeType(&ft))
-		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-
-	// Load font as face
-	FT_Face face;
-	if (FT_New_Face(ft, "../../assets/fonts/calibri.ttf", 0, &face))
-		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
-
-	// Set size to load glyphs as
-	FT_Set_Pixel_Sizes(face, 0, 48);
-
-	// Disable byte-alignment restriction
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	// Load first 128 characters of ASCII set
-	for (GLubyte c = 0; c < 128; c++)
-	{
-		// Load character glyph 
-		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
-		{
-			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
-			continue;
-		}
-		// Generate texture
-		GLuint texture;
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glTexImage2D(
-			GL_TEXTURE_2D,
-			0,
-			GL_RED,
-			face->glyph->bitmap.width,
-			face->glyph->bitmap.rows,
-			0,
-			GL_RED,
-			GL_UNSIGNED_BYTE,
-			face->glyph->bitmap.buffer
-		);
-		// Set texture options
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		// Now store character for later use
-		Character character = {
-			texture,
-			Vector2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-			Vector2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-			face->glyph->advance.x
-		};
-		characters.insert(std::pair<GLchar, Character>(c, character));
-	}
-	glBindTexture(GL_TEXTURE_2D, 0);
-	// Destroy FreeType once we're finished
-	FT_Done_Face(face);
-	FT_Done_FreeType(ft);
-
-
-	// Configure VAO/VBO for texture quads
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
 
 	return true;
 }
@@ -354,8 +282,8 @@ void EngineCore::render()
 		mLamps[i]->drawModel(mpShaderManager->getShaderByKey(emitterShaderId));
 	}
 
-	RenderText(*mpShaderManager->getShaderByKey(textShaderId), "This is sample text", 25.0f, 25.0f, 1.0f, Vector3(0.5, 0.8f, 0.2f));
-	RenderText(*mpShaderManager->getShaderByKey(textShaderId), "(C) Rocket3d", 540.0f, 570.0f, 0.5f, Vector3(0.3, 0.7f, 0.9f));
+	textObj->renderText();
+	textObj2->renderText();
 
 	// swap the buffers
 	mpWindow->swapBuffers();
@@ -387,51 +315,4 @@ void EngineCore::toggleWireframe(bool showWireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-}
-
-void EngineCore::RenderText(RK_Shader &shader, std::string text, float x, float y, float scale, Vector3 color)
-{
-	// Activate corresponding render state	
-	shader.use();
-	//shader.setVec3("textColor", color);
-	int val = glGetUniformLocation(shader.shaderID, "textColor");
-	glUniform3f(val, color.getX(), color.getY(), color.getZ());
-	glActiveTexture(GL_TEXTURE0);
-	glBindVertexArray(VAO);
-
-	// Iterate through all characters
-	std::string::const_iterator c;
-	for (c = text.begin(); c != text.end(); c++)
-	{
-		Character ch = characters[*c];
-
-		GLfloat xpos = x + ch.bearing.getX() * scale;
-		GLfloat ypos = y - (ch.size.getY() - ch.bearing.getY()) * scale;
-
-		GLfloat w = ch.size.getX() * scale;
-		GLfloat h = ch.size.getY() * scale;
-		// Update VBO for each character
-		GLfloat vertices[6][4] = {
-			{ xpos,     ypos + h,   0.0, 0.0 },
-			{ xpos,     ypos,       0.0, 1.0 },
-			{ xpos + w, ypos,       1.0, 1.0 },
-
-			{ xpos,     ypos + h,   0.0, 0.0 },
-			{ xpos + w, ypos,       1.0, 1.0 },
-			{ xpos + w, ypos + h,   1.0, 0.0 }
-		};
-		// Render glyph texture over quad
-		glBindTexture(GL_TEXTURE_2D, ch.textureId);
-		// Update content of VBO memory
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
-
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		// Render quad
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-		x += (ch.advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
-	}
-	glBindVertexArray(0);
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
