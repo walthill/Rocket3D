@@ -132,6 +132,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="component\Component.cpp" />
+    <ClCompile Include="component\ComponentManager.cpp" />
     <ClCompile Include="component\MaterialComponent.cpp" />
     <ClCompile Include="component\MeshComponent.cpp" />
     <ClCompile Include="core\GameApp.cpp" />
@@ -145,6 +147,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="component\Component.h" />
+    <ClInclude Include="component\ComponentManager.h" />
     <ClInclude Include="component\MaterialComponent.h" />
     <ClInclude Include="component\MeshComponent.h" />
     <ClInclude Include="core\GameApp.h" />
