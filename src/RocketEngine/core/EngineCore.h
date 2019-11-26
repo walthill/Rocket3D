@@ -13,10 +13,6 @@
 			 EngineCore.h
 	=========================
 
-	This class is the central point for the graphics & rendering 
-	logic of the engine. OpenG, lighting, shaders, input, 
-	and models are initalized here
-
 ********/
 
 #ifndef ENGINE_CORE_H
@@ -38,13 +34,19 @@ class RK_Shader;
 class Model;
 class Text;
 
-
+/***************************************************************************//**
+ * @brief The central point for RocketEngine graphics and rendering functionality
+ *
+ * This class is the central hub for the graphics & rendering 
+ * logic of the engine. OpenG, lighting, shaders, input, 
+ * and models are initalized here
+ ******************************************************************************/
 class EngineCore : public Trackable
 {
 	public:
-		/***
-			* Empty Constructor
-		***/
+
+		//doxygen example
+		/// Empty class constructor
 		EngineCore();
 
 		/***
@@ -94,9 +96,13 @@ class EngineCore : public Trackable
 		***/
 		void moveCameraBack();
 
-		/***
-			* View models in wireframe
-		***/
+		//Doxygen function documentation example w/ params
+		/**********************************************************************//**
+		 * Toggles the window flag between wireframe and full render modes.
+		 *
+		 * @param showWireframe Boolean flag to set render mode. Passing true renders 
+		 * window in wireframe, and passing false renders the window in full
+		 *************************************************************************/
 		void toggleWireframe(bool showWireframe);
 
 		/***
@@ -109,8 +115,9 @@ class EngineCore : public Trackable
 		***/
 		void rk_mouse_callback(double xpos, double ypos);
 
-		// Time between current frame and last frame
-		float deltaTime = 0.0f;	
+		///Time between current frame and last frame
+		float deltaTime = 0.0f; 
+		//doxygen in-line comment example///< Time between current frame and last frame	
 
 	private:
 		const std::string mMODEL_PATH = "../../assets/models/";
