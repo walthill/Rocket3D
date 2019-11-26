@@ -22,7 +22,7 @@
 */
 namespace rkm {
 
-	class Mat4 : public Trackable
+	class Mat4
 	{
 		public:
 			Mat4();

@@ -3,7 +3,6 @@
 
 #include <ostream>
 #include <iostream>
-#include "../../DeanLib/include/Trackable.h"
 
 //TODO(low): worth moving code into cpp file?
 
@@ -11,7 +10,7 @@
 
 namespace rkm {
 
-	class Vector3 : public Trackable
+	class Vector3
 	{
 	public:
 		Vector3();

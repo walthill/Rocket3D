@@ -1,12 +1,35 @@
 using namespace std;
 
 #include <iostream>
-#include "include/MathUtils.h"
+#include <vector>
+#include "cpp/include/MathUtils.h"
+#include "cpp/include/RK_Timer.h"
 
-//Vector3 Demo
+//stretch goals to test for - normalize(), dot()
+
+/*******************************
+	masm function prototypes
+
+********************************/
+extern "C" void _asmMagnitude();
+extern "C" void _asmCross();
+extern "C" void _printVector3(float x, float y, float z) 
+{
+	//std::cout << "Vector: (" << x << ", " << y << ", " << z << ")" << std::endl;
+}
+extern "C" void _printMagnitude(float magnitude) 
+{
+	//std::cout << "Magnitude: " << magnitude << std::endl;
+}
+
+
+/*******************************
+	Vector 3 Demo
+
+********************************/
 void Vector3TestOperations()
 {
-	rkm::Vector3 a(2, -4, 1), b(2, 4, 2);
+/*	rkm::Vector3 a(2, -4, 1), b(2, 4, 2);
 
 	//Vector to vector
 	cout << "Vector to vector math" << endl;
@@ -32,9 +55,8 @@ void Vector3TestOperations()
 	cout << (a == a) << endl;
 	cout << (a == b) << endl;
 	cout << (a != b) << endl << endl;
-
-	cout << "Length of vector" << endl;
-	cout << "a is " << a << endl;
+	
+	cout << "Length of vector a" << a << " is:" << endl;
 	cout << a.getMagnitude() << endl << endl;
 
 	cout << "Unit vector" << endl;
@@ -51,6 +73,10 @@ void Vector3TestOperations()
 	float angleInRadians = rkm::Vector3::dot(v1, v2);
 	float angleInDegrees = rkm::radToDeg(angleInRadians);
 	cout << angleInDegrees << endl << endl;
+	
+	cout << "Cross Product: " << endl;
+	cout << "v1 is " << v1 << " v2 is " << v2 << endl;
+	cout << "cross product is " << rkm::Vector3::cross(v1, v2) << endl;
 
 	cout << "Utility Vectors" << endl;
 	cout << "Back: " << rkm::Vector3::back << endl;
@@ -60,8 +86,10 @@ void Vector3TestOperations()
 	cout << "Up: " << rkm::Vector3::up << endl;
 	cout << "Down: " << rkm::Vector3::down << endl;
 	cout << "Zero: " << rkm::Vector3::zero << endl;
-	cout << "One: " << rkm::Vector3::one << endl;
+	cout << "One: " << rkm::Vector3::one << endl;*/
 }
+
+/*
 
 void Mat4TestOperations()
 {
@@ -110,15 +138,138 @@ void Mat4TestTransformations()
 	trans2 = rkm::Mat4::rotate(trans2, rkm::degToRad(90.0f), rkm::Vector3(0.0f, 0.0f, 1.0f));
 	trans2 = rkm::Mat4::scale(trans2, rkm::Vector3(0.5f, 0.5f, 0.5f));
 	cout << trans2 << endl;
+}*/
+
+
+void testTimer()
+{
+	RK_Timer tmr;
+	tmr.start();
+	double t;
+
+	for (size_t i = 0; i < 10000; i++)
+	{
+		cout << "~ TESTING TIMER ~" << endl;
+	}
+
+	cout << "~|| SLEEPING ||~" << endl;
+	
+	tmr.sleepUntilElapsed(3000);
+	t = tmr.getTimeElapsedMs();
+	std::cout << t << "ms" << std::endl;
+	
+	t = tmr.getTimeElapsedInSeconds();
+	std::cout << t << "sec" << std::endl;
 }
+
+vector<double> masmTimeList;
+vector<double> cppTimeList;
+const int NUM_TEST_RUNS = 1000000;
+
+//Vector3 Computer Architecture final project benchmark functions
+void Vec3CppMagnitude()
+{
+	rkm::Vector3 a(2, -4, 1);
+	float mag = a.getMagnitude();
+}
+
+void Vec3CppCross()
+{
+	rkm::Vector3 v1(0.6f, -0.8f, 0.0f), v2(2, -4, 1);
+	rkm::Vector3 newVec = rkm::Vector3::cross(v1, v2);
+}
+
+void calculateAndDisplayResults(bool isMASM)
+{
+	double total = 0;
+
+	if (isMASM)
+	{
+		for each (double value in masmTimeList)
+		{
+			total += value;
+		}
+
+		total /= masmTimeList.size();
+		cout << endl << ">>--- MASM Results ---<< " << endl
+			<< NUM_TEST_RUNS << " tests run" << endl
+			<< "Average Time: " << total << "ms" << endl << endl;
+
+		masmTimeList.clear();
+	}
+	else
+	{
+		for each (double value in cppTimeList)
+		{
+			total += value;
+		}
+
+		total /= cppTimeList.size();
+		cout << endl << ">>--- CPP Results ---<< " << endl
+			<< NUM_TEST_RUNS << " tests run" << endl
+			<< "Average Time: " << total << "ms" << endl << endl;
+
+		cppTimeList.clear();
+	}
+}
+
+void RunAsmTest()
+{
+	RK_Timer timer;
+	cout << endl << "------- Beginning Test - MASM 1st, CPP 2nd -------" << endl << endl;
+
+	/***************************
+
+		GET MAGNITUDE TEST
+
+	*****************************/
+	cout << endl << "------- Test #1 Vector3::getMagnitude() -------" << endl << endl;
+
+	for (size_t i = 0; i < NUM_TEST_RUNS; i++)
+	{
+		timer.start();
+		_asmMagnitude();
+		masmTimeList.push_back(timer.getTimeElapsedMs());
+
+		timer.start();
+		Vec3CppMagnitude();
+		cppTimeList.push_back(timer.getTimeElapsedMs());
+	}
+
+	calculateAndDisplayResults(true);
+	calculateAndDisplayResults(false);
+
+	/****************************
+
+		CROSS PRODUCT TEST
+
+	****************************/
+	cout << endl << "------- Test #2 Vector3::cross() -------" << endl << endl;
+	for (size_t i = 0; i < NUM_TEST_RUNS; i++)
+	{
+		timer.start();
+		_asmCross();
+		masmTimeList.push_back(timer.getTimeElapsedMs());
+
+		timer.start();
+		Vec3CppCross();
+		cppTimeList.push_back(timer.getTimeElapsedMs());
+	}
+
+	calculateAndDisplayResults(true);
+	calculateAndDisplayResults(false);
+}
+
 
 // Taking notes from Learn OpenGL https://learnopengl.com/Getting-started/Transformations
 int main()
 {
+	RunAsmTest();
 
+//	testTimer();
 //	Vector3TestOperations();
 //	Mat4TestOperations();
 //  Mat4TestTransformations();
-	
+
     return 0;
 }

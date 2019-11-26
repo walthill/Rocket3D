@@ -22,29 +22,29 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{DAD6E733-E0C3-4B17-9F45-EA1B4D237F4B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>VectorMath</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -66,7 +66,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>..\..\..\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -84,6 +85,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
     </Link>
+    <PreLinkEvent>
+      <Command>ml /c /Cx /coff masm/vector3.asm</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -98,23 +102,30 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
+    <PreLinkEvent>
+      <Command>ml /c /Cx /coff masm/vector3.asm</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="MatProj.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Mat4.cpp" />
-    <ClCompile Include="Vector2.cpp" />
-    <ClCompile Include="Vector3.cpp" />
-    <ClCompile Include="Vector4.cpp" />
+    <ClCompile Include="cpp\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Mat4.h" />
-    <ClInclude Include="include\MathUtils.h" />
-    <ClInclude Include="include\MatProj.h" />
-    <ClInclude Include="include\Vector2.h" />
-    <ClInclude Include="include\Vector3.h" />
-    <ClInclude Include="include\Vector4.h" />
+    <ClInclude Include="cpp\include\Mat4.h" />
+    <ClInclude Include="cpp\include\MathUtils.h" />
+    <ClInclude Include="cpp\include\MatProj.h" />
+    <ClInclude Include="cpp\include\Vector2.h" />
+    <ClInclude Include="cpp\include\Vector3.h" />
+    <ClInclude Include="cpp\include\Vector4.h" />
+    <ClInclude Include="cpp\include\RK_Timer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="masm\vector3.asm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="vector3.obj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
