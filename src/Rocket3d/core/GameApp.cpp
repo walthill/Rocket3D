@@ -18,12 +18,12 @@
 #include <core/EngineCore.h>
 #include <iostream>
 #include <DeanLib/PerformanceTracker.h>
+#include "../../RocketEngine/shader/ShaderManager.h"
 #include "../input/GameMessage.h"
 #include "../input/GameMessageManager.h"
 #include "../../RocketEngine/logging/RK_Log.h"
-#include "GameObject.h"
-#include "../component/MaterialComponent.h"
-#include "../component/MeshComponent.h"
+#include "GameObjectManager.h"
+#include "../component/ComponentManager.h"
 
 GameApp* GameApp::mpGameApp = nullptr;
 
@@ -45,10 +45,25 @@ bool GameApp::initialize(char* argv[])
 	if (!mpRocketEngine->initialize(argv))
 		return false;
 
-	g = new GameObject(new MeshComponent("cube"), new MaterialComponent(mpRocketEngine->getShaderManager(), STANDARD_SHADER));
-	g->setScale(g->getScale() * 0.5f);
-	g->setPosition(Vector3(0, -1, -3));
-	g->setRotation(Vector3::up, 45.0f);
+	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);
+	mpComponentManager = new ComponentManager(MAX_NUM_OBJECTS);
+
+	TransformData t = { Vector3(0, -1, -3), Vector3::one * 0.5f, Vector3::up, 45.0f };
+	
+	MeshComponentData meshData = {"cube", mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY)};
+	
+	MaterialData matData = { meshData.shader, STANDARD_SHADER };
+	
+	//test render limits 
+	for(int i = 0; i < MAX_NUM_OBJECTS; i++)
+		mpGameObjectManager->createGameObject(t, meshData, matData);
+
+//	g = new GameObject(new MeshComponent("cube"), new MaterialComponent(mpRocketEngine->getShaderManager(), STANDARD_SHADER));
+//	g->setScale(g->getScale() * 0.5f);
+//	g->setPosition(Vector3(0, -1, -3));
+//	g->setRotation(Vector3::up, 45.0f);
+
+	mpComponentManager->loadMeshes();
 
 	pPerformanceTracker->stopTracking(mINIT_TRACKER_NAME);
 	RK_INFO_ALL("Time to init: " + std::to_string(pPerformanceTracker->getElapsedTime(mINIT_TRACKER_NAME)) + "ms\n");
@@ -64,7 +79,8 @@ bool GameApp::initialize(char* argv[])
 
 void GameApp::clean()
 {
-	delete g;
+	delete mpGameObjectManager;
+	delete mpComponentManager;
 
 	delete mpFrameTimer;
 	delete mpMasterTimer;
@@ -95,10 +111,10 @@ bool GameApp::processLoop()
 		mpFrameTimer->sleepUntilElapsed(m60FPS_FRAME_TIME);
 		pPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
 
-		//RK_INFO_C("loop took:" + std::to_string(pPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) + 
-		//		  "ms draw took:" +  std::to_string(pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) +"ms\n");
-//		mFPS = (int)(1000.0 / pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
-//		RK_INFO_C("FPS: " + std::to_string(mFPS));
+//		RK_INFO_C("loop took:" + std::to_string(pPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) + 
+//				  "ms draw took:" +  std::to_string(pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) +"ms\n");
+		//mFPS = (int)(1000.0 / pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
+		//RK_INFO_C("FPS: " + std::to_string(mFPS));
 	}
 
 	delete pPerformanceTracker;
@@ -110,13 +126,14 @@ void GameApp::update()
 {
 	mpGameMessageManager->processMessagesForThisFrame();
 	mpRocketEngine->update(); 
+	mpComponentManager->update(m60FPS_FRAME_TIME);
 }
 
 void GameApp::render()
 {
 	mpRocketEngine->render();
 
-	g->render();
+	mpGameObjectManager->renderAllGameObjs();
 
 	mpRocketEngine->swapBuffers();
 }

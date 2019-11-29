@@ -2,9 +2,9 @@
 #include "MaterialComponent.h"
 #include "../../RocketEngine/asset/Model.h"
 
-MeshComponent::MeshComponent(std::string modelName)
+MeshComponent::MeshComponent(const ComponentId& id) :
+	Component(id)
 {
-	mMesh = new Model(modelFileLocation	+ modelName + "/" + modelName + ".obj");
 }
 
 MeshComponent::~MeshComponent()
@@ -12,10 +12,16 @@ MeshComponent::~MeshComponent()
 	cleanup();
 }
 
+void MeshComponent::load()
+{
+
+//	mMeshData.mesh = new Model(modelFileLocation + mMeshData.modelName + "/" + mMeshData.modelName + ".obj");
+}
+
 
 void MeshComponent::cleanup()
 {
-	delete mMesh;
+	delete mMeshData.mesh;
 }
 
 void MeshComponent::render(Vector3 position, Vector3 scale, Vector3 rotatonAxis, float rotationAngle)
@@ -26,6 +32,9 @@ void MeshComponent::render(Vector3 position, Vector3 scale, Vector3 rotatonAxis,
 	modelMatrixValues = Mat4::rotate(modelMatrixValues, rotationAngle, rotatonAxis);
 	modelMatrixValues = Mat4::scale(modelMatrixValues, scale);
 
-	mMaterialComponent->setMeshProperties(modelMatrixValues); //assume this is model matrix
-	mMesh->drawModel(mMaterialComponent->getShader());
+	mMeshData.shader->use();
+	mMeshData.shader->setMat4(MATRIX_NAME, modelMatrixValues);
+
+	if(mMeshData.mesh != nullptr)	
+		mMeshData.mesh->drawModel(mMeshData.shader);
 }

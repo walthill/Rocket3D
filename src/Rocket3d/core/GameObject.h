@@ -2,44 +2,44 @@
 #define GAME_OBJ_H
 
 #include <RocketMath/Vector3.h>
+#include "../component/Component.h"
 
 class MaterialComponent;
 class MeshComponent;
-
-
-struct Transform
-{
-	struct Rotation
-	{
-		float angle;
-		Vector3 rotationAxis;
-	} rotation;
-	
-	Vector3 position, scale;
-};
+class TransformComponent;
 
 class GameObject : public Trackable 
 {
 	public:
-		GameObject(MeshComponent* mesh = nullptr, MaterialComponent* material = nullptr);
+		GameObject();
 		~GameObject();
 
 		void destroy();
 
-		void update();
 		void render();
 
-		inline Vector3 getPosition() { return mTransform.position; };
-		inline Vector3 getScale() { return mTransform.scale; };
+		void setId(uint32 id) { mId = id; }
+		void setTransformHandle(TransformComponent* comp) { mpTransform = comp; }
+		void connectTransform(ComponentId transfromId) { mTransformId = transfromId; }
+		void connectMesh(ComponentId meshId) { mMeshId = meshId; }
+		void connectMaterial(ComponentId materialId) { mMaterialId = materialId; }
 
-		inline void setPosition(Vector3 pos) { mTransform.position = pos; };
-		inline void setScale(Vector3 scale) { mTransform.scale = scale; };
-		void setRotation(Vector3 rotationAxis, float angle); //TODO(low): Quaternions??
+		uint32 getId() { return mId; }
+		ComponentId getTransformId() { return mTransformId; };
+		ComponentId getMeshId() { return mMeshId; };
+		ComponentId getMaterialId() { return mMaterialId; };
+	
+		TransformComponent* getTransform() { return mpTransform; }
+		MeshComponent* getMesh();
+		MaterialComponent* getMaterial();
 
 	private:
-		Transform mTransform;
-		MeshComponent* mMesh;
-		MaterialComponent* mMaterial;
+		uint32 mId; //change in GameObjectId
+		ComponentId mMaterialId;
+		ComponentId mMeshId;
+		ComponentId mTransformId;
+
+		TransformComponent* mpTransform;
 };
 
 #endif // !GAME_OBJ_H

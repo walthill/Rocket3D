@@ -1,6 +1,6 @@
 #pragma once
-#include <Trackable.h>
-#include <DeanLibDefines.h>
+#include "Trackable.h"
+#include "DeanLibDefines.h"
 
 template < class T >
 class CircularQueue : public Trackable
@@ -20,7 +20,7 @@ public:
 		delete[] mArray;
 	}
 
-	void CircularQueue::reset()
+	void reset()
 	{
 		mFront = 0;
 		mBack = 0;
