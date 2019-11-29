@@ -47,7 +47,7 @@ struct BufferData {
 	BufferData() : data(nullptr), width(0), height(0), nrComponents(0) {};
 };
 
-class Model : public Trackable
+class Model /*: public Trackable*/
 {
 	//TODO: add gamma correction code after lighting tutorial
 

@@ -42,6 +42,7 @@ class ComponentManager : public Trackable
 		bool shouldLoadMesh;
 		std::vector<std::future<void>> mFutures;
 		std::vector<Model*> mModelsToLoad;
+		std::vector<bool> mFuturesFinished;
 
 		MemoryPool mTransformPool;
 		MemoryPool mMeshPool;

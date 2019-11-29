@@ -200,18 +200,13 @@ void ComponentManager::loadMeshes()
 
 			mFutures.push_back(std::async(
 				std::launch::async, loadMesh, std::ref(mModelsToLoad), filename));
+			mFuturesFinished.push_back(false);
 		}
 	}
 #else
-	auto it = mMeshComponentMap.begin();
-	if (it != mMeshComponentMap.end())//found it
+	for (auto it = mMeshComponentMap.begin(); it != mMeshComponentMap.end(); ++it)//found it
 	{
-		MeshComponentData* data = it->second->getData();
-
-		std::string filename = modelFileLocation + data->modelName +
-			"/" + data->modelName + ".obj";
-
-		data->mesh = new Model(filename);
+		it->second->load();
 	}
 #endif	
 }
@@ -239,12 +234,27 @@ void ComponentManager::storeMeshes()
 
 void ComponentManager::update(float elapsedTime)
 {
-	if (shouldLoadMesh && mFutures.back().wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+	if (shouldLoadMesh)
 	{
-		storeMeshes();
-		shouldLoadMesh = false;
-		mFutures.clear();
-		mModelsToLoad.clear();
+		int ready = 0;
+
+		for (size_t i = 0; i < mFutures.size(); i++)
+		{
+			if (mFutures[i].wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+			{
+				ready++;
+				mFuturesFinished[i]  = true;
+			}
+		}
+
+		if (ready == mFuturesFinished.size())
+		{
+			storeMeshes();
+			shouldLoadMesh = false;
+			mFutures.clear();
+			mModelsToLoad.clear();
+			mFutures.clear();
+		}
 	}
 }
 

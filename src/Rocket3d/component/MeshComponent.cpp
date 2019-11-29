@@ -14,14 +14,15 @@ MeshComponent::~MeshComponent()
 
 void MeshComponent::load()
 {
-
-//	mMeshData.mesh = new Model(modelFileLocation + mMeshData.modelName + "/" + mMeshData.modelName + ".obj");
+	mMeshData.mesh = new Model(modelFileLocation + mMeshData.modelName + "/" + mMeshData.modelName + ".obj");
+	mMeshData.mesh->initTextureBuffers();
 }
 
 
 void MeshComponent::cleanup()
 {
-	delete mMeshData.mesh;
+	if(mMeshData.mesh != nullptr)
+		delete mMeshData.mesh;
 }
 
 void MeshComponent::render(Vector3 position, Vector3 scale, Vector3 rotatonAxis, float rotationAngle)
