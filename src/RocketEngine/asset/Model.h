@@ -40,6 +40,13 @@ struct ModelData {
 	std::string directory;
 };
 
+struct BufferData {
+	unsigned char* data;
+	int width, height, nrComponents;
+
+	BufferData() : data(nullptr), width(0), height(0), nrComponents(0) {};
+};
+
 class Model : public Trackable
 {
 	//TODO: add gamma correction code after lighting tutorial
@@ -53,6 +60,50 @@ class Model : public Trackable
 			initialize(path);
 		};
 
+		void initTextureBuffers()
+		{
+
+			//TextureId id;
+			//glGenTextures(1, &id);
+
+			for (int i = 0; i < mModelData.meshes.size(); i++)
+			{
+				mModelData.meshes[i].initialize();
+				mModelData.meshes[i].setTextureIds();
+
+				//	glGetError();
+				for (size_t j = 0; j < mModelData.meshes[i].getTextureCount(); j++)
+				{
+					if (mBufferData.data)
+					{
+						GLenum format;
+						if (mBufferData.nrComponents == 1)
+							format = GL_RED;
+						else if (mBufferData.nrComponents == 3)
+							format = GL_RGB;
+						else if (mBufferData.nrComponents == 4)
+							format = GL_RGBA;
+
+						glBindTexture(GL_TEXTURE_2D, mModelData.meshes[i].getTextureId(j));
+						glTexImage2D(GL_TEXTURE_2D, 0, format, mBufferData.width, mBufferData.height, 0, format, GL_UNSIGNED_BYTE, mBufferData.data);
+						glGenerateMipmap(GL_TEXTURE_2D);
+
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+						stbi_image_free(mBufferData.data);
+					}
+					else
+					{
+						RK_CORE_ERROR_ALL("ERROR::Texture::Buffer data is null");
+						stbi_image_free(mBufferData.data);
+					}
+				}
+			}
+		}
+
 		/*
 			* Render meshes to display model on-screen
 		*/
@@ -63,7 +114,9 @@ class Model : public Trackable
 		};
 
 	private:
+		unsigned int mTextureId;
 		ModelData mModelData;
+		BufferData mBufferData;
 		std::vector<Texture> texturesLoaded;
 
 		/*
@@ -195,11 +248,13 @@ class Model : public Trackable
 				if (!loadFromMemory) 
 				{
 					Texture texture;
-					texture.id = TextureFromFile(str.C_Str(), mModelData.directory);
+					TextureFromFile(str.C_Str(), mModelData.directory);
+					texture.id = mTextureId;
 					texture.type = typeName;
 					texture.path = str.C_Str();
 					textures.push_back(texture);
 					texturesLoaded.push_back(texture); 
+					mTextureId++;
 				}
 			}
 			return textures;
@@ -210,45 +265,20 @@ class Model : public Trackable
 			* Loads in textures from the given file path and
 			stores the textures in an OpenGL-compatible form
 		*/
-		unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false)
+		void TextureFromFile(const char *path, const std::string &directory, bool gamma = false)
 		{
 			std::string filename = (std::string)path;
 			filename = directory + '/' + filename;
+			mBufferData.data = stbi_load(filename.c_str(), &mBufferData.width, &mBufferData.height, &mBufferData.nrComponents, 0);
 
-			TextureId id;
-			glGenTextures(1, &id);
-
-			int width, height, nrComponents;
-			unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-
-			if (data)
+			if (mBufferData.data)
 			{
-				GLenum format;
-				if (nrComponents == 1)
-					format = GL_RED;
-				else if (nrComponents == 3)
-					format = GL_RGB;
-				else if (nrComponents == 4)
-					format = GL_RGBA;
-
-				glBindTexture(GL_TEXTURE_2D, id);
-				glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-				glGenerateMipmap(GL_TEXTURE_2D);
-
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-				stbi_image_free(data);
+				//RK_CORE_LOG_ALL("SUCCESS::Texture::Buffer Data Loaded");
 			}
 			else
 			{
-				RK_CORE_ERROR_ALL("ERROR::Texture::Failed to load at path: " + (std::string)path);
-				stbi_image_free(data);
+				RK_CORE_ERROR_ALL("ERROR::Texture::Cannot open file at" + (std::string)path);
 			}
-
-			return id;
 		}
 
 };

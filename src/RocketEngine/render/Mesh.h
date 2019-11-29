@@ -60,7 +60,38 @@ class Mesh
 			this->mMeshData.vertices = data.vertices;
 			this->mMeshData.indices = data.indices;
 			this->mMeshData.textures = data.textures;
-			initialize();
+			//initialize();
+		};
+
+		/***
+			* Initializes mesh vertex positions, normals, and texture coordinates using OpenGL functions
+		***/
+		void initialize()
+		{
+			glGenVertexArrays(1, &VAO);
+			glGenBuffers(1, &VBO);
+			glGenBuffers(1, &EBO);
+
+			glBindVertexArray(VAO);
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+			glBufferData(GL_ARRAY_BUFFER, mMeshData.vertices.size() * sizeof(Vertex), &mMeshData.vertices[0], GL_STATIC_DRAW);
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, mMeshData.indices.size() * sizeof(unsigned int),
+				&mMeshData.indices[0], GL_STATIC_DRAW);
+
+			// vertex positions
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+			// vertex normals
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+			// vertex texture coords
+			glEnableVertexAttribArray(2);
+			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
+
+			glBindVertexArray(0);
 		};
 
 		/***
@@ -104,40 +135,20 @@ class Mesh
 			glActiveTexture(GL_TEXTURE0);
 		};
 
+		void setTextureIds()
+		{
+			for (size_t i = 0; i < mMeshData.textures.size(); i++)
+			{
+				glGenTextures(1, &mMeshData.textures[i].id);
+			}
+		}
+
+		int getTextureCount() { return mMeshData.textures.size(); }
+		unsigned int getTextureId(int index) { return mMeshData.textures[index].id; }
+
 	private:
 		MeshData mMeshData;
 		unsigned int VAO, VBO, EBO;
-
-		/***
-			* Initializes mesh vertex positions, normals, and texture coordinates using OpenGL functions
-		***/
-		void initialize()
-		{
-			glGenVertexArrays(1, &VAO);
-			glGenBuffers(1, &VBO);
-			glGenBuffers(1, &EBO);
-
-			glBindVertexArray(VAO);
-			glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-			glBufferData(GL_ARRAY_BUFFER, mMeshData.vertices.size() * sizeof(Vertex), &mMeshData.vertices[0], GL_STATIC_DRAW);
-
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, mMeshData.indices.size() * sizeof(unsigned int),
-						 &mMeshData.indices[0], GL_STATIC_DRAW);
-
-			// vertex positions
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-			// vertex normals
-			glEnableVertexAttribArray(1);
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
-			// vertex texture coords
-			glEnableVertexAttribArray(2);
-			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
-
-			glBindVertexArray(0);
-		};
 };
 
 #endif //!MESH_H
