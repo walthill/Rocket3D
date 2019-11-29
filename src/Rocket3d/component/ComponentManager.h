@@ -30,8 +30,6 @@ class ComponentManager : public Trackable
 		ComponentId allocateMaterialComponent(const ComponentId& materialId, const MaterialData& data = ZERO_MAT_DATA);
 		void deallocateMaterialComponent(const ComponentId& id);
 
-		void loadMeshes();
-		void storeMeshes();
 		void update(float elapsedTime);
 
 		int getNumberOfMeshes() { return mMeshComponentMap.size(); }
@@ -39,10 +37,6 @@ class ComponentManager : public Trackable
 		int getNumberOfTransforms() { return mTransformComponentMap.size(); }
 
 	private:
-		bool shouldLoadMesh;
-		std::vector<std::future<void>> mFutures;
-		std::vector<Model*> mModelsToLoad;
-
 		MemoryPool mTransformPool;
 		MemoryPool mMeshPool;
 		MemoryPool mMaterialPool;

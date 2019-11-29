@@ -14,8 +14,7 @@ MeshComponent::~MeshComponent()
 
 void MeshComponent::load()
 {
-
-//	mMeshData.mesh = new Model(modelFileLocation + mMeshData.modelName + "/" + mMeshData.modelName + ".obj");
+	mMeshData.mesh = new Model(modelFileLocation + mMeshData.modelName + "/" + mMeshData.modelName + ".obj");
 }
 
 

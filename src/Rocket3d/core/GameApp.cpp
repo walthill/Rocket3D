@@ -54,16 +54,8 @@ bool GameApp::initialize(char* argv[])
 	
 	MaterialData matData = { meshData.shader, STANDARD_SHADER };
 	
-	//test render limits 
 	for(int i = 0; i < MAX_NUM_OBJECTS; i++)
 		mpGameObjectManager->createGameObject(t, meshData, matData);
-
-//	g = new GameObject(new MeshComponent("cube"), new MaterialComponent(mpRocketEngine->getShaderManager(), STANDARD_SHADER));
-//	g->setScale(g->getScale() * 0.5f);
-//	g->setPosition(Vector3(0, -1, -3));
-//	g->setRotation(Vector3::up, 45.0f);
-
-	mpComponentManager->loadMeshes();
 
 	pPerformanceTracker->stopTracking(mINIT_TRACKER_NAME);
 	RK_INFO_ALL("Time to init: " + std::to_string(pPerformanceTracker->getElapsedTime(mINIT_TRACKER_NAME)) + "ms\n");

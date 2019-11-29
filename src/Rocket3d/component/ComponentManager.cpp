@@ -110,7 +110,7 @@ ComponentId ComponentManager::allocateMeshComponent(const ComponentId & meshId, 
 		newID = msNextMeshComponentId;
 		MeshComponent* pComponent = new (ptr)MeshComponent(newID);
 		pComponent->setData(data);
-//		pComponent->load();			//load model mesh
+		pComponent->load();			//load model mesh
 		mMeshComponentMap[newID] = pComponent;
 		msNextMeshComponentId++;//increment id
 	}
@@ -173,78 +173,7 @@ void ComponentManager::deallocateMaterialComponent(const ComponentId& id)
 	}
 }
 
-
-static std::mutex sMeshMutex;
-
-static void loadMesh(std::vector<Model*>& models, std::string path)
-{
-	Model* newMesh = new Model(path);
-	std::lock_guard<std::mutex> lock(sMeshMutex);
-	models.push_back(newMesh);
-}
-
-void ComponentManager::loadMeshes()
-{
-#define ASYNC 1
-#if ASYNC
-	shouldLoadMesh = true;
-	//load in from file
-	for (auto it = mMeshComponentMap.begin(); it != mMeshComponentMap.end(); ++it)//found it
-	{
-		MeshComponentData* data = it->second->getData();
-		if (!data->isLoaded)
-		{
-			std::string filename = modelFileLocation + data->modelName +
-				"/" + data->modelName + ".obj";
-
-
-			mFutures.push_back(std::async(
-				std::launch::async, loadMesh, std::ref(mModelsToLoad), filename));
-		}
-	}
-#else
-	auto it = mMeshComponentMap.begin();
-	if (it != mMeshComponentMap.end())//found it
-	{
-		MeshComponentData* data = it->second->getData();
-
-		std::string filename = modelFileLocation + data->modelName +
-			"/" + data->modelName + ".obj";
-
-		data->mesh = new Model(filename);
-	}
-#endif	
-}
-
-void ComponentManager::storeMeshes()
-{
-	//do openGL buffer work
-	for (size_t i = 0; i < mModelsToLoad.size(); i++)
-	{
-		mModelsToLoad[i]->initTextureBuffers();
-	}
-
-	int i = 0;
-	for (auto it = mMeshComponentMap.begin(); it != mMeshComponentMap.end(); ++it)//found it
-	{
-		MeshComponentData* data = it->second->getData();
-		if (!data->isLoaded)
-		{
-			data->mesh = mModelsToLoad[i];
-			i++;
-			data->isLoaded = true;
-		}
-	}
-}
-
 void ComponentManager::update(float elapsedTime)
 {
-	if (shouldLoadMesh && mFutures.back().wait_for(std::chrono::seconds(0)) == std::future_status::ready)
-	{
-		storeMeshes();
-		shouldLoadMesh = false;
-		mFutures.clear();
-		mModelsToLoad.clear();
-	}
 }
 
