@@ -29,6 +29,8 @@
 #include <glad/glad.h>
 
 typedef unsigned int TextureId;
+//TODO: create implementation file
+
 
 /* Vertex Data */
 struct Vertex {
@@ -37,7 +39,14 @@ struct Vertex {
 };
 
 /* Texture Data */
+struct TextureBuffer
+{
+	unsigned char* data;
+	int width, height, nrComponents;
+};
+
 struct Texture {
+	TextureBuffer buffer;
     TextureId id;
     std::string type, path;
 };
@@ -143,6 +152,7 @@ class Mesh
 			}
 		}
 
+		TextureBuffer getTexData(int ind) { return mMeshData.textures[ind].buffer; }
 		int getTextureCount() { return mMeshData.textures.size(); }
 		unsigned int getTextureId(int index) { return mMeshData.textures[index].id; }
 

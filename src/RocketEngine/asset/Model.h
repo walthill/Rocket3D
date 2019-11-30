@@ -35,16 +35,11 @@
 
 //unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
 
+//TODO: create implementation file
+
 struct ModelData {
 	std::vector<Mesh> meshes;
 	std::string directory;
-};
-
-struct BufferData {
-	unsigned char* data;
-	int width, height, nrComponents;
-
-	BufferData() : data(nullptr), width(0), height(0), nrComponents(0) {};
 };
 
 class Model /*: public Trackable*/
@@ -62,46 +57,47 @@ class Model /*: public Trackable*/
 
 		void initTextureBuffers()
 		{
-
-			//TextureId id;
-			//glGenTextures(1, &id);
-
 			for (int i = 0; i < mModelData.meshes.size(); i++)
 			{
-				mModelData.meshes[i].initialize();
-				mModelData.meshes[i].setTextureIds();
+				Mesh* mesh = &mModelData.meshes[i];
+				mesh->initialize();
+				mesh->setTextureIds();
 
-				//	glGetError();
-				for (size_t j = 0; j < mModelData.meshes[i].getTextureCount(); j++)
+				for (int j = 0; j < mesh->getTextureCount(); j++)
 				{
-					if (mBufferData.data)
+					TextureBuffer buffer = mesh->getTexData(j);
+					if (buffer.data)
 					{
 						GLenum format;
-						if (mBufferData.nrComponents == 1)
+						if (buffer.nrComponents == 1)
 							format = GL_RED;
-						else if (mBufferData.nrComponents == 3)
+						else if (buffer.nrComponents == 3)
 							format = GL_RGB;
-						else if (mBufferData.nrComponents == 4)
+						else if (buffer.nrComponents == 4)
 							format = GL_RGBA;
 
-						glBindTexture(GL_TEXTURE_2D, mModelData.meshes[i].getTextureId(j));
-						glTexImage2D(GL_TEXTURE_2D, 0, format, mBufferData.width, mBufferData.height, 0, format, GL_UNSIGNED_BYTE, mBufferData.data);
+						glBindTexture(GL_TEXTURE_2D, mesh->getTextureId(j));
+						glTexImage2D(GL_TEXTURE_2D, 0, format, buffer.width, buffer.height, 0, format, GL_UNSIGNED_BYTE, buffer.data);
 						glGenerateMipmap(GL_TEXTURE_2D);
 
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-						stbi_image_free(mBufferData.data);
 					}
 					else
 					{
 						RK_CORE_ERROR_ALL("ERROR::Texture::Buffer data is null");
-						stbi_image_free(mBufferData.data);
 					}
 				}
 			}
+
+			for (size_t i = 0; i < texturesLoaded.size(); i++)
+			{
+				stbi_image_free(texturesLoaded[i].buffer.data);
+			}
+
+			texturesLoaded.clear();
 		}
 
 		/*
@@ -114,9 +110,7 @@ class Model /*: public Trackable*/
 		};
 
 	private:
-		unsigned int mTextureId;
 		ModelData mModelData;
-		BufferData mBufferData;
 		std::vector<Texture> texturesLoaded;
 
 		/*
@@ -248,13 +242,11 @@ class Model /*: public Trackable*/
 				if (!loadFromMemory) 
 				{
 					Texture texture;
-					TextureFromFile(str.C_Str(), mModelData.directory);
-					texture.id = mTextureId;
+					texture.buffer = TextureFromFile(str.C_Str(), mModelData.directory);
 					texture.type = typeName;
 					texture.path = str.C_Str();
 					textures.push_back(texture);
 					texturesLoaded.push_back(texture); 
-					mTextureId++;
 				}
 			}
 			return textures;
@@ -265,13 +257,19 @@ class Model /*: public Trackable*/
 			* Loads in textures from the given file path and
 			stores the textures in an OpenGL-compatible form
 		*/
-		void TextureFromFile(const char *path, const std::string &directory, bool gamma = false)
+		TextureBuffer TextureFromFile(const char *path, const std::string &directory, bool gamma = false)
 		{
 			std::string filename = (std::string)path;
 			filename = directory + '/' + filename;
-			mBufferData.data = stbi_load(filename.c_str(), &mBufferData.width, &mBufferData.height, &mBufferData.nrComponents, 0);
+			
+			TextureBuffer buffer;
+			buffer.data = stbi_load(filename.c_str(), &buffer.width, &buffer.height, &buffer.nrComponents, 0);
+			
+			//mBufferDataList.push_back(buffer);
 
-			if (mBufferData.data)
+			//mBufferData.data = stbi_load(filename.c_str(), &mBufferData.width, &mBufferData.height, &mBufferData.nrComponents, 0);
+
+			if (buffer.data)
 			{
 				//RK_CORE_LOG_ALL("SUCCESS::Texture::Buffer Data Loaded");
 			}
@@ -279,6 +277,8 @@ class Model /*: public Trackable*/
 			{
 				RK_CORE_ERROR_ALL("ERROR::Texture::Cannot open file at" + (std::string)path);
 			}
+
+			return buffer;
 		}
 
 };

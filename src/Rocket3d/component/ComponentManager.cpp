@@ -253,7 +253,7 @@ void ComponentManager::update(float elapsedTime)
 			shouldLoadMesh = false;
 			mFutures.clear();
 			mModelsToLoad.clear();
-			mFutures.clear();
+			mFuturesFinished.clear();
 		}
 	}
 }
