@@ -1,6 +1,6 @@
 name: SemVer Bump Version
 on:
-  pull_request:
+  push:
     branches: 
       - master
 jobs:
