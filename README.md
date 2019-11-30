@@ -1,4 +1,4 @@
-# Rocket3D
+# Rocket3D - OpenGL & C++
 
 ## To Build & Run
 
