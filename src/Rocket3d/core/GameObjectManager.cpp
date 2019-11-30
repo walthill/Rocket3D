@@ -9,6 +9,8 @@ GameObjectManager::GameObjectManager(uint32 maxSize) :
 {
 }
 
+//TODO: remove material component
+//TODO: add lighting component
 GameObject* GameObjectManager::createGameObject(const TransformData& transform, const MeshComponentData& meshData,
 											    const MaterialData& matData, const GameObjectId& id)
 {

@@ -118,7 +118,7 @@ void GameApp::update()
 {
 	mpGameMessageManager->processMessagesForThisFrame();
 	mpRocketEngine->update(); 
-	mpComponentManager->update(m60FPS_FRAME_TIME);
+	mpComponentManager->update(mpRocketEngine->deltaTime);
 }
 
 void GameApp::render()
