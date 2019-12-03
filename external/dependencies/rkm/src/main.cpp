@@ -15,11 +15,11 @@ extern "C" void _asmMagnitude();
 extern "C" void _asmCross();
 extern "C" void _printVector3(float x, float y, float z) 
 {
-	//std::cout << "Vector: (" << x << ", " << y << ", " << z << ")" << std::endl;
+	std::cout << "Vector: (" << x << ", " << y << ", " << z << ")" << std::endl;
 }
 extern "C" void _printMagnitude(float magnitude) 
 {
-	//std::cout << "Magnitude: " << magnitude << std::endl;
+	std::cout << "Magnitude: " << magnitude << std::endl;
 }
 
 
@@ -164,19 +164,21 @@ void testTimer()
 
 vector<double> masmTimeList;
 vector<double> cppTimeList;
-const int NUM_TEST_RUNS = 1000000;
+const int NUM_TEST_RUNS = 100;
+
+rkm::Vector3 a(2, -4, 1), b(0.6f, -0.8f, 0.0f);
+rkm::Vector3 crossVec;
+float magnitudeResult;
 
 //Vector3 Computer Architecture final project benchmark functions
 void Vec3CppMagnitude()
 {
-	rkm::Vector3 a(2, -4, 1);
-	float mag = a.getMagnitude();
+	magnitudeResult = a.getMagnitude();
 }
 
 void Vec3CppCross()
 {
-	rkm::Vector3 v1(0.6f, -0.8f, 0.0f), v2(2, -4, 1);
-	rkm::Vector3 newVec = rkm::Vector3::cross(v1, v2);
+	crossVec = rkm::Vector3::cross(a, b);
 }
 
 void calculateAndDisplayResults(bool isMASM)

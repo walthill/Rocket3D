@@ -109,6 +109,7 @@
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cpp\RK_Timer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="cpp\Vector3.cpp" />
   </ItemGroup>

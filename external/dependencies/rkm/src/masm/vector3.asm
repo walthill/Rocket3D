@@ -11,9 +11,9 @@ _printVector3 PROTO C	; Protoype for display
 
 .DATA				 ; Data segment, including .bss
 ; Vector A
-xx REAL4 0.6f
-yy REAL4 -0.8f
-zz REAL4 0.0f
+xx REAL4 0.6
+yy REAL4 -0.8
+zz REAL4 0.0
 
 ; Vector B
 aa REAL4 2.0
@@ -26,7 +26,6 @@ crossZ REAL4 ?
 vectorResult REAL4 ?
 
 
-
 .CODE			; start of code segment
 
 ; ===============================
@@ -35,7 +34,8 @@ vectorResult REAL4 ?
 
 _asmMagnitude PROC C	; assembly main() - called from cpp file	
 
-	; printing a vector3
+	; Printing a vector3
+	;---------------------------------
 	;push dword ptr [zz]	
 	;push dword ptr [yy]	
 	;push dword ptr [xx]	
@@ -54,9 +54,11 @@ _asmMagnitude PROC C	; assembly main() - called from cpp file
  	fsqrt
 	fstp vectorResult
 
-	push dword ptr [vectorResult]
-	call _printMagnitude
-	add esp, 4
+	; Print out reselt of getMagnitude() to console
+	;---------------------------------
+	;push dword ptr [vectorResult]
+	;call _printMagnitude
+	;add esp, 4
 
 	ret						; exits _asmMagnitude() and returns to main() in the cpp file
 
@@ -108,12 +110,13 @@ _asmCross PROC C	; assembly main() - called from cpp file
 	fxch st(3)
 	fstp crossZ
 
-	; printing a vector3
-	push dword ptr [crossX]	
-	push dword ptr [crossY]	
-	push dword ptr [crossZ]	
-	call _printVector3
-	add esp, 12	; stack cleanup
+	; Print out Vector3 reselt of cross() to console
+	;---------------------------------
+	;push dword ptr [crossX]	
+	;push dword ptr [crossY]	
+	;push dword ptr [crossZ]	
+	;call _printVector3
+	;add esp, 12	; stack cleanup
 
 	ret						; exits asmMain() and returns to main() in the cpp file
 

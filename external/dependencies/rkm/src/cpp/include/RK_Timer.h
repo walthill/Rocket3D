@@ -11,24 +11,15 @@ typedef unsigned long long uint64;
 
 class RK_Timer {
 	public:
-		RK_Timer() {}
+		RK_Timer();
 
-		void start() { mStartTime = rk_clock::now(); };
+		void start();
 		
-		double getTimeElapsedMs() const 
-		{
-			return std::chrono::duration_cast<rk_millisecond>(
-				rk_clock::now() - mStartTime).count();
-		}
+		double getTimeElapsedMs() const;
+	
+		double getTimeElapsedInSeconds() const;
 
-		double getTimeElapsedInSeconds() const
-		{
-			return std::chrono::duration_cast<rk_second>(
-				rk_clock::now() - mStartTime).count();
-		}
-
-		//Help here https://stackoverflow.com/questions/4184468/sleep-for-milliseconds
-		void sleepUntilElapsed(double ms) { std::this_thread::sleep_for(rk_millisecond(ms)); }
+		void sleepUntilElapsed(double ms);
 
 	private:
 		//param1: An arithmetic type, or a class emulating an arithmetic type, to be used as the type for the internal count.
