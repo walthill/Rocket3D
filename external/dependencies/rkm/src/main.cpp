@@ -1,7 +1,6 @@
-using namespace std;
-
 #include <iostream>
 #include <vector>
+#include <random>
 #include "cpp/include/MathUtils.h"
 #include "cpp/include/RK_Timer.h"
 
@@ -13,6 +12,8 @@ using namespace std;
 ********************************/
 extern "C" void _asmMagnitude();
 extern "C" void _asmCross();
+extern "C" void _asmPrintMagnitude();
+extern "C" void _asmPrintCross();
 extern "C" void _printVector3(float x, float y, float z) 
 {
 	std::cout << "Vector: (" << x << ", " << y << ", " << z << ")" << std::endl;
@@ -24,12 +25,12 @@ extern "C" void _printMagnitude(float magnitude)
 
 
 /*******************************
-	Vector 3 Demo
+	Vector3 Functionality Demo
 
 ********************************/
-void Vector3TestOperations()
+/*void Vector3TestOperations()
 {
-/*	rkm::Vector3 a(2, -4, 1), b(2, 4, 2);
+	rkm::Vector3 a(2, -4, 1), b(2, 4, 2);
 
 	//Vector to vector
 	cout << "Vector to vector math" << endl;
@@ -86,12 +87,14 @@ void Vector3TestOperations()
 	cout << "Up: " << rkm::Vector3::up << endl;
 	cout << "Down: " << rkm::Vector3::down << endl;
 	cout << "Zero: " << rkm::Vector3::zero << endl;
-	cout << "One: " << rkm::Vector3::one << endl;*/
-}
+	cout << "One: " << rkm::Vector3::one << endl;
+}*/
 
-/*
+/*******************************
+	Mat4 Functionality Demo
 
-void Mat4TestOperations()
+********************************/
+/*void Mat4TestOperations()
 {
 	float val[16] = {
 		1, 2, 0, 0,
@@ -141,6 +144,10 @@ void Mat4TestTransformations()
 }*/
 
 
+/*******************************
+	MASM/CPP Vector3 Testing
+
+********************************/
 void testTimer()
 {
 	RK_Timer tmr;
@@ -149,10 +156,10 @@ void testTimer()
 
 	for (size_t i = 0; i < 10000; i++)
 	{
-		cout << "~ TESTING TIMER ~" << endl;
+		std::cout << "~ TESTING TIMER ~" << std::endl;
 	}
 
-	cout << "~|| SLEEPING ||~" << endl;
+	std::cout << "~|| SLEEPING ||~" << std::endl;
 	
 	tmr.sleepUntilElapsed(3000);
 	t = tmr.getTimeElapsedMs();
@@ -162,18 +169,22 @@ void testTimer()
 	std::cout << t << "sec" << std::endl;
 }
 
-vector<double> masmTimeList;
-vector<double> cppTimeList;
-const int NUM_TEST_RUNS = 100;
+//Benchmarking data
+std::vector<double> masmTimeList;
+std::vector<double> cppTimeList;
+const int NUM_TEST_RUNS = 30;
+const float MIN_FLOAT = -1000;
+const float MAX_FLOAT = 1000;
 
-rkm::Vector3 a(2, -4, 1), b(0.6f, -0.8f, 0.0f);
+//CPP Test data
+rkm::Vector3 a, b;
 rkm::Vector3 crossVec;
 float magnitudeResult;
 
-//Vector3 Computer Architecture final project benchmark functions
+
 void Vec3CppMagnitude()
 {
-	magnitudeResult = a.getMagnitude();
+	magnitudeResult = b.getMagnitude();
 }
 
 void Vec3CppCross()
@@ -181,6 +192,7 @@ void Vec3CppCross()
 	crossVec = rkm::Vector3::cross(a, b);
 }
 
+//Display time results for MASM and CPP function calls
 void calculateAndDisplayResults(bool isMASM)
 {
 	double total = 0;
@@ -193,9 +205,9 @@ void calculateAndDisplayResults(bool isMASM)
 		}
 
 		total /= masmTimeList.size();
-		cout << endl << ">>--- MASM Results ---<< " << endl
-			<< NUM_TEST_RUNS << " tests run" << endl
-			<< "Average Time: " << total << "ms" << endl << endl;
+		std::cout << std::endl << ">>--- MASM Results ---<< " << std::endl
+			<< NUM_TEST_RUNS << " tests run" << std::endl
+			<< "Average Time: " << total << "ms" << std::endl << std::endl;
 
 		masmTimeList.clear();
 	}
@@ -207,28 +219,30 @@ void calculateAndDisplayResults(bool isMASM)
 		}
 
 		total /= cppTimeList.size();
-		cout << endl << ">>--- CPP Results ---<< " << endl
-			<< NUM_TEST_RUNS << " tests run" << endl
-			<< "Average Time: " << total << "ms" << endl << endl;
+		std::cout << std::endl << ">>--- CPP Results ---<< " << std::endl
+			<< NUM_TEST_RUNS << " tests run" << std::endl
+			<< "Average Time: " << total << "ms" << std::endl << std::endl;
 
 		cppTimeList.clear();
 	}
 }
 
-void RunAsmTest()
+void runAsmBenchmark()
 {
 	RK_Timer timer;
-	cout << endl << "------- Beginning Test - MASM 1st, CPP 2nd -------" << endl << endl;
+	std::cout << std::endl << "------- Beginning Test - MASM 1st, CPP 2nd -------" << std::endl << std::endl;
 
 	/***************************
 
 		GET MAGNITUDE TEST
 
 	*****************************/
-	cout << endl << "------- Test #1 Vector3::getMagnitude() -------" << endl << endl;
+	std::cout << std::endl << "------- Test #1 Vector3::getMagnitude() -------" << std::endl << std::endl;
 
 	for (size_t i = 0; i < NUM_TEST_RUNS; i++)
 	{
+		
+
 		timer.start();
 		_asmMagnitude();
 		masmTimeList.push_back(timer.getTimeElapsedMs());
@@ -246,9 +260,26 @@ void RunAsmTest()
 		CROSS PRODUCT TEST
 
 	****************************/
-	cout << endl << "------- Test #2 Vector3::cross() -------" << endl << endl;
+	std::cout << std::endl << "------- Test #2 Vector3::cross() -------" << std::endl << std::endl;
 	for (size_t i = 0; i < NUM_TEST_RUNS; i++)
 	{
+		std::random_device rd;
+		std::uniform_real_distribution<float> realDist(MIN_FLOAT, MAX_FLOAT);
+
+		//randomize vector data
+
+		float x = realDist(rd);
+		float y = realDist(rd);
+		float z = realDist(rd);
+		a = rkm::Vector3(x, y, z);
+			
+		x = realDist(rd);
+		y = realDist(rd);
+		z = realDist(rd);
+		b = rkm::Vector3(x, y, z);
+
+		//Pass data to asm
+
 		timer.start();
 		_asmCross();
 		masmTimeList.push_back(timer.getTimeElapsedMs());
@@ -262,16 +293,25 @@ void RunAsmTest()
 	calculateAndDisplayResults(false);
 }
 
+// Execute masm vector3 functions and display results, 
+void testMASMImplementation()
+{
+	_asmMagnitude();
+	_asmCross();
 
-// Taking notes from Learn OpenGL https://learnopengl.com/Getting-started/Transformations
+	std::cout << "Magnitude of " << b << " -- ";
+	_asmPrintMagnitude();
+	std::cout << "Cross product of " << a  << " x " << b << " -- ";
+	_asmPrintCross();
+}
+
+// Taking notes on matrix and vector math from LearnOpenGL https://learnopengl.com/Getting-started/Transformations
 int main()
 {
-	RunAsmTest();
+	testMASMImplementation();
+	runAsmBenchmark();
 
-//	testTimer();
-//	Vector3TestOperations();
-//	Mat4TestOperations();
-//  Mat4TestTransformations();
+	//testTimer();
 
     return 0;
 }

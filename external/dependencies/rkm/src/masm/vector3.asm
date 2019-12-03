@@ -20,10 +20,10 @@ aa REAL4 2.0
 bb REAL4 -4.0
 cc REAL4 1.0
 
-crossX REAL4 ?
-crossY  REAL4 ?
-crossZ REAL4 ?
-vectorResult REAL4 ?
+crossX REAL4 0.0
+crossY  REAL4 0.0
+crossZ REAL4 0.0
+vectorResult REAL4 0.0
 
 
 .CODE			; start of code segment
@@ -32,37 +32,22 @@ vectorResult REAL4 ?
 ; float Vector3::getMagnitude()
 ; ===============================
 
-_asmMagnitude PROC C	; assembly main() - called from cpp file	
-
-	; Printing a vector3
-	;---------------------------------
-	;push dword ptr [zz]	
-	;push dword ptr [yy]	
-	;push dword ptr [xx]	
-	;call _printVector3
-	;add esp, 12	; stack cleanup
-	
+_asmMagnitude PROC C	; assembly main() - called from cpp file		
 	fld xx
-	fmul xx
+	fmul st(0), st(0)	; square it
 	fld yy
-	fmul yy
+	fmul st(0), st(0)
 	fld zz
-	fmul zz
+	fmul st(0), st(0)
 	
 	fadd st(0), st(1)
 	fadd st(0), st(2)
  	fsqrt
 	fstp vectorResult
 
-	; Print out reselt of getMagnitude() to console
-	;---------------------------------
-	;push dword ptr [vectorResult]
-	;call _printMagnitude
-	;add esp, 4
-
 	ret						; exits _asmMagnitude() and returns to main() in the cpp file
 
-_asmMagnitude ENDP	; End of asmMain() function
+_asmMagnitude ENDP	; End of _asmMagnitude() function
 
 
 ; ===============================
@@ -99,7 +84,7 @@ _asmCross PROC C	; assembly main() - called from cpp file
 
 	fsub st(1), st(0)
 
-	; load cross product values for printing
+	; load cross product result values 
 	; ----------------------------
 	fxch st(1)		; send value at st(1) to st(0)
 	fstp crossX
@@ -110,16 +95,42 @@ _asmCross PROC C	; assembly main() - called from cpp file
 	fxch st(3)
 	fstp crossZ
 
-	; Print out Vector3 reselt of cross() to console
-	;---------------------------------
-	;push dword ptr [crossX]	
-	;push dword ptr [crossY]	
-	;push dword ptr [crossZ]	
-	;call _printVector3
-	;add esp, 12	; stack cleanup
-
-	ret						; exits asmMain() and returns to main() in the cpp file
+	ret						; exits _asmCross() and returns to main() in the cpp file
 
 _asmCross ENDP	; End of _asmCross() function
+
+; ===============================
+; Print result of _asmMagnitude
+; ===============================
+
+_asmPrintMagnitude PROC C	; assembly main() - called from cpp file		
+
+	; Print out reselt of getMagnitude() to console
+	;---------------------------------
+	push dword ptr [vectorResult]
+	call _printMagnitude
+	add esp, 4
+
+	ret						; exits _asmPrintMagnitude() and returns to main() in the cpp file
+
+_asmPrintMagnitude ENDP	; End of _asmPrintMagnitude() function
+
+; ===============================
+; Print result of _asmcross
+; ===============================
+
+_asmPrintCross PROC C	; assembly main() - called from cpp file
+
+	; Print out Vector3 reselt of cross() to console
+	;---------------------------------
+	push dword ptr [crossX]	
+	push dword ptr [crossY]	
+	push dword ptr [crossZ]	
+	call _printVector3
+	add esp, 12	; stack cleanup
+
+	ret						; exits _asmPrintCross() and returns to main() in the cpp file
+
+_asmPrintCross ENDP	; End of _asmPrintCross() function
 
 END				; End of file identifier - tells the assembler to stop assembly process
