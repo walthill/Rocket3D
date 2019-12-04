@@ -28,6 +28,27 @@ vectorResult REAL4 0.0
 
 .CODE			; start of code segment
 
+_asmSetData PROC C _a:REAL4, _b:REAL4, _c:REAL4, _x:REAL4, _y:REAL4, _z:REAL4	; assembly main() - called from cpp file		
+
+	fld _a
+	fstp aa
+	fld _b
+	fstp bb
+	fld _c
+	fstp cc
+
+	fld _x
+	fstp xx
+	fld _y
+	fstp yy
+	fld _z
+	fstp zz
+	
+	ret						; exits _asmMagnitude() and returns to main() in the cpp file
+
+_asmSetData ENDP	; End of _asmMagnitude() function
+
+
 ; ===============================
 ; float Vector3::getMagnitude()
 ; ===============================

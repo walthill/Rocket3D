@@ -10,6 +10,7 @@
 	masm function prototypes
 
 ********************************/
+extern "C" void _asmSetData(float a, float b, float c, float x, float y, float z);
 extern "C" void _asmMagnitude();
 extern "C" void _asmCross();
 extern "C" void _asmPrintMagnitude();
@@ -172,24 +173,24 @@ void testTimer()
 //Benchmarking data
 std::vector<double> masmTimeList;
 std::vector<double> cppTimeList;
-const int NUM_TEST_RUNS = 30;
+const int NUM_TEST_RUNS = 1000000; //1 million test runs
 const float MIN_FLOAT = -1000;
 const float MAX_FLOAT = 1000;
 
 //CPP Test data
-rkm::Vector3 a, b;
+rkm::Vector3 vectorA(0.6f, -0.8f, 0.0f), vectorB(2.0f, -4.0f, 1.0f);
 rkm::Vector3 crossVec;
 float magnitudeResult;
 
 
 void Vec3CppMagnitude()
 {
-	magnitudeResult = b.getMagnitude();
+	magnitudeResult = vectorB.getMagnitude();
 }
 
 void Vec3CppCross()
 {
-	crossVec = rkm::Vector3::cross(a, b);
+	crossVec = rkm::Vector3::cross(vectorA, vectorB);
 }
 
 //Display time results for MASM and CPP function calls
@@ -227,7 +228,28 @@ void calculateAndDisplayResults(bool isMASM)
 	}
 }
 
-void runAsmBenchmark()
+
+//randomize vector data
+void setBenchmarkData()
+{
+	std::random_device rd;
+	std::uniform_real_distribution<float> realDist(MIN_FLOAT, MAX_FLOAT);
+
+	float a = realDist(rd);
+	float b = realDist(rd);
+	float c = realDist(rd);
+	vectorA = rkm::Vector3(a, b, c);
+
+	float x = realDist(rd);
+	float y = realDist(rd);
+	float z = realDist(rd);
+	vectorB = rkm::Vector3(x, y, z);
+
+	_asmSetData(a, b, c, x, y, z);
+}
+
+
+void runAsmCppBenchmark()
 {
 	RK_Timer timer;
 	std::cout << std::endl << "------- Beginning Test - MASM 1st, CPP 2nd -------" << std::endl << std::endl;
@@ -241,7 +263,7 @@ void runAsmBenchmark()
 
 	for (size_t i = 0; i < NUM_TEST_RUNS; i++)
 	{
-		
+		setBenchmarkData();
 
 		timer.start();
 		_asmMagnitude();
@@ -263,22 +285,7 @@ void runAsmBenchmark()
 	std::cout << std::endl << "------- Test #2 Vector3::cross() -------" << std::endl << std::endl;
 	for (size_t i = 0; i < NUM_TEST_RUNS; i++)
 	{
-		std::random_device rd;
-		std::uniform_real_distribution<float> realDist(MIN_FLOAT, MAX_FLOAT);
-
-		//randomize vector data
-
-		float x = realDist(rd);
-		float y = realDist(rd);
-		float z = realDist(rd);
-		a = rkm::Vector3(x, y, z);
-			
-		x = realDist(rd);
-		y = realDist(rd);
-		z = realDist(rd);
-		b = rkm::Vector3(x, y, z);
-
-		//Pass data to asm
+		setBenchmarkData();
 
 		timer.start();
 		_asmCross();
@@ -299,9 +306,9 @@ void testMASMImplementation()
 	_asmMagnitude();
 	_asmCross();
 
-	std::cout << "Magnitude of " << b << " -- ";
+	std::cout << "Magnitude of " << vectorB << " -- ";
 	_asmPrintMagnitude();
-	std::cout << "Cross product of " << a  << " x " << b << " -- ";
+	std::cout << "Cross product of " << vectorA  << " x " << vectorB << " -- ";
 	_asmPrintCross();
 }
 
@@ -309,7 +316,7 @@ void testMASMImplementation()
 int main()
 {
 	testMASMImplementation();
-	runAsmBenchmark();
+	runAsmCppBenchmark();
 
 	//testTimer();
 
