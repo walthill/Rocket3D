@@ -28,7 +28,10 @@ vectorResult REAL4 0.0
 
 .CODE			; start of code segment
 
-_asmSetData PROC C _a:REAL4, _b:REAL4, _c:REAL4, _x:REAL4, _y:REAL4, _z:REAL4	; assembly main() - called from cpp file		
+; ===============================
+; Vector data setup
+; ===============================
+_asmSetData PROC C _a:REAL4, _b:REAL4, _c:REAL4, _x:REAL4, _y:REAL4, _z:REAL4	; called from cpp file		
 
 	fld _a
 	fstp aa
@@ -53,7 +56,7 @@ _asmSetData ENDP	; End of _asmMagnitude() function
 ; float Vector3::getMagnitude()
 ; ===============================
 
-_asmMagnitude PROC C	; assembly main() - called from cpp file		
+_asmMagnitude PROC C	; called from cpp file		
 	fld xx
 	fmul st(0), st(0)	; square it
 	fld yy
@@ -75,7 +78,7 @@ _asmMagnitude ENDP	; End of _asmMagnitude() function
 ; Vector3::cross(Vector3 a, Vector3 b)
 ; ===============================
 
-_asmCross PROC C	; assembly main() - called from cpp file
+_asmCross PROC C	; called from cpp file
 	
 	; float_x = (yy * cc) - (zz * bb)
 	; ----------------------------
@@ -124,7 +127,7 @@ _asmCross ENDP	; End of _asmCross() function
 ; Print result of _asmMagnitude
 ; ===============================
 
-_asmPrintMagnitude PROC C	; assembly main() - called from cpp file		
+_asmPrintMagnitude PROC C	; called from cpp file		
 
 	; Print out reselt of getMagnitude() to console
 	;---------------------------------
@@ -140,7 +143,7 @@ _asmPrintMagnitude ENDP	; End of _asmPrintMagnitude() function
 ; Print result of _asmcross
 ; ===============================
 
-_asmPrintCross PROC C	; assembly main() - called from cpp file
+_asmPrintCross PROC C	; called from cpp file
 
 	; Print out Vector3 reselt of cross() to console
 	;---------------------------------
