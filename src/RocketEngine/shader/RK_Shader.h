@@ -23,200 +23,113 @@
 #ifndef RK_SHADER_H
 #define RK_SHADER_H
 
-#include <glad/glad.h>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include "../logging/RK_Log.h"
+#include <unordered_map>
 #include <RocketMath/MathUtils.h>
+
+typedef int rk_uniformLocation;
 
 class RK_Shader 
 {
 	public:
 		
-		unsigned int shaderID; //program ID
+		unsigned int shaderID; ///< Shader program ID
 
-		/***
-			* Constructor that takes in vertex and fragment shader and calls init()
-		***/
-		RK_Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
-		{
-			mVertShaderPath = vertexPath;
-			mFragShaderPath = fragmentPath;
+		/**********************************************************************//**
+		 * Constructor that takes in shader filenames 
+		 *
+		 * @param vertexPath Vertex shader filename
+		 * @param vertexPath Fragment shader filename
+		 * Takes in vertex and fragment shader filenames and initializes the shaders
+		 *************************************************************************/
+		RK_Shader(std::string vertexPath, std::string fragmentPath);
 
-			init();
-		}
+		/// Initialize shader by reading GLSL code from file, compiling, and linking shaders 
+		void init();
 
-		/***
-			* Initialize shader by reading GLSL code from file, compiling, and linking shaders  
-		***/
-		void init()
-		{
-			std::string vertexCode;
-			std::string fragmentCode;
+		/// Get shader code from file, store in string for use in compilation 
+		std::pair<std::string, std::string> loadFromFile();
 
-			std::ifstream vertShaderFile;
-			std::ifstream fragShaderFile;
+		/**********************************************************************//**
+		 * Executes shader compilation, linking, and cleanup
+		 *
+		 * @param vertShaderCode Vertex shader code to compile
+		 * @param fragShaderCode Fragment shader code to compile
+		 *************************************************************************/
+		void compileShaders(const char* vertShaderCode, const char* fragShaderCode);
 
-			vertShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-			fragShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+		///Executre shader program
+		void use();
 
-			try
-			{
-				//Constructor only needs file name and not path
-				char vFilePath[500], fFilePath[500];
+		/**********************************************************************//**
+		 * Cleanup shader initialization objects
+		 *
+		 * @param shaderObject Int reference to the shaderObject to destroy
+		 *************************************************************************/
+		void destroyShader(int shaderObject);
 
-				strcpy_s(vFilePath, mSHADER_FILE_PATH);
-				strcat_s(vFilePath, mVertShaderPath);
+		/**********************************************************************//**
+		 * Set boolean uniform in the shader
+		 *
+		 * @param name String uniform identifier
+		 * @param value Boolean value to pass to the shader's uniform 
+		 * Set boolean uniform to the given value at the location of the given name in the shader
+		 *************************************************************************/
+		void setBool(const std::string& name, const bool& value) const;
 
-				strcpy_s(fFilePath, mSHADER_FILE_PATH);
-				strcat_s(fFilePath, mFragShaderPath);
+		/**********************************************************************//**
+		 * Set integer uniform in the shader
+		 *
+		 * @param name String uniform identifier
+		 * @param value Integer value to pass to the shader's uniform
+		 * Set integer uniform to the given value at the location of the given name in the shader
+		 *************************************************************************/
+		void setInt(const std::string& name, const int& value) const;
 
-				vertShaderFile.open(vFilePath, std::ifstream::in);
-				fragShaderFile.open(fFilePath, std::ifstream::in);
+		/**********************************************************************//**
+		 * Set float uniform in the shader
+		 *
+		 * @param name String uniform identifier
+		 * @param value Float value to pass to the shader's uniform
+		 * Set float uniform to the given value at the location of the given name in the shader
+		 *************************************************************************/
+		void setFloat(const std::string& name, const float& value) const;
+	
+		/**********************************************************************//**
+		 * Set Matrix4 uniform in the shader
+		 *
+		 * @param name String uniform identifier
+		 * @param value Matrix4 value to pass to the shader's uniform
+		 * Set Matrix4 uniform to the given value at the location of the given name in the shader
+		 *************************************************************************/
+		void setMat4(const std::string& name, const Mat4& mat) const;
 
-				std::stringstream vShaderStream, fShaderStream;
+		/**********************************************************************//**
+		 * Set Vector3 uniform in the shader
+		 *
+		 * @param name String uniform identifier
+		 * @param value Vector3 value to pass to the shader's uniform
+		 * Set Vector3 uniform to the given value at the location of the given name in the shader
+		 *************************************************************************/
+		void setVec3(const std::string& name, const Vector3& value);
 
-				//Read files into streams
-				vShaderStream << vertShaderFile.rdbuf();
-				fShaderStream << fragShaderFile.rdbuf();
-
-				vertShaderFile.close();
-				fragShaderFile.close();
-
-				//Convert stream into string
-				vertexCode = vShaderStream.str();
-				fragmentCode = fShaderStream.str();
-			}
-			catch (std::ifstream::failure e)
-			{
-				RK_CORE_ERROR_ALL("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ");
-			}
-
-			const char* vertShaderCode = vertexCode.c_str();
-			const char* fragShaderCode = fragmentCode.c_str();
-
-			// Compile shaders
-			// ---------------------------------------------------------------
-			std::cout << std::endl << "=======\tSHADER -- BUILD STARTED =======" << std::endl << std::endl;
-
-			unsigned int vertexShader, fragmentShader; //Shader obj
-
-			//Debug vars
-			int success;
-			char infoLog[512];
-
-			//VERTEX SHADER
-			std::cout << "(" << mVertShaderPath << ") -- VERTEX SHADER COMPILATION" << std::endl;
-			vertexShader = glCreateShader(GL_VERTEX_SHADER);
-			glShaderSource(vertexShader, 1, &vertShaderCode, NULL);
-			glCompileShader(vertexShader);
-
-			//Check if compilation successful
-			glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-			if (!success)
-			{
-				glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-				RK_CORE_ERROR_ALL("ERROR::SHADER::VERTEX::COMPILATION_FAILED");
-			}
-			else { std::cout << "COMPILATION >>>>>>> [SUCCESSFUL]" << std::endl; }
-
-			//FRAGMENT SHADER
-			std::cout << "(" << mFragShaderPath << ") -- FRAGMENT SHADER COMPILATION" << std::endl;
-			fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-			glShaderSource(fragmentShader, 1, &fragShaderCode, NULL);
-			glCompileShader(fragmentShader);
-
-			//Check if compilation successful
-			glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-			if (!success)
-			{
-				glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-				RK_CORE_ERROR_ALL("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED");
-			}
-			else { std::cout << "COMPILATION >>>>>>> [SUCCESSFUL]" << std::endl; }
-
-
-			//SHADER PROGRAM
-			std::cout << "PERFORMING SHADER LINK" << std::endl;
-			shaderID = glCreateProgram();
-			glAttachShader(shaderID, vertexShader);
-			glAttachShader(shaderID, fragmentShader);
-			glLinkProgram(shaderID);
-
-			// Check if linking successful
-			glGetProgramiv(shaderID, GL_LINK_STATUS, &success);
-			if (!success)
-			{
-				glGetProgramInfoLog(shaderID, 512, NULL, infoLog);
-				RK_CORE_ERROR_ALL("ERROR::SHADER::PROGRAM::LINKING_FAILED");
-			}
-			else 
-			{ 
-				std::cout << "LINKING >>>>>>> [SUCCESSFUL]" << std::endl << std::endl; 
-			}
-
-			glDeleteShader(vertexShader);
-			glDeleteShader(fragmentShader);
-		}
-
-		/***
-			* Execute shader
-		***/
-		void use()
-		{
-			glUseProgram(shaderID);
-		}
-
-		/***
-			* Set boolean uniform in the shader
-		***/
-		void setBool(const std::string &name, const bool &value) const
-		{
-			glUniform1i(glGetUniformLocation(shaderID, name.c_str()), (int)value);
-		}
-
-		/***
-			* Set int uniform in the shader
-		***/
-		void setInt(const std::string &name, const int &value) const
-		{
-			glUniform1i(glGetUniformLocation(shaderID, name.c_str()), value);
-		}
-
-		/***
-			* Set float uniform in the shader
-		***/
-		void setFloat(const std::string &name, const float &value) const
-		{
-			glUniform1f(glGetUniformLocation(shaderID, name.c_str()), value);
-		}
-
-		/***
-			* Set Matrix4 uniform in the shader
-		***/
-		void setMat4(const std::string &name, const Mat4 &mat)
-		{
-			glUniformMatrix4fv(glGetUniformLocation(shaderID, name.c_str()), 
-													1, GL_TRUE, mat.getMatrixValues());
-		}
-
-		/***
-			* Set Vector3 uniform in the shader
-		***/
-		void setVec3(const std::string &name, const Vector3 &value)
-		{	
-			glUniform3fv(glGetUniformLocation(shaderID, name.c_str()), 1, value.toArray());
-		}
+		/**********************************************************************//**
+		 * Get uniform location, either from cache or an OpenGL call
+		 *
+		 * @param name String uniform identifier
+		 * Use uniform name to check if location has been cached. If so, returns from map
+		 * If not found, new location is retrieved from OpenGL and stored in the map
+		 *************************************************************************/
+		rk_uniformLocation getUniformLocation(std::string name) const;
 
 	private:
 		//TODO: add ability to re-set bools, ints, floats - vectors that are reapplied on build?
 		//reapply vars w/ reassignVariables()
+		std::string mSHADER_FILE_PATH = "../RocketEngine/shader/glsl/"; ///> Shader file path
+		std::string mVertShaderPath;
+		std::string mFragShaderPath;
 
-		const char* mSHADER_FILE_PATH = "../RocketEngine/shader/glsl/";
-		const char* mVertShaderPath;
-		const char* mFragShaderPath;
+		///Stores unifrom locations for faster access & uniform manipulation 
+		mutable std::unordered_map<std::string, rk_uniformLocation> mUniformLocationCache;
 };
 
 #endif // !RK_SHADER_H
