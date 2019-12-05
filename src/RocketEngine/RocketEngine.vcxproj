@@ -49,6 +49,7 @@
     <ClCompile Include="render\light\Lighting.cpp" />
     <ClCompile Include="render\light\PointLight.cpp" />
     <ClCompile Include="render\light\SpotLight.cpp" />
+    <ClCompile Include="shader\RK_Shader.cpp" />
     <ClCompile Include="shader\ShaderManager.cpp" />
     <ClCompile Include="util\Mat4.cpp" />
     <ClCompile Include="util\Vector2.cpp" />
