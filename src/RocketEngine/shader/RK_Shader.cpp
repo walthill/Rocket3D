@@ -127,6 +127,7 @@ void RK_Shader::compileShaders(const char* vertShaderCode, const char* fragShade
 		RK_CORE_INFO_ALL("LINKING >>>>>>> [SUCCESSFUL]");
 	}
 
+	//Clean up
 	destroyShader(vertexShader);
 	destroyShader(fragmentShader);
 }
@@ -173,10 +174,12 @@ void RK_Shader::setVec3(const std::string& name, const Vector3& value)
 
 rk_uniformLocation RK_Shader::getUniformLocation(std::string name) const
 {
+	//Find existing uniform, return its location value
 	auto locationIndex = mUniformLocationCache.find(name);
 	if (locationIndex != mUniformLocationCache.end())
 		return locationIndex->second;
 
+	//Get location from OpenGL, store in cache, and return
 	rk_uniformLocation location = glGetUniformLocation(shaderID, name.c_str());
 	mUniformLocationCache[name] = location;
 	return location;
