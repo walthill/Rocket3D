@@ -3,11 +3,10 @@
 #include <glad/glad.h>
 #include <fstream>
 #include <sstream>
-#include <iostream>
 #include "../logging/RK_Log.h"
 
 
-RK_Shader::RK_Shader(const char* vertexPath, const char* fragmentPath)
+RK_Shader::RK_Shader(std::string vertexPath, std::string fragmentPath)
 {
 	mVertShaderPath = vertexPath;
 	mFragShaderPath = fragmentPath;
@@ -15,6 +14,16 @@ RK_Shader::RK_Shader(const char* vertexPath, const char* fragmentPath)
 }
 
 void RK_Shader::init()
+{
+	std::pair<std::string, std::string> vertAndFragCode = loadFromFile();
+
+	const char* vertexShaderCode = vertAndFragCode.first.c_str();
+	const char* fragmentShaderCode = vertAndFragCode.second.c_str();
+
+	compileShaders(vertexShaderCode, fragmentShaderCode);
+}
+
+std::pair<std::string, std::string> RK_Shader::loadFromFile()
 {
 	std::string vertexCode;
 	std::string fragmentCode;
@@ -28,13 +37,10 @@ void RK_Shader::init()
 	try
 	{
 		//Constructor only needs file name and not path
-		char vFilePath[500], fFilePath[500];
+		std::string vFilePath, fFilePath;
 
-		strcpy_s(vFilePath, mSHADER_FILE_PATH);
-		strcat_s(vFilePath, mVertShaderPath);
-
-		strcpy_s(fFilePath, mSHADER_FILE_PATH);
-		strcat_s(fFilePath, mFragShaderPath);
+		vFilePath = mSHADER_FILE_PATH + mVertShaderPath;
+		fFilePath = mSHADER_FILE_PATH + mFragShaderPath;
 
 		vertShaderFile.open(vFilePath, std::ifstream::in);
 		fragShaderFile.open(fFilePath, std::ifstream::in);
@@ -57,12 +63,14 @@ void RK_Shader::init()
 		RK_CORE_ERROR_ALL("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ");
 	}
 
-	const char* vertShaderCode = vertexCode.c_str();
-	const char* fragShaderCode = fragmentCode.c_str();
+	return std::pair<std::string, std::string>(vertexCode, fragmentCode);
+}
 
+void RK_Shader::compileShaders(const char* vertShaderCode, const char* fragShaderCode)
+{
 	// Compile shaders
 	// ---------------------------------------------------------------
-	std::cout << std::endl << "=======\tSHADER -- BUILD STARTED =======" << std::endl << std::endl;
+	RK_CORE_LOG_ALL("=======\tSHADER -- BUILD STARTED =======");
 
 	unsigned int vertexShader, fragmentShader; //Shader obj
 
@@ -71,7 +79,7 @@ void RK_Shader::init()
 	char infoLog[512];
 
 	//VERTEX SHADER
-	std::cout << "(" << mVertShaderPath << ") -- VERTEX SHADER COMPILATION" << std::endl;
+	RK_CORE_LOG_ALL("(" + mVertShaderPath + ") -- VERTEX SHADER COMPILATION");
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertShaderCode, NULL);
 	glCompileShader(vertexShader);
@@ -83,10 +91,10 @@ void RK_Shader::init()
 		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
 		RK_CORE_ERROR_ALL("ERROR::SHADER::VERTEX::COMPILATION_FAILED");
 	}
-	else { std::cout << "COMPILATION >>>>>>> [SUCCESSFUL]" << std::endl; }
+	else { RK_CORE_INFO_ALL("COMPILATION >>>>>>> [SUCCESSFUL]"); }
 
 	//FRAGMENT SHADER
-	std::cout << "(" << mFragShaderPath << ") -- FRAGMENT SHADER COMPILATION" << std::endl;
+	RK_CORE_LOG_ALL("(" + mFragShaderPath + ") -- FRAGMENT SHADER COMPILATION");
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragShaderCode, NULL);
 	glCompileShader(fragmentShader);
@@ -98,11 +106,10 @@ void RK_Shader::init()
 		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
 		RK_CORE_ERROR_ALL("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED");
 	}
-	else { std::cout << "COMPILATION >>>>>>> [SUCCESSFUL]" << std::endl; }
-
+	else { RK_CORE_INFO_ALL("COMPILATION >>>>>>> [SUCCESSFUL]"); }
 
 	//SHADER PROGRAM
-	std::cout << "PERFORMING SHADER LINK" << std::endl;
+	RK_CORE_LOG_ALL("PERFORMING SHADER LINK");
 	shaderID = glCreateProgram();
 	glAttachShader(shaderID, vertexShader);
 	glAttachShader(shaderID, fragmentShader);
@@ -117,16 +124,21 @@ void RK_Shader::init()
 	}
 	else
 	{
-		std::cout << "LINKING >>>>>>> [SUCCESSFUL]" << std::endl << std::endl;
+		RK_CORE_INFO_ALL("LINKING >>>>>>> [SUCCESSFUL]");
 	}
 
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	destroyShader(vertexShader);
+	destroyShader(fragmentShader);
 }
 
 void RK_Shader::use()
 {
 	glUseProgram(shaderID);
+}
+
+void RK_Shader::destroyShader(int shaderObject)
+{
+	glDeleteShader(shaderObject);	
 }
 
 void RK_Shader::setBool(const std::string& name, const bool& value) const
@@ -163,7 +175,7 @@ rk_uniformLocation RK_Shader::getUniformLocation(std::string name) const
 {
 	auto locationIndex = mUniformLocationCache.find(name);
 	if (locationIndex != mUniformLocationCache.end())
-		return mUniformLocationCache[name];
+		return locationIndex->second;
 
 	rk_uniformLocation location = glGetUniformLocation(shaderID, name.c_str());
 	mUniformLocationCache[name] = location;

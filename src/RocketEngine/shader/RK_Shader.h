@@ -37,17 +37,23 @@ class RK_Shader
 		/***
 			* Constructor that takes in vertex and fragment shader and calls init()
 		***/
-		RK_Shader(const char* vertexPath, const char* fragmentPath);
+		RK_Shader(std::string vertexPath, std::string fragmentPath);
 
 		/***
 			* Initialize shader by reading GLSL code from file, compiling, and linking shaders  
 		***/
 		void init();
-		
+
+		std::pair<std::string, std::string> loadFromFile();
+
+		void compileShaders(const char* vertShaderCode, const char* fragShaderCode);
+
 		/***
 			* Execute shader
 		***/
 		void use();
+
+		void destroyShader(int shaderObject);
 
 		/***
 			* Set boolean uniform in the shader
@@ -82,9 +88,9 @@ class RK_Shader
 	private:
 		//TODO: add ability to re-set bools, ints, floats - vectors that are reapplied on build?
 		//reapply vars w/ reassignVariables()
-		const char* mSHADER_FILE_PATH = "../RocketEngine/shader/glsl/";
-		const char* mVertShaderPath;
-		const char* mFragShaderPath;
+		std::string mSHADER_FILE_PATH = "../RocketEngine/shader/glsl/";
+		std::string mVertShaderPath;
+		std::string mFragShaderPath;
 
 		mutable std::unordered_map<std::string, rk_uniformLocation> mUniformLocationCache;
 };
