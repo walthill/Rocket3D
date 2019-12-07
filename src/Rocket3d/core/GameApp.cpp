@@ -17,7 +17,6 @@
 #include "GameApp.h"
 #include <core/EngineCore.h>
 #include <iostream>
-#include <DeanLib/PerformanceTracker.h>
 #include "../input/GameMessage.h"
 #include "../input/GameMessageManager.h"
 #include "../../RocketEngine/logging/RK_Log.h"
@@ -29,15 +28,14 @@ GameApp::~GameApp()
 	clean();
 }
 
-
 bool GameApp::initialize(char* argv[])
 {
-	PerformanceTracker* pPerformanceTracker = new PerformanceTracker;
+	rkutil::RK_PerformanceTracker* pPerformanceTracker = new rkutil::RK_PerformanceTracker();
 	pPerformanceTracker->startTracking(mINIT_TRACKER_NAME);
 
 	mpRocketEngine = new EngineCore();
 	mpGameMessageManager = new GameMessageManager();
-	mpMasterTimer = new Timer();
+	mpMasterTimer = new rkutil::RK_Timer();
 
 	if (!mpRocketEngine->initialize(argv))
 		return false;
@@ -64,18 +62,18 @@ void GameApp::clean()
 
 bool GameApp::processLoop()
 {
-	PerformanceTracker* pPerformanceTracker = new PerformanceTracker();
+	rkutil::RK_PerformanceTracker* pPerformanceTracker = new rkutil::RK_PerformanceTracker();
 
-	mpFrameTimer = new Timer();
+	mpFrameTimer = new rkutil::RK_Timer();
 	
 	while (!mShouldExit)
 	{
-		pPerformanceTracker->clearTracker(mLOOP_TRACKER_NAME);
+		//pPerformanceTracker->clearTracker(mLOOP_TRACKER_NAME);
 		pPerformanceTracker->startTracking(mLOOP_TRACKER_NAME);
 
 		mpFrameTimer->start();
 
-		pPerformanceTracker->clearTracker(mDRAW_TRACKER_NAME);
+		//pPerformanceTracker->clearTracker(mDRAW_TRACKER_NAME);
 		pPerformanceTracker->startTracking(mDRAW_TRACKER_NAME);
 	
 		update();
@@ -109,7 +107,7 @@ void GameApp::render()
 
 double GameApp::getCurrentTime() 
 { 
-	return mpMasterTimer->getElapsedTime(); 
+	return mpMasterTimer->getTimeElapsedMs(); 
 };
 
 //TODO: everything below this point should be moved into separate classes and accessed via accessor

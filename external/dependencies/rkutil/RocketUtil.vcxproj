@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,63 +18,10 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="asset\image\RocketImgLoader.h" />
-    <ClInclude Include="asset\Model.h" />
-    <ClInclude Include="core\EngineCore.h" />
-    <ClInclude Include="input\InputSystem.h" />
-    <ClInclude Include="logging\RK_Log.h" />
-    <ClInclude Include="render\Camera.h" />
-    <ClInclude Include="render\Color.h" />
-    <ClInclude Include="render\Text.h" />
-    <ClInclude Include="render\light\DirectionalLight.h" />
-    <ClInclude Include="render\light\Light.h" />
-    <ClInclude Include="render\light\Lighting.h" />
-    <ClInclude Include="render\light\PointLight.h" />
-    <ClInclude Include="render\light\SpotLight.h" />
-    <ClInclude Include="render\Mesh.h" />
-    <ClInclude Include="shader\RK_Shader.h" />
-    <ClInclude Include="shader\ShaderBuild.h" />
-    <ClInclude Include="shader\ShaderManager.h" />
-    <ClInclude Include="util\EngineUtils.h" />
-    <ClInclude Include="window\Window.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="core\EngineCore.cpp" />
-    <ClCompile Include="input\InputSystem.cpp" />
-    <ClCompile Include="logging\RK_Log.cpp" />
-    <ClCompile Include="render\Color.cpp" />
-    <ClCompile Include="render\Text.cpp" />
-    <ClCompile Include="render\light\DirectionalLight.cpp" />
-    <ClCompile Include="render\light\Lighting.cpp" />
-    <ClCompile Include="render\light\PointLight.cpp" />
-    <ClCompile Include="render\light\SpotLight.cpp" />
-    <ClCompile Include="shader\RK_Shader.cpp" />
-    <ClCompile Include="shader\ShaderManager.cpp" />
-    <ClCompile Include="util\Mat4.cpp" />
-    <ClCompile Include="util\Vector2.cpp" />
-    <ClCompile Include="util\Vector3.cpp" />
-    <ClCompile Include="window\Window.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="README.md" />
-    <None Include="shader\glsl\fDirectionalLight.glsl" />
-    <None Include="shader\glsl\fLamp.glsl" />
-    <None Include="shader\glsl\fPointLight.glsl" />
-    <None Include="shader\glsl\fLighting.glsl" />
-    <None Include="shader\glsl\fShader.glsl" />
-    <None Include="shader\glsl\fSoftSpotlight.glsl" />
-    <None Include="shader\glsl\fSpotlight.glsl" />
-    <None Include="shader\glsl\fTextRender.glsl" />
-    <None Include="shader\glsl\vLamp.glsl" />
-    <None Include="shader\glsl\vLighting.glsl" />
-    <None Include="shader\glsl\vShader.glsl" />
-    <None Include="shader\glsl\vTextRender.glsl" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{0ED5C651-7932-434D-BE10-B5DEC6D359F3}</ProjectGuid>
-    <RootNamespace>RocketEngine</RootNamespace>
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{24253B52-4B3A-4DBF-B373-62362B67399C}</ProjectGuid>
+    <RootNamespace>RocketUtil</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -92,7 +39,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -123,10 +70,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>../../../external/include;../../external/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../../../external/lib;../../external/lib;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)Debug</TargetName>
     <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)bin-int\$(Configuration)-$(Platform)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>$(ProjectName)Release</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -135,6 +84,13 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -143,6 +99,9 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -154,9 +113,14 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -168,10 +132,20 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\RK_PerformanceTracker.cpp" />
+    <ClCompile Include="src\RK_Timer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\include\RK_PerformanceTracker.h" />
+    <ClInclude Include="src\include\RK_Timer.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
