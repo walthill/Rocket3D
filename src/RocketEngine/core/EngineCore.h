@@ -41,7 +41,7 @@ class Text;
  * logic of the engine. OpenG, lighting, shaders, input, 
  * and models are initalized here
  ******************************************************************************/
-class EngineCore : public Trackable
+class EngineCore : public rkutil::Trackable
 {
 	public:
 

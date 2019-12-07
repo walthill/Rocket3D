@@ -31,7 +31,7 @@
 #include <assimp/postprocess.h>
 #include "image/RocketImgLoader.h"
 #include "../logging/RK_Log.h"
-#include <DeanLib/Trackable.h>
+#include <rkutil/Trackable.h>
 
 unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
 
@@ -40,7 +40,7 @@ struct ModelData {
 	std::string directory;
 };
 
-class Model : public Trackable
+class Model : public rkutil::Trackable
 {
 	//TODO: add gamma correction code after lighting tutorial
 

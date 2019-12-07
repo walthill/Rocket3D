@@ -18,30 +18,30 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RK_Timer.cpp">
+    <ClCompile Include="src\MemoryTracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RK_PerformanceTracker.cpp">
+    <ClCompile Include="src\PerformanceTracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RK_MemoryTracker.cpp">
+    <ClCompile Include="src\Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RK_Trackable.cpp">
+    <ClCompile Include="src\Trackable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\include\RK_Timer.h">
+    <ClInclude Include="src\include\MemoryTracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\RK_PerformanceTracker.h">
+    <ClInclude Include="src\include\PerformanceTracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\RK_MemoryTracker.h">
+    <ClInclude Include="src\include\Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\RK_Trackable.h">
+    <ClInclude Include="src\include\Trackable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -22,7 +22,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <DeanLib/Trackable.h>
+#include <rkutil/Trackable.h>
 
 struct GLFWwindow;
 
@@ -30,7 +30,7 @@ enum WindowBufferType {	COLOR_BUFFER = 1, DEPTH_BUFFER, ACCUM_BUFFER, STENCIL_BU
 enum WindowDrawMode { WIREFRAME = 1, VERTICES, FILL };
 enum WindowDrawFace { FRONT = 1, BACK, FRONT_AND_BACK };
 
-class Window : public Trackable
+class Window : public rkutil::Trackable
 {
 	public:
 		/* Empty constructor */

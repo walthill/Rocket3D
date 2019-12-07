@@ -27,9 +27,9 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-#include <DeanLib/Trackable.h>
+#include <rkutil/Trackable.h>
 
-class RK_Log : public Trackable
+class RK_Log : public rkutil::Trackable
 {
 	public:
 		#pragma region Static Class Functions

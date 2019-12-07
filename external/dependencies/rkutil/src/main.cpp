@@ -1,9 +1,9 @@
 #include <iostream>
-#include "include/RK_Timer.h"
+#include "include/Timer.h"
 
 void testTimer()
 {
-	rkutil::RK_Timer tmr;
+	rkutil::Timer tmr;
 	tmr.start();
 	double t;
 

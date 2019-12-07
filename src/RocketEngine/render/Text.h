@@ -1,7 +1,7 @@
 #ifndef TEXT_H
 #define TEXT_H
 
-#include <DeanLib/Trackable.h>
+#include <rkutil/Trackable.h>
 #include <RocketMath/Vector2.h>
 #include <RocketMath/Vector3.h>
 #include "Color.h"
@@ -18,7 +18,7 @@ struct TextData
 
 class RK_Shader;
 
-class Text : public Trackable
+class Text : public rkutil::Trackable
 {
 	public:
 		Text();
