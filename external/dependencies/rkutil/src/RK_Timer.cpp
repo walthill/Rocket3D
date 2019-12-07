@@ -61,7 +61,21 @@ double RK_Timer::getTimeElapsedInSeconds() const
 }
 
 //Help here https://stackoverflow.com/questions/4184468/sleep-for-milliseconds
-void RK_Timer::sleepUntilElapsed(double ms)
+void RK_Timer::sleepForMilliseconds(double ms)
 {
 	std::this_thread::sleep_for(rk_millisecond(ms)); 
+}
+
+//Help here https://stackoverflow.com/questions/28311230/precision-time-sleep-using-chrono
+void RK_Timer::sleepUntilElapsed(double msTarget)
+{
+	bool shouldSleep = true;
+	while (shouldSleep)
+	{
+		auto now = rk_clock::now();
+
+		auto elapsedTime = std::chrono::duration_cast<rk_millisecond>(now - mStartTime);
+		if (elapsedTime.count() > msTarget)
+			shouldSleep = false;
+	}
 }

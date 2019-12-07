@@ -30,7 +30,7 @@
 class EngineCore;
 class GameMessage;
 class GameMessageManager;
-class Timer;
+class RK_Timer;
 
 class GameApp : Trackable
 {
@@ -118,8 +118,8 @@ class GameApp : Trackable
 		bool mShouldExit;
 
 		//Performance tracker data
-		Timer *mpFrameTimer;
-		Timer *mpMasterTimer;
+		RK_Timer* mpFrameTimer;
+		RK_Timer* mpMasterTimer;
 		int mFPS;
 		const std::string mINIT_TRACKER_NAME = "init";
 		const std::string mDRAW_TRACKER_NAME = "draw";

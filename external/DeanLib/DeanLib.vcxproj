@@ -17,25 +17,25 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DB900E08-5331-46D6-B450-6775A2C7C856}</ProjectGuid>
     <RootNamespace>DeanLib</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -104,20 +104,14 @@
   <ItemGroup>
     <ClCompile Include="MemoryPool.cpp" />
     <ClCompile Include="MemoryTracker.cpp" />
-    <ClCompile Include="PerformanceTracker.cpp" />
-    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Trackable.cpp" />
-    <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CircularQueue.h" />
     <ClInclude Include="include\DeanLibDefines.h" />
     <ClInclude Include="include\MemoryPool.h" />
     <ClInclude Include="include\MemoryTracker.h" />
-    <ClInclude Include="include\PerformanceTracker.h" />
-    <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\Trackable.h" />
-    <ClInclude Include="include\Vector2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

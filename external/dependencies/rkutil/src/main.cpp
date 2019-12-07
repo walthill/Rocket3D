@@ -16,7 +16,7 @@ void testTimer()
 
 	std::cout << "~|| SLEEPING ||~" << std::endl;
 
-	tmr.sleepUntilElapsed(3000);
+	tmr.sleepForMilliseconds(3000);
 	t = tmr.getTimeElapsedMs();
 	std::cout << t << "ms" << std::endl;
 

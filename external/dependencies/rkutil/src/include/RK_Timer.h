@@ -22,6 +22,8 @@ class RK_Timer {
 	
 		double getTimeElapsedInSeconds() const;
 
+		void sleepForMilliseconds(double ms);
+
 		void sleepUntilElapsed(double ms);
 
 	private:

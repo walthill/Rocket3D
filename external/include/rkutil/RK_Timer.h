@@ -12,12 +12,17 @@ typedef unsigned long long uint64;
 class RK_Timer {
 	public:
 		RK_Timer();
+		~RK_Timer() {};
 
 		void start();
-		
+		void stop();
+		void pause();
+
 		double getTimeElapsedMs() const;
 	
 		double getTimeElapsedInSeconds() const;
+
+		void sleepForMilliseconds(double ms);
 
 		void sleepUntilElapsed(double ms);
 
@@ -30,6 +35,8 @@ class RK_Timer {
 		typedef std::chrono::high_resolution_clock rk_clock;
 		
 		std::chrono::time_point<rk_clock> mStartTime;
+		std::chrono::time_point<rk_clock> mEndTime;
+		bool mIsPaused = false;
 };
 
 #endif // !RK_TIMER_H
