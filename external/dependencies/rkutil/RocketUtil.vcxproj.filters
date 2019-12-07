@@ -24,12 +24,24 @@
     <ClCompile Include="src\RK_PerformanceTracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\RK_MemoryTracker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RK_Trackable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\include\RK_Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\include\RK_PerformanceTracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\RK_MemoryTracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\RK_Trackable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
