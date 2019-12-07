@@ -86,7 +86,7 @@
       <AdditionalDependencies>freetype.lib;assimp-vc141-mtd.lib;RocketEngine.lib;RocketUtilDebug.lib;DeanLibDebug.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)-$(Platform)\RocketEngine\;Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)-$(Platform)\RocketUtil\;$(SolutionDir)bin\$(Configuration)-$(Platform)\RocketEngine\;Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(SolutionDir)..\..\external\lib\assimp-vc141-mtd.dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\assimp-vc141-mtd.dll"

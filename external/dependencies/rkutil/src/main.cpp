@@ -3,7 +3,7 @@
 
 void testTimer()
 {
-	RK_Timer tmr;
+	rkutil::RK_Timer tmr;
 	tmr.start();
 	double t;
 

@@ -24,13 +24,13 @@
 
 #include <DeanLib/Trackable.h>
 #include <DeanLib/MemoryTracker.h>
+#include <rkutil/RK_PerformanceTracker.h>
 #include <string>
 #include <cassert>
 
 class EngineCore;
 class GameMessage;
 class GameMessageManager;
-class RK_Timer;
 
 class GameApp : Trackable
 {
@@ -118,8 +118,8 @@ class GameApp : Trackable
 		bool mShouldExit;
 
 		//Performance tracker data
-		RK_Timer* mpFrameTimer;
-		RK_Timer* mpMasterTimer;
+		rkutil::RK_Timer* mpFrameTimer;
+		rkutil::RK_Timer* mpMasterTimer;
 		int mFPS;
 		const std::string mINIT_TRACKER_NAME = "init";
 		const std::string mDRAW_TRACKER_NAME = "draw";

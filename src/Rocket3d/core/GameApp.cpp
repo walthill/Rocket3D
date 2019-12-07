@@ -17,7 +17,6 @@
 #include "GameApp.h"
 #include <core/EngineCore.h>
 #include <iostream>
-#include <rkutil/RK_PerformanceTracker.h>
 #include "../input/GameMessage.h"
 #include "../input/GameMessageManager.h"
 #include "../../RocketEngine/logging/RK_Log.h"
@@ -29,15 +28,14 @@ GameApp::~GameApp()
 	clean();
 }
 
-
 bool GameApp::initialize(char* argv[])
 {
-	RK_PerformanceTracker* pPerformanceTracker = new RK_PerformanceTracker();
+	rkutil::RK_PerformanceTracker* pPerformanceTracker = new rkutil::RK_PerformanceTracker();
 	pPerformanceTracker->startTracking(mINIT_TRACKER_NAME);
 
 	mpRocketEngine = new EngineCore();
 	mpGameMessageManager = new GameMessageManager();
-	mpMasterTimer = new RK_Timer();
+	mpMasterTimer = new rkutil::RK_Timer();
 
 	if (!mpRocketEngine->initialize(argv))
 		return false;
@@ -64,9 +62,9 @@ void GameApp::clean()
 
 bool GameApp::processLoop()
 {
-	RK_PerformanceTracker* pPerformanceTracker = new RK_PerformanceTracker();
+	rkutil::RK_PerformanceTracker* pPerformanceTracker = new rkutil::RK_PerformanceTracker();
 
-	mpFrameTimer = new RK_Timer();
+	mpFrameTimer = new rkutil::RK_Timer();
 	
 	while (!mShouldExit)
 	{

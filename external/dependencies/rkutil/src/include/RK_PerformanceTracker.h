@@ -5,8 +5,10 @@
 #include <map>
 #include "RK_Timer.h"
 
-class RK_PerformanceTracker
+namespace rkutil
 {
+	class RK_PerformanceTracker
+	{
 	public:
 		RK_PerformanceTracker();
 		~RK_PerformanceTracker();
@@ -15,9 +17,9 @@ class RK_PerformanceTracker
 		void stopTracking(const std::string& timerName);
 		double getElapsedTime(const std::string& timerName);
 		void removeTracker(const std::string& timerName);
-	
+
 	private:
 		std::map<std::string, RK_Timer*> mTimerMap;
-};
-
+	};
+}
 #endif // !RK_PERFORMANCE_TRACKER_H
