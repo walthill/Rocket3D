@@ -22,7 +22,6 @@ ComponentManager::~ComponentManager()
 	clean();
 }
 
-
 void ComponentManager::clean()
 {
 	//call destructor for all components
@@ -41,15 +40,36 @@ void ComponentManager::clean()
 		MaterialComponent* pComponent = it.second;
 		pComponent->~MaterialComponent();
 	}
+	for (auto& it : mDirectionalLightComponentMap)
+	{
+		DirectionalLightComponent* pComponent = it.second;
+		pComponent->~DirectionalLightComponent();
+	}
+	for (auto& it : mPointLightComponentMap)
+	{
+		PointLightComponent* pComponent = it.second;
+		pComponent->~PointLightComponent();
+	}
+	for (auto& it : mSpotlightComponentMap)
+	{
+		SpotLightComponent* pComponent = it.second;
+		pComponent->~SpotLightComponent();
+	}
 
 	//clear maps
 	mTransformComponentMap.clear();
 	mMaterialComponentMap.clear();
 	mMeshComponentMap.clear();
+	mDirectionalLightComponentMap.clear();
+	mPointLightComponentMap.clear();
+	mSpotlightComponentMap.clear();
 
 	//reset memory pools
 	mTransformPool.reset();
 	mMeshPool.reset();
+	mDirectionalLightPool.reset();
+	mPointLightPool.reset();
+	mSpotlightPool.reset();
 }
 
 
