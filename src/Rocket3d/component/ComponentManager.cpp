@@ -8,12 +8,13 @@ ComponentId ComponentManager::msNextPointLightComponentId = 0;
 ComponentId ComponentManager::msNextDirectionalLightComponentId = 0;
 ComponentId ComponentManager::msNextSpotlightComponentId = 0;
 
-ComponentManager::ComponentManager(uint32 maxSize)
+ComponentManager::ComponentManager(uint32 maxSize, RK_Shader* lightingShader)
 	: mTransformPool(maxSize, sizeof(TransformComponent))
 	, mDirectionalLightPool(maxSize, sizeof(DirectionalLightComponent))
 	, mPointLightPool(maxSize, sizeof(PointLightComponent))
 	, mSpotlightPool(maxSize, sizeof(SpotLightComponent))
 	, mMeshPool(maxSize, sizeof(MeshComponent))
+	, mLightingShader(lightingShader)
 {
 }
 
@@ -336,13 +337,13 @@ void ComponentManager::update(float elapsedTime)
 void ComponentManager::processLightingComponents()
 {
 	for (auto& it : mDirectionalLightComponentMap)
-		it.second->processLightingData(lightingShader);
+		it.second->processLightingData(mLightingShader);
 
 	for (auto& it : mPointLightComponentMap)
-		it.second->processLightingData(lightingShader);
+		it.second->processLightingData(mLightingShader);
 
 	for (auto& it : mSpotlightComponentMap)
-		it.second->processLightingData(lightingShader);
+		it.second->processLightingData(mLightingShader);
 
 }
 

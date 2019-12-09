@@ -13,7 +13,7 @@
 class ComponentManager : public Trackable
 {
 	public:
-		ComponentManager(uint32 maxSize);
+		ComponentManager(uint32 maxSize, RK_Shader* lightingShader);
 		~ComponentManager();
 
 		void clean();
@@ -66,7 +66,7 @@ class ComponentManager : public Trackable
 		MemoryPool mMeshPool;
 
 		//Lighting
-		RK_Shader* lightingShader;
+		RK_Shader* mLightingShader;
 		MemoryPool mDirectionalLightPool;
 		MemoryPool mPointLightPool;
 		MemoryPool mSpotlightPool;
