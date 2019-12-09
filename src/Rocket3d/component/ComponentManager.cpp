@@ -4,10 +4,15 @@
 ComponentId ComponentManager::msNextMaterialComponentId = 0;
 ComponentId ComponentManager::msNextMeshComponentId = 0;
 ComponentId ComponentManager::msNextTransformComponentId = 0;
+ComponentId ComponentManager::msNextPointLightComponentId = 0;
+ComponentId ComponentManager::msNextDirectionalLightComponentId = 0;
+ComponentId ComponentManager::msNextSpotlightComponentId = 0;
 
 ComponentManager::ComponentManager(uint32 maxSize)
-	:mTransformPool(maxSize, sizeof(TransformComponent))
-	, mMaterialPool(maxSize, sizeof(MaterialComponent))
+	: mTransformPool(maxSize, sizeof(TransformComponent))
+	, mDirectionalLightPool(maxSize, sizeof(DirectionalLightComponent))
+	, mPointLightPool(maxSize, sizeof(PointLightComponent))
+	, mSpotlightPool(maxSize, sizeof(SpotLightComponent))
 	, mMeshPool(maxSize, sizeof(MeshComponent))
 {
 }
@@ -44,9 +49,18 @@ void ComponentManager::clean()
 
 	//reset memory pools
 	mTransformPool.reset();
-	mMaterialPool.reset();
 	mMeshPool.reset();
 }
+
+
+/******************************************************************************
+******************************************************************************
+
+	TRANSFORM COMPONENT
+
+******************************************************************************
+*****************************************************************************/
+
 
 TransformComponent * ComponentManager::getTransformComponent(const ComponentId & id)
 {
@@ -88,6 +102,15 @@ void ComponentManager::deallocateTransformComponent(const ComponentId & id)
 		mTransformPool.freeObject((Byte*)ptr);
 	}
 }
+
+/******************************************************************************
+******************************************************************************
+
+	MESH COMPONENT
+
+******************************************************************************
+*****************************************************************************/
+
 
 MeshComponent * ComponentManager::getMeshComponent(const ComponentId & id)
 {
@@ -132,48 +155,174 @@ void ComponentManager::deallocateMeshComponent(const ComponentId & id)
 	}
 }
 
-MaterialComponent* ComponentManager::getMaterialComponent(const ComponentId& id)
-{
-	auto it = mMaterialComponentMap.find(id);
 
-	if (it != mMaterialComponentMap.end())
+
+/******************************************************************************
+******************************************************************************
+
+	DIRECTIONAL LIGHT COMPONENT
+
+******************************************************************************
+*****************************************************************************/
+
+
+DirectionalLightComponent* ComponentManager::getDirectionalLightComponent(const ComponentId& id)
+{
+	auto it = mDirectionalLightComponentMap.find(id);
+
+	if (it != mDirectionalLightComponentMap.end())
 		return it->second;
 	else
 		return nullptr;
 }
 
-ComponentId ComponentManager::allocateMaterialComponent(const ComponentId& materialId, const MaterialData& data)
+ComponentId ComponentManager::allocateDirectionalLightComponent(const ComponentId& meshId, const DirectionalLightData& data)
 {
 	ComponentId newID = INVALID_COMPONENT_ID;
+	Byte* ptr = mDirectionalLightPool.allocateObject();
 
-	Byte* ptr = mMaterialPool.allocateObject();
 	if (ptr != nullptr)
 	{
-		newID = msNextMaterialComponentId;
-		MaterialComponent* pComponent = new (ptr)MaterialComponent(newID);
+		newID = msNextDirectionalLightComponentId;
+		DirectionalLightComponent* pComponent = new (ptr)DirectionalLightComponent(newID);
 		pComponent->setData(data);
-		mMaterialComponentMap[newID] = pComponent;
-		msNextMaterialComponentId++;//increment id
+		mDirectionalLightComponentMap[newID] = pComponent;
+		msNextDirectionalLightComponentId++;//increment id
 	}
 
 	return newID;
 }
 
-void ComponentManager::deallocateMaterialComponent(const ComponentId& id)
+void ComponentManager::deallocateDirectionalLightComponent(const ComponentId& id)
 {
-	auto it = mMaterialComponentMap.find(id);
+	auto it = mDirectionalLightComponentMap.find(id);
 
-	if (it != mMaterialComponentMap.end())//found it
+	if (it != mDirectionalLightComponentMap.end())//found it
 	{
-		MaterialComponent* ptr = it->second;
-		mMaterialComponentMap.erase(it);
+		DirectionalLightComponent* ptr = it->second;
+		mDirectionalLightComponentMap.erase(it);
 
-		ptr->~MaterialComponent();
-		mMaterialPool.freeObject((Byte*)ptr);
+		ptr->~DirectionalLightComponent();
+		mDirectionalLightPool.freeObject((Byte*)ptr);
 	}
 }
 
+/******************************************************************************
+******************************************************************************
+
+	POINT LIGHT COMPONENT
+
+******************************************************************************
+*****************************************************************************/
+
+
+PointLightComponent* ComponentManager::getPointLightComponent(const ComponentId& id)
+{
+	auto it = mPointLightComponentMap.find(id);
+
+	if (it != mPointLightComponentMap.end())
+		return it->second;
+	else
+		return nullptr;
+}
+
+ComponentId ComponentManager::allocatePointLightComponent(const ComponentId& meshId, const PointLightData& data)
+{
+	ComponentId newID = INVALID_COMPONENT_ID;
+	Byte* ptr = mPointLightPool.allocateObject();
+
+	if (ptr != nullptr)
+	{
+		newID = msNextPointLightComponentId;
+		PointLightComponent* pComponent = new (ptr)PointLightComponent(newID);
+		pComponent->setData(data);
+		mPointLightComponentMap[newID] = pComponent;
+		msNextPointLightComponentId++;//increment id
+	}
+
+	return newID;
+}
+
+void ComponentManager::deallocatePointLightComponent(const ComponentId& id)
+{
+	auto it = mPointLightComponentMap.find(id);
+
+	if (it != mPointLightComponentMap.end())//found it
+	{
+		PointLightComponent* ptr = it->second;
+		mPointLightComponentMap.erase(it);
+
+		ptr->~PointLightComponent();
+		mPointLightPool.freeObject((Byte*)ptr);
+	}
+}
+
+
+/******************************************************************************
+******************************************************************************
+
+	SPOT LIGHT COMPONENT
+
+******************************************************************************
+*****************************************************************************/
+
+SpotLightComponent* ComponentManager::getSpotlightComponent(const ComponentId& id)
+{
+	auto it = mSpotlightComponentMap.find(id);
+
+	if (it != mSpotlightComponentMap.end())
+		return it->second;
+	else
+		return nullptr;
+}
+
+ComponentId ComponentManager::allocateSpotlightComponent(const ComponentId& meshId, const SpotLightData& data)
+{
+	ComponentId newID = INVALID_COMPONENT_ID;
+	Byte* ptr = mSpotlightPool.allocateObject();
+
+	if (ptr != nullptr)
+	{
+		newID = msNextSpotlightComponentId;
+		SpotLightComponent* pComponent = new (ptr)SpotLightComponent(newID);
+		pComponent->setData(data);
+		mSpotlightComponentMap[newID] = pComponent;
+		msNextSpotlightComponentId++;//increment id
+	}
+
+	return newID;
+}
+
+void ComponentManager::deallocateSpotlightComponent(const ComponentId& id)
+{
+	auto it = mSpotlightComponentMap.find(id);
+
+	if (it != mSpotlightComponentMap.end())//found it
+	{
+		SpotLightComponent* ptr = it->second;
+		mSpotlightComponentMap.erase(it);
+
+		ptr->~SpotLightComponent();
+		mSpotlightPool.freeObject((Byte*)ptr);
+	}
+}
+
+
 void ComponentManager::update(float elapsedTime)
 {
+	processLightingComponents();
+}
+
+void ComponentManager::processLightingComponents()
+{
+	for (auto& it : mDirectionalLightComponentMap)
+		it.second->processLightingData(lightingShader);
+
+	for (auto& it : mPointLightComponentMap)
+		it.second->processLightingData(lightingShader);
+
+	for (auto& it : mSpotlightComponentMap)
+		it.second->processLightingData(lightingShader);
+
 }
 

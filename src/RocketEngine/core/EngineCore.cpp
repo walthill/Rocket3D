@@ -103,8 +103,8 @@ void EngineCore::initLighting()
 	}
 
 	//Currently acts as a flashlight
-	SpotLight *s = new SpotLight(*mpCam->getFront(), Vector3::zero, Vector3::one, Vector3::one, constant, linear, quadratic, cutoff, outerCutoff);
-	mpLighting->addSpotLight(s, mpCam);
+	//SpotLight *s = new SpotLight(*mpCam->getFront(), Vector3::zero, Vector3::one, Vector3::one, constant, linear, quadratic, cutoff, outerCutoff);
+	//mpLighting->addSpotLight(s, mpCam);
 
 	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	mpShaderManager->setShaderInt("material.diffuse", 0);
