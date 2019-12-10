@@ -10,10 +10,12 @@
 #include "TransformComponent.h"
 #include "LightComponent.h"
 
+class ShaderManager;
+
 class ComponentManager : public Trackable
 {
 	public:
-		ComponentManager(uint32 maxSize, RK_Shader* lightingShader);
+		ComponentManager(uint32 maxSize, ShaderManager* shaderMan, ShaderKey lightingShaderKey);
 		~ComponentManager();
 
 		void clean();
@@ -30,18 +32,18 @@ class ComponentManager : public Trackable
 
 		//DIRECTIONAL LIGHT
 		DirectionalLightComponent* getDirectionalLightComponent(const ComponentId& id);
-		ComponentId allocateDirectionalLightComponent(const ComponentId& meshId, const DirectionalLightData& data = ZERO_DIRECTIONAL_LIGHT_DATA);
+		ComponentId allocateDirectionalLightComponent(const ComponentId& dirLightId, const DirectionalLightData& data = ZERO_DIRECTIONAL_LIGHT_DATA);
 		void deallocateDirectionalLightComponent(const ComponentId& id);
 
 
 		//POINT LIGHT
 		PointLightComponent* getPointLightComponent(const ComponentId& id);
-		ComponentId allocatePointLightComponent(const ComponentId& meshId, const PointLightData& data = ZERO_POINT_LIGHT_DATA);
+		ComponentId allocatePointLightComponent(const ComponentId& pointLightId, const PointLightData& data = ZERO_POINT_LIGHT_DATA);
 		void deallocatePointLightComponent(const ComponentId& id);
 
 		//SPOT LIGHT
 		SpotLightComponent* getSpotlightComponent(const ComponentId& id);
-		ComponentId allocateSpotlightComponent(const ComponentId& meshId, const	SpotLightData& data = ZERO_SPOTLIGHT_DATA);
+		ComponentId allocateSpotlightComponent(const ComponentId& spotlightId, const	SpotLightData& data = ZERO_SPOTLIGHT_DATA);
 		void deallocateSpotlightComponent(const ComponentId& id);
 
 
@@ -52,6 +54,8 @@ class ComponentManager : public Trackable
 
 		void update(float elapsedTime);
 		void processLightingComponents();
+		void renderMeshes();
+
 
 		int getNumberOfMeshes() { return mMeshComponentMap.size(); }
 		int getNumberOfMaterials() { return mMaterialComponentMap.size(); }
@@ -66,7 +70,9 @@ class ComponentManager : public Trackable
 		MemoryPool mMeshPool;
 
 		//Lighting
-		RK_Shader* mLightingShader;
+		ShaderManager* mpShaderManagerHandle;
+		ShaderKey mLightingShaderKey;
+
 		MemoryPool mDirectionalLightPool;
 		MemoryPool mPointLightPool;
 		MemoryPool mSpotlightPool;

@@ -90,7 +90,7 @@ void EngineCore::initLighting()
 	diffuse = Vector3(0.8f, 0.8f, 0.8f);
 	specular = Vector3(0.5f, 0.5f, 0.5f);
 
-	mpLighting->addDirectionalLight(new DirectionalLight(dir, ambient, diffuse, specular));
+	//mpLighting->addDirectionalLight(new DirectionalLight(dir, ambient, diffuse, specular));
 
 	diffuse = Vector3(0.8f, 0.8f, 0.8f);
 	specular = Vector3(1.0f, 1.0f, 1.0f);
@@ -99,7 +99,7 @@ void EngineCore::initLighting()
 	for(int i =0; i < numPointLights; i++)
 	{
 		p = new PointLight(pointLightPositions[i], ambient, diffuse, specular, constant, linear, quadratic);
-		mpLighting->addPointLight(p);
+		//mpLighting->addPointLight(p);
 	}
 
 	//Currently acts as a flashlight
@@ -136,7 +136,7 @@ bool EngineCore::initialize(char* argv[])
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
 	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
 
-	initLighting();
+	//initLighting();
 
 	//mpModel = new Model(mMODEL_PATH + "nanosuit/nanosuit.obj");
 
@@ -155,7 +155,7 @@ void EngineCore::update()
 	mpInputSystem->processInput();
 	calculateDeltaTime();
 
-	mpLighting->processLighting(mpCam);
+	//mpLighting->processLighting(mpCam);
 
 	//Check for shader rebuild
 	//TODO: shader rebuild causes need to set shader values every frame. Should fix
@@ -200,9 +200,9 @@ void EngineCore::render()
 	for (auto i = 0; i < 4; i++)
 	{
 		model = Mat4(1.0f);
-		model = Mat4::translate(model, pointLightPositions[i]);
-		model = Mat4::scale(model, Vector3(0.1f, 0.1f, 0.1f));
-		mpShaderManager->setShaderMat4("model", model);
+	//	model = Mat4::translate(model, pointLightPositions[i]);
+		//model = Mat4::scale(model, Vector3(0.1f, 0.1f, 0.1f));
+		//mpShaderManager->setShaderMat4("model", model);
 
 		//mLamps[i]->drawModel(mpShaderManager->getShaderByKey(emitterShaderId));
 	}

@@ -9,10 +9,14 @@ GameObjectManager::GameObjectManager(uint32 maxSize) :
 {
 }
 
-//TODO: remove material component
-//TODO: add lighting component
+GameObjectManager::~GameObjectManager()
+{
+	mpComponentManagerHandle = nullptr;
+}
+
 GameObject* GameObjectManager::createGameObject(const TransformData& transform, const MeshComponentData& meshData,
-											    const MaterialData& matData, const GameObjectId& id)
+												 /* not implemented const MaterialData& matData,*/
+												const GameObjectId& id)
 {
 	GameObject* newObj = nullptr;
 
@@ -28,8 +32,7 @@ GameObject* GameObjectManager::createGameObject(const TransformData& transform, 
 			newId = msNextUnitId;
 			msNextUnitId++;
 		}
-		
-		
+				
 		//add new object to map and set the object's id locally
 		mGameObjMap[newId] = newObj;
 		newObj->setId(newId);
@@ -37,14 +40,16 @@ GameObject* GameObjectManager::createGameObject(const TransformData& transform, 
 		//Hook up components
 		ComponentManager* pComponentManager = GameApp::getInstance()->getComponentManager();
 		
-		//Create transform component and store id and ptr in the new object
+		//TRANSFORM
 		ComponentId newTransformId = pComponentManager->allocateTransformComponent(transform);
 		newObj->connectTransform(newTransformId);
 		newObj->setTransformHandle(pComponentManager->getTransformComponent(newTransformId));
-
+	
+		//MESH
 		//Create mesh component, store id in new object, and load the mesh to the component
 		ComponentId newMeshId = pComponentManager->allocateMeshComponent(newObj->getTransformId(), meshData);
 		newObj->connectMesh(newMeshId);
+
 	}
 	return newObj;
 }
@@ -82,13 +87,39 @@ void GameObjectManager::destroy(const GameObjectId & id)
 	}
 }
 
+void GameObjectManager::addPointLight(const GameObjectId& id, const PointLightData& pointLightData)
+{
+	ComponentManager* pComponentManager = GameApp::getInstance()->getComponentManager();
+	GameObject* obj = mGameObjMap[id];
+
+	ComponentId pointLight = pComponentManager->allocatePointLightComponent(obj->getTransformId(), pointLightData);
+	obj->connectPointLight(pointLight);
+}
+
+void GameObjectManager::addDirectionalLight(const GameObjectId& id, const DirectionalLightData& dirLightDat)
+{
+	ComponentManager* pComponentManager = GameApp::getInstance()->getComponentManager();
+	GameObject* obj = mGameObjMap[id];
+
+	ComponentId dirLight = pComponentManager->allocateDirectionalLightComponent(obj->getTransformId(), dirLightDat);
+	obj->connectDirectionalLight(dirLight);
+}
+
+void GameObjectManager::addSpotLight(const GameObjectId& id, const SpotLightData& spotlightData)
+{
+	ComponentManager* pComponentManager = GameApp::getInstance()->getComponentManager();
+	GameObject* obj = mGameObjMap[id];
+
+	ComponentId spotLight = pComponentManager->allocateSpotlightComponent(obj->getTransformId(), spotlightData);
+	obj->connectSpotLight(spotLight);
+}
 
 void GameObjectManager::renderAllGameObjs() const
 {
-	for (auto it = mGameObjMap.begin(); it != mGameObjMap.end(); ++it)
+	/*for (auto it = mGameObjMap.begin(); it != mGameObjMap.end(); ++it)
 	{
 		it->second->render();
-	}
+	}*/
 }
 
 void GameObjectManager::updateAll(float elapsedTime)
@@ -96,7 +127,7 @@ void GameObjectManager::updateAll(float elapsedTime)
 	for (auto it = mGameObjMap.begin(); it != mGameObjMap.end(); ++it)
 	{
 		//no update function currently
-		//it->second->update(elapsedTime);
+		it->second->update(elapsedTime);
 	}
 }
 

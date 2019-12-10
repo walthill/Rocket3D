@@ -3,9 +3,9 @@
 
 #include <RocketMath/MathUtils.h>
 #include "Component.h"
+#include "..//..//RocketEngine/shader/ShaderManager.h"
 
 class MaterialComponent;
-class RK_Shader;
 class Model;
 
 const static std::string modelFileLocation = "../../assets/models/";
@@ -13,12 +13,12 @@ const static std::string modelFileLocation = "../../assets/models/";
 struct MeshComponentData
 {
 	bool isLoaded;
-	std::string modelName;
+	std::string modelName, shaderKey;
 	Model* mesh;
 	RK_Shader* shader;
 
-	MeshComponentData() : isLoaded(false), mesh(nullptr), shader(nullptr), modelName("") {};
-	MeshComponentData(std::string name, RK_Shader* s) : isLoaded(false), mesh(nullptr), shader(s), modelName(name) {};
+	MeshComponentData() : isLoaded(false), mesh(nullptr), shader(nullptr), modelName(""), shaderKey("") {};
+	MeshComponentData(std::string name, std::string shaderKey, RK_Shader* s) : isLoaded(false), mesh(nullptr), shader(s), shaderKey(shaderKey), modelName(name) {};
 };
 
 const MeshComponentData ZERO_MESH_DATA;
@@ -40,8 +40,9 @@ class MeshComponent : public Component
 		void setShader(RK_Shader* shader) { mMeshData.shader = shader; }
 		void setMesh(Model* mesh) { mMeshData.mesh = mesh; }
 
-		void render(Vector3 position = Vector3::zero, Vector3 scale = Vector3::one,
-					Vector3 rotatonAxis = Vector3::one, float rotationAngle = 0);
+		void process(Vector3 position = Vector3::zero, Vector3 scale = Vector3::one,
+			Vector3 rotatonAxis = Vector3::one, float rotationAngle = 0);
+		void render(ShaderManager* shaderMan);
 
 	private: 
 		const std::string MATRIX_NAME = "model";

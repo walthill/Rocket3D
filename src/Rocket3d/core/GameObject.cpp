@@ -16,20 +16,48 @@ void GameObject::destroy()
 {
 }
 
-void GameObject::render()
+void GameObject::update(float elapsedTime)
 {
-	MeshComponent*  meshComponent = getMesh();
-	if(meshComponent != nullptr) 
+	MeshComponent* meshComponent = getMesh();
+	if (meshComponent != nullptr)
 	{
 		TransformData data = mpTransform->getData();
-		
-		meshComponent->render(data.position, data.scale,
-							  data.rotation.rotationAxis, data.rotation.angle);
+
+		meshComponent->process(data.position, data.scale,
+			data.rotation.rotationAxis, data.rotation.angle);
 	}
+}
+
+void GameObject::render()
+{
 }
 
 MeshComponent * GameObject::getMesh()
 {
-	MeshComponent* pComponent = GameApp::getInstance()->getComponentManager()->getMeshComponent(mMeshId);
+	auto pComponent = GameApp::getInstance()->getComponentManager()->getMeshComponent(mMeshId);
+	return pComponent;
+}
+
+MaterialComponent* GameObject::getMaterial()
+{
+	//auto pComponent = GameApp::getInstance()->getComponentManager()->getMaterialComponent(mMaterialId);
+	return nullptr;
+}
+
+SpotLightComponent* GameObject::getSpotLight()
+{
+	auto pComponent = GameApp::getInstance()->getComponentManager()->getSpotlightComponent(mSpotLightId);
+	return pComponent;
+}
+
+DirectionalLightComponent* GameObject::getDirectionalLight()
+{
+	auto pComponent = GameApp::getInstance()->getComponentManager()->getDirectionalLightComponent(mDirectionalLightId);
+	return pComponent;
+}
+
+PointLightComponent* GameObject::getPointLight()
+{
+	auto pComponent = GameApp::getInstance()->getComponentManager()->getPointLightComponent(mPointLightId);
 	return pComponent;
 }

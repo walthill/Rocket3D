@@ -23,10 +23,11 @@
 #include <RocketMath/Mat4.h>
 #include "../util/EngineUtils.h"
 #include <map>
-
-class RK_Shader;
+#include "RK_Shader.h"
 
 const ShaderKey STANDARD_SHADER_KEY = "standardLightingShader";
+const ShaderKey EMITTER_SHADER_KEY = "emitter";
+
 
 class ShaderManager : public Trackable
 {

@@ -46,16 +46,44 @@ bool GameApp::initialize(char* argv[])
 		return false;
 
 	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);
-	mpComponentManager = new ComponentManager(MAX_NUM_OBJECTS);
+	mpComponentManager = new ComponentManager(MAX_NUM_OBJECTS, mpRocketEngine->getShaderManager(), STANDARD_SHADER_KEY);
 
 	TransformData t = { Vector3(0, -1, -3), Vector3::one * 0.5f, Vector3::up, 45.0f };
 	
-	MeshComponentData meshData = {"cube", mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY)};
+	MeshComponentData meshData = {"cube", STANDARD_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY)};
 	
-	MaterialData matData = { meshData.shader, STANDARD_SHADER };
+	//MaterialData matData = { meshData.shader, STANDARD_SHADER };
 	
-	for(int i = 0; i < MAX_NUM_OBJECTS; i++)
-		mpGameObjectManager->createGameObject(t, meshData, matData);
+	//for(int i = 0; i < MAX_NUM_OBJECTS; i++)
+	GameObject* o =	mpGameObjectManager->createGameObject(t, meshData);// , matData);
+
+
+/*	TransformData t2 = { Vector3(0.0f,  -1.0f, -1.0f), Vector3::one * 0.1f, Vector3::up, 0 };
+
+	MeshComponentData lightMeshData = { "cube", EMITTER_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(EMITTER_SHADER_KEY) };
+
+
+	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f;
+	Vector3	ambient = Vector3(0.075f, 0.075f, 0.075f),
+			diffuse = Vector3(0.8f, 0.8f, 0.8f),
+			specular = Vector3(0.5f, 0.5f, 0.5f);
+
+	PointLightData pointLightData;
+	pointLightData.mBaseLightData.ambientLight = ambient;
+	pointLightData.mBaseLightData.diffuseLight = diffuse;
+	pointLightData.mBaseLightData.specularLight = specular;
+
+	pointLightData.mConstant = constant;
+	pointLightData.mLinear = linear;
+	pointLightData.mQuadratic = quadratic;
+	pointLightData.mPosition = t2.position;
+
+	GameObject* pointLight = mpGameObjectManager->createGameObject(t, lightMeshData);
+	mpGameObjectManager->addPointLight(pointLight->getId(), pointLightData);
+
+	mpRocketEngine->getShaderManager()->useShaderByKey(STANDARD_SHADER_KEY);
+	mpRocketEngine->getShaderManager()->setShaderInt("material.diffuse", 0);
+	mpRocketEngine->getShaderManager()->setShaderInt("material.specular", 1);*/
 
 	pPerformanceTracker->stopTracking(mINIT_TRACKER_NAME);
 	RK_INFO_ALL("Time to init: " + std::to_string(pPerformanceTracker->getElapsedTime(mINIT_TRACKER_NAME)) + "ms\n");
@@ -113,19 +141,20 @@ bool GameApp::processLoop()
 
 	return false;
 }
-
+  
 void GameApp::update()
 {
 	mpGameMessageManager->processMessagesForThisFrame();
 	mpRocketEngine->update(); 
-	mpComponentManager->update(mpRocketEngine->deltaTime);
+	//mpComponentManager->update(mpRocketEngine->deltaTime);
+	mpGameObjectManager->updateAll(mpRocketEngine->deltaTime);
 }
 
 void GameApp::render()
 {
 	mpRocketEngine->render();
 
-	mpGameObjectManager->renderAllGameObjs();
+	mpComponentManager->renderMeshes();
 
 	mpRocketEngine->swapBuffers();
 }

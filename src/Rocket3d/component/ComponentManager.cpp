@@ -1,5 +1,6 @@
 #include "ComponentManager.h"
 #include "../../RocketEngine/asset/Model.h"
+#include "../..//RocketEngine/shader/ShaderManager.h"
 
 ComponentId ComponentManager::msNextMaterialComponentId = 0;
 ComponentId ComponentManager::msNextMeshComponentId = 0;
@@ -8,13 +9,14 @@ ComponentId ComponentManager::msNextPointLightComponentId = 0;
 ComponentId ComponentManager::msNextDirectionalLightComponentId = 0;
 ComponentId ComponentManager::msNextSpotlightComponentId = 0;
 
-ComponentManager::ComponentManager(uint32 maxSize, RK_Shader* lightingShader)
+ComponentManager::ComponentManager(uint32 maxSize, ShaderManager* shaderMan, ShaderKey lightingShaderKey)
 	: mTransformPool(maxSize, sizeof(TransformComponent))
 	, mDirectionalLightPool(maxSize, sizeof(DirectionalLightComponent))
 	, mPointLightPool(maxSize, sizeof(PointLightComponent))
 	, mSpotlightPool(maxSize, sizeof(SpotLightComponent))
 	, mMeshPool(maxSize, sizeof(MeshComponent))
-	, mLightingShader(lightingShader)
+	, mpShaderManagerHandle(shaderMan)
+	, mLightingShaderKey(lightingShaderKey)
 {
 }
 
@@ -336,14 +338,22 @@ void ComponentManager::update(float elapsedTime)
 
 void ComponentManager::processLightingComponents()
 {
+	mpShaderManagerHandle->useShaderByKey(mLightingShaderKey);
+	RK_Shader* shader = mpShaderManagerHandle->getShaderByKey(mLightingShaderKey);
+
 	for (auto& it : mDirectionalLightComponentMap)
-		it.second->processLightingData(mLightingShader);
+		it.second->processLightingData(shader);
 
 	for (auto& it : mPointLightComponentMap)
-		it.second->processLightingData(mLightingShader);
+		it.second->processLightingData(shader);
 
 	for (auto& it : mSpotlightComponentMap)
-		it.second->processLightingData(mLightingShader);
+		it.second->processLightingData(shader);
+}
 
+void ComponentManager::renderMeshes()
+{
+	for (auto& it : mMeshComponentMap)
+		it.second->render(mpShaderManagerHandle);
 }
 

@@ -16,7 +16,6 @@
 ********/
 
 #include "ShaderManager.h"
-#include "RK_Shader.h"
 
 std::map<ShaderKey, RK_Shader*> ShaderManager::mShaderList;
 

@@ -140,7 +140,7 @@ class EngineCore : public Trackable
 		Lighting* mpLighting;
 		
 		Vector3 *pointLightPositions;
-		ShaderKey standardLightingShaderId = "standardLightingShader", emitterShaderId = "emmiter";
+		ShaderKey standardLightingShaderId = "standardLightingShader", emitterShaderId = "emitter";
 		
 		Model* mpModel;
 		std::vector<Model*> mLamps;

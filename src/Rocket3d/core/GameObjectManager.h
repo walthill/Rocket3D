@@ -9,7 +9,9 @@
 #include "../component/TransformComponent.h"
 #include "../component/MeshComponent.h"
 #include "../component/MaterialComponent.h"
+#include "../component/LightComponent.h"
 
+class ComponentManager;
 
 typedef uint32 GameObjectId;
 
@@ -20,17 +22,21 @@ class GameObjectManager : public Trackable
 {
 	public:
 		GameObjectManager(uint32 maxSize);
-		~GameObjectManager() {};
+		~GameObjectManager();
 		
 		GameObject* findGameObject(const GameObjectId& id) const;
 		
 		GameObject* createGameObject(const TransformData& transform = ZERO_TRANSFORM_DATA, 
 									const MeshComponentData& meshData = ZERO_MESH_DATA, 
-									const MaterialData& matData = ZERO_MAT_DATA, 
+									/*const MaterialData& matData = ZERO_MAT_DATA, */
 									const GameObjectId& id = INVALID_GAMEOBJECT_ID);
 
 		void destroy(const GameObjectId& id);
-		
+
+		void addPointLight(const GameObjectId& id, const PointLightData& pointLightData);
+		void addDirectionalLight(const GameObjectId& id, const DirectionalLightData& dirLightDat);
+		void addSpotLight(const GameObjectId& id, const SpotLightData& spotlightData);
+
 		void renderAllGameObjs() const;
 		void updateAll(float elapsedTime);
 
@@ -39,6 +45,8 @@ class GameObjectManager : public Trackable
 
 	private:
 		static GameObjectId msNextUnitId;
+
+		ComponentManager* mpComponentManagerHandle;
 
 		MemoryPool mGameObjectPool;
 		std::map<GameObjectId, GameObject*> mGameObjMap;
