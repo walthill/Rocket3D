@@ -20,8 +20,7 @@
 #include <glad/glad.h>
 #include <glfw3.h>
 #include "../render/Camera.h"
-#include "../asset/Model.h"
-//#include "../asset/image/RocketImgLoader.h"
+#include "../asset/image/RocketImgLoader.h"
 #include "../input/InputSystem.h"
 //#include "../shader/ShaderBuild.h"
 #include "../shader/RK_Shader.h"

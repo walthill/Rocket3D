@@ -33,14 +33,9 @@ class Vector3;
 class Camera;
 class Window;
 class InputSystem;
-class ShaderBuild;
-class Lighting;
-class DirectionalLight;
-class PointLight;
-class SpotLight;
+//class ShaderBuild;
 class ShaderManager;
 class RK_Shader;
-class Model;
 
 class EngineCore : public Trackable
 {
@@ -122,7 +117,6 @@ class EngineCore : public Trackable
 		Camera* getCamera() { return mpCam; }
 		void swapBuffers();
 
-
 		// Time between current frame and last frame
 		float deltaTime = 0.0f;	
 
@@ -130,8 +124,6 @@ class EngineCore : public Trackable
 		const std::string mMODEL_PATH = "../../assets/models/";
 
 		int mWindowWidth, mWindowHeight;
-		bool firstMouse = true;
-		double lastX = 400, lastY = 300; //last mouse offset, half of width & height
 		float lastFrame = 0.0f; // Time of last frame
 		
 		Window *mpWindow;
