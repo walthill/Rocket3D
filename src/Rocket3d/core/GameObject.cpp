@@ -18,13 +18,18 @@ void GameObject::destroy()
 
 void GameObject::update(float elapsedTime)
 {
-	MeshComponent* meshComponent = getMesh();
-	if (meshComponent != nullptr)
+	if (mpTransform->hasChanged())
 	{
-		TransformData data = mpTransform->getData();
+		MeshComponent* meshComponent = getMesh();
+		if (meshComponent != nullptr)
+		{
+			TransformData data = mpTransform->getData();
 
-		meshComponent->process(data.position, data.scale,
-			data.rotation.rotationAxis, data.rotation.angle);
+			meshComponent->process(data.position, data.scale,
+				data.rotation.rotationAxis, data.rotation.angle);
+		}
+
+		mpTransform->setHasChanged(false);
 	}
 }
 

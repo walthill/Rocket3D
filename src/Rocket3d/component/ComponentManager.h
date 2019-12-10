@@ -5,7 +5,7 @@
 #include <vector>
 #include <DeanLib/Trackable.h>
 #include <DeanLib/MemoryPool.h>
-#include "MaterialComponent.h"
+//#include "MaterialComponent.h"
 #include "MeshComponent.h"
 #include "TransformComponent.h"
 #include "LightComponent.h"
@@ -46,19 +46,11 @@ class ComponentManager : public Trackable
 		ComponentId allocateSpotlightComponent(const ComponentId& spotlightId, const	SpotLightData& data = ZERO_SPOTLIGHT_DATA);
 		void deallocateSpotlightComponent(const ComponentId& id);
 
-
-		//NOT IMPLEMENTED & NOT USED AS OF 12/9/19
-		MaterialComponent* getMaterialComponent(const ComponentId& id);
-		ComponentId allocateMaterialComponent(const ComponentId& materialId, const MaterialData& data = ZERO_MAT_DATA);
-		void deallocateMaterialComponent(const ComponentId& id);
-
 		void update(float elapsedTime);
 		void processLightingComponents();
 		void renderMeshes();
 
-
 		int getNumberOfMeshes() { return mMeshComponentMap.size(); }
-		int getNumberOfMaterials() { return mMaterialComponentMap.size(); }
 		int getNumberOfTransforms() { return mTransformComponentMap.size(); }
 		int getNumberOfPointLights() { return mPointLightComponentMap.size(); }
 		int getNumberOfSpotlights() { return mSpotlightComponentMap.size(); }
@@ -66,21 +58,18 @@ class ComponentManager : public Trackable
 
 
 	private:
-		MemoryPool mTransformPool;
-		MemoryPool mMeshPool;
-
-		//Lighting
+		const std::string pointLightNumVar = "numPointLights";
 		ShaderManager* mpShaderManagerHandle;
 		ShaderKey mLightingShaderKey;
 
+		MemoryPool mTransformPool;
+		MemoryPool mMeshPool;
 		MemoryPool mDirectionalLightPool;
 		MemoryPool mPointLightPool;
 		MemoryPool mSpotlightPool;
 
 		std::map<ComponentId, TransformComponent*> mTransformComponentMap;
 		std::map<ComponentId, MeshComponent*> mMeshComponentMap;
-		std::map<ComponentId, MaterialComponent*> mMaterialComponentMap;
-		//Light components
 		std::map<ComponentId, PointLightComponent*> mPointLightComponentMap;
 		std::map<ComponentId, DirectionalLightComponent*> mDirectionalLightComponentMap;
 		std::map<ComponentId, SpotLightComponent*> mSpotlightComponentMap;
@@ -88,11 +77,9 @@ class ComponentManager : public Trackable
 		static ComponentId msNextTransformComponentId;
 		static ComponentId msNextMeshComponentId;
 		static ComponentId msNextMaterialComponentId;
-		//Light id's
 		static ComponentId msNextPointLightComponentId;
 		static ComponentId msNextDirectionalLightComponentId;
 		static ComponentId msNextSpotlightComponentId;
-
 };
 
 #endif // !COMPONENT_MAN_H

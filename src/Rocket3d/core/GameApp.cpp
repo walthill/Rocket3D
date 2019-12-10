@@ -47,6 +47,10 @@ bool GameApp::initialize(char* argv[])
 
 	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);
 	mpComponentManager = new ComponentManager(MAX_NUM_OBJECTS, mpRocketEngine->getShaderManager(), STANDARD_SHADER_KEY);
+	
+	//=========================================================================
+	//		Creating GameObjects
+	//=========================================================================
 
 	TransformData t = { Vector3(0, -1, -3), Vector3::one * 0.5f, Vector3::up, 45.0f };
 	
@@ -54,40 +58,61 @@ bool GameApp::initialize(char* argv[])
 	
 	//MaterialData matData = { meshData.shader, STANDARD_SHADER };
 	
-	//for(int i = 0; i < MAX_NUM_OBJECTS; i++)
 	GameObject* o =	mpGameObjectManager->createGameObject(t, meshData);// , matData);
 
 
-/*	TransformData t2 = { Vector3(0.0f,  -1.0f, -1.0f), Vector3::one * 0.1f, Vector3::up, 0 };
+	TransformData t2 = { Vector3(1.5f,  -1.5f, -2.5f), Vector3::one * 0.1f, Vector3::up, 0 };
 
 	MeshComponentData lightMeshData = { "cube", EMITTER_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(EMITTER_SHADER_KEY) };
-
-
+	
 	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f;
 	Vector3	ambient = Vector3(0.075f, 0.075f, 0.075f),
 			diffuse = Vector3(0.8f, 0.8f, 0.8f),
 			specular = Vector3(0.5f, 0.5f, 0.5f);
+	Vector3* pointLightPositions;
+	
+	pointLightPositions = new Vector3[4]{
+		Vector3(0.7f,  0.2f,  2.0f),
+		Vector3(2.3f, -3.3f, -4.0f),
+		Vector3(-4.0f,  2.0f, -12.0f),
+		Vector3(0.0f,  -1.0f, -1.0f)
+	};
 
 	PointLightData pointLightData;
 	pointLightData.mBaseLightData.ambientLight = ambient;
 	pointLightData.mBaseLightData.diffuseLight = diffuse;
 	pointLightData.mBaseLightData.specularLight = specular;
-
 	pointLightData.mConstant = constant;
 	pointLightData.mLinear = linear;
 	pointLightData.mQuadratic = quadratic;
-	pointLightData.mPosition = t2.position;
 
-	GameObject* pointLight = mpGameObjectManager->createGameObject(t, lightMeshData);
-	mpGameObjectManager->addPointLight(pointLight->getId(), pointLightData);
+	MeshComponentData dirLightMeshData = { "null", EMITTER_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(EMITTER_SHADER_KEY) };
 
-	mpRocketEngine->getShaderManager()->useShaderByKey(STANDARD_SHADER_KEY);
-	mpRocketEngine->getShaderManager()->setShaderInt("material.diffuse", 0);
-	mpRocketEngine->getShaderManager()->setShaderInt("material.specular", 1);*/
+	DirectionalLightData data;
+	data.mBaseLightData.ambientLight = ambient;
+	data.mBaseLightData.diffuseLight = diffuse;
+	data.mBaseLightData.specularLight = specular;
+	data.mDirection = Vector3(-0.2f, -1.0f, -0.3f);
+
+	//Point lights
+	for (size_t i = 0; i < 4; i++)
+	{
+		t2.position = pointLightPositions[i];
+		GameObject* pointLight = mpGameObjectManager->createGameObject(t2, lightMeshData);
+		pointLightData.mPosition = pointLightPositions[i];
+		mpGameObjectManager->addPointLight(pointLight->getId(), pointLightData);
+	}
+
+	//Directional light
+	GameObject* dirLight = mpGameObjectManager->createGameObject(t2, lightMeshData);
+	mpGameObjectManager->addDirectionalLight(dirLight->getId(), data);
+
+	//=========================================================================
 
 	pPerformanceTracker->stopTracking(mINIT_TRACKER_NAME);
 	RK_INFO_ALL("Time to init: " + std::to_string(pPerformanceTracker->getElapsedTime(mINIT_TRACKER_NAME)) + "ms\n");
 	
+	delete[] pointLightPositions;
 	delete pPerformanceTracker;
 
 	mShouldExit = false;
@@ -131,14 +156,14 @@ bool GameApp::processLoop()
 		mpFrameTimer->sleepUntilElapsed(m60FPS_FRAME_TIME);
 		pPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
 
-//		RK_INFO_C("loop took:" + std::to_string(pPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) + 
-//				  "ms draw took:" +  std::to_string(pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) +"ms\n");
+		RK_INFO_C("loop took:" + std::to_string(pPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) + 
+				  "ms draw took:" +  std::to_string(pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) +"ms\n");
 		//mFPS = (int)(1000.0 / pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
 		//RK_INFO_C("FPS: " + std::to_string(mFPS));
 	}
 
 	delete pPerformanceTracker;
-
+	
 	return false;
 }
   
@@ -146,16 +171,14 @@ void GameApp::update()
 {
 	mpGameMessageManager->processMessagesForThisFrame();
 	mpRocketEngine->update(); 
-	//mpComponentManager->update(mpRocketEngine->deltaTime);
+	mpComponentManager->update(mpRocketEngine->deltaTime);
 	mpGameObjectManager->updateAll(mpRocketEngine->deltaTime);
 }
 
 void GameApp::render()
 {
 	mpRocketEngine->render();
-
 	mpComponentManager->renderMeshes();
-
 	mpRocketEngine->swapBuffers();
 }
 

@@ -14,13 +14,19 @@ MeshComponent::~MeshComponent()
 
 void MeshComponent::load()
 {
-	mMeshData.mesh = new Model(modelFileLocation + mMeshData.modelName + "/" + mMeshData.modelName + ".obj");
+	if(mMeshData.modelName != "null" || mMeshData.modelName != "")
+		mMeshData.mesh = new Model(modelFileLocation + mMeshData.modelName + "/" + mMeshData.modelName + ".obj");
 }
 
 
 void MeshComponent::cleanup()
 {
 	delete mMeshData.mesh;
+}
+
+Model* MeshComponent::getMesh()
+{
+	return mMeshData.mesh;
 }
 
 void MeshComponent::process(Vector3 position, Vector3 scale, Vector3 rotatonAxis, float rotationAngle)
@@ -36,8 +42,12 @@ void MeshComponent::render(ShaderManager* shaderMan)
 {		
 	shaderMan->useShaderByKey(mMeshData.shaderKey);
 	shaderMan->setShaderMat4(MATRIX_NAME, modelMatrixValues);
-//	mMeshData.shader->setMat4();
 
-	if(mMeshData.mesh != nullptr)	
+	if(mIsEnabled && mMeshData.mesh != nullptr)	
 		mMeshData.mesh->drawModel(mMeshData.shader);
+}
+
+void MeshComponent::setMeshVisible(bool show)
+{
+	mIsEnabled = show;
 }

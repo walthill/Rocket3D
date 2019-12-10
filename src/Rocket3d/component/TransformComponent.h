@@ -36,15 +36,18 @@ class TransformComponent : public Component
 		TransformData getData() { return mTransformData; }
 		Vector3 getPosition() { return mTransformData.position; };
 		Vector3 getScale() { return mTransformData.scale; };
-		
+		bool hasChanged() { return mDataChanged; }
+
 		//Setters
-		inline void setPosition(Vector3 pos) { mTransformData.position = pos; };
+		inline void setPosition(Vector3 pos);
 		void setData(const TransformData& data);
-		inline void setScale(Vector3 scale) { mTransformData.scale = scale; };
+		inline void setScale(Vector3 scale);
 		void setRotation(Vector3 rotationAxis, float angle); //TODO(low): Quaternions?? One day	
+		void setHasChanged(bool changed) { mDataChanged = changed; }
 
 	private: 
 		TransformData mTransformData;
+		bool mDataChanged = false;
 };
 
 #endif // !TRANSFORM_COMPONENT_H

@@ -75,6 +75,9 @@ class EngineCore : public Trackable
 		***/
 		void update();
 		
+		void processViewProjectionMatrices();
+
+
 		/***
 			* Draw models and lighting data to the window
 		***/
@@ -137,13 +140,8 @@ class EngineCore : public Trackable
 
 		//ShaderBuild* mpLiveload;
 		ShaderManager* mpShaderManager;
-		Lighting* mpLighting;
 		
-		Vector3 *pointLightPositions;
 		ShaderKey standardLightingShaderId = "standardLightingShader", emitterShaderId = "emitter";
-		
-		Model* mpModel;
-		std::vector<Model*> mLamps;
 
 		/***
 			* Helper function that initializes the lighting system

@@ -27,10 +27,7 @@
 #include "../shader/RK_Shader.h"
 #include "../shader/ShaderManager.h"
 #include "../logging/RK_Log.h"
-#include "../render/light/DirectionalLight.h"
-#include "../render/light/Lighting.h"
-#include "../render/light/PointLight.h"
-#include "../render/light/SpotLight.h"
+
 
 //mouse selection: http://antongerdelan.net/opengl/raycasting.html
 // also helpful? https://www.bfilipek.com/2012/06/select-mouse-opengl.html
@@ -46,10 +43,6 @@ EngineCore::~EngineCore()
 
 void EngineCore::clean()
 {
-	delete[] pointLightPositions;
-
-	delete mpModel;
-	delete mpLighting;
 	delete mpShaderManager;
 	delete mpInputSystem;
 	delete mpCam;
@@ -71,44 +64,10 @@ void EngineCore::initGLFW()
 
 void EngineCore::initLighting()
 {
-	int numPointLights = 4;
-	pointLightPositions = new Vector3[4]{
-		Vector3(0.7f,  0.2f,  2.0f),
-		Vector3(2.3f, -3.3f, -4.0f),
-		Vector3(-4.0f,  2.0f, -12.0f),
-		Vector3(0.0f,  -1.0f, -1.0f)
-	};
-
-	mpLighting = new Lighting(standardLightingShaderId, mpShaderManager, numPointLights);
-	
-	Vector3 dir, pos, ambient, diffuse, specular;
-	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f, 
-		  cutoff = cos(RK_Math::degToRad(12.5f)), outerCutoff = cos(RK_Math::degToRad(17.5f));
-
-	dir = Vector3(-0.2f, -1.0f, -0.3f);
-	ambient = Vector3(0.075f, 0.075f, 0.075f);
-	diffuse = Vector3(0.8f, 0.8f, 0.8f);
-	specular = Vector3(0.5f, 0.5f, 0.5f);
-
-	//mpLighting->addDirectionalLight(new DirectionalLight(dir, ambient, diffuse, specular));
-
-	diffuse = Vector3(0.8f, 0.8f, 0.8f);
-	specular = Vector3(1.0f, 1.0f, 1.0f);
-
-	PointLight *p;
-	for(int i =0; i < numPointLights; i++)
-	{
-		p = new PointLight(pointLightPositions[i], ambient, diffuse, specular, constant, linear, quadratic);
-		//mpLighting->addPointLight(p);
-	}
-
-	//Currently acts as a flashlight
-	//SpotLight *s = new SpotLight(*mpCam->getFront(), Vector3::zero, Vector3::one, Vector3::one, constant, linear, quadratic, cutoff, outerCutoff);
-	//mpLighting->addSpotLight(s, mpCam);
-
 	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	mpShaderManager->setShaderInt("material.diffuse", 0);
 	mpShaderManager->setShaderInt("material.specular", 1);
+	mpShaderManager->setShaderFloat("material.shininess", 32.0f);
 } 
 
 bool EngineCore::initialize(char* argv[])
@@ -136,14 +95,9 @@ bool EngineCore::initialize(char* argv[])
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
 	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
 
-	//initLighting();
+	initLighting();
 
-	//mpModel = new Model(mMODEL_PATH + "nanosuit/nanosuit.obj");
-
-	for (size_t i = 0; i < 4; i++)
-	{
-		//mLamps.push_back(new Model(mMODEL_PATH + "cube/cube.obj"));
-	}
+	processViewProjectionMatrices();
 
 	return true;
 }
@@ -154,8 +108,6 @@ void EngineCore::update()
 	//Input
 	mpInputSystem->processInput();
 	calculateDeltaTime();
-
-	//mpLighting->processLighting(mpCam);
 
 	//Check for shader rebuild
 	//TODO: shader rebuild causes need to set shader values every frame. Should fix
@@ -169,46 +121,33 @@ void EngineCore::calculateDeltaTime()
 	lastFrame = currentFrame;
 }
 
-void EngineCore::render()
+//Set vertex shader uniform data for each shader
+void EngineCore::processViewProjectionMatrices()
 {
-	//Rendering
-
-	mpWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
-	mpWindow->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
-	
-	//Set properties of cube object in 3d space
+	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	Mat4 proj = Mat4::identity;
 	proj = MatProj::perspective(RK_Math::degToRad(mpCam->getFov()), 800.0f / 600.0f, 0.1f, 100.0f);
 	mpShaderManager->setShaderMat4("projection", proj);
 
-	Mat4 view = Mat4::identity;	
+	Mat4 view = Mat4::identity;
 	view = mpCam->getViewMatrix();
 	mpShaderManager->setShaderMat4("view", view);
-	
+
 	Mat4 model = Mat4::identity;
-	/*	model = Mat4::translate(model, Vector3(0.0f, -2.75f, 0.0f));
-	model = Mat4::scale(model, Vector3(0.2f, 0.2f, 0.2f));
-	mpShaderManager->setShaderMat4("model", model);
-	mpModel->drawModel(mpShaderManager->getShaderByKey(standardLightingShaderId));
-*/
-	// Light "emitters" these objects are not affected by 
-	// the lighting shader and mark the location of the light sources
+
+	// Light "emitters" are not affected by the lighting shader 
+	// and mark the location of the light sources
 	mpShaderManager->useShaderByKey(emitterShaderId);
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
 
-	for (auto i = 0; i < 4; i++)
-	{
-		model = Mat4(1.0f);
-	//	model = Mat4::translate(model, pointLightPositions[i]);
-		//model = Mat4::scale(model, Vector3(0.1f, 0.1f, 0.1f));
-		//mpShaderManager->setShaderMat4("model", model);
+}
 
-		//mLamps[i]->drawModel(mpShaderManager->getShaderByKey(emitterShaderId));
-	}
-
-	// swap the buffers
-	//mpWindow->swapBuffers();
+void EngineCore::render()
+{
+	mpWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
+	mpWindow->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
+	processViewProjectionMatrices();
 }
 
 void EngineCore::moveCameraLeft()

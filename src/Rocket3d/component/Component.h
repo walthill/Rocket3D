@@ -23,6 +23,8 @@ class Component : public Trackable
 		inline ComponentId getId() { return mId; }
 	private:
 		ComponentId mId;
+	protected:
+		bool mIsEnabled;
 };
 
 #endif // !COMPONENT_H

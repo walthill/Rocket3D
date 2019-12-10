@@ -1,6 +1,4 @@
 #include "ComponentManager.h"
-#include "../../RocketEngine/asset/Model.h"
-#include "../..//RocketEngine/shader/ShaderManager.h"
 
 ComponentId ComponentManager::msNextMaterialComponentId = 0;
 ComponentId ComponentManager::msNextMeshComponentId = 0;
@@ -38,11 +36,6 @@ void ComponentManager::clean()
 		MeshComponent* pComponent = it.second;
 		pComponent->~MeshComponent();
 	}
-	for (auto& it : mMaterialComponentMap)
-	{
-		MaterialComponent* pComponent = it.second;
-		pComponent->~MaterialComponent();
-	}
 	for (auto& it : mDirectionalLightComponentMap)
 	{
 		DirectionalLightComponent* pComponent = it.second;
@@ -61,7 +54,6 @@ void ComponentManager::clean()
 
 	//clear maps
 	mTransformComponentMap.clear();
-	mMaterialComponentMap.clear();
 	mMeshComponentMap.clear();
 	mDirectionalLightComponentMap.clear();
 	mPointLightComponentMap.clear();
@@ -260,6 +252,7 @@ ComponentId ComponentManager::allocatePointLightComponent(const ComponentId& mes
 		PointLightComponent* pComponent = new (ptr)PointLightComponent(newID);
 		pComponent->setData(data);
 		mPointLightComponentMap[newID] = pComponent;
+		pComponent->setUniformIndex(mPointLightComponentMap.size() - 1);
 		msNextPointLightComponentId++;//increment id
 	}
 
@@ -339,7 +332,10 @@ void ComponentManager::update(float elapsedTime)
 void ComponentManager::processLightingComponents()
 {
 	mpShaderManagerHandle->useShaderByKey(mLightingShaderKey);
-	RK_Shader* shader = mpShaderManagerHandle->getShaderByKey(mLightingShaderKey);
+	RK_Shader* shader = mpShaderManagerHandle->getShaderInUse();
+
+	//Set number of point lights
+	mpShaderManagerHandle->setShaderInt(pointLightNumVar, mPointLightComponentMap.size());
 
 	for (auto& it : mDirectionalLightComponentMap)
 		it.second->processLightingData(shader);

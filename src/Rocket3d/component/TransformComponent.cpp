@@ -9,10 +9,30 @@ TransformComponent::~TransformComponent()
 {
 }
 
+inline void TransformComponent::setPosition(Vector3 pos)
+{
+	mTransformData.position = pos;
+	mDataChanged = true;
+}
+
 void TransformComponent::setData(const TransformData & data)
 {
 	mTransformData.position = data.position;
 	mTransformData.rotation.angle = data.rotation.angle;
 	mTransformData.rotation.rotationAxis = data.rotation.rotationAxis;
 	mTransformData.scale = data.scale;
+	mDataChanged = true;
+}
+
+inline void TransformComponent::setScale(Vector3 scale)
+{
+	mTransformData.scale = scale;
+	mDataChanged = true;
+}
+
+void TransformComponent::setRotation(Vector3 rotationAxis, float angle)
+{
+	mTransformData.rotation.angle = angle;
+	mTransformData.rotation.rotationAxis = rotationAxis;
+	mDataChanged = true;
 }
