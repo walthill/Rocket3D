@@ -1,7 +1,7 @@
 #include "LightComponent.h"
 
 #include "../../RocketEngine/shader/RK_Shader.h"
-
+#include "../../RocketEngine/render/Camera.h"
 
 /*****************************************************************
 	
@@ -95,8 +95,8 @@ SpotLightComponent::~SpotLightComponent()
 
 void SpotLightComponent::processLightingData(RK_Shader* lightingShader)
 {
-	lightingShader->setVec3(positionVar, mSpotlightData.mPosition);
-	lightingShader->setVec3(directionVar, mSpotlightData.mDirection);
+	lightingShader->setVec3(positionVar, *mSpotlightData.mpCamHandle->getPosition());
+	lightingShader->setVec3(directionVar, *mSpotlightData.mpCamHandle->getFront());
 
 	lightingShader->setFloat(constantVar, mSpotlightData.mConstant);
 	lightingShader->setFloat(linearVar, mSpotlightData.mLinear);

@@ -103,7 +103,6 @@ class DirectionalLightComponent : public Component
 };
 
 
-
 /*****************************************************************
 	SPOTLIGHT
 	
@@ -112,7 +111,7 @@ class DirectionalLightComponent : public Component
 	NOTE: The spotlight is currently meant to be used on the player camera
 
 *****************************************************************/
-
+class Camera;
 
 struct SpotLightData
 {
@@ -120,16 +119,16 @@ struct SpotLightData
 	BaseLightData mBaseLightData;
 
 	//Directional light specific data
-	Vector3 mDirection, mPosition;
+	Camera* mpCamHandle;
 	float mConstant, mLinear, mQuadratic, mCutoff, mOuterCutoff;
 	
 	SpotLightData() : 
-		mBaseLightData(), mDirection(Vector3::zero), mPosition(Vector3::zero), mConstant(0), mLinear(0), mQuadratic(0),
+		mBaseLightData(), mpCamHandle(nullptr), mConstant(0), mLinear(0), mQuadratic(0),
 		mCutoff(0), mOuterCutoff(0){}
 
 
-	SpotLightData(BaseLightData data, Vector3 dir, Vector3 pos, float constant, float linear, float quadratic, float cutoff, float outerCuttoff) :
-		mBaseLightData(), mDirection(Vector3::zero), mPosition(pos), mConstant(constant), mLinear(linear), mQuadratic(quadratic),
+	SpotLightData(BaseLightData data, Camera* cam, Vector3 dir, Vector3 pos, float constant, float linear, float quadratic, float cutoff, float outerCuttoff) :
+		mBaseLightData(), mpCamHandle(cam), mConstant(constant), mLinear(linear), mQuadratic(quadratic),
 		mCutoff(cutoff), mOuterCutoff(outerCuttoff) {}
 };
 

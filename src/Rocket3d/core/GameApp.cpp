@@ -78,21 +78,28 @@ bool GameApp::initialize(char* argv[])
 		Vector3(0.0f,  -1.0f, -1.0f)
 	};
 
+	BaseLightData baseLightData = { ambient, diffuse, specular };
+
 	PointLightData pointLightData;
-	pointLightData.mBaseLightData.ambientLight = ambient;
-	pointLightData.mBaseLightData.diffuseLight = diffuse;
-	pointLightData.mBaseLightData.specularLight = specular;
+	pointLightData.mBaseLightData = baseLightData;
 	pointLightData.mConstant = constant;
 	pointLightData.mLinear = linear;
 	pointLightData.mQuadratic = quadratic;
 
 	MeshComponentData dirLightMeshData = { "null", EMITTER_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(EMITTER_SHADER_KEY) };
 
-	DirectionalLightData data;
-	data.mBaseLightData.ambientLight = ambient;
-	data.mBaseLightData.diffuseLight = diffuse;
-	data.mBaseLightData.specularLight = specular;
-	data.mDirection = Vector3(-0.2f, -1.0f, -0.3f);
+	DirectionalLightData dirData;
+	dirData.mBaseLightData = baseLightData;
+	dirData.mDirection = Vector3(-0.2f, -1.0f, -0.3f);
+
+	SpotLightData spotData;
+	spotData.mBaseLightData = { Vector3::zero, Vector3::one, Vector3::one };
+	spotData.mConstant = constant;
+	spotData.mLinear = linear;
+	spotData.mQuadratic = quadratic;
+	spotData.mCutoff = cos(RK_Math::degToRad(12.5f));
+	spotData.mOuterCutoff = cos(RK_Math::degToRad(17.5f));
+	spotData.mpCamHandle = mpRocketEngine->getCamera();
 
 	//Point lights
 	for (size_t i = 0; i < 4; i++)
@@ -105,7 +112,12 @@ bool GameApp::initialize(char* argv[])
 
 	//Directional light
 	GameObject* dirLight = mpGameObjectManager->createGameObject(t2, lightMeshData);
-	mpGameObjectManager->addDirectionalLight(dirLight->getId(), data);
+	mpGameObjectManager->addDirectionalLight(dirLight->getId(), dirData);
+
+	//Spotlight light
+	GameObject* spotLight = mpGameObjectManager->createGameObject();
+	mpGameObjectManager->addSpotLight(spotLight->getId(), spotData);
+
 
 	//=========================================================================
 
