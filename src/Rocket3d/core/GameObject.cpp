@@ -43,11 +43,11 @@ MeshComponent * GameObject::getMesh()
 	return pComponent;
 }
 
-MaterialComponent* GameObject::getMaterial()
-{
+//MaterialComponent* GameObject::getMaterial()
+//{
 	//auto pComponent = GameApp::getInstance()->getComponentManager()->getMaterialComponent(mMaterialId);
-	return nullptr;
-}
+//	return nullptr;
+//}
 
 SpotLightComponent* GameObject::getSpotLight()
 {

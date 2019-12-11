@@ -66,6 +66,8 @@ bool GameApp::initialize(char* argv[])
 	MeshComponentData lightMeshData = { "cube", EMITTER_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(EMITTER_SHADER_KEY) };
 	
 	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f;
+
+	//TODO: have these values stored as Color objects
 	Vector3	ambient = Vector3(0.075f, 0.075f, 0.075f),
 			diffuse = Vector3(0.8f, 0.8f, 0.8f),
 			specular = Vector3(0.5f, 0.5f, 0.5f);
@@ -117,7 +119,6 @@ bool GameApp::initialize(char* argv[])
 	//Spotlight light
 	GameObject* spotLight = mpGameObjectManager->createGameObject();
 	mpGameObjectManager->addSpotLight(spotLight->getId(), spotData);
-
 
 	//=========================================================================
 
