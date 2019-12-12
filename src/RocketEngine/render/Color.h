@@ -24,6 +24,17 @@ class Color : public rkutil::Trackable
 		float getBlueValue();
 		float getAlphaValue();
 
+
+		static Color black; // (0, 0, 0)
+		static Color white; // (255,255,255)
+		static Color grey; // (127.5, 127.5,127.5)
+
+		static Color red; // (255,0,0)
+		static Color green; // (0,255,0)
+		static Color blue; // (0,0,255)
+
+		static Color clear; // (0, 0, 0, 0)
+
 	private:
 		rkm::Vector4 mColorValue;
 

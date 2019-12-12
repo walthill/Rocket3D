@@ -128,6 +128,8 @@ class RK_Shader
 		std::string mVertShaderPath;
 		std::string mFragShaderPath;
 
+		const int MODIFY_SINGLE_OBJECT = 1;
+
 		///Stores unifrom locations for faster access & uniform manipulation 
 		mutable std::unordered_map<std::string, rk_uniformLocation> mUniformLocationCache;
 };

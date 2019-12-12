@@ -43,7 +43,7 @@ class Window : public rkutil::Trackable
 		/***
 			* Initialize GLFW Window and OpenGL base
 		****/
-		bool initialize(int width, int height, const char* windowName, int settingsFlags = 0, bool showCursor = true);
+		bool initialize(float width, float height, const char* windowName, int settingsFlags = 0, bool showCursor = true);
 
 		/***
 			* Set window OpenGL capabilities
@@ -98,6 +98,7 @@ class Window : public rkutil::Trackable
 		GLFWwindow* getWindowHandle() const;
 
 	private:
+		const int TOP_LEFT = 0;
 		int w, h;
 		GLFWwindow* mWindow;
 };
