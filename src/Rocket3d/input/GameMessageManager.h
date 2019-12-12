@@ -42,7 +42,7 @@ class GameMessageManager
 			* Execute the logic of the queued messages. Messages are processed
 			based on the delay time passed into addMessage()
 		***/
-		void processMessagesForThisFrame();
+		void processMessagesForThisFrame(float deltaTime);
 
 	private:
 		std::list<GameMessage*> mMessages;

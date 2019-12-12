@@ -16,7 +16,7 @@ MouseMoveMessage::~MouseMoveMessage()
 {
 }
 
-void MouseMoveMessage::process()
+void MouseMoveMessage::process(float deltaTime)
 {
 	GameApp* pGame = GameApp::getInstance();
 
@@ -24,7 +24,7 @@ void MouseMoveMessage::process()
 	{
 		if (mMouseMoveCode == CAM_MOUSE_MOVE)
 		{
-			pGame->getRocketEngine()->getCamera()->processMouseMovement(xPos, yPos);
+			pGame->getRocketEngine()->getCamera()->processMouseMovement(deltaTime, xPos, yPos);
 		}
 	}
 }

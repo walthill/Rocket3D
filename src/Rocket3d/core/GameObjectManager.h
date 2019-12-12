@@ -22,7 +22,7 @@
 #include <vector>
 #include <map>
 #include "../../RocketEngine/util/EngineUtils.h"
-#include <DeanLib/MemoryPool.h>
+#include <rkutil/DeanLib_MemoryPool.h>
 #include "GameObject.h"
 #include "../component/TransformComponent.h"
 #include "../component/MeshComponent.h"
@@ -43,7 +43,7 @@ const uint32 INVALID_GAMEOBJECT_ID = UINT_MAX;
  * This class, contains all GameObjects and controls their 
  * rendering, processing, creation, and deletion.
  ******************************************************************************/
-class GameObjectManager : public Trackable
+class GameObjectManager : public rkutil::Trackable
 {
 	public:
 
@@ -122,7 +122,7 @@ class GameObjectManager : public Trackable
 
 		ComponentManager* mpComponentManagerHandle;
 
-		MemoryPool mGameObjectPool;
+		rkutil::MemoryPool mGameObjectPool;
 		std::map<GameObjectId, GameObject*> mGameObjMap;
 };
 

@@ -21,8 +21,8 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include <RocketMath/Vector2.h>
-#include <RocketMath/Vector3.h>
+#include <rkm/Vector2.h>
+#include <rkm/Vector3.h>
 #include <vector>
 #include <string>
 #include "../shader/RK_Shader.h"
@@ -32,8 +32,8 @@ typedef unsigned int TextureId;
 
 /* Vertex Data */
 struct Vertex {
-    Vector3 position, normal;
-    Vector2 texCoords;
+	rkm::Vector3 position, normal;
+	rkm::Vector2 texCoords;
 };
 
 /* Texture Data */

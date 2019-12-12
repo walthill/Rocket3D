@@ -19,7 +19,7 @@
 #ifndef LIGHT_COMPONENT_H
 #define LIGHT_COMPONENT_H
 
-#include <RocketMath/Vector3.h>
+#include <rkm/Vector3.h>
 #include "Component.h"
 
 /***************************************************************************//**
@@ -30,15 +30,15 @@
  ******************************************************************************/
 struct BaseLightData
 {
-	Vector3 ambientLight; ///< Ambient light value
-	Vector3 diffuseLight; ///< Diffuse light value
-	Vector3 specularLight; ///< Specular light value
+	rkm::Vector3 ambientLight; ///< Ambient light value
+	rkm::Vector3 diffuseLight; ///< Diffuse light value
+	rkm::Vector3 specularLight; ///< Specular light value
 
 	///Default constructor sets all values to zero
-	BaseLightData() : ambientLight(Vector3::zero), diffuseLight(Vector3::zero), specularLight(Vector3::zero) {};
+	BaseLightData() : ambientLight(rkm::Vector3::zero), diffuseLight(rkm::Vector3::zero), specularLight(rkm::Vector3::zero) {};
 
 	///Constructor that takes in values for struct variables
-	BaseLightData(Vector3 ambient, Vector3 diffuse, Vector3 specular) :
+	BaseLightData(rkm::Vector3 ambient, rkm::Vector3 diffuse, rkm::Vector3 specular) :
 		ambientLight(ambient), diffuseLight(diffuse), specularLight(specular) {};
 };
 
@@ -59,16 +59,16 @@ struct PointLightData
 {
 	BaseLightData mBaseLightData; ///< Base lighting data
 	//Point-light specific data
-	Vector3 mPosition;			///< Point light world position value
+	rkm::Vector3 mPosition;			///< Point light world position value
 	//Values for light intensity, smoothness, and falloff 
 	//TODO: (review notes to make more detailed comments on lighting variables)
 	float mConstant, mLinear, mQuadratic;
 
 	///Default constructor sets all values to zero
-	PointLightData() : mBaseLightData(), mPosition(Vector3::zero), mConstant(0), mLinear(0), mQuadratic(0) {}
+	PointLightData() : mBaseLightData(), mPosition(rkm::Vector3::zero), mConstant(0), mLinear(0), mQuadratic(0) {}
 
 	///Constructor that takes in values for struct variables
-	PointLightData(BaseLightData data, Vector3 pos, float constant, float linear, float quadratic) : 
+	PointLightData(BaseLightData data, rkm::Vector3 pos, float constant, float linear, float quadratic) :
 		mBaseLightData(data), mPosition(pos), mConstant(constant), mLinear(linear), mQuadratic(quadratic) {}
 };
 
@@ -150,13 +150,13 @@ struct DirectionalLightData
 	BaseLightData mBaseLightData; ///< Base lighting data
 
 	//Directional light specific data
-	Vector3 mDirection;			 ///< Light direction value
+	rkm::Vector3 mDirection;			 ///< Light direction value
 
 	///Default constructor
-	DirectionalLightData() : mBaseLightData(), mDirection(Vector3::zero) {}
+	DirectionalLightData() : mBaseLightData(), mDirection(rkm::Vector3::zero) {}
 
 	///Constructor that takes in values for struct variables
-	DirectionalLightData(BaseLightData data, Vector3 dir) : mBaseLightData(data), mDirection(dir) {}
+	DirectionalLightData(BaseLightData data, rkm::Vector3 dir) : mBaseLightData(data), mDirection(dir) {}
 };
 
 const DirectionalLightData ZERO_DIRECTIONAL_LIGHT_DATA;
@@ -240,9 +240,9 @@ struct SpotLightData
 		mCutoff(0), mOuterCutoff(0){}
 
 	///Constructor that takes in values for struct variables
-	SpotLightData(BaseLightData data, Camera* cam, Vector3 dir, Vector3 pos, float constant, float linear, float quadratic, float cutoff, float outerCuttoff) :
+	SpotLightData(BaseLightData data, Camera* cam, rkm::Vector3 dir, rkm::Vector3 pos, float constant, float linear, float quadratic, float cutoff, float outerCuttoff) :
 		mBaseLightData(), mpCamHandle(cam), mConstant(constant), mLinear(linear), mQuadratic(quadratic),
-		mCutoff(cutoff), mOuterCutoff(outerCuttoff) {}
+		mCutoff(cutoff), mOuterCutoff(outerCuttoff) {};
 };
 
 const SpotLightData ZERO_SPOTLIGHT_DATA;

@@ -25,7 +25,6 @@
 
 #include "../util/EngineUtils.h"
 
-class Vector3;
 class Camera;
 class Window;
 class InputSystem;
@@ -155,8 +154,6 @@ class EngineCore : public rkutil::Trackable
 			* Calculate real time between frames
 		***/
 		void calculateDeltaTime();
-		void RenderText(RK_Shader &s, std::string text, float x, float y, float scale, Vector3 color);
-
 };
 
 #endif // !ENGINE_CORE_H

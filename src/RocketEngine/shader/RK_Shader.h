@@ -24,7 +24,7 @@
 #define RK_SHADER_H
 
 #include <unordered_map>
-#include <RocketMath/MathUtils.h>
+#include <rkm/MathUtils.h>
 
 typedef int rk_uniformLocation;
 
@@ -101,7 +101,7 @@ class RK_Shader
 		 * @param value Matrix4 value to pass to the shader's uniform
 		 * Set Matrix4 uniform to the given value at the location of the given name in the shader
 		 *************************************************************************/
-		void setMat4(const std::string& name, const Mat4& mat) const;
+		void setMat4(const std::string& name, const rkm::Mat4& mat) const;
 
 		/**********************************************************************//**
 		 * Set Vector3 uniform in the shader
@@ -110,7 +110,7 @@ class RK_Shader
 		 * @param value Vector3 value to pass to the shader's uniform
 		 * Set Vector3 uniform to the given value at the location of the given name in the shader
 		 *************************************************************************/
-		void setVec3(const std::string& name, const Vector3& value);
+		void setVec3(const std::string& name, const rkm::Vector3& value);
 
 		/**********************************************************************//**
 		 * Get uniform location, either from cache or an OpenGL call

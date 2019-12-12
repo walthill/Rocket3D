@@ -23,8 +23,8 @@
 
 #include <map>
 #include <vector>
-#include <DeanLib/Trackable.h>
-#include <DeanLib/MemoryPool.h>
+#include <rkutil/Trackable.h>
+#include <rkutil/DeanLib_MemoryPool.h>
 //#include "MaterialComponent.h"
 #include "MeshComponent.h"
 #include "TransformComponent.h"
@@ -37,7 +37,7 @@ class ShaderManager;
  *
  * Stores collection of components. and handles their processing and rendering
  ******************************************************************************/
-class ComponentManager : public Trackable
+class ComponentManager : public rkutil::Trackable
 {
 	public:
 		/**********************************************************************//**
@@ -198,11 +198,11 @@ class ComponentManager : public Trackable
 		ShaderManager* mpShaderManagerHandle;
 		ShaderKey mLightingShaderKey;
 
-		MemoryPool mTransformPool;
-		MemoryPool mMeshPool;
-		MemoryPool mDirectionalLightPool;
-		MemoryPool mPointLightPool;
-		MemoryPool mSpotlightPool;
+		rkutil::MemoryPool mTransformPool;
+		rkutil::MemoryPool mMeshPool;
+		rkutil::MemoryPool mDirectionalLightPool;
+		rkutil::MemoryPool mPointLightPool;
+		rkutil::MemoryPool mSpotlightPool;
 
 		std::map<ComponentId, TransformComponent*> mTransformComponentMap;
 		std::map<ComponentId, MeshComponent*> mMeshComponentMap;

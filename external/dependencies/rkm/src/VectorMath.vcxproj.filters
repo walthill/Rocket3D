@@ -24,6 +24,18 @@
     <ClCompile Include="cpp\RK_Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cpp\Mat4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\MatProj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Vector2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Vector4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cpp\include\Mat4.h">
@@ -52,8 +64,5 @@
     <None Include="masm\vector3.asm">
       <Filter>Source Files</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="vector3.obj" />
   </ItemGroup>
 </Project>

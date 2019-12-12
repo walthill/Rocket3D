@@ -81,7 +81,7 @@ bool EngineCore::initialize(char* argv[])
 	if(!mpWindow->initialize(800, 600, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE, false))
 		return false;
 
-	mpCam = new Camera(Vector3(0.0f, 0.0f, 3.0f));
+	mpCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
 
 	mpInputSystem = new InputSystem(mpWindow->getWindowHandle());
 	//mpLiveload = new ShaderBuild();
@@ -104,14 +104,15 @@ bool EngineCore::initialize(char* argv[])
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	textObj = new Text("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId));
-	TextData data = { "This is sample text", Color(127, 204, 51), Vector2(25.0f, 25.0f), 1.0f };
+	TextData data = { "This is sample text", Color(127, 204, 51), rkm::Vector2(25.0f, 25.0f), 1.0f };
 	textObj->initTextData(data);
 	textObj2 = new Text("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId));
-	data = { "(C) Rocket3d", Color(76.5f, 178.5f, 229.5f), Vector2(540.0f, 570.0f), 0.5f };
+	data = { "(C) Rocket3d", Color(76.5f, 178.5f, 229.5f), rkm::Vector2(540.0f, 570.0f), 0.5f };
 	textObj2->initTextData(data);
 	// Compile and setup the shader
-	Mat4 projection = MatProj::orthographic(0.0f, 800.0f, 0.0f, 600.0f);
+	rkm::Mat4 projection = rkm::MatProj::orthographic(0.0f, 800.0f, 0.0f, 600.0f);
 	mpShaderManager->useShaderByKey(textShaderId);
 	mpShaderManager->getShaderInUse()->setMat4("projection", projection);
 	return true;
@@ -140,15 +141,15 @@ void EngineCore::calculateDeltaTime()
 void EngineCore::processViewProjectionMatrices()
 {
 	mpShaderManager->useShaderByKey(standardLightingShaderId);
-	Mat4 proj = Mat4::identity;
-	proj = MatProj::perspective(RK_Math::degToRad(mpCam->getFov()), 800.0f / 600.0f, 0.1f, 100.0f);
+	rkm::Mat4 proj = rkm::Mat4::identity;
+	proj = rkm::MatProj::perspective(rkm::degToRad(mpCam->getFov()), 800.0f / 600.0f, 0.1f, 100.0f);
 	mpShaderManager->setShaderMat4("projection", proj);
 
-	Mat4 view = Mat4::identity;
+	rkm::Mat4 view = rkm::Mat4::identity;
 	view = mpCam->getViewMatrix();
 	mpShaderManager->setShaderMat4("view", view);
 
-	Mat4 model = Mat4::identity;
+	rkm::Mat4 model = rkm::Mat4::identity;
 
 	// Light "emitters" are not affected by the lighting shader 
 	// and mark the location of the light sources

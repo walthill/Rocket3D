@@ -20,7 +20,7 @@
 #ifndef TRANSFORM_COMPONENT_H
 #define TRANSFORM_COMPONENT_H
 
-#include <RocketMath/Vector3.h>
+#include <rkm/Vector3.h>
 #include "Component.h"
 
 /***************************************************************************//**
@@ -34,23 +34,23 @@ struct TransformData
 	struct Rotation
 	{
 		float angle;			///< Rotation angle
-		Vector3 rotationAxis;	///< Axis of rotation
+		rkm::Vector3 rotationAxis;	///< Axis of rotation
 
 		///Default constructor sets all values to zero
-		Rotation() : angle(0), rotationAxis(Vector3::up) {}
+		Rotation() : angle(0), rotationAxis(rkm::Vector3::up) {}
 		///Constructor that takes in values for struct variables
-		Rotation(Vector3 axis, float a) : angle(a), rotationAxis(axis) {}
+		Rotation(rkm::Vector3 axis, float a) : angle(a), rotationAxis(axis) {}
 	};
 
 	Rotation rotation;	///< Transform rotation data
-	Vector3 position;	///< Transform position value
-	Vector3 scale;		///< Transform scale value
+	rkm::Vector3 position;	///< Transform position value
+	rkm::Vector3 scale;		///< Transform scale value
 
 	///Default constructor sets all values to zero
-	TransformData() : position(Vector3::zero), scale(Vector3::one), rotation() {};
+	TransformData() : position(rkm::Vector3::zero), scale(rkm::Vector3::one), rotation() {};
 
 	///Constructor that takes in values for struct variables
-	TransformData(Vector3 pos, Vector3 s, Vector3 rot, float angle) : position(pos), scale(s), rotation(rot, angle) {};
+	TransformData(rkm::Vector3 pos, rkm::Vector3 s, rkm::Vector3 rot, float angle) : position(pos), scale(s), rotation(rot, angle) {};
 };
 
 const TransformData ZERO_TRANSFORM_DATA;
@@ -78,9 +78,9 @@ class TransformComponent : public Component
 		///Access the transform component data
 		TransformData getData() { return mTransformData; }
 		///Access the transform component position
-		Vector3 getPosition() { return mTransformData.position; };
+		rkm::Vector3 getPosition() { return mTransformData.position; };
 		///Access the transform component scale
-		Vector3 getScale() { return mTransformData.scale; };
+		rkm::Vector3 getScale() { return mTransformData.scale; };
 		///Check if the transform component data has changed
 		bool hasChanged() { return mDataChanged; }
 
@@ -89,7 +89,7 @@ class TransformComponent : public Component
 		 *
 		 * @param pos New position vector
 		 *************************************************************************/
-		void setPosition(Vector3 pos);
+		void setPosition(rkm::Vector3 pos);
 
 		/**********************************************************************//**
 		 * Set position value
@@ -103,7 +103,7 @@ class TransformComponent : public Component
 		 *
 		 * @param pos New position vector
 		 *************************************************************************/
-		void setScale(Vector3 scale);
+		void setScale(rkm::Vector3 scale);
 
 		/**********************************************************************//**
 		 * Set rotation value
@@ -111,7 +111,7 @@ class TransformComponent : public Component
 		 * @param pos New rotation axis vector 
 		 * @param angle New rotation angle 
 		 *************************************************************************/
-		void setRotation(Vector3 rotationAxis, float angle); //TODO(low): Quaternions?? One day	
+		void setRotation(rkm::Vector3 rotationAxis, float angle); //TODO(low): Quaternions?? One day	
 
 		/**********************************************************************//**
 		 * Set mDataChanged flag

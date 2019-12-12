@@ -27,11 +27,6 @@
     <ClInclude Include="render\Camera.h" />
     <ClInclude Include="render\Color.h" />
     <ClInclude Include="render\Text.h" />
-    <ClInclude Include="render\light\DirectionalLight.h" />
-    <ClInclude Include="render\light\Light.h" />
-    <ClInclude Include="render\light\Lighting.h" />
-    <ClInclude Include="render\light\PointLight.h" />
-    <ClInclude Include="render\light\SpotLight.h" />
     <ClInclude Include="render\Mesh.h" />
     <ClInclude Include="shader\RK_Shader.h" />
     <ClInclude Include="shader\ShaderBuild.h" />
@@ -45,15 +40,8 @@
     <ClCompile Include="logging\RK_Log.cpp" />
     <ClCompile Include="render\Color.cpp" />
     <ClCompile Include="render\Text.cpp" />
-    <ClCompile Include="render\light\DirectionalLight.cpp" />
-    <ClCompile Include="render\light\Lighting.cpp" />
-    <ClCompile Include="render\light\PointLight.cpp" />
-    <ClCompile Include="render\light\SpotLight.cpp" />
     <ClCompile Include="shader\RK_Shader.cpp" />
     <ClCompile Include="shader\ShaderManager.cpp" />
-    <ClCompile Include="util\Mat4.cpp" />
-    <ClCompile Include="util\Vector2.cpp" />
-    <ClCompile Include="util\Vector3.cpp" />
     <ClCompile Include="window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>

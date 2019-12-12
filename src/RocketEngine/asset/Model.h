@@ -115,28 +115,28 @@ class Model : public rkutil::Trackable
 			MeshData data;
 			
 			Vertex vert;
-			Vector3 vector;
-			Vector2 texVector;
+			rkm::Vector3 vector;
+			rkm::Vector2 texVector;
 			unsigned int i;
 
 			//Fill mesh vertices
 			for (i = 0; i < mesh->mNumVertices; i++)
 			{
 				//Set position
-				vector = Vector3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+				vector = rkm::Vector3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 				vert.position = vector;
 				
-				vector = Vector3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+				vector = rkm::Vector3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
 				vert.normal = vector;
 	
 				//check for texture coordinates
 				if (mesh->mTextureCoords[0])
 				{
-					texVector = Vector2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+					texVector = rkm::Vector2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
 					vert.texCoords = texVector;
 				}
 				else
-					vert.texCoords = Vector2::zero;	
+					vert.texCoords = rkm::Vector2::zero;
 
 				data.vertices.push_back(vert);
 			}

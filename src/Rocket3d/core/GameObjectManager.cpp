@@ -20,11 +20,11 @@ GameObject* GameObjectManager::createGameObject(const TransformData& transform, 
 {
 	GameObject* newObj = nullptr;
 
-	Byte* ptr = mGameObjectPool.allocateObject();
+	rkutil::Byte* ptr = mGameObjectPool.allocateObject();
 	
 	if (ptr != nullptr)
 	{
-		newObj = new (ptr)GameObject();//placement new
+		newObj = ::new (ptr)GameObject();//placement new
 
 		GameObjectId newId = id;
 		if (newId == INVALID_GAMEOBJECT_ID) //new game obj
@@ -83,7 +83,7 @@ void GameObjectManager::destroy(const GameObjectId & id)
 		obj->~GameObject();
 
 		//free the object in the pool
-		mGameObjectPool.freeObject((Byte*)obj);
+		mGameObjectPool.freeObject((rkutil::Byte*)obj);
 	}
 }
 

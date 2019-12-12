@@ -22,7 +22,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <RocketMath/MathUtils.h>
+#include <rkm/MathUtils.h>
 #include <rkutil/Trackable.h>
 
 class Camera : public rkutil::Trackable
@@ -35,7 +35,7 @@ class Camera : public rkutil::Trackable
 			* Constructor initializes camera member variables from paramters
 			* Calculates Front, Right, and Up for the camera
 		***/
-		Camera(Vector3 position = Vector3::zero, Vector3 up = Vector3::up, float yaw = -90.0f, float pitch = 0.0f) 
+		Camera(rkm::Vector3 position = rkm::Vector3::zero, rkm::Vector3 up = rkm::Vector3::up, float yaw = -90.0f, float pitch = 0.0f)
 		{
 			mMoveSpeed = 2.5f;
 			mMouseSensitivity = 0.1f;
@@ -53,17 +53,17 @@ class Camera : public rkutil::Trackable
 		/***
 			* Calculates mouse movement and converts params into a new camera position
 		***/
-		void processMouseMovement(float xOffset, float yOffset, bool constrainPitch = true)
+		void processMouseMovement(float deltaTime, float xOffset, float yOffset, bool constrainPitch = true)
 		{
 			xOffset *= mMouseSensitivity;
 			yOffset *= mMouseSensitivity;
 
 			mYaw += xOffset;
-			mPitch += yOffset;
+			mPitch += yOffset; 
 
 			//First-person camera -- limit ability to look up and down
 			if(constrainPitch)
-				mPitch = RK_Math::clamp(mPitch, -89.0f, 89.0f);
+				mPitch = rkm::clamp(mPitch, -89.0f, 89.0f);
 
 			updateCameraVectors();
 		};
@@ -78,13 +78,13 @@ class Camera : public rkutil::Trackable
 			if (mZoom >= 1.0f && mZoom <= 45.0f)
 				mZoom -= yOffset;
 
-			mZoom = RK_Math::clamp(mZoom, 1.0f, 45.0f);
+			mZoom = rkm::clamp(mZoom, 1.0f, 45.0f);
 		};
 
 		/***
 			* Access the camera's view matrix
 		***/
-		Mat4 getViewMatrix() { return Mat4::lookAt(mPos, mPos + mFront, mUp); };
+		rkm::Mat4 getViewMatrix() { return rkm::Mat4::lookAt(mPos, mPos + mFront, mUp); };
 		
 		/***
 			* Move camera left
@@ -113,7 +113,7 @@ class Camera : public rkutil::Trackable
 		***/
 		void moveCameraForward(float deltaTime) 
 		{ 
-			mPos += Vector3::cross(mUp, mRight).normalize() * mMoveSpeed * deltaTime;
+			mPos += rkm::Vector3::cross(mUp, mRight).normalize() * mMoveSpeed * deltaTime;
 	//		mPos += Vector3::cross(mWorldUp, mRight).normalize() * mMoveSpeed * deltaTime;
 		};
 		
@@ -122,14 +122,14 @@ class Camera : public rkutil::Trackable
 		***/
 		void moveCameraBack(float deltaTime)
 		{ 
-			mPos -= Vector3::cross(mUp, mRight).normalize() * mMoveSpeed * deltaTime;
+			mPos -= rkm::Vector3::cross(mUp, mRight).normalize() * mMoveSpeed * deltaTime;
 //			mPos -= Vector3::cross(mWorldUp, mRight).normalize() * mMoveSpeed * deltaTime;
 		};
 
 		/***
 			* Access camera front vector
 		***/
-		Vector3* getFront() { return &mFront; };
+		rkm::Vector3* getFront() { return &mFront; };
 		/***
 			* Access camera FOV
 		***/
@@ -137,15 +137,15 @@ class Camera : public rkutil::Trackable
 		/***
 			* Access camera position vector
 		***/
-		Vector3* getPosition() { return &mPos; };
+		rkm::Vector3* getPosition() { return &mPos; };
 
 	private:
 		// Camera Attributes
-		Vector3 mPos;
-		Vector3 mFront;
-		Vector3 mUp;
-		Vector3 mRight;
-		Vector3 mWorldUp = Vector3::up;
+		rkm::Vector3 mPos;
+		rkm::Vector3 mFront;
+		rkm::Vector3 mUp;
+		rkm::Vector3 mRight;
+		rkm::Vector3 mWorldUp = rkm::Vector3::up;
 
 		// Euler Angles
 		float mYaw;
@@ -162,17 +162,17 @@ class Camera : public rkutil::Trackable
 		***/
 		void updateCameraVectors()
 		{
-			Vector3 front;
-			front = Vector3(
-				cos(RK_Math::degToRad(mYaw)) * cos(RK_Math::degToRad(mPitch)),
-				sin(RK_Math::degToRad(mPitch)),
-				sin(RK_Math::degToRad(mYaw)) * cos(RK_Math::degToRad(mPitch)));
+			rkm::Vector3 front;
+			front = rkm::Vector3(
+				cos(rkm::degToRad(mYaw)) * cos(rkm::degToRad(mPitch)),
+				sin(rkm::degToRad(mPitch)),
+				sin(rkm::degToRad(mYaw)) * cos(rkm::degToRad(mPitch)));
 
 			mFront = front.normalize();
 
 			// Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-			mRight = Vector3::cross(mFront, mWorldUp).normalize();
-			mUp = Vector3::cross(mRight, mFront).normalize();
+			mRight = rkm::Vector3::cross(mFront, mWorldUp).normalize();
+			mUp = rkm::Vector3::cross(mRight, mFront).normalize();
 		};
 };
 

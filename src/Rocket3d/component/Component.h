@@ -21,7 +21,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include <DeanLib/Trackable.h>
+#include <rkutil/Trackable.h>
 #include <limits>
 #include "../../RocketEngine/util/EngineUtils.h"
 
@@ -35,7 +35,7 @@ const uint32 INVALID_COMPONENT_ID = UINT_MAX;
  * an enabled flag to be used by derived class. 
  * All derived classes must construct this class by passing an id value
  ******************************************************************************/
-class Component : public Trackable
+class Component : public rkutil::Trackable
 {
 	public:
 

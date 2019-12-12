@@ -2,8 +2,8 @@
 #define TEXT_H
 
 #include <rkutil/Trackable.h>
-#include <RocketMath/Vector2.h>
-#include <RocketMath/Vector3.h>
+#include <rkm/Vector2.h>
+#include <rkm/Vector3.h>
 #include "Color.h"
 #include "../util/EngineUtils.h"
 #include <map>
@@ -12,7 +12,7 @@ struct TextData
 {
 	std::string text;
 	Color color;
-	Vector2 position;
+	rkm::Vector2 position;
 	float scale;
 };
 
@@ -39,8 +39,8 @@ class Text : public rkutil::Trackable
 		struct Character 
 		{
 			uint32 textureId;
-			Vector2 size;
-			Vector2 bearing;
+			rkm::Vector2 size;
+			rkm::Vector2 bearing;
 			uint32 advance;
 		};
 
