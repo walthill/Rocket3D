@@ -26,7 +26,8 @@
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 void framebufferSizeCallback(GLFWwindow* window, int width, int height) //TODO: move to callback class - move to input?
 {
-	glViewport(0, 0, width, height);
+	const int TOP_LEFT = 0;
+	glViewport(TOP_LEFT, TOP_LEFT, width, height);
 }
 
 Window::Window()
@@ -67,7 +68,7 @@ bool Window::initialize(int width, int height, const char* windowName, int setti
 		return false;
 	}
 
-	setViewport(0, 0, w, h);
+	setViewport(TOP_LEFT, TOP_LEFT, w, h);
 	enableOpenGLWindowFlags(settingsFlags);
 	setCursor(showCursor);
 	glfwSetFramebufferSizeCallback(mWindow, framebufferSizeCallback);
@@ -77,14 +78,17 @@ bool Window::initialize(int width, int height, const char* windowName, int setti
 
 void Window::enableOpenGLWindowFlags(int settingsToEnable)
 {
-	if(settingsToEnable & AA_MULTISAMPLE)
+	if (settingsToEnable & AA_MULTISAMPLE)
 		glEnable(GL_MULTISAMPLE);
 	if (settingsToEnable & DEPTH_TEST)
 		glEnable(GL_DEPTH_TEST);
 	if (settingsToEnable & CULL_FACE)
 		glEnable(GL_CULL_FACE);
 	if (settingsToEnable & BLEND)
+	{
 		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
 }
 
 void Window::clearWindowBuffers(int buffersToClear)

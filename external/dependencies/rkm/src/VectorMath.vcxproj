@@ -89,7 +89,8 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PreLinkEvent>
-      <Command>ml /c /Cx /coff masm/vector3.asm</Command>
+      <Command>
+      </Command>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

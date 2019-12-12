@@ -23,6 +23,7 @@
 #include "../../RocketEngine/logging/RK_Log.h"
 #include "GameObjectManager.h"
 #include "../component/ComponentManager.h"
+#include <window/Window.h>
 
 GameApp* GameApp::mpGameApp = nullptr;
 
@@ -40,7 +41,7 @@ bool GameApp::initialize(char* argv[])
 	mpGameMessageManager = new GameMessageManager();
 	mpMasterTimer = new rkutil::Timer();
 
-	if (!mpRocketEngine->initialize(argv))
+	if (!mpRocketEngine->initialize(mWindowWidth, mWindowHeight))
 		return false;
 
 	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);

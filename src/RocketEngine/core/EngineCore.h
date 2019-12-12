@@ -28,7 +28,6 @@
 class Camera;
 class Window;
 class InputSystem;
-//class ShaderBuild;
 class ShaderManager;
 class RK_Shader;
 class Text;
@@ -61,7 +60,7 @@ class EngineCore : public rkutil::Trackable
 		/***
 			* Initialize engine components
 		***/
-		bool initialize(char* argv[]); //pass in data for live shader rebuilds
+		bool initialize(int width, int height); //pass in data for live shader rebuilds
 		
 		/***
 			* Destroy engine component pointers
@@ -129,15 +128,13 @@ class EngineCore : public rkutil::Trackable
 
 	private:
 		const std::string mMODEL_PATH = "../../assets/models/";
-		uint32 VAO, VBO;
-		int mWindowWidth, mWindowHeight;
+		int mWindowWidth = 0, mWindowHeight = 0;
 		float lastFrame = 0.0f; // Time of last frame
 		
 		Window *mpWindow;
 		InputSystem *mpInputSystem;
 		Camera* mpCam;
 
-		//ShaderBuild* mpLiveload;
 		ShaderManager* mpShaderManager;
 		
 		ShaderKey standardLightingShaderId = "standardLightingShader", emitterShaderId = "emitter";

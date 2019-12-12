@@ -1,5 +1,15 @@
 #include "Color.h"
 
+Color Color::black(0, 0, 0);
+Color Color::white(255, 255, 255);
+Color Color::grey(127.5f, 127.5f, 127.5f);
+
+Color Color::red(255, 0, 0); 
+Color Color::green(0, 255, 0);
+Color Color::blue(0, 0, 255); 
+
+Color Color::clear(0, 0, 0, 0);
+
 Color::Color()
 {
 	mColorValue = rkm::Vector4(0,0,0,255);

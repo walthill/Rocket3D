@@ -71,27 +71,23 @@ void EngineCore::initLighting()
 	mpShaderManager->setShaderFloat("material.shininess", 32.0f);
 } 
 
-bool EngineCore::initialize(char* argv[])
+bool EngineCore::initialize(int width, int height)
 {
+	mWindowWidth = width;
+	mWindowHeight = height;
+
 	initGLFW();
 
 	mpWindow = new Window();
 	
 	//Init window size, name, features, and cursor 
-	if(!mpWindow->initialize(800, 600, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE, false))
+	if(!mpWindow->initialize(width, height, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE, false))
 		return false;
 
 	mpCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
 
 	mpInputSystem = new InputSystem(mpWindow->getWindowHandle());
-	//mpLiveload = new ShaderBuild();
 	mpShaderManager = new ShaderManager();
-
-	//std::wstring directory(argv[0], argv[0] + strlen(argv[0]));
-	//directory.erase(directory.find_last_of(L'\\') + 1);
-
-	//mpLiveload->init(directory + L"RocketBuild.dll");
-	//mpLiveload->addFunctionToLiveLoad("live_shader_rebuild");
 
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
 	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
@@ -100,10 +96,6 @@ bool EngineCore::initialize(char* argv[])
 	initLighting();
 
 	processViewProjectionMatrices();
-
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	textObj = new Text("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId));
 	TextData data = { "This is sample text", Color(127, 204, 51), rkm::Vector2(25.0f, 25.0f), 1.0f };
@@ -121,13 +113,8 @@ bool EngineCore::initialize(char* argv[])
 
 void EngineCore::update()
 {
-	//Input
 	mpInputSystem->processInput();
 	calculateDeltaTime();
-
-	//Check for shader rebuild
-	//TODO: shader rebuild causes need to set shader values every frame. Should fix
-	//mpLiveload->pollSourceForUpdates(mpShaderManager);
 }
 
 void EngineCore::calculateDeltaTime()
@@ -142,7 +129,7 @@ void EngineCore::processViewProjectionMatrices()
 {
 	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	rkm::Mat4 proj = rkm::Mat4::identity;
-	proj = rkm::MatProj::perspective(rkm::degToRad(mpCam->getFov()), 800.0f / 600.0f, 0.1f, 100.0f);
+	proj = rkm::MatProj::perspective(rkm::degToRad(mpCam->getFov()), (float)mWindowWidth / (float)mWindowHeight, 0.1f, 100.0f);
 	mpShaderManager->setShaderMat4("projection", proj);
 
 	rkm::Mat4 view = rkm::Mat4::identity;

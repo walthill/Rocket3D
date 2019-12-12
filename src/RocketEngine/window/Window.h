@@ -98,7 +98,8 @@ class Window : public rkutil::Trackable
 		GLFWwindow* getWindowHandle() const;
 
 	private:
-		int w, h;
+		const int TOP_LEFT = 0;
+		int w = 0, h = 0;
 		GLFWwindow* mWindow;
 };
 
