@@ -223,7 +223,7 @@ class Model : public rkutil::Trackable
 
 			if (data)
 			{
-				GLenum format;
+				GLenum format = -1;
 				if (nrComponents == 1)
 					format = GL_RED;
 				else if (nrComponents == 3)

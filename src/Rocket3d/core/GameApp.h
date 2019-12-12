@@ -125,19 +125,19 @@ class GameApp : public rkutil::Trackable
 			
 		//Game state vars
 		static GameApp* mpGameApp;
-		bool mShouldExit;
+		bool mShouldExit = false;
 
 		//Performance tracker data
 		rkutil::Timer* mpFrameTimer;
 		rkutil::Timer* mpMasterTimer;
-		int mFPS;
+		int mFPS = 0;
 		const std::string mINIT_TRACKER_NAME = "init";
 		const std::string mDRAW_TRACKER_NAME = "draw";
 		const std::string mLOOP_TRACKER_NAME = "loop";
 		const double m60FPS_FRAME_TIME = 16.7;
 		const double m30FPS_FRAME_TIME = 33.3;
 		const int MAX_NUM_OBJECTS = 10;
-		const float mWindowWidth = 800, mWindowHeight = 600;
+		const int mWindowWidth = 800, mWindowHeight = 600;
 
 
 		GameApp() {}; //Empty constuctor

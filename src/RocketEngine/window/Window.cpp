@@ -43,7 +43,7 @@ void Window::clean()
 {
 }
 
-bool Window::initialize(float width, float height, const char* windowName, int settingsFlags, bool showCursor)
+bool Window::initialize(int width, int height, const char* windowName, int settingsFlags, bool showCursor)
 {
 	w = width; 
 	h = height;

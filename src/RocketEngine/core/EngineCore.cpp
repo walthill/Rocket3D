@@ -71,7 +71,7 @@ void EngineCore::initLighting()
 	mpShaderManager->setShaderFloat("material.shininess", 32.0f);
 } 
 
-bool EngineCore::initialize(float width, float height)
+bool EngineCore::initialize(int width, int height)
 {
 	mWindowWidth = width;
 	mWindowHeight = height;
@@ -129,7 +129,7 @@ void EngineCore::processViewProjectionMatrices()
 {
 	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	rkm::Mat4 proj = rkm::Mat4::identity;
-	proj = rkm::MatProj::perspective(rkm::degToRad(mpCam->getFov()), mWindowWidth / mWindowHeight, 0.1f, 100.0f);
+	proj = rkm::MatProj::perspective(rkm::degToRad(mpCam->getFov()), (float)mWindowWidth / (float)mWindowHeight, 0.1f, 100.0f);
 	mpShaderManager->setShaderMat4("projection", proj);
 
 	rkm::Mat4 view = rkm::Mat4::identity;

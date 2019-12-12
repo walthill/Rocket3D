@@ -44,7 +44,7 @@ class Component : public rkutil::Trackable
 		 *
 		 * @param id ComponentId value assigned to this instance of the Component class
 		 *************************************************************************/
-		Component(const ComponentId &id) { mId = id; };
+		Component(const ComponentId &id) : mIsEnabled(true) { mId = id; };
 
 		/*
 			"Virtual destructors are useful when you might potentially delete 

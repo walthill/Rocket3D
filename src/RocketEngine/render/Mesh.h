@@ -38,7 +38,7 @@ struct Vertex {
 
 /* Texture Data */
 struct Texture {
-    TextureId id;
+    TextureId id = -1;
     std::string type, path;
 };
 

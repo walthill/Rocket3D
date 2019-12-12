@@ -60,7 +60,7 @@ class EngineCore : public rkutil::Trackable
 		/***
 			* Initialize engine components
 		***/
-		bool initialize(float windowWidth, float windowHeight); //pass in data for live shader rebuilds
+		bool initialize(int width, int height); //pass in data for live shader rebuilds
 		
 		/***
 			* Destroy engine component pointers
@@ -128,8 +128,7 @@ class EngineCore : public rkutil::Trackable
 
 	private:
 		const std::string mMODEL_PATH = "../../assets/models/";
-		uint32 VAO, VBO;
-		float mWindowWidth, mWindowHeight;
+		int mWindowWidth = 0, mWindowHeight = 0;
 		float lastFrame = 0.0f; // Time of last frame
 		
 		Window *mpWindow;
