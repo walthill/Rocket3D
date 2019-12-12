@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 		RK_LOGGER_CLEAN();
 
 		//TODO(low): output to logger
-		MemoryTracker::getInstance()->reportAllocations(std::cout); 
+		rkutil::MemoryTracker::getInstance()->reportAllocs(std::cout);
 		system("pause");
 
 		return 1;

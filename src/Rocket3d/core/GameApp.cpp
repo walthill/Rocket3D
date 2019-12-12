@@ -30,12 +30,12 @@ GameApp::~GameApp()
 
 bool GameApp::initialize(char* argv[])
 {
-	rkutil::RK_PerformanceTracker* pPerformanceTracker = new rkutil::RK_PerformanceTracker();
+	rkutil::PerformanceTracker* pPerformanceTracker = new rkutil::PerformanceTracker();
 	pPerformanceTracker->startTracking(mINIT_TRACKER_NAME);
 
 	mpRocketEngine = new EngineCore();
 	mpGameMessageManager = new GameMessageManager();
-	mpMasterTimer = new rkutil::RK_Timer();
+	mpMasterTimer = new rkutil::Timer();
 
 	if (!mpRocketEngine->initialize(argv))
 		return false;
@@ -62,9 +62,9 @@ void GameApp::clean()
 
 bool GameApp::processLoop()
 {
-	rkutil::RK_PerformanceTracker* pPerformanceTracker = new rkutil::RK_PerformanceTracker();
+	rkutil::PerformanceTracker* pPerformanceTracker = new rkutil::PerformanceTracker();
 
-	mpFrameTimer = new rkutil::RK_Timer();
+	mpFrameTimer = new rkutil::Timer();
 	
 	while (!mShouldExit)
 	{

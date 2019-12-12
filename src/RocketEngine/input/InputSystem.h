@@ -20,11 +20,11 @@
 #ifndef INPUT_SYS_H
 #define INPUT_SYS_H
 
-#include <DeanLib/Trackable.h>
+#include <rkutil/Trackable.h>
 
 struct GLFWwindow;
 
-class InputSystem : public Trackable
+class InputSystem : public rkutil::Trackable
 {
 	public:
 

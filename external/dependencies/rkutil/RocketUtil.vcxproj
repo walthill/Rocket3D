@@ -138,13 +138,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\DeanLib_MemoryPool.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\RK_PerformanceTracker.cpp" />
-    <ClCompile Include="src\RK_Timer.cpp" />
+    <ClCompile Include="src\MemoryTracker.cpp" />
+    <ClCompile Include="src\PerformanceTracker.cpp" />
+    <ClCompile Include="src\Timer.cpp" />
+    <ClCompile Include="src\Trackable.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\include\RK_PerformanceTracker.h" />
-    <ClInclude Include="src\include\RK_Timer.h" />
+    <ClInclude Include="src\include\DeanLib_CircularQueue.h" />
+    <ClInclude Include="src\include\DeanLib_MemoryPool.h" />
+    <ClInclude Include="src\include\MemoryTracker.h" />
+    <ClInclude Include="src\include\PerformanceTracker.h" />
+    <ClInclude Include="src\include\Timer.h" />
+    <ClInclude Include="src\include\Trackable.h" />
+    <ClInclude Include="src\include\UtilDefines.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -22,9 +22,9 @@
 #ifndef GAME_APP_H
 #define GAME_APP_H
 
-#include <DeanLib/Trackable.h>
-#include <DeanLib/MemoryTracker.h>
-#include <rkutil/RK_PerformanceTracker.h>
+#include <rkutil/Trackable.h>
+#include <rkutil/MemoryTracker.h>
+#include <rkutil/PerformanceTracker.h>
 #include <string>
 #include <cassert>
 
@@ -32,10 +32,9 @@ class EngineCore;
 class GameMessage;
 class GameMessageManager;
 
-class GameApp : Trackable
+class GameApp : public rkutil::Trackable
 {
 	public:
-		
 		#pragma region Static Class Functions
 		/***
 			* Initializes the global static instance of the GameApp class
@@ -118,8 +117,8 @@ class GameApp : Trackable
 		bool mShouldExit;
 
 		//Performance tracker data
-		rkutil::RK_Timer* mpFrameTimer;
-		rkutil::RK_Timer* mpMasterTimer;
+		rkutil::Timer* mpFrameTimer;
+		rkutil::Timer* mpMasterTimer;
 		int mFPS;
 		const std::string mINIT_TRACKER_NAME = "init";
 		const std::string mDRAW_TRACKER_NAME = "draw";

@@ -29,7 +29,7 @@ class SpotLight;
 
 //enum LightType { DIR_LIGHT , POINT_LIGHT, SPOT_LIGHT };
 
-class Lighting : public Trackable //Used to init lighting shader variables
+class Lighting : public rkutil::Trackable //Used to init lighting shader variables
 {
 	public:
 		/***

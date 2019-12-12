@@ -1,10 +1,10 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include <DeanLib/Trackable.h>
+#include <rkutil/Trackable.h>
 #include <RocketMath/Vector4.h>
 
-class Color : public Trackable
+class Color : public rkutil::Trackable
 {
 		
 	public:

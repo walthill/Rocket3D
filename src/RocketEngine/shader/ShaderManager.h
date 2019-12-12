@@ -26,7 +26,7 @@
 
 class RK_Shader;
 
-class ShaderManager : public Trackable
+class ShaderManager : public rkutil::Trackable
 {
 	public:
 		/***
