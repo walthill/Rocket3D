@@ -9,7 +9,7 @@ TransformComponent::~TransformComponent()
 {
 }
 
-inline void TransformComponent::setPosition(Vector3 pos)
+inline void TransformComponent::setPosition(rkm::Vector3 pos)
 {
 	mTransformData.position = pos;
 	mDataChanged = true;
@@ -24,13 +24,13 @@ void TransformComponent::setData(const TransformData & data)
 	mDataChanged = true;
 }
 
-inline void TransformComponent::setScale(Vector3 scale)
+inline void TransformComponent::setScale(rkm::Vector3 scale)
 {
 	mTransformData.scale = scale;
 	mDataChanged = true;
 }
 
-void TransformComponent::setRotation(Vector3 rotationAxis, float angle)
+void TransformComponent::setRotation(rkm::Vector3 rotationAxis, float angle)
 {
 	mTransformData.rotation.angle = angle;
 	mTransformData.rotation.rotationAxis = rotationAxis;

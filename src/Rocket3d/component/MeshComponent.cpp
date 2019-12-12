@@ -29,13 +29,13 @@ Model* MeshComponent::getMesh()
 	return mMeshData.mesh;
 }
 
-void MeshComponent::process(Vector3 position, Vector3 scale, Vector3 rotatonAxis, float rotationAngle)
+void MeshComponent::process(rkm::Vector3 position, rkm::Vector3 scale, rkm::Vector3 rotatonAxis, float rotationAngle)
 {
- 	modelMatrixValues = Mat4::identity;
+ 	modelMatrixValues = rkm::Mat4::identity;
 
-	modelMatrixValues = Mat4::translate(modelMatrixValues, position);
-	modelMatrixValues = Mat4::rotate(modelMatrixValues, rotationAngle, rotatonAxis);
-	modelMatrixValues = Mat4::scale(modelMatrixValues, scale);
+	modelMatrixValues = rkm::Mat4::translate(modelMatrixValues, position);
+	modelMatrixValues = rkm::Mat4::rotate(modelMatrixValues, rotationAngle, rotatonAxis);
+	modelMatrixValues = rkm::Mat4::scale(modelMatrixValues, scale);
 }
 
 void MeshComponent::render(ShaderManager* shaderMan)

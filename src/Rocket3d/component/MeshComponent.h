@@ -20,7 +20,7 @@
 #ifndef MESH_COMP_H
 #define MESH_COMP_H
 
-#include <RocketMath/MathUtils.h>
+#include <rkm/MathUtils.h>
 #include "Component.h"
 #include "../../RocketEngine/shader/ShaderManager.h"
 
@@ -121,8 +121,8 @@ class MeshComponent : public Component
 		 * @param rotationAxis		The rotational axis of the model
 		 * @param rotationAngle		The rotation angle of the model
 		 *************************************************************************/
-		void process(Vector3 position = Vector3::zero, Vector3 scale = Vector3::one,
-					 Vector3 rotatonAxis = Vector3::one, float rotationAngle = 0);
+		void process(rkm::Vector3 position = rkm::Vector3::zero, rkm::Vector3 scale = rkm::Vector3::one,
+					 rkm::Vector3 rotatonAxis = rkm::Vector3::one, float rotationAngle = 0);
 		
 		/**********************************************************************//**
 		 * Render model
@@ -133,7 +133,7 @@ class MeshComponent : public Component
 		
 	private: 
 		const std::string MATRIX_NAME = "model";
-		Mat4 modelMatrixValues = Mat4::identity;
+		rkm::Mat4 modelMatrixValues = rkm::Mat4::identity;
 		MeshComponentData mMeshData;
 };
 

@@ -16,7 +16,7 @@ MouseDownMessage::~MouseDownMessage()
 {
 }
 
-void MouseDownMessage::process()
+void MouseDownMessage::process(float deltaTime)
 {
 	GameApp* pGame = GameApp::getInstance();
 

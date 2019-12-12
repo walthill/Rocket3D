@@ -91,11 +91,11 @@ ComponentId ComponentManager::allocateTransformComponent(const TransformData & d
 {
 	ComponentId newID = INVALID_COMPONENT_ID;
 
-	Byte* ptr = mTransformPool.allocateObject();
+	rkutil::Byte* ptr = mTransformPool.allocateObject();
 	if (ptr != nullptr)
 	{
 		newID = msNextTransformComponentId;
-		TransformComponent* pComponent = new (ptr)TransformComponent(newID);
+		TransformComponent* pComponent = ::new (ptr)TransformComponent(newID); //placement new https://stackoverflow.com/questions/19831298/operator-new-function-does-not-take-2-arguments
 		pComponent->setData(data);
 		mTransformComponentMap[newID] = pComponent;
 		msNextTransformComponentId++;//increment id
@@ -114,7 +114,7 @@ void ComponentManager::deallocateTransformComponent(const ComponentId & id)
 		mTransformComponentMap.erase(it);
 
 		ptr->~TransformComponent();
-		mTransformPool.freeObject((Byte*)ptr);
+		mTransformPool.freeObject((rkutil::Byte*)ptr);
 	}
 }
 
@@ -141,12 +141,12 @@ MeshComponent * ComponentManager::getMeshComponent(const ComponentId & id)
 ComponentId ComponentManager::allocateMeshComponent(const ComponentId & meshId, const MeshComponentData & data)
 {
 	ComponentId newID = INVALID_COMPONENT_ID;
-	Byte* ptr = mMeshPool.allocateObject();
+	rkutil::Byte* ptr = mMeshPool.allocateObject();
 
 	if (ptr != nullptr)
 	{
 		newID = msNextMeshComponentId;
-		MeshComponent* pComponent = new (ptr)MeshComponent(newID);
+		MeshComponent* pComponent = ::new (ptr)MeshComponent(newID);
 		pComponent->setData(data);
 		pComponent->load();			//load model mesh
 		mMeshComponentMap[newID] = pComponent;
@@ -166,7 +166,7 @@ void ComponentManager::deallocateMeshComponent(const ComponentId & id)
 		mMeshComponentMap.erase(it);
 
 		ptr->~MeshComponent();
-		mMeshPool.freeObject((Byte*)ptr);
+		mMeshPool.freeObject((rkutil::Byte*)ptr);
 	}
 }
 
@@ -194,12 +194,12 @@ DirectionalLightComponent* ComponentManager::getDirectionalLightComponent(const 
 ComponentId ComponentManager::allocateDirectionalLightComponent(const ComponentId& meshId, const DirectionalLightData& data)
 {
 	ComponentId newID = INVALID_COMPONENT_ID;
-	Byte* ptr = mDirectionalLightPool.allocateObject();
+	rkutil::Byte* ptr = mDirectionalLightPool.allocateObject();
 
 	if (ptr != nullptr)
 	{
 		newID = msNextDirectionalLightComponentId;
-		DirectionalLightComponent* pComponent = new (ptr)DirectionalLightComponent(newID);
+		DirectionalLightComponent* pComponent = ::new (ptr)DirectionalLightComponent(newID);
 		pComponent->setData(data);
 		mDirectionalLightComponentMap[newID] = pComponent;
 		msNextDirectionalLightComponentId++;//increment id
@@ -218,7 +218,7 @@ void ComponentManager::deallocateDirectionalLightComponent(const ComponentId& id
 		mDirectionalLightComponentMap.erase(it);
 
 		ptr->~DirectionalLightComponent();
-		mDirectionalLightPool.freeObject((Byte*)ptr);
+		mDirectionalLightPool.freeObject((rkutil::Byte*)ptr);
 	}
 }
 
@@ -244,12 +244,12 @@ PointLightComponent* ComponentManager::getPointLightComponent(const ComponentId&
 ComponentId ComponentManager::allocatePointLightComponent(const ComponentId& meshId, const PointLightData& data)
 {
 	ComponentId newID = INVALID_COMPONENT_ID;
-	Byte* ptr = mPointLightPool.allocateObject();
+	rkutil::Byte* ptr = mPointLightPool.allocateObject();
 
 	if (ptr != nullptr)
 	{
 		newID = msNextPointLightComponentId;
-		PointLightComponent* pComponent = new (ptr)PointLightComponent(newID);
+		PointLightComponent* pComponent = ::new (ptr)PointLightComponent(newID);
 		pComponent->setData(data);
 		mPointLightComponentMap[newID] = pComponent;
 		pComponent->setUniformIndex(mPointLightComponentMap.size() - 1);
@@ -269,7 +269,7 @@ void ComponentManager::deallocatePointLightComponent(const ComponentId& id)
 		mPointLightComponentMap.erase(it);
 
 		ptr->~PointLightComponent();
-		mPointLightPool.freeObject((Byte*)ptr);
+		mPointLightPool.freeObject((rkutil::Byte*)ptr);
 	}
 }
 
@@ -295,12 +295,12 @@ SpotLightComponent* ComponentManager::getSpotlightComponent(const ComponentId& i
 ComponentId ComponentManager::allocateSpotlightComponent(const ComponentId& meshId, const SpotLightData& data)
 {
 	ComponentId newID = INVALID_COMPONENT_ID;
-	Byte* ptr = mSpotlightPool.allocateObject();
+	rkutil::Byte* ptr = mSpotlightPool.allocateObject();
 
 	if (ptr != nullptr)
 	{
 		newID = msNextSpotlightComponentId;
-		SpotLightComponent* pComponent = new (ptr)SpotLightComponent(newID);
+		SpotLightComponent* pComponent = ::new (ptr)SpotLightComponent(newID);
 		pComponent->setData(data);
 		mSpotlightComponentMap[newID] = pComponent;
 		msNextSpotlightComponentId++;//increment id
@@ -319,7 +319,7 @@ void ComponentManager::deallocateSpotlightComponent(const ComponentId& id)
 		mSpotlightComponentMap.erase(it);
 
 		ptr->~SpotLightComponent();
-		mSpotlightPool.freeObject((Byte*)ptr);
+		mSpotlightPool.freeObject((rkutil::Byte*)ptr);
 	}
 }
 

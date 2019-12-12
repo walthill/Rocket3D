@@ -50,7 +50,7 @@ bool GameApp::initialize(char* argv[])
 	//		Creating GameObjects
 	//=========================================================================
 
-	TransformData t = { Vector3(0, -1, -3), Vector3::one * 0.5f, Vector3::up, 45.0f };
+	TransformData t = { rkm::Vector3(0, -1, -3), rkm::Vector3::one * 0.5f, rkm::Vector3::up, 45.0f };
 	
 	MeshComponentData meshData = {"cube", STANDARD_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY)};
 	
@@ -59,23 +59,23 @@ bool GameApp::initialize(char* argv[])
 	GameObject* o =	mpGameObjectManager->createGameObject(t, meshData);// , matData);
 
 
-	TransformData t2 = { Vector3(1.5f,  -1.5f, -2.5f), Vector3::one * 0.1f, Vector3::up, 0 };
+	TransformData t2 = { rkm::Vector3(1.5f,  -1.5f, -2.5f), rkm::Vector3::one * 0.1f, rkm::Vector3::up, 0 };
 
 	MeshComponentData lightMeshData = { "cube", EMITTER_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(EMITTER_SHADER_KEY) };
 	
 	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f;
 
 	//TODO: have these values stored as Color objects
-	Vector3	ambient = Vector3(0.075f, 0.075f, 0.075f),
-			diffuse = Vector3(0.8f, 0.8f, 0.8f),
-			specular = Vector3(0.5f, 0.5f, 0.5f);
-	Vector3* pointLightPositions;
+	rkm::Vector3	ambient = rkm::Vector3(0.075f, 0.075f, 0.075f),
+			diffuse = rkm::Vector3(0.8f, 0.8f, 0.8f),
+			specular = rkm::Vector3(0.5f, 0.5f, 0.5f);
+	rkm::Vector3* pointLightPositions;
 	
-	pointLightPositions = new Vector3[4]{
-		Vector3(0.7f,  0.2f,  2.0f),
-		Vector3(2.3f, -3.3f, -4.0f),
-		Vector3(-4.0f,  2.0f, -12.0f),
-		Vector3(0.0f,  -1.0f, -1.0f)
+	pointLightPositions = new rkm::Vector3[4]{
+		rkm::Vector3(0.7f,  0.2f,  2.0f),
+		rkm::Vector3(2.3f, -3.3f, -4.0f),
+		rkm::Vector3(-4.0f,  2.0f, -12.0f),
+		rkm::Vector3(0.0f,  -1.0f, -1.0f)
 	};
 
 	BaseLightData baseLightData = { ambient, diffuse, specular };
@@ -90,15 +90,15 @@ bool GameApp::initialize(char* argv[])
 
 	DirectionalLightData dirData;
 	dirData.mBaseLightData = baseLightData;
-	dirData.mDirection = Vector3(-0.2f, -1.0f, -0.3f);
+	dirData.mDirection = rkm::Vector3(-0.2f, -1.0f, -0.3f);
 
 	SpotLightData spotData;
-	spotData.mBaseLightData = { Vector3::zero, Vector3::one, Vector3::one };
+	spotData.mBaseLightData = { rkm::Vector3::zero, rkm::Vector3::one, rkm::Vector3::one };
 	spotData.mConstant = constant;
 	spotData.mLinear = linear;
 	spotData.mQuadratic = quadratic;
-	spotData.mCutoff = cos(RK_Math::degToRad(12.5f));
-	spotData.mOuterCutoff = cos(RK_Math::degToRad(17.5f));
+	spotData.mCutoff = cos(rkm::degToRad(12.5f));
+	spotData.mOuterCutoff = cos(rkm::degToRad(17.5f));
 	spotData.mpCamHandle = mpRocketEngine->getCamera();
 
 	//Point lights
@@ -173,14 +173,14 @@ bool GameApp::processLoop()
 		//RK_INFO_C("FPS: " + std::to_string(mFPS));
 	}
 
-	delete pPerformanceTracker;
+	//delete pPerformanceTracker;
 	
 	return false;
 }
   
 void GameApp::update()
 {
-	mpGameMessageManager->processMessagesForThisFrame();
+	mpGameMessageManager->processMessagesForThisFrame(mpRocketEngine->deltaTime);
 	mpRocketEngine->update(); 
 	mpComponentManager->update(mpRocketEngine->deltaTime);
 	mpGameObjectManager->updateAll(mpRocketEngine->deltaTime);

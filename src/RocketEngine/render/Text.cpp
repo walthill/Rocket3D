@@ -69,8 +69,8 @@ void Text::init(std::string fontName, RK_Shader *shader)
 		// Now store character for later use
 		Character character = {
 			texture,
-			Vector2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-			Vector2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+			rkm::Vector2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+			rkm::Vector2(face->glyph->bitmap_left, face->glyph->bitmap_top),
 			(uint32)face->glyph->advance.x
 		};
 		characters.insert(std::pair<GLchar, Character>(c, character));
@@ -159,7 +159,7 @@ void Text::renderText(TextData data)
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
 		float x = (ch.advance >> 6) * data.scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
-		data.position = Vector2(data.position.getX() + x, data.position.getY());
+		data.position = rkm::Vector2(data.position.getX() + x, data.position.getY());
 	}
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);

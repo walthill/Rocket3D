@@ -2,7 +2,7 @@
 #define COLOR_H
 
 #include <rkutil/Trackable.h>
-#include <RocketMath/Vector4.h>
+#include <rkm/Vector4.h>
 
 class Color : public rkutil::Trackable
 {
@@ -13,8 +13,8 @@ class Color : public rkutil::Trackable
 
 		~Color();
 
-		void setColor(Vector3 rgb, float a = 255);
-		void setColor(Vector4 color);
+		void setColor(rkm::Vector3 rgb, float a = 255);
+		void setColor(rkm::Vector4 color);
 		void setColor(float setAllRGB);
 		void setColor(float r, float g, float b, float a = 255);
 
@@ -25,7 +25,7 @@ class Color : public rkutil::Trackable
 		float getAlphaValue();
 
 	private:
-		Vector4 mColorValue;
+		rkm::Vector4 mColorValue;
 
 };
 

@@ -27,7 +27,7 @@ class MouseDownMessage : public GameMessage {
 		/*
 			* Convert player input into an action based on the given key code.
 		*/
-		void process();
+		void process(float deltaTime);
 
 	private:
 		int mMouseCode;

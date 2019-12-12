@@ -2,13 +2,13 @@
 
 Color::Color()
 {
-	mColorValue = Vector4(0,0,0,255);
+	mColorValue = rkm::Vector4(0,0,0,255);
 }
 
 
 Color::Color(float r, float g, float b, float a)
 {
-	mColorValue = Vector4(r, g, b, a);
+	mColorValue = rkm::Vector4(r, g, b, a);
 }
 
 
@@ -16,12 +16,12 @@ Color::~Color()
 {
 }
 
-void Color::setColor(Vector3 rgb, float a)
+void Color::setColor(rkm::Vector3 rgb, float a)
 {
-	mColorValue = Vector4(rgb, a);
+	mColorValue = rkm::Vector4(rgb, a);
 }
 
-void Color::setColor(Vector4 color)
+void Color::setColor(rkm::Vector4 color)
 {
 	mColorValue = color;
 }
@@ -29,13 +29,13 @@ void Color::setColor(Vector4 color)
 
 void Color::setColor(float r, float g, float b, float a)
 {
-	mColorValue = Vector4(r, g, b, a);
+	mColorValue = rkm::Vector4(r, g, b, a);
 }
 
 
 void Color::setColor(float setRGB)
 {
-	mColorValue = Vector4(setRGB, setRGB, setRGB, setRGB);
+	mColorValue = rkm::Vector4(setRGB, setRGB, setRGB, setRGB);
 }
 
 

@@ -66,7 +66,7 @@ class GameMessage
 
 	private:
 		//This function must be overwritten by every child class
-		virtual void process() PURE_VIRTUAL;
+		virtual void process(float deltaTime) PURE_VIRTUAL;
 
 };
 

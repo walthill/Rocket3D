@@ -83,10 +83,10 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>freetyped.lib;assimp-vc141-mtd.lib;RocketEngine.lib;RocketUtilDebug.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetyped.lib;assimp-vc141-mtd.lib;RocketEngine.lib;RocketUtilDebug.lib;RocketMathDebug.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)-$(Platform)\RocketUtil\;$(SolutionDir)bin\$(Configuration)-$(Platform)\RocketEngine\;Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)-$(Platform)\RocketUtil\;$(SolutionDir)bin\$(Configuration)-$(Platform)\VectorMath\;$(SolutionDir)bin\$(Configuration)-$(Platform)\RocketEngine\;Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(SolutionDir)..\..\external\lib\assimp-vc141-mtd.dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\assimp-vc141-mtd.dll"

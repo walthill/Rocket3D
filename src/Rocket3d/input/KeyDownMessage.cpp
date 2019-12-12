@@ -31,7 +31,7 @@ KeyDownMessage::~KeyDownMessage()
 {
 }
 
-void KeyDownMessage::process()
+void KeyDownMessage::process(float deltaTime)
 {
 	GameApp* pGame = GameApp::getInstance();
 

@@ -47,7 +47,7 @@ void GameMessageManager::addMessage(GameMessage* pMessage, int delay)
 
 }
 
-void GameMessageManager::processMessagesForThisFrame()
+void GameMessageManager::processMessagesForThisFrame(float deltaTime)
 {
 	double currentTime = GameApp::getInstance()->getCurrentTime();
 
@@ -59,7 +59,7 @@ void GameMessageManager::processMessagesForThisFrame()
 	{
 		if ((*iter)->getScheduledTime() <= currentTime)
 		{
-			(*iter)->process();
+			(*iter)->process(deltaTime);
 			delete (*iter);
 			iter = mMessages.erase(iter);
 		}

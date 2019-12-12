@@ -19,8 +19,8 @@
 #ifndef R3_SHADER_MAN_H
 #define R3_SHADER_MAN_H
 
-#include <RocketMath/Vector3.h>
-#include <RocketMath/Mat4.h>
+#include <rkm/Vector3.h>
+#include <rkm/Mat4.h>
 #include "../util/EngineUtils.h"
 #include <map>
 #include "RK_Shader.h"
@@ -73,9 +73,9 @@ class ShaderManager : public rkutil::Trackable
 		void setShaderInt(std::string intName, int value);
 		void setShaderBool(std::string boolName, bool value);
 		void setShaderFloat(std::string floatName, float value);
-		void setShaderMat4(std::string matrixName, const Mat4 &mat);
+		void setShaderMat4(std::string matrixName, const rkm::Mat4 &mat);
 		void setShaderVec3(std::string vecName, float x, float y, float z); //Use three float values
-		void setShaderVec3(std::string vecName, const Vector3 &vec); //use Vector object in param
+		void setShaderVec3(std::string vecName, const rkm::Vector3 &vec); //use Vector object in param
 
 		/***
 			* Access currently used shader

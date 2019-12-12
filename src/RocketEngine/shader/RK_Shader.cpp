@@ -160,13 +160,13 @@ void RK_Shader::setFloat(const std::string& name, const float& value) const
 	glUniform1f(location, value);
 }
 
-void RK_Shader::setMat4(const std::string& name, const Mat4& mat) const
+void RK_Shader::setMat4(const std::string& name, const rkm::Mat4& mat) const
 {
 	rk_uniformLocation location = getUniformLocation(name);
 	glUniformMatrix4fv(location, 1, GL_TRUE, mat.getMatrixValues());
 }
 
-void RK_Shader::setVec3(const std::string& name, const Vector3& value)
+void RK_Shader::setVec3(const std::string& name, const rkm::Vector3& value)
 {
 	rk_uniformLocation location = getUniformLocation(name);
 	glUniform3fv(location, 1, value.toArray());

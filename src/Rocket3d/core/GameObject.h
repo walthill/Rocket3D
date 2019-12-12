@@ -21,7 +21,7 @@
 #ifndef GAME_OBJ_H
 #define GAME_OBJ_H
 
-#include <RocketMath/Vector3.h>
+#include <rkm/Vector3.h>
 #include "../component/Component.h"
 
 class MaterialComponent;
@@ -37,7 +37,7 @@ class TransformComponent;
  * This class contains a GameObject's component identifiers and controls the
  * processing of transform data.
  ******************************************************************************/
-class GameObject : public Trackable
+class GameObject : public rkutil::Trackable
 {
 	public:
 		///Default constructor
