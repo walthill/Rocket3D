@@ -23,8 +23,11 @@
 #include <RocketMath/Mat4.h>
 #include "../util/EngineUtils.h"
 #include <map>
+#include "RK_Shader.h"
 
-class RK_Shader;
+const ShaderKey STANDARD_SHADER_KEY = "standardLightingShader";
+const ShaderKey EMITTER_SHADER_KEY = "emitter";
+
 
 class ShaderManager : public rkutil::Trackable
 {

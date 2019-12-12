@@ -23,6 +23,12 @@
 #include <glfw3.h>
 #include "../logging/RK_Log.h"
 
+void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+void framebufferSizeCallback(GLFWwindow* window, int width, int height) //TODO: move to callback class - move to input?
+{
+	glViewport(0, 0, width, height);
+}
+
 Window::Window()
 {
 }
@@ -36,7 +42,7 @@ void Window::clean()
 {
 }
 
-bool Window::initialize(int width, int height, const char* windowName)
+bool Window::initialize(int width, int height, const char* windowName, int settingsFlags, bool showCursor)
 {
 	w = width; 
 	h = height;
@@ -62,8 +68,23 @@ bool Window::initialize(int width, int height, const char* windowName)
 	}
 
 	setViewport(0, 0, w, h);
+	enableOpenGLWindowFlags(settingsFlags);
+	setCursor(showCursor);
+	glfwSetFramebufferSizeCallback(mWindow, framebufferSizeCallback);
 
 	return true;
+}
+
+void Window::enableOpenGLWindowFlags(int settingsToEnable)
+{
+	if(settingsToEnable & AA_MULTISAMPLE)
+		glEnable(GL_MULTISAMPLE);
+	if (settingsToEnable & DEPTH_TEST)
+		glEnable(GL_DEPTH_TEST);
+	if (settingsToEnable & CULL_FACE)
+		glEnable(GL_CULL_FACE);
+	if (settingsToEnable & BLEND)
+		glEnable(GL_BLEND);
 }
 
 void Window::clearWindowBuffers(int buffersToClear)
@@ -123,6 +144,22 @@ void Window::setWindowDrawMode(WindowDrawFace faceToDraw, WindowDrawMode drawMod
 		else if (drawMode == VERTICES)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 	}
+}
+
+void Window::setCursor(bool shouldAppear)
+{
+	if(shouldAppear)
+		glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	else
+		glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void Window::toggleWireframe(bool showWireframe)
+{
+	if (showWireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void Window::setWindowToCurrent()

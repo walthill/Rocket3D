@@ -133,18 +133,38 @@ IF not exist log ( mkdir log &amp;&amp; type nul &gt; log/applog.txt &amp;&amp; 
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="component\Component.cpp" />
+    <ClCompile Include="component\ComponentManager.cpp" />
+    <ClCompile Include="component\LightComponent.cpp" />
+    <ClCompile Include="component\MaterialComponent.cpp" />
+    <ClCompile Include="component\MeshComponent.cpp" />
+    <ClCompile Include="component\TransformComponent.cpp" />
     <ClCompile Include="core\GameApp.cpp" />
+    <ClCompile Include="core\GameObject.cpp" />
+    <ClCompile Include="core\GameObjectManager.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="input\GameMessage.cpp" />
     <ClCompile Include="input\GameMessageManager.cpp" />
     <ClCompile Include="input\KeyDownMessage.cpp" />
+    <ClCompile Include="input\MouseDownMessage.cpp" />
+    <ClCompile Include="input\MouseMoveMessage.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="component\Component.h" />
+    <ClInclude Include="component\ComponentManager.h" />
+    <ClInclude Include="component\MaterialComponent.h" />
+    <ClInclude Include="component\MeshComponent.h" />
+    <ClInclude Include="component\LightComponent.h" />
+    <ClInclude Include="component\TransformComponent.h" />
     <ClInclude Include="core\GameApp.h" />
+    <ClInclude Include="core\GameObject.h" />
+    <ClInclude Include="core\GameObjectManager.h" />
     <ClInclude Include="input\GameMessage.h" />
     <ClInclude Include="input\GameMessageManager.h" />
     <ClInclude Include="input\KeyDownMessage.h" />
+    <ClInclude Include="input\MouseDownMessage.h" />
+    <ClInclude Include="input\MouseMoveMessage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

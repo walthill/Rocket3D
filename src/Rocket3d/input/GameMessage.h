@@ -29,7 +29,9 @@
 enum GameMessageType
 {
 	INVALID_MESSAGE_TYPE = -1,
-	BUTTON_DOWN = 0
+	BUTTON_DOWN = 0,
+	MOUSE_DOWN,
+	NUM_MSG_TYPES
 };
 
 class GameMessage

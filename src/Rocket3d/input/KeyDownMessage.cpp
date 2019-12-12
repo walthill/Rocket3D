@@ -27,11 +27,9 @@ KeyDownMessage::KeyDownMessage(const int& key)
 {
 }
 
-
 KeyDownMessage::~KeyDownMessage()
 {
 }
-
 
 void KeyDownMessage::process()
 {

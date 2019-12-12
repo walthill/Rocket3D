@@ -24,7 +24,11 @@
 
 #ifndef R_IMG_LOAD_H
 #define R_IMG_LOAD_H
-#define STB_IMAGE_IMPLEMENTATION
+
+/* 
+	Moved the STB_IMAGE #defines out of this header file and into 
+	EngineCore.h due to double definition linker error. 
+*/
 #include <stb_image.h>
 
 #endif // !R_IMG_LOAD_H

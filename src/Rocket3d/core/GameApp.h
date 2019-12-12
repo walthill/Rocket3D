@@ -31,6 +31,10 @@
 class EngineCore;
 class GameMessage;
 class GameMessageManager;
+class Timer;
+class GameObject;
+class GameObjectManager;
+class ComponentManager;
 
 class GameApp : public rkutil::Trackable
 {
@@ -96,6 +100,9 @@ class GameApp : public rkutil::Trackable
 		***/
 		inline GameMessageManager* getGameMessageManager() { return mpGameMessageManager; };
 		
+		inline GameObjectManager* getGameObjectManager() { return mpGameObjectManager; }
+		inline ComponentManager* getComponentManager() { return mpComponentManager; }
+
 		/***
 			* Returns a double representing the runtime of the engine since startup.
 		***/
@@ -111,7 +118,11 @@ class GameApp : public rkutil::Trackable
 	private:
 		EngineCore* mpRocketEngine;
 		GameMessageManager* mpGameMessageManager;
+		GameObjectManager* mpGameObjectManager;
+		ComponentManager* mpComponentManager;
 
+		//GameObject* g;
+			
 		//Game state vars
 		static GameApp* mpGameApp;
 		bool mShouldExit;
@@ -125,6 +136,7 @@ class GameApp : public rkutil::Trackable
 		const std::string mLOOP_TRACKER_NAME = "loop";
 		const double m60FPS_FRAME_TIME = 16.7;
 		const double m30FPS_FRAME_TIME = 33.3;
+		const int MAX_NUM_OBJECTS = 10;
 
 		GameApp() {}; //Empty constuctor
 		~GameApp();

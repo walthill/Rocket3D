@@ -18,20 +18,20 @@
 #ifndef ENGINE_CORE_H
 #define ENGINE_CORE_H
 
+//See RocketImgLoader.h
+#ifndef STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
+#endif
+
 #include "../util/EngineUtils.h"
 
 class Vector3;
 class Camera;
 class Window;
 class InputSystem;
-class ShaderBuild;
-class Lighting;
-class DirectionalLight;
-class PointLight;
-class SpotLight;
+//class ShaderBuild;
 class ShaderManager;
 class RK_Shader;
-class Model;
 class Text;
 
 /***************************************************************************//**
@@ -74,6 +74,9 @@ class EngineCore : public rkutil::Trackable
 		***/
 		void update();
 		
+		void processViewProjectionMatrices();
+
+
 		/***
 			* Draw models and lighting data to the window
 		***/
@@ -108,23 +111,27 @@ class EngineCore : public rkutil::Trackable
 		/***
 			* Callback for resizing the window
 		***/
-		void rk_scroll_callback(double xoffset, double yoffset);
+	//	void rk_scroll_callback(double xoffset, double yoffset);
+
+		//void rk_mouse_click_callback(int button, int action, int modifier);
+
 
 		/***
 			* Callback for mouse movement
 		***/
-		void rk_mouse_callback(double xpos, double ypos);
+		//void rk_mouse_move_callback(double xpos, double ypos);
 
-		///Time between current frame and last frame
-		float deltaTime = 0.0f; 
-		//doxygen in-line comment example///< Time between current frame and last frame	
+		ShaderManager* getShaderManager() { return mpShaderManager; };
+		Camera* getCamera() { return mpCam; }
+		void swapBuffers();
+
+		// Time between current frame and last frame
+		float deltaTime = 0.0f;	
 
 	private:
 		const std::string mMODEL_PATH = "../../assets/models/";
 		uint32 VAO, VBO;
 		int mWindowWidth, mWindowHeight;
-		bool firstMouse = true;
-		double lastX = 400, lastY = 300; //last mouse offset, half of width & height
 		float lastFrame = 0.0f; // Time of last frame
 		
 		Window *mpWindow;
@@ -133,17 +140,11 @@ class EngineCore : public rkutil::Trackable
 
 		//ShaderBuild* mpLiveload;
 		ShaderManager* mpShaderManager;
-		Lighting* mpLighting;
 		
+		ShaderKey standardLightingShaderId = "standardLightingShader", emitterShaderId = "emitter";
 		Text* textObj;
 		Text* textObj2;
-
-		Vector3 *pointLightPositions;
-		ShaderKey lightingShaderId = "lightingShader", emitterShaderId = "emmiter";
 		ShaderKey textShaderId = "textShader";
-
-		Model* mpModel;
-		std::vector<Model*> mLamps;
 
 		/***
 			* Helper function that initializes the lighting system
