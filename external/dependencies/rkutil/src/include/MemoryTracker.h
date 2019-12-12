@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <unordered_map>
+#include "UtilDefines.h"
 
 namespace rkutil {
 
@@ -19,7 +20,7 @@ namespace rkutil {
 			struct AllocRecord 
 			{
 				int mRecordNum;
-				unsigned int mByteSize;
+				uint32 mByteSize;
 			
 				AllocRecord(int recordNum, unsigned int size)
 				{ 
@@ -28,7 +29,7 @@ namespace rkutil {
 				}
 			};
 
-			static unsigned int sNumAllocs;
+			static uint32 sNumAllocs;
 			static MemoryTracker* mpMemoryTracker;
 			std::unordered_map<void*, AllocRecord> mAllocRecordMap;
 

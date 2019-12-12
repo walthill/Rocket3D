@@ -6,11 +6,11 @@
 #include <chrono>
 #include <thread>
 
-typedef long long int64;
-typedef unsigned long long uint64;
-
 namespace rkutil 
 {
+	typedef long long int64;
+	typedef unsigned long long uint64;
+
 	class Timer 
 	{
 		public:
