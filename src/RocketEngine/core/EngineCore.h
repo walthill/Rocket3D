@@ -81,6 +81,11 @@ class EngineCore : public rkutil::Trackable
 		void render();
 
 		/***
+			* Draw ui elements to the window. Should be called last before SwapBuffer()
+		***/
+		void renderText();
+
+		/***
 			* Moves player left
 		***/
 		void moveCameraLeft();

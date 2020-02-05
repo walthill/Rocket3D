@@ -151,6 +151,10 @@ void EngineCore::render()
 	mpWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
 	mpWindow->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
 	processViewProjectionMatrices();
+}
+
+void EngineCore::renderText()
+{
 	textObj->renderText();
 	textObj2->renderText();
 }
