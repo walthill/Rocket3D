@@ -19,13 +19,25 @@
 
 #include "core/GameApp.h"
 #include "../RocketEngine/logging/RK_Log.h"
+#include "core/Application.h"
 
 int main(int argc, char* argv[])
-{
+{	
 	RK_LOGGER_INIT();
 	RK_CORE_INFO_ALL("Rocket Logger initialized");
 
-	GameApp::initInstance();
+	Application *client = new Application();
+	client->run();
+	delete client;
+
+	//TODO(low): output to logger
+	RK_INFO_C("Client leaks: ");
+	rkutil::MemoryTracker::getInstance()->reportAllocs(std::cout);
+
+	RK_LOGGER_CLEAN();
+	system("pause");
+
+	/*	GameApp::initInstance();
 
 	if (!GameApp::getInstance()->initialize(argv))
 	{
@@ -44,7 +56,7 @@ int main(int argc, char* argv[])
 		system("pause");
 
 		return 1;
-	}
+	}*/
 
 	return 0;
 }

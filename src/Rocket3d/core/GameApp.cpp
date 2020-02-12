@@ -32,7 +32,7 @@ GameApp::~GameApp()
 	clean();
 }
 
-bool GameApp::initialize(char* argv[])
+bool GameApp::initialize()
 {
 	rkutil::PerformanceTracker* pPerformanceTracker = new rkutil::PerformanceTracker();
 	pPerformanceTracker->startTracking(mINIT_TRACKER_NAME);

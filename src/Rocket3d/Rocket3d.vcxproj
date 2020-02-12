@@ -139,6 +139,7 @@ IF not exist log ( mkdir log &amp;&amp; type nul &gt; log/applog.txt &amp;&amp; 
     <ClCompile Include="component\MaterialComponent.cpp" />
     <ClCompile Include="component\MeshComponent.cpp" />
     <ClCompile Include="component\TransformComponent.cpp" />
+    <ClCompile Include="core\Application.cpp" />
     <ClCompile Include="core\GameApp.cpp" />
     <ClCompile Include="core\GameObject.cpp" />
     <ClCompile Include="core\GameObjectManager.cpp" />
@@ -157,6 +158,7 @@ IF not exist log ( mkdir log &amp;&amp; type nul &gt; log/applog.txt &amp;&amp; 
     <ClInclude Include="component\MeshComponent.h" />
     <ClInclude Include="component\LightComponent.h" />
     <ClInclude Include="component\TransformComponent.h" />
+    <ClInclude Include="core\Application.h" />
     <ClInclude Include="core\GameApp.h" />
     <ClInclude Include="core\GameObject.h" />
     <ClInclude Include="core\GameObjectManager.h" />

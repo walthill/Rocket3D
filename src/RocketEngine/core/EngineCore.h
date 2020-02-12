@@ -12,6 +12,7 @@
 	=========================
 			 EngineCore.h
 	=========================
+	This is the header for the Rocket Engine renderer
 
 ********/
 
@@ -146,6 +147,8 @@ class EngineCore : public rkutil::Trackable
 			* Helper function that initializes the lighting system
 		***/
 		void initLighting();
+
+		bool initWindow();
 
 		/***
 			* Calculate real time between frames

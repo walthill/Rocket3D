@@ -74,7 +74,7 @@ class GameApp : public rkutil::Trackable
 			* Instatiate engine, logging, timing, & game variables
 			* Returns true on successful initialization, false on failure
 		***/
-		bool initialize(char * argv[]);
+		bool initialize();
 		
 		/***
 			* Destruction & garbage collection of engine, logging, timing, & game variables

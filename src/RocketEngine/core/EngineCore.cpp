@@ -71,17 +71,25 @@ void EngineCore::initLighting()
 	mpShaderManager->setShaderFloat("material.shininess", 32.0f);
 } 
 
+bool EngineCore::initWindow()
+{
+	mpWindow = new Window();
+
+	//Init window size, name, features, and cursor 
+	if (!mpWindow->initialize(mWindowWidth, mWindowHeight, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE, false))
+		return false;
+
+	return true;
+}
+
 bool EngineCore::initialize(int width, int height)
 {
 	mWindowWidth = width;
 	mWindowHeight = height;
 
 	initGLFW();
-
-	mpWindow = new Window();
 	
-	//Init window size, name, features, and cursor 
-	if(!mpWindow->initialize(width, height, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE, false))
+	if (!initWindow())
 		return false;
 
 	mpCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
