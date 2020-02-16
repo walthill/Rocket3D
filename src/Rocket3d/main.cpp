@@ -31,10 +31,8 @@ int main(int argc, char* argv[])
 	delete client;
 
 	//TODO(low): output to logger
-	RK_INFO_C("Client leaks: ");
-	rkutil::MemoryTracker::getInstance()->reportAllocs(std::cout);
-
 	RK_LOGGER_CLEAN();
+	rkutil::MemoryTracker::getInstance()->reportAllocs(std::cout);
 	system("pause");
 
 	/*	GameApp::initInstance();

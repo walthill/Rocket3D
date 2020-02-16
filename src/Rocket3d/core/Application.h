@@ -14,10 +14,10 @@ class GameLayer : public Layer
 			:Layer("Game")
 		{
 			GameApp::initInstance();
-
+			
 			if (!GameApp::getInstance()->initialize())
 			{
-				RK_CORE_FATAL_ALL("ERROR: DISPLAY CREATION FAILED.");
+				RK_CORE_FATAL_ALL("ERROR: RENDERER CREATION FAILED.");
 				return;
 			}			
 		}
@@ -26,7 +26,7 @@ class GameLayer : public Layer
 		{
 			GameApp::getInstance()->cleanInstance();
 
-			RK_INFO_C("Game layer leaks:");
+			RK_LOG_C("Game Layer Leaks below");
 			//TODO(low): output to logger
 			rkutil::MemoryTracker::getInstance()->reportAllocs(std::cout);
 		}
@@ -54,11 +54,6 @@ class Application
 		void addOverlay(Layer* overlay);
 
 		void run();
-
-		//All layer pointers are currently destroyed at end of application
-//		void removeLayer(Layer* layer);
-//		void removeOverlay(Layer* overlay);
-
 
 	private:
 		LayerStack mLayerStack;

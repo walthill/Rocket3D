@@ -11,7 +11,11 @@ class Layer
 
 		virtual void onAttach() {}
 		virtual void onDettach() {}
+		
+		// Returns a bool to allow layers to send result back to the application
+		// Currently, quitting the GameApp layer returns false & quits the app
 		virtual bool onUpdate() { return false; }
+		
 		virtual void onEvent() {}
 
 		inline const std::string getLayerName() { return mLayerName; }
