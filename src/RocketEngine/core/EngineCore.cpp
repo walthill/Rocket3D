@@ -52,7 +52,7 @@ void EngineCore::clean()
 	glfwTerminate();
 }
 
-void EngineCore::initGLFW()
+void EngineCore::initGLFW() //TODO: move into window init
 {
 	glfwInit();
 

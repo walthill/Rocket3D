@@ -10,7 +10,7 @@ class Layer
 		virtual ~Layer();
 
 		virtual void onAttach() {}
-		virtual void onDettach() {}
+		virtual void onDetach() {}
 		
 		// Returns a bool to allow layers to send result back to the application
 		// Currently, quitting the GameApp layer returns false & quits the app
