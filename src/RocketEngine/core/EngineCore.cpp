@@ -47,7 +47,6 @@ void EngineCore::clean()
 	delete mpShaderManager;
 	delete mpInputSystem;
 	delete mpCam;
-	delete mpWindowHandle;
 }
 
 

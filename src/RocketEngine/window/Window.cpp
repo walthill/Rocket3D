@@ -195,7 +195,9 @@ void Window::initGLFW()
 		mShouldInitGLFW = false;
 	}
 	else
+	{
 		RK_CORE_WARN_ALL("Attemping to reinitialize GLFW");
+	}
 }
 
 void Window::destroyGLFW()

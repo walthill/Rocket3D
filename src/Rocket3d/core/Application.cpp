@@ -21,6 +21,7 @@ Application::~Application()
 
 void Application::clean()
 {
+	delete mpAppWindow;
 	Window::destroyGLFW();
 }
 

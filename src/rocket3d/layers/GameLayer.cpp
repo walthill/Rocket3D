@@ -16,10 +16,6 @@ GameLayer::GameLayer()
 GameLayer::~GameLayer()
 {
 	GameApp::getInstance()->cleanInstance();
-
-	RK_LOG_C("Game Layer Leaks below");
-	//TODO(low): output to logger
-	rkutil::MemoryTracker::getInstance()->reportAllocs(std::cout);
 }
 
 bool GameLayer::onUpdate()
