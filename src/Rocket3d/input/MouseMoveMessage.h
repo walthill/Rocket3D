@@ -7,17 +7,17 @@ enum MouseMoveCode {
 	CAM_MOUSE_MOVE = 0
 };
 
-class MouseMoveMessage : public GameMessage {
+class GameMouseMove : public Message {
 	public:
 	/*
 		* The constructor requires an input keycode parameter
 	*/
-	MouseMoveMessage(const int& key, double x = 0, double y = 0);
+	GameMouseMove(const int& key, double x = 0, double y = 0);
 
 	/*
 		* Destructor
 	*/
-	~MouseMoveMessage();
+	~GameMouseMove();
 
 	/*
 		* Convert player input into an action based on the given key code.

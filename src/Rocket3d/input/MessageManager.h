@@ -25,18 +25,18 @@
 
 #include <list>
 
-class AppMessage;
+class Message;
 
-class AppMessageManager
+class MessageManager
 {
 	public:
-		AppMessageManager();
-		~AppMessageManager();
+		MessageManager();
+		~MessageManager();
 
 		/***
 			* The manager will own the message and handle processing & deletion
 		***/
-		void addMessage(AppMessage* pMessage, int delay);
+		void addMessage(Message* pMessage, int delay);
 
 		/***
 			* Execute the logic of the queued messages. Messages are processed
@@ -45,7 +45,7 @@ class AppMessageManager
 		void processMessagesForThisFrame(float deltaTime);
 
 	private:
-		std::list<AppMessage*> mMessages;
+		std::list<Message*> mMessages;
 
 };
 

@@ -17,9 +17,9 @@
 	=========================
 ********/
 
-#include "AppMessage.h"
+#include "Message.h"
 
-Message::Message(MessageType type)
+Message::Message(AppMessageType type)
 	:mType(type)
 	, mSubmittedTime(0)
 	, mScheduledTime(0)

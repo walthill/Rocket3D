@@ -45,7 +45,7 @@ void EngineCore::clean()
 	delete textObj;
 	delete textObj2;
 	delete mpShaderManager;
-	delete mpInputSystem;
+//	delete mpInputSystem;
 	delete mpCam;
 }
 
@@ -68,7 +68,7 @@ bool EngineCore::initialize()
 
 	mpCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
 
-	mpInputSystem = new InputSystem(mpWindowHandle->getWindowHandle());
+//	mpInputSystem = new InputSystem(mpWindowHandle->getWindowHandle());
 	mpShaderManager = new ShaderManager();
 
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
@@ -95,7 +95,7 @@ bool EngineCore::initialize()
 
 void EngineCore::update()
 {
-	mpInputSystem->processInput();
+	//mpInputSystem->processInput();
 	calculateDeltaTime();
 }
 

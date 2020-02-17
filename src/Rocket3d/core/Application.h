@@ -8,11 +8,14 @@
 #include "../../RocketEngine/render/layers/LayerStack.h"
 #include "../../RocketEngine/logging/RK_Log.h"
 #include "../../RocketEngine/input/InputSystem.h"
+#include "../input/MessageManager.h"
 
 //Event system? for layer-unique inputs
 
 class Application : public rkutil::Trackable
 {
+	//TODO: create play button to differentiate between (with bool flag?) inputs to game and to ImGui
+
 	public:
 		#pragma region Static Class Functions
 		/***
@@ -52,17 +55,29 @@ class Application : public rkutil::Trackable
 		void addLayer(Layer* layer);
 		void addOverlay(Layer* overlay);
 
+		void onMessage(float deltaTime);
+
 		bool run();
 
-		Window* getAppWindow(); 
+		void calculateDeltaTime();
 
+		//tracks time since GLFW init
+		inline double getTime() { return mpMasterTimer->getTimeElapsedMs(); };
+		inline Window* getAppWindow() { return mpAppWindow; };
+		inline MessageManager* getMessageManager() { return mpMessageManager;  }
+
+		float mDeltaTime;
 	private:
 		static Application* mpApplication;
 		Application();
 		~Application();
 
+		rkutil::Timer* mpMasterTimer;
+		float mLastFrame;
+
 		Window* mpAppWindow;
 		InputSystem* mpInputSystem;
+		MessageManager* mpMessageManager;
 		LayerStack mLayerStack;
 		bool mIsRunning;
 };

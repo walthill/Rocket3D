@@ -38,7 +38,7 @@ bool GameApp::initialize()
 	pPerformanceTracker->startTracking(mINIT_TRACKER_NAME);
 
 	mpRocketEngine = new EngineCore();
-	mpGameMessageManager = new GameMessageManager();
+//	mpGameMessageManager = new GameMessageManager();
 	mpMasterTimer = new rkutil::Timer();
 
 	if (!mpRocketEngine->initialize())
@@ -142,7 +142,7 @@ void GameApp::clean()
 	delete mpPerformanceTracker;
 	delete mpFrameTimer;
 	delete mpMasterTimer;
-	delete mpGameMessageManager;
+//	delete mpGameMessageManager;
 	delete mpRocketEngine;
 }
 
@@ -180,7 +180,7 @@ bool GameApp::processLoop()
   
 void GameApp::update()
 {
-	mpGameMessageManager->processMessagesForThisFrame(mpRocketEngine->deltaTime);
+//	mpGameMessageManager->processMessagesForThisFrame(mpRocketEngine->deltaTime);
 	mpRocketEngine->update(); 
 	mpComponentManager->update(mpRocketEngine->deltaTime);
 	mpGameObjectManager->updateAll(mpRocketEngine->deltaTime);

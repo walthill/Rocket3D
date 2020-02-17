@@ -34,7 +34,7 @@ enum MessageType
 	NUM_MSG_TYPES
 };
 
-enum MessageCategory
+enum AppMessageCategory
 {
 	INVALIED_CATEGORY = -1,
 	GAME,
@@ -49,6 +49,10 @@ enum MouseCode
 	MIDDLE_MOUSE_DOWN,
 	MOUSE_SCROLL,
 	NUM_MOUSE_CODES
+};
+
+enum MouseMoveCode {
+	CAM_MOUSE_MOVE = 0
 };
 
 enum KeyCode

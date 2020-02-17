@@ -13,7 +13,7 @@
 	(https://github.com/walthill/Rocket3D/blob/master/LICENSE)
 
 	=========================
-			 KeyDownMessage.cpp
+			 GameKeyDown.cpp
 	=========================
 
 ********/
@@ -21,17 +21,17 @@
 #include "KeyDownMessage.h"
 #include "../core/GameApp.h"
 
-KeyDownMessage::KeyDownMessage(const int& key)
-	:GameMessage(BUTTON_DOWN)
+GameKeyDown::GameKeyDown(const int& key)
+	:Message(BUTTON_DOWN)
 	, mKeyCode(key)
 {
 }
 
-KeyDownMessage::~KeyDownMessage()
+GameKeyDown::~GameKeyDown()
 {
 }
 
-void KeyDownMessage::process(float deltaTime)
+void GameKeyDown::process(float deltaTime)
 {
 	GameApp* pGame = GameApp::getInstance();
 

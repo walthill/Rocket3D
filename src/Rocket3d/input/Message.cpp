@@ -17,7 +17,7 @@
 	=========================
 ********/
 
-#include "AppMessage.h"
+#include "Message.h"
 
 Message::Message(MessageType type)
 	:mType(type)

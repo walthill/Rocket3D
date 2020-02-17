@@ -30,15 +30,6 @@
     <ClCompile Include="core\GameApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="input\KeyDownMessage.cpp">
-      <Filter>Source Files\input</Filter>
-    </ClCompile>
-    <ClCompile Include="input\GameMessageManager.cpp">
-      <Filter>Source Files\input</Filter>
-    </ClCompile>
-    <ClCompile Include="input\GameMessage.cpp">
-      <Filter>Source Files\input</Filter>
-    </ClCompile>
     <ClCompile Include="core\GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -46,12 +37,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="component\MeshComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="input\MouseDownMessage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="input\MouseMoveMessage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="component\Component.cpp">
@@ -90,19 +75,22 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="input\game\GameMessages.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input\ImGui\ImGuiMessages.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input\Message.cpp">
+      <Filter>Source Files\input</Filter>
+    </ClCompile>
+    <ClCompile Include="input\MessageManager.cpp">
+      <Filter>Source Files\input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\GameApp.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="input\KeyDownMessage.h">
-      <Filter>Header Files\input</Filter>
-    </ClInclude>
-    <ClInclude Include="input\GameMessageManager.h">
-      <Filter>Header Files\input</Filter>
-    </ClInclude>
-    <ClInclude Include="input\GameMessage.h">
-      <Filter>Header Files\input</Filter>
     </ClInclude>
     <ClInclude Include="core\GameObject.h">
       <Filter>Header Files</Filter>
@@ -111,12 +99,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="component\MaterialComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="input\MouseDownMessage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="input\MouseMoveMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="component\Component.h">
@@ -142,6 +124,18 @@
     </ClInclude>
     <ClInclude Include="layers\ImGuiLayer.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input\game\GameMessages.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input\ImGui\ImGuiMessages.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input\Message.h">
+      <Filter>Header Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="input\MessageManager.h">
+      <Filter>Header Files\input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

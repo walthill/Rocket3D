@@ -3,26 +3,17 @@
 
 #include "GameMessage.h"
 
-enum MouseCode
-{
-	INVALID__MOUSE_KEY = -1,
-	LEFT_MOUSE_DOWN, RIGHT_MOUSE_DOWN,
-	MIDDLE_MOUSE_DOWN,
-	MOUSE_SCROLL,
-	NUM_MOUSE_CODES
-};
-
-class MouseDownMessage : public GameMessage {
+class GameMouseDown : public Message {
 	public:
 		/*
 			* The constructor requires an input keycode parameter
 		*/
-		MouseDownMessage(const int& mouseKey, double x = 0, double y = 0);
+		GameMouseDown(const int& mouseKey, double x = 0, double y = 0);
 
 		/*
 			* Destructor
 		*/
-		~MouseDownMessage();
+		~GameMouseDown();
 
 		/*
 			* Convert player input into an action based on the given key code.

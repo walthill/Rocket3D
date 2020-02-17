@@ -4,19 +4,19 @@
 #include "../../RocketEngine/core/EngineCore.h"
 #include "../../RocketEngine/render/Camera.h"
 
-MouseDownMessage::MouseDownMessage(const int & mouseKey, double x, double y)
-	:GameMessage(BUTTON_DOWN)
+GameMouseDown::GameMouseDown(const int & mouseKey, double x, double y)
+	:Message(BUTTON_DOWN)
 	,mMouseCode(mouseKey)
 	,x(x)
 	,y(y)
 {
 }
 
-MouseDownMessage::~MouseDownMessage()
+GameMouseDown::~GameMouseDown()
 {
 }
 
-void MouseDownMessage::process(float deltaTime)
+void GameMouseDown::process(float deltaTime)
 {
 	GameApp* pGame = GameApp::getInstance();
 

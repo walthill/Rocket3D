@@ -29,8 +29,8 @@
 #include <cassert>
 
 class EngineCore;
-class GameMessage;
-class GameMessageManager;
+class Message;
+class MessageManager;
 class Timer;
 class GameObject;
 class GameObjectManager;
@@ -98,7 +98,7 @@ class GameApp : public rkutil::Trackable
 			* Accessor for the GameMessageManager class. Allows for function calls to the message system.
 			* Returns a pointer to the GameMessageManager class.
 		***/
-		inline GameMessageManager* getGameMessageManager() { return mpGameMessageManager; };
+		inline MessageManager* getGameMessageManager() { return mpGameMessageManager; };
 		
 		inline GameObjectManager* getGameObjectManager() { return mpGameObjectManager; }
 		inline ComponentManager* getComponentManager() { return mpComponentManager; }
@@ -117,7 +117,7 @@ class GameApp : public rkutil::Trackable
 
 	private:
 		EngineCore* mpRocketEngine;
-		GameMessageManager* mpGameMessageManager;
+		MessageManager* mpGameMessageManager;
 		GameObjectManager* mpGameObjectManager;
 		ComponentManager* mpComponentManager;
 		rkutil::PerformanceTracker* mpPerformanceTracker;
