@@ -2,19 +2,32 @@
 #include "../layers/GameLayer.h"
 #include "../layers/ImGuiLayer.h"
 
+Application* Application::mpApplication = nullptr;
+
 Application::Application()
 {
 	mIsRunning = true;
-	addLayer(new GameLayer());	//game layer created by default for now
-//	addLayer(new ImGuiLayer());
+
+	Window::initGLFW();
+	
+	mpAppWindow = new Window();
+	mpAppWindow->initialize(800, 600, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE);
 }
 
 Application::~Application()
 {
+	clean();
+}
+
+void Application::clean()
+{
+	Window::destroyGLFW();
 }
 
 void Application::init()
 {
+	addLayer(new ImGuiLayer());
+	addLayer(new GameLayer());	//game layer created by default for now
 }
 
 void Application::addLayer(Layer* layer)
@@ -29,15 +42,30 @@ void Application::addOverlay(Layer* overlay)
 	overlay->onAttach();
 }
 
-void Application::run()
+bool Application::run()
 {
 	while (mIsRunning)
 	{
+		mpAppWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
+		mpAppWindow->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
+
 		for (Layer* layer : mLayerStack)
+		{
 			if (!layer->onUpdate())
 			{
 				mIsRunning = false;
 				break;
 			}
+		}
+
+		//swap buffer for all draw layers
+		mpAppWindow->swapBuffers();
 	}
+
+	return false;
+}
+
+Window* Application::getAppWindow()
+{
+	return mpAppWindow;
 }

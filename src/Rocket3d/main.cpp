@@ -26,35 +26,15 @@ int main(int argc, char* argv[])
 	RK_LOGGER_INIT();
 	RK_CORE_INFO_ALL("Rocket Logger initialized");
 
-	Application *client = new Application();
-	client->run();
-	delete client;
+	Application::initInstance();
 
+	if(!Application::getInstance()->run())
+		Application::cleanInstance();
+	
 	//TODO(low): output to logger
 	RK_LOGGER_CLEAN();
 	rkutil::MemoryTracker::getInstance()->reportAllocs(std::cout);
 	system("pause");
-
-	/*	GameApp::initInstance();
-
-	if (!GameApp::getInstance()->initialize(argv))
-	{
-		RK_CORE_FATAL_ALL("ERROR: DISPLAY CREATION FAILED.");
-		return -1;
-	}
-
-	if (!GameApp::getInstance()->processLoop())
-	{
-		GameApp::getInstance()->cleanInstance();
-		
-		RK_LOGGER_CLEAN();
-
-		//TODO(low): output to logger
-		rkutil::MemoryTracker::getInstance()->reportAllocs(std::cout);
-		system("pause");
-
-		return 1;
-	}*/
 
 	return 0;
 }

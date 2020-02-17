@@ -14,8 +14,8 @@
 	=========================
 
 ********/
-#include <glad/glad.h>
 #include <glfw3.h>
+#include "../../Rocket3d/core/Application.h"
 #include "EngineCore.h"
 #include "../window/Window.h"
 #include "../render/Camera.h"
@@ -47,21 +47,9 @@ void EngineCore::clean()
 	delete mpShaderManager;
 	delete mpInputSystem;
 	delete mpCam;
-	delete mpWindow;
-
-	glfwTerminate();
+	delete mpWindowHandle;
 }
 
-void EngineCore::initGLFW() //TODO: move into window init
-{
-	glfwInit();
-
-	//Init OpenGL version settings
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_SAMPLES, 4);
-}
 
 void EngineCore::initLighting()
 {
@@ -71,30 +59,17 @@ void EngineCore::initLighting()
 	mpShaderManager->setShaderFloat("material.shininess", 32.0f);
 } 
 
-bool EngineCore::initWindow()
+
+bool EngineCore::initialize()
 {
-	mpWindow = new Window();
-
-	//Init window size, name, features, and cursor 
-	if (!mpWindow->initialize(mWindowWidth, mWindowHeight, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE, false))
-		return false;
-
-	return true;
-}
-
-bool EngineCore::initialize(int width, int height)
-{
-	mWindowWidth = width;
-	mWindowHeight = height;
-
-	initGLFW();
-	
-	if (!initWindow())
-		return false;
+	Application* app = Application::getInstance();
+	mWindowWidth = app->getAppWindow()->getWidth();
+	mWindowHeight = app->getAppWindow()->getHeight();
+	mpWindowHandle = app->getAppWindow();
 
 	mpCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
 
-	mpInputSystem = new InputSystem(mpWindow->getWindowHandle());
+	mpInputSystem = new InputSystem(mpWindowHandle->getWindowHandle());
 	mpShaderManager = new ShaderManager();
 
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
@@ -151,13 +126,10 @@ void EngineCore::processViewProjectionMatrices()
 	mpShaderManager->useShaderByKey(emitterShaderId);
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
-
 }
 
 void EngineCore::render()
 {
-	mpWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
-	mpWindow->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
 	processViewProjectionMatrices();
 	textObj->renderText();
 	textObj2->renderText();
@@ -185,10 +157,5 @@ void EngineCore::moveCameraBack()
 
 void EngineCore::toggleWireframe(bool showWireframe)
 {
-	mpWindow->toggleWireframe(showWireframe);
-}
-
-void EngineCore::swapBuffers()
-{
-	mpWindow->swapBuffers();
+	mpWindowHandle->toggleWireframe(showWireframe);
 }

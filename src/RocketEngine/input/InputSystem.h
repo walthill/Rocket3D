@@ -39,7 +39,7 @@ class InputSystem : public rkutil::Trackable
 		void rk_scroll_callback(double xoffset, double yoffset);
 
 		/***
-			* Callback for moving the mouse
+			* Callback for mouse clicks
 		***/
 		void rk_mouse_click_callback(int button, int action, int modifier);
 

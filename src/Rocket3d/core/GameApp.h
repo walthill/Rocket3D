@@ -112,7 +112,7 @@ class GameApp : public rkutil::Trackable
 		void moveRight();
 		void moveLeft();
 		void toggleView(bool displayWireframeMode);
-		void quit() { mShouldExit = true; };
+		void quit() { mKeepRunning = false; };
 		#pragma endregion
 
 	private:
@@ -120,12 +120,13 @@ class GameApp : public rkutil::Trackable
 		GameMessageManager* mpGameMessageManager;
 		GameObjectManager* mpGameObjectManager;
 		ComponentManager* mpComponentManager;
+		rkutil::PerformanceTracker* mpPerformanceTracker;
 
 		//GameObject* g;
 			
 		//Game state vars
 		static GameApp* mpGameApp;
-		bool mShouldExit = false;
+		bool mKeepRunning = false;
 
 		//Performance tracker data
 		rkutil::Timer* mpFrameTimer;

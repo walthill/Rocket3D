@@ -3,7 +3,7 @@
 
 #include <rkutil/Trackable.h>
 
-class Layer 
+class Layer : public rkutil::Trackable
 {
 	public:
 		Layer(const std::string &name = "Layer");

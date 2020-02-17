@@ -49,7 +49,10 @@ class Window : public rkutil::Trackable
 			* Set window OpenGL capabilities
 		***/
 		void enableOpenGLWindowFlags(int settingsToEnable);
-
+		
+		/***
+			* Set window OpenGL capabilities
+		***/
 		void clean();
 
 		/***
@@ -97,10 +100,31 @@ class Window : public rkutil::Trackable
 		***/
 		GLFWwindow* getWindowHandle() const;
 
+		/***
+			* Returns the width of the window
+		***/
+		inline int getWidth() { return w; }
+		
+		/***
+			* Returns the height of the window
+		***/		
+		inline int getHeight() { return h; }
+
+		/***
+			* Initialize GLFW library
+		***/
+		static void initGLFW();
+		
+		/***
+			* Clean up GLFW library
+		***/
+		static void destroyGLFW();
+
 	private:
+		static bool mShouldInitGLFW;
 		const int TOP_LEFT = 0;
 		int w = 0, h = 0;
-		GLFWwindow* mWindow;
+		GLFWwindow* mpWindow;
 };
 
 #endif // !WINDOW_H
