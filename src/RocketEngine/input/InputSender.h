@@ -1,11 +1,11 @@
 #ifndef INPUT_INTERFACE_H
 #define INPUT_INTERFACE_H
 
-class InputInterface
+class InputSender
 {
 	public:
-		InputInterface() { };
-		virtual ~InputInterface() { };
+		InputSender() { };
+		virtual ~InputSender() { };
 
 	protected:
 		virtual void onKeyDown(int key, int scancode, int action, int mods) = 0;

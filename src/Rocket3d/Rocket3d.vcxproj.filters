@@ -75,22 +75,22 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="input\messaging\AppMessages.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="input\messaging\Message.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
     <ClCompile Include="input\messaging\MessageManager.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
-    <ClCompile Include="input\messaging\game\GameMessages.cpp">
+    <ClCompile Include="input\messaging\receive\AppMessages.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="input\messaging\ImGui\ImGuiMessages.cpp">
+    <ClCompile Include="input\messaging\receive\ImGui\ImGuiMessages.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="input\polling\AppInput.cpp">
+    <ClCompile Include="input\messaging\receive\game\GameMessages.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input\messaging\send\AppInputSender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -131,22 +131,22 @@
     <ClInclude Include="layers\ImGuiLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="input\messaging\AppMessages.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="input\messaging\Message.h">
       <Filter>Header Files\input</Filter>
     </ClInclude>
     <ClInclude Include="input\messaging\MessageManager.h">
       <Filter>Header Files\input</Filter>
     </ClInclude>
-    <ClInclude Include="input\messaging\game\GameMessages.h">
+    <ClInclude Include="input\messaging\receive\AppMessages.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="input\messaging\ImGui\ImGuiMessages.h">
+    <ClInclude Include="input\messaging\receive\ImGui\ImGuiMessages.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="input\polling\AppInput.h">
+    <ClInclude Include="input\messaging\receive\game\GameMessages.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input\messaging\send\AppInputSender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

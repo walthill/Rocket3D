@@ -23,7 +23,7 @@
 #include <rkutil/Trackable.h>
 #include "../window/Window.h"
 
-class AppInput;
+class AppInputSender;
 
 class InputSystem : public rkutil::Trackable
 {
@@ -63,7 +63,7 @@ class InputSystem : public rkutil::Trackable
 		inline void play() { mPlayMode = !mPlayMode; }
 
 	private:
-		AppInput* mpAppInput;
+		AppInputSender* mpAppInput;
 
 		GLFWwindow* mpWindowHandle;
 		bool firstMouse, mPlayMode = true;

@@ -21,10 +21,10 @@
 #include "../../Rocket3d/core/Application.h"
 #include "../core/EngineCore.h"
 #include "../../Rocket3d/input/messaging/MessageManager.h"
-#include "../../Rocket3d/input/messaging/AppMessages.h"
-#include "../../Rocket3d/input/messaging/ImGui/ImGuiMessages.h"
-#include "../../Rocket3d/input/messaging/game/GameMessages.h"
-#include "../../Rocket3d/input/polling/AppInput.h"
+#include "../../Rocket3d/input/messaging/receive/AppMessages.h"
+#include "../../Rocket3d/input/messaging/receive/ImGui/ImGuiMessages.h"
+#include "../../Rocket3d/input/messaging/receive/game/GameMessages.h"
+#include "../../Rocket3d/input/messaging/send/AppInputSender.h"
 #include <glfw3.h>
 
 #pragma region GLFW Callbacks
@@ -138,7 +138,7 @@ void InputSystem::onKeyEvent(int key, int scancode, int action, int mods)
 
 InputSystem::InputSystem(GLFWwindow* window)
 {
-	mpAppInput = new AppInput();
+	mpAppInput = new AppInputSender();
 
 	firstMouse = true;
 	mpWindowHandle = window;

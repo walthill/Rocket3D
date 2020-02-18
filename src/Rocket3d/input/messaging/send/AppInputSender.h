@@ -1,13 +1,13 @@
 #ifndef APP_INPUT_H
 #define APP_INPUT_H
 
-#include "../../../RocketEngine/input/InputInterface.h"
+#include "../../../../RocketEngine/input/InputSender.h"
 
-class AppInput : public InputInterface
+class AppInputSender : public InputSender
 {
 public:
-	AppInput();	
-	~AppInput();
+	AppInputSender();	
+	~AppInputSender();
 
 	//return bool flag in case we need to stop from polling beyond this layer
 	bool handleKeyEvents(int key, int scancode, int action, int mods);

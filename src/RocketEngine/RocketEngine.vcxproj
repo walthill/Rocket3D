@@ -22,7 +22,7 @@
     <ClInclude Include="asset\image\RocketImgLoader.h" />
     <ClInclude Include="asset\Model.h" />
     <ClInclude Include="core\EngineCore.h" />
-    <ClInclude Include="input\InputInterface.h" />
+    <ClInclude Include="input\InputSender.h" />
     <ClInclude Include="input\InputSystem.h" />
     <ClInclude Include="platform\OpenGL\ImGuiOpenGLRenderer.h" />
     <ClInclude Include="render\layers\Layer.h" />

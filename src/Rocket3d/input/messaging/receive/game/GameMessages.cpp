@@ -1,8 +1,9 @@
 #include "GameMessages.h"
-#include "../../../core/GameApp.h"
-#include "../../../../RocketEngine/logging/RK_Log.h"
-#include "../../../../RocketEngine/core/EngineCore.h"
-#include "../../../../RocketEngine/render/Camera.h"
+#include "../../../../core/GameApp.h"
+
+#include <render/Camera.h>
+#include <core/EngineCore.h>
+#include <logging/RK_Log.h>
 
 /*
 ===========================================================
