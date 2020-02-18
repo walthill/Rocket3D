@@ -72,6 +72,9 @@
     <ClInclude Include="platform\OpenGL\ImGuiOpenGLRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="input\InputInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\EngineCore.cpp">

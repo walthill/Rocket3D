@@ -148,11 +148,12 @@ IF not exist log ( mkdir log &amp;&amp; type nul &gt; log/applog.txt &amp;&amp; 
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="input\AppMessages.cpp" />
-    <ClCompile Include="input\Message.cpp" />
-    <ClCompile Include="input\MessageManager.cpp" />
-    <ClCompile Include="input\game\GameMessages.cpp" />
-    <ClCompile Include="input\ImGui\ImGuiMessages.cpp" />
+    <ClCompile Include="input\messaging\AppMessages.cpp" />
+    <ClCompile Include="input\messaging\Message.cpp" />
+    <ClCompile Include="input\messaging\MessageManager.cpp" />
+    <ClCompile Include="input\messaging\game\GameMessages.cpp" />
+    <ClCompile Include="input\messaging\ImGui\ImGuiMessages.cpp" />
+    <ClCompile Include="input\polling\AppInput.cpp" />
     <ClCompile Include="layers\GameLayer.cpp" />
     <ClCompile Include="layers\ImGuiLayer.cpp" />
     <ClCompile Include="main.cpp" />
@@ -168,11 +169,12 @@ IF not exist log ( mkdir log &amp;&amp; type nul &gt; log/applog.txt &amp;&amp; 
     <ClInclude Include="core\GameApp.h" />
     <ClInclude Include="core\GameObject.h" />
     <ClInclude Include="core\GameObjectManager.h" />
-    <ClInclude Include="input\AppMessages.h" />
-    <ClInclude Include="input\Message.h" />
-    <ClInclude Include="input\MessageManager.h" />
-    <ClInclude Include="input\game\GameMessages.h" />
-    <ClInclude Include="input\ImGui\ImGuiMessages.h" />
+    <ClInclude Include="input\messaging\AppMessages.h" />
+    <ClInclude Include="input\messaging\Message.h" />
+    <ClInclude Include="input\messaging\MessageManager.h" />
+    <ClInclude Include="input\messaging\game\GameMessages.h" />
+    <ClInclude Include="input\messaging\ImGui\ImGuiMessages.h" />
+    <ClInclude Include="input\polling\AppInput.h" />
     <ClInclude Include="layers\GameLayer.h" />
     <ClInclude Include="layers\ImGuiLayer.h" />
   </ItemGroup>

@@ -16,20 +16,28 @@
 ********/
 
 #include <glad/glad.h>
-#include <glfw3.h>
 #include "InputSystem.h"
 #include "../logging/RK_Log.h"
 #include "../../Rocket3d/core/Application.h"
 #include "../core/EngineCore.h"
-#include "../../Rocket3d/input/MessageManager.h"
-#include "../../Rocket3d/input/AppMessages.h"
-#include "../../Rocket3d/input/ImGui/ImGuiMessages.h"
-#include "../../Rocket3d/input/game/GameMessages.h"
+#include "../../Rocket3d/input/messaging/MessageManager.h"
+#include "../../Rocket3d/input/messaging/AppMessages.h"
+#include "../../Rocket3d/input/messaging/ImGui/ImGuiMessages.h"
+#include "../../Rocket3d/input/messaging/game/GameMessages.h"
+#include "../../Rocket3d/input/polling/AppInput.h"
+#include <glfw3.h>
 
 #pragma region GLFW Callbacks
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouse_move_callback(GLFWwindow* window, double xpos, double ypos);
 void mouse_click_callback(GLFWwindow* window, int button, int action, int modifier);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	InputSystem* wind = reinterpret_cast<InputSystem*>(glfwGetWindowUserPointer(window));
+	wind->onKeyEvent(key, scancode, action, mods);
+}
 
 void mouse_click_callback(GLFWwindow* window, int button, int action, int modifier)
 {
@@ -117,49 +125,38 @@ void InputSystem::onMouseMove(double xpos, double ypos)
 	}
 }
 
+
+void InputSystem::onKeyEvent(int key, int scancode, int action, int mods)
+{
+	mpAppInput->handleKeyEvents(key, scancode, action, mods);
+
+	//if play mode
+		//gameInput->handleKeyEvents()
+	//if !play mode
+		//editorInput->handleKeyEvents()
+}
+
 InputSystem::InputSystem(GLFWwindow* window)
 {
+	mpAppInput = new AppInput();
+
 	firstMouse = true;
 	mpWindowHandle = window;
 	glfwSetWindowUserPointer(mpWindowHandle, reinterpret_cast<void*>(this));//<--- right here
 	glfwSetCursorPosCallback(mpWindowHandle, mouse_move_callback);
 	glfwSetScrollCallback(mpWindowHandle, scroll_callback);
 	glfwSetMouseButtonCallback(mpWindowHandle, mouse_click_callback);
+	glfwSetKeyCallback(window, key_callback);
 }
 
 void InputSystem::processInput()
 {
-	if (mPlayMode)
-	{
-		pollGameInput();
-	}
-	else
-	{
-		pollEditorInput();
-	}
-
-	pollAppInput();
-
 	//Check and call events
 	glfwPollEvents();
 }
 
-void InputSystem::pollAppInput()
-{
-	if (glfwGetKey(mpWindowHandle, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-	{
-		Message* pMessage = new AppKeyDown(ESC);
-		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-	}
 
-	if (glfwGetKey(mpWindowHandle, GLFW_KEY_ENTER) == GLFW_PRESS)	
-	{
-		Message* pMessage = new AppKeyDown(ENTER);
-		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-	}
-}
-
-void InputSystem::pollGameInput()
+void InputSystem::pollGameInput(int key, int scancode, int action, int mods)
 {
 	if (glfwGetKey(mpWindowHandle, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
@@ -198,7 +195,3 @@ void InputSystem::pollGameInput()
 	}
 }
 
-void InputSystem::pollEditorInput()
-{
-
-}

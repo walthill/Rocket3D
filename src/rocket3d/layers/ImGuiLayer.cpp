@@ -1,8 +1,8 @@
 #include "ImGuiLayer.h"
 
 #include <platform/OpenGL/ImGuiOpenGLRenderer.h>
-#include <glfw3.h>
 #include "../core/Application.h"
+#include <glfw3.h>
 
 //TODO	-- Get imgui ui objects to recieve input --> refactor input system? 
 //		-- Create application event system

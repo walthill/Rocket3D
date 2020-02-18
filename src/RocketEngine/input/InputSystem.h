@@ -21,8 +21,9 @@
 #define INPUT_SYS_H
 
 #include <rkutil/Trackable.h>
+#include "../window/Window.h"
 
-struct GLFWwindow;
+class AppInput;
 
 class InputSystem : public rkutil::Trackable
 {
@@ -48,18 +49,22 @@ class InputSystem : public rkutil::Trackable
 		***/
 		void onMouseMove(double xpos, double ypos);
 
+		void onKeyEvent(int key, int scancode, int action, int mods);
+
 		/***
 			* Checks for inputs every frame and queues input message
 		***/
 		void processInput();
 
-		void pollAppInput();
-		void pollGameInput();
-		void pollEditorInput();
+		//TODO: separate input polling types into files
+		void pollGameInput(int key, int scancode, int action, int mods);
+		void pollEditorInput(int key, int scancode, int action, int mods);
 
 		inline void play() { mPlayMode = !mPlayMode; }
 
 	private:
+		AppInput* mpAppInput;
+
 		GLFWwindow* mpWindowHandle;
 		bool firstMouse, mPlayMode = true;
 		double lastX, lastY;

@@ -2,8 +2,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <glad/glad.h>
-#include <glfw3.h>
 #include "../shader/RK_Shader.h"
+#include <glfw3.h>
 
 Text::Text(std::string fontName, RK_Shader * shader)
 {

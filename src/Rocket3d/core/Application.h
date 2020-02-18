@@ -1,14 +1,12 @@
 #ifndef APP_H
 #define APP_H
 
-#include <rkutil/Trackable.h>
 #include <rkutil/PerformanceTracker.h>
 #include <rkutil/Timer.h>
-#include "../../RocketEngine/window/Window.h"
 #include "../../RocketEngine/render/layers/LayerStack.h"
 #include "../../RocketEngine/logging/RK_Log.h"
 #include "../../RocketEngine/input/InputSystem.h"
-#include "../input/MessageManager.h"
+#include "../input/messaging/MessageManager.h"
 
 //Event system? for layer-unique inputs
 
@@ -63,7 +61,7 @@ class Application : public rkutil::Trackable
 		
 		inline void quit() { mIsRunning = false; }
 		//tracks time since GLFW init
-		inline double getTime() { return mpMasterTimer->getTimeElapsedMs(); };
+		inline double getTime() { return mpMasterTimer->getTimeElapsedInSeconds(); };
 		inline Window* getAppWindow() { return mpAppWindow; };
 		inline MessageManager* getMessageManager() { return mpMessageManager;  }
 

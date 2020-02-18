@@ -14,13 +14,13 @@
 	=========================
 
 ********/
-#include <glfw3.h>
+//#include <glfw3.h>
 #include "../../Rocket3d/core/Application.h"
 #include "EngineCore.h"
-#include "../window/Window.h"
+//#include "../window/Window.h"
 #include "../render/Camera.h"
 #include "../asset/image/RocketImgLoader.h"
-#include "../input/InputSystem.h"
+//#include "../input/InputSystem.h"
 //#include "../shader/ShaderBuild.h"
 #include "../shader/RK_Shader.h"
 #include "../shader/ShaderManager.h"
@@ -101,7 +101,7 @@ void EngineCore::update()
 
 void EngineCore::calculateDeltaTime()
 {
-	float currentFrame = (float)glfwGetTime();
+	float currentFrame = (float)Application::getInstance()->getTime();
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
 }

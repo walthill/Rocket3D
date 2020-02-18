@@ -20,8 +20,8 @@
 
 #include "Window.h"
 #include <glad/glad.h>
-#include <glfw3.h>
 #include "../logging/RK_Log.h"
+#include <glfw3.h>
 
 bool Window::mShouldInitGLFW = true;
 
