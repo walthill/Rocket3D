@@ -68,11 +68,7 @@ bool Application::run()
 
 		for (Layer* layer : mLayerStack)
 		{
-			if (!layer->onUpdate())
-			{
-				mIsRunning = false;
-				break;
-			}
+			layer->onUpdate();
 		}
 
 		//swap buffer for all draw layers
@@ -82,15 +78,14 @@ bool Application::run()
 	return false;
 }
 
+void Application::play()
+{
+	mpInputSystem->play();
+}
+
 void Application::calculateDeltaTime()
 {
 	float currentFrame = (float)getTime();
 	mDeltaTime = currentFrame - mLastFrame;
 	mLastFrame = currentFrame;
 }
-
-
-/*Window* Application::getAppWindow()
-{
-	return mpAppWindow;
-}*/

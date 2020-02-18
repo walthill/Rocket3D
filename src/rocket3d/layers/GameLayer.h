@@ -9,7 +9,7 @@ class GameLayer : public Layer
 		GameLayer();
 		~GameLayer();
 
-		bool onUpdate() override;
+		void onUpdate() override;
 };
 
 

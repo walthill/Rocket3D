@@ -30,7 +30,7 @@ void GameKeyDown::process(float deltaTime)
 	{
 		if (mKeyCode == ESC)
 		{
-			pGame->quit();
+//			pGame->quit();
 		}
 		if (mKeyCode == KEY_W)
 		{

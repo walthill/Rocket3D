@@ -58,9 +58,10 @@ class Application : public rkutil::Trackable
 		void onMessage(float deltaTime);
 
 		bool run();
-
+		void play();
 		void calculateDeltaTime();
-
+		
+		inline void quit() { mIsRunning = false; }
 		//tracks time since GLFW init
 		inline double getTime() { return mpMasterTimer->getTimeElapsedMs(); };
 		inline Window* getAppWindow() { return mpAppWindow; };

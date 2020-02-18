@@ -5,6 +5,50 @@
 /*
 ===========================================================
 
+			ImGui Key Messages
+
+============================================================
+*/
+
+ImGuiKeyDown::ImGuiKeyDown(const int& key)
+	:Message(BUTTON_DOWN)
+	, mKeyCode(key)
+{
+}
+
+ImGuiKeyDown::~ImGuiKeyDown()
+{
+}
+
+void ImGuiKeyDown::process(float deltaTime)
+{
+	if (mKeyCode == ESC)
+	{
+	}
+	if (mKeyCode == KEY_W)
+	{
+	}
+	if (mKeyCode == KEY_A)
+	{
+	}
+	if (mKeyCode == KEY_S)
+	{
+	}
+	if (mKeyCode == KEY_D)
+	{
+	}
+	if (mKeyCode == KEY_1)
+	{
+	}
+	if (mKeyCode == KEY_2)
+	{
+	}
+}
+
+
+/*
+===========================================================
+
 			ImGUi Mouse DOWN Messages
 
 ============================================================

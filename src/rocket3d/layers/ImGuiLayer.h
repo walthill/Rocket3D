@@ -11,7 +11,7 @@ class ImGuiLayer : public Layer
 
 		void onAttach() override;
 		void onDetach() override;
-		bool onUpdate() override;
+		void onUpdate() override;
 
 	private:
 		float mTime = 0.0f;

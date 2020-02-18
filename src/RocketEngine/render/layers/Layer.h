@@ -10,12 +10,8 @@ class Layer : public rkutil::Trackable
 		virtual ~Layer();
 
 		virtual void onAttach() {}
-		virtual void onDetach() {}
-		
-		// Returns a bool to allow layers to send result back to the application
-		// Currently, quitting the GameApp layer returns false & quits the app
-		virtual bool onUpdate() { return false; }
-		
+		virtual void onDetach() {}		
+		virtual void onUpdate() {}
 		virtual void onEvent() {}
 
 		inline const std::string getLayerName() { return mLayerName; }

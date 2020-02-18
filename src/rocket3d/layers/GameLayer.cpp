@@ -18,12 +18,7 @@ GameLayer::~GameLayer()
 	GameApp::getInstance()->cleanInstance();
 }
 
-bool GameLayer::onUpdate()
+void GameLayer::onUpdate()
 {
-	if (!GameApp::getInstance()->processLoop())
-	{
-		return false;
-	}
-
-	return true;
+	GameApp::getInstance()->processLoop();
 }

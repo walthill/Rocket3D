@@ -87,6 +87,9 @@
     <ClCompile Include="input\MessageManager.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
+    <ClCompile Include="input\AppMessages.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\GameApp.h">
@@ -136,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="input\MessageManager.h">
       <Filter>Header Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="input\AppMessages.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

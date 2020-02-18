@@ -36,26 +36,32 @@ class InputSystem : public rkutil::Trackable
 		/***
 			* Callback for resizing the window
 		***/
-		void rk_scroll_callback(double xoffset, double yoffset);
+		void onMouseScroll(double xoffset, double yoffset);
 
 		/***
 			* Callback for mouse clicks
 		***/
-		void rk_mouse_click_callback(int button, int action, int modifier);
+		void onMouseClick(int button, int action, int modifier);
 
 		/***
 			* Callback for mouse movement
 		***/
-		void rk_mouse_move_callback(double xpos, double ypos);
+		void onMouseMove(double xpos, double ypos);
 
 		/***
 			* Checks for inputs every frame and queues input message
 		***/
 		void processInput();
 
+		void pollAppInput();
+		void pollGameInput();
+		void pollEditorInput();
+
+		inline void play() { mPlayMode = !mPlayMode; }
+
 	private:
 		GLFWwindow* mpWindowHandle;
-		bool firstMouse;
+		bool firstMouse, mPlayMode = true;
 		double lastX, lastY;
 };
 

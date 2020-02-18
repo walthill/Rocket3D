@@ -56,7 +56,7 @@ void ImGuiLayer::onDetach()
 {
 }
 
-bool ImGuiLayer::onUpdate()
+void ImGuiLayer::onUpdate()
 {
 	Application* app = Application::getInstance();
 	ImGuiIO& io = ImGui::GetIO();
@@ -81,6 +81,4 @@ bool ImGuiLayer::onUpdate()
 	//show on screen
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-	return true;
 }

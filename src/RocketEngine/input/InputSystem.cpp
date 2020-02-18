@@ -22,6 +22,7 @@
 #include "../../Rocket3d/core/Application.h"
 #include "../core/EngineCore.h"
 #include "../../Rocket3d/input/MessageManager.h"
+#include "../../Rocket3d/input/AppMessages.h"
 #include "../../Rocket3d/input/ImGui/ImGuiMessages.h"
 #include "../../Rocket3d/input/game/GameMessages.h"
 
@@ -33,65 +34,87 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_click_callback(GLFWwindow* window, int button, int action, int modifier)
 {
 	InputSystem* wind = reinterpret_cast<InputSystem*>(glfwGetWindowUserPointer(window));
-	wind->rk_mouse_click_callback(button, action, modifier);
+	wind->onMouseClick(button, action, modifier);
 }
 
 //Help found here https://stackoverflow.com/questions/27387040/referencing-glfws-callback-functions-from-a-class
 void mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	InputSystem* wind = reinterpret_cast<InputSystem*>(glfwGetWindowUserPointer(window));
-	wind->rk_mouse_move_callback(xpos, ypos);
+	wind->onMouseMove(xpos, ypos);
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	InputSystem* wind = reinterpret_cast<InputSystem*>(glfwGetWindowUserPointer(window));
-	wind->rk_scroll_callback(xoffset, yoffset);
+	wind->onMouseScroll(xoffset, yoffset);
 }
 
 #pragma endregion
 
 
-void InputSystem::rk_scroll_callback(double xoffset, double yoffset)
+void InputSystem::onMouseScroll(double xoffset, double yoffset)
 {
-	Message* pMessage = new GameMouseDown(MOUSE_SCROLL, xoffset, yoffset);
-	Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-}
-
-void InputSystem::rk_mouse_click_callback(int button, int action, int modifier)
-{
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+	if (mPlayMode)
 	{
-		Message* pMessage = new GameMouseDown(LEFT_MOUSE_DOWN);
+		Message* pMessage = new GameMouseDown(MOUSE_SCROLL, xoffset, yoffset);
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-	}
-	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-	{
-		Message* pMessage = new GameMouseDown(RIGHT_MOUSE_DOWN);
-		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-	}
-
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) //TODO: mouse button & key button release
-	{
 	}
 }
 
-void InputSystem::rk_mouse_move_callback(double xpos, double ypos)
+void InputSystem::onMouseClick(int button, int action, int modifier)
 {
-	if (firstMouse)
+	if (mPlayMode)
 	{
-		lastX = xpos;
+		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+		{
+			Message* pMessage = new GameMouseDown(LEFT_MOUSE_DOWN);
+			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+		}
+		if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+		{
+			Message* pMessage = new GameMouseDown(RIGHT_MOUSE_DOWN);
+			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+		}
+
+		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) //TODO: mouse button & key button release
+		{
+		}
+	}
+	else
+	{
+		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+		{
+			Message* pMessage = new ImGuiMouseDown(LEFT_MOUSE_DOWN);
+			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+		}
+		if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+		{
+			Message* pMessage = new ImGuiMouseDown(RIGHT_MOUSE_DOWN);
+			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+		}
+	}
+}
+
+void InputSystem::onMouseMove(double xpos, double ypos)
+{
+	if (mPlayMode)
+	{
+		if (firstMouse)
+		{
+			lastX = xpos;
+			lastY = ypos;
+			firstMouse = false;
+		}
+
+		float xOffset = (float)(xpos - lastX);
+		float yOffset = (float)(lastY - ypos);
 		lastY = ypos;
-		firstMouse = false;
+		lastX = xpos;
+
+		Message* pMessage = new GameMouseMove(CAM_MOUSE_MOVE, xOffset, yOffset);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
-
-	float xOffset = (float)(xpos - lastX);
-	float yOffset = (float)(lastY - ypos);
-	lastY = ypos;
-	lastX = xpos;
-
-	Message* pMessage = new GameMouseMove(CAM_MOUSE_MOVE, xOffset, yOffset);
-	Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 }
 
 InputSystem::InputSystem(GLFWwindow* window)
@@ -105,6 +128,38 @@ InputSystem::InputSystem(GLFWwindow* window)
 }
 
 void InputSystem::processInput()
+{
+	if (mPlayMode)
+	{
+		pollGameInput();
+	}
+	else
+	{
+		pollEditorInput();
+	}
+
+	pollAppInput();
+
+	//Check and call events
+	glfwPollEvents();
+}
+
+void InputSystem::pollAppInput()
+{
+	if (glfwGetKey(mpWindowHandle, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	{
+		Message* pMessage = new AppKeyDown(ESC);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+
+	if (glfwGetKey(mpWindowHandle, GLFW_KEY_ENTER) == GLFW_PRESS)	
+	{
+		Message* pMessage = new AppKeyDown(ENTER);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+}
+
+void InputSystem::pollGameInput()
 {
 	if (glfwGetKey(mpWindowHandle, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
@@ -141,7 +196,9 @@ void InputSystem::processInput()
 		Message* pMessage = new GameKeyDown(KEY_2);
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
+}
 
-	//Check and call events
-	glfwPollEvents();
+void InputSystem::pollEditorInput()
+{
+
 }
