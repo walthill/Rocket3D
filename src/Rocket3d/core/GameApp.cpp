@@ -18,8 +18,8 @@
 #include <core/EngineCore.h>
 #include <iostream>
 #include "../../RocketEngine/shader/ShaderManager.h"
-#include "../input/GameMessage.h"
-#include "../input/GameMessageManager.h"
+#include "../input/Message.h"
+#include "../input/MessageManager.h"
 #include "../../RocketEngine/logging/RK_Log.h"
 #include "GameObjectManager.h"
 #include "../component/ComponentManager.h"

@@ -21,10 +21,9 @@
 #include "../logging/RK_Log.h"
 #include "../../Rocket3d/core/Application.h"
 #include "../core/EngineCore.h"
-#include "../../Rocket3d/input/KeyDownMessage.h"
-#include "../../Rocket3d/input/MouseDownMessage.h"
-#include "../../Rocket3d/input/GameMessageManager.h"
-#include "../../Rocket3d/input/MouseMoveMessage.h"
+#include "../../Rocket3d/input/MessageManager.h"
+#include "../../Rocket3d/input/ImGui/ImGuiMessages.h"
+#include "../../Rocket3d/input/game/GameMessages.h"
 
 #pragma region GLFW Callbacks
 void mouse_move_callback(GLFWwindow* window, double xpos, double ypos);
