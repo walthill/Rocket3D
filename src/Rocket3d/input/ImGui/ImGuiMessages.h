@@ -1,7 +1,7 @@
 #ifndef IMGUI_MESSAGES_H
 #define IMGUI_MESSAGES_H
 
-#include "../../Message.h"
+#include "../Message.h"
 
 /*
 ===========================================================

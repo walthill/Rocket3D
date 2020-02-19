@@ -24,7 +24,7 @@
 #ifndef GAME_MSG_H
 #define GAME_MSG_H
 
-#include "../../../RocketEngine/util/EngineUtils.h"
+#include "../../RocketEngine/util/EngineUtils.h"
 
 enum MessageType
 {

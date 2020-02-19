@@ -1,7 +1,7 @@
 #ifndef APP_MESSAGES_H
 #define APP_MESSAGES_H
 
-#include "../Message.h"
+#include "Message.h"
 
 /*
 ===========================================================

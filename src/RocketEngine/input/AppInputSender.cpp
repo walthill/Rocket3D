@@ -1,7 +1,7 @@
 #include "AppInputSender.h"
-#include "../../../../Rocket3d/core/Application.h"
-#include "../../../../Rocket3d/input/messaging/Message.h"
-#include "../receive/AppMessages.h"
+#include "../../Rocket3d/core/Application.h"
+#include "../../Rocket3d/input/Message.h"
+#include "../../Rocket3d/input/AppMessages.h"
 #include <glfw3.h>
 
 AppInputSender::AppInputSender()
@@ -50,6 +50,8 @@ void AppInputSender::onKeyUp(int key, int scancode, int action, int mods)
 void AppInputSender::onKeyRepeat(int key, int scancode, int action, int mods)
 {
 }
+
+
 
 void AppInputSender::onMouseDown(int key, int scancode, int action, int mods)
 {

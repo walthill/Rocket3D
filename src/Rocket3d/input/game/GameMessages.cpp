@@ -1,5 +1,5 @@
 #include "GameMessages.h"
-#include "../../../../core/GameApp.h"
+#include "../../core/GameApp.h"
 
 #include <render/Camera.h>
 #include <core/EngineCore.h>

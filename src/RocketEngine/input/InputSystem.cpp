@@ -20,11 +20,10 @@
 #include "../logging/RK_Log.h"
 #include "../../Rocket3d/core/Application.h"
 #include "../core/EngineCore.h"
-#include "../../Rocket3d/input/messaging/MessageManager.h"
-#include "../../Rocket3d/input/messaging/receive/AppMessages.h"
-#include "../../Rocket3d/input/messaging/receive/ImGui/ImGuiMessages.h"
-#include "../../Rocket3d/input/messaging/receive/game/GameMessages.h"
-#include "../../Rocket3d/input/messaging/send/AppInputSender.h"
+#include "../../Rocket3d/input/MessageManager.h"
+#include "../../Rocket3d/input/AppMessages.h"
+#include "../../Rocket3d/input/ImGui/ImGuiMessages.h"
+#include "../../Rocket3d/input/game/GameMessages.h"
 #include <glfw3.h>
 
 #pragma region GLFW Callbacks

@@ -75,6 +75,9 @@
     <ClInclude Include="input\InputSender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="input\AppInputSender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\EngineCore.cpp">
@@ -108,6 +111,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="platform\OpenGL\ImGuiOpenGLRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input\AppInputSender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

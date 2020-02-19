@@ -22,6 +22,7 @@
     <ClInclude Include="asset\image\RocketImgLoader.h" />
     <ClInclude Include="asset\Model.h" />
     <ClInclude Include="core\EngineCore.h" />
+    <ClInclude Include="input\AppInputSender.h" />
     <ClInclude Include="input\InputSender.h" />
     <ClInclude Include="input\InputSystem.h" />
     <ClInclude Include="platform\OpenGL\ImGuiOpenGLRenderer.h" />
@@ -40,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\EngineCore.cpp" />
+    <ClCompile Include="input\AppInputSender.cpp" />
     <ClCompile Include="input\InputSystem.cpp" />
     <ClCompile Include="platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
     <ClCompile Include="render\layers\Layer.cpp" />

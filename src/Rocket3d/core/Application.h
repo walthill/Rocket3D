@@ -6,7 +6,7 @@
 #include "../../RocketEngine/render/layers/LayerStack.h"
 #include "../../RocketEngine/logging/RK_Log.h"
 #include "../../RocketEngine/input/InputSystem.h"
-#include "../input/messaging/MessageManager.h"
+#include "../input/MessageManager.h"
 
 //Event system? for layer-unique inputs
 
