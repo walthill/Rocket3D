@@ -64,82 +64,65 @@ void InputSystem::onMouseScroll(double xoffset, double yoffset)
 {
 	if (mPlayMode)
 	{
-		Message* pMessage = new GameMouseDown(MOUSE_SCROLL, xoffset, yoffset);
-		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+		mpGameInput->onMouseScroll(xoffset, yoffset);
 	}
+	else
+	{
+		mpImGuiInput->onMouseScroll(xoffset, yoffset);
+	}
+
+	mpAppInput->onMouseScroll(xoffset, yoffset);
 }
 
 void InputSystem::onMouseClick(int button, int action, int modifier)
 {
 	if (mPlayMode)
 	{
-		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-		{
-			Message* pMessage = new GameMouseDown(LEFT_MOUSE_DOWN);
-			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-		}
-		if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-		{
-			Message* pMessage = new GameMouseDown(RIGHT_MOUSE_DOWN);
-			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-		}
-
-		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) //TODO: mouse button & key button release
-		{
-		}
+		mpGameInput->handleMouseButtonEvents(button, action, modifier);
 	}
 	else
 	{
-		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-		{
-			Message* pMessage = new ImGuiMouseDown(LEFT_MOUSE_DOWN);
-			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-		}
-		if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-		{
-			Message* pMessage = new ImGuiMouseDown(RIGHT_MOUSE_DOWN);
-			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-		}
+		mpImGuiInput->handleMouseButtonEvents(button, action, modifier);		
 	}
+
+	mpAppInput->handleMouseButtonEvents(button, action, modifier);
 }
 
 void InputSystem::onMouseMove(double xpos, double ypos)
 {
 	if (mPlayMode)
 	{
-		if (firstMouse)
-		{
-			lastX = xpos;
-			lastY = ypos;
-			firstMouse = false;
-		}
-
-		float xOffset = (float)(xpos - lastX);
-		float yOffset = (float)(lastY - ypos);
-		lastY = ypos;
-		lastX = xpos;
-
-		Message* pMessage = new GameMouseMove(CAM_MOUSE_MOVE, xOffset, yOffset);
-		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+		mpGameInput->onMouseMove(xpos, ypos);
 	}
+	else
+	{
+		mpImGuiInput->onMouseMove(xpos, ypos);
+	}
+
+	mpAppInput->onMouseMove(xpos, ypos);
 }
 
 
 void InputSystem::onKeyEvent(int key, int scancode, int action, int mods)
 {
-	mpAppInput->handleKeyEvents(key, scancode, action, mods);
+	if (mPlayMode)
+	{
+		mpGameInput->handleKeyEvents(key, scancode, action, mods);
+	}
+	else
+	{
+		mpImGuiInput->handleKeyEvents(key, scancode, action, mods);
+	}
 
-	//if play mode
-		//gameInput->handleKeyEvents()
-	//if !play mode
-		//editorInput->handleKeyEvents()
+	mpAppInput->handleKeyEvents(key, scancode, action, mods);
 }
 
 InputSystem::InputSystem(GLFWwindow* window)
 {
 	mpAppInput = new AppInputSender();
+	mpImGuiInput = new ImGuiInputSender();
+	mpGameInput = new GameInputSender();
 
-	firstMouse = true;
 	mpWindowHandle = window;
 	glfwSetWindowUserPointer(mpWindowHandle, reinterpret_cast<void*>(this));//<--- right here
 	glfwSetCursorPosCallback(mpWindowHandle, mouse_move_callback);
@@ -154,7 +137,7 @@ void InputSystem::processInput()
 	glfwPollEvents();
 }
 
-
+/*
 void InputSystem::pollGameInput(int key, int scancode, int action, int mods)
 {
 	if (glfwGetKey(mpWindowHandle, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -192,5 +175,5 @@ void InputSystem::pollGameInput(int key, int scancode, int action, int mods)
 		Message* pMessage = new GameKeyDown(KEY_2);
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
-}
+}*/
 

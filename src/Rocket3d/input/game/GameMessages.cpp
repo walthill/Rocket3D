@@ -70,7 +70,7 @@ void GameKeyDown::process(float deltaTime)
 
 
 GameMouseDown::GameMouseDown(const int& mouseKey, double x, double y)
-	:Message(BUTTON_DOWN)
+	:Message(MOUSE_DOWN)
 	, mMouseCode(mouseKey)
 	, x(x)
 	, y(y)
@@ -116,7 +116,7 @@ void GameMouseDown::process(float deltaTime)
 */
 
 GameMouseMove::GameMouseMove(const int& mouseKey, double x, double y)
-	:Message(BUTTON_DOWN)
+	:Message(MOUSE_MOVE_TYPE)
 	, mMouseMoveCode(mouseKey)
 {
 	xPos = (float)x;

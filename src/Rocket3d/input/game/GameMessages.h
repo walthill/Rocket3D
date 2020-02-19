@@ -85,7 +85,7 @@ class GameMouseMove : public Message
 		/*
 			* The constructor requires an input keycode parameter
 		*/
-		GameMouseMove(const int& key, double x = 0, double y = 0);
+		GameMouseMove(const int& mouseKey, double x = 0, double y = 0);
 
 		/*
 			* Destructor

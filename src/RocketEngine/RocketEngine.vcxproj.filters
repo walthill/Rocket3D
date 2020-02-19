@@ -78,6 +78,12 @@
     <ClInclude Include="input\AppInputSender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="input\ImGuiInputSender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input\GameInputSender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\EngineCore.cpp">
@@ -114,6 +120,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="input\AppInputSender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input\ImGuiInputSender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input\GameInputSender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

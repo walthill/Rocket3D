@@ -1,6 +1,5 @@
 #include "AppInputSender.h"
 #include "../../Rocket3d/core/Application.h"
-#include "../../Rocket3d/input/Message.h"
 #include "../../Rocket3d/input/AppMessages.h"
 #include <glfw3.h>
 
@@ -17,11 +16,13 @@ bool AppInputSender::handleKeyEvents(int key, int scancode, int action, int mods
 	bool shouldConsumeEvent = false;
 
 	onKeyDown(key, scancode, action, mods);
+	onKeyUp(key, scancode, action, mods);
+	onKeyRepeat(key, scancode, action, mods);
 
 	return shouldConsumeEvent;
 }
 
-bool AppInputSender::handleMouseButtonEvents(int key, int scancode, int action, int mods)
+bool AppInputSender::handleMouseButtonEvents(int key, int action, int mods)
 {
 	bool shouldConsumeEvent = false;
 
@@ -53,15 +54,20 @@ void AppInputSender::onKeyRepeat(int key, int scancode, int action, int mods)
 
 
 
-void AppInputSender::onMouseDown(int key, int scancode, int action, int mods)
+void AppInputSender::onMouseDown(int key, int action, int mods)
 {
 }
 
-void AppInputSender::onMouseUp(int key, int scancode, int action, int mods)
+void AppInputSender::onMouseUp(int key, int action, int mods)
 {
 }
 
-void AppInputSender::onMouseRepeat(int key, int scancode, int action, int mods)
+void AppInputSender::onMouseMove(double xPos, double yPos)
 {
 }
+
+void AppInputSender::onMouseScroll(double xoffset, double yoffset)
+{
+}
+
 

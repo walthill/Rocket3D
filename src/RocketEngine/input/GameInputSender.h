@@ -1,13 +1,13 @@
-#ifndef APP_INPUT_H
-#define APP_INPUT_H
+#ifndef GAME_INPUT_SENDER_H
+#define GAME_INPUT_SENDER_H
 
 #include "InputSender.h"
 
-class AppInputSender : public InputSender
+class GameInputSender : public InputSender
 {
 	public:
-		AppInputSender();	
-		~AppInputSender();
+		GameInputSender();
+		~GameInputSender();
 
 		//return bool flag in case we need to stop from polling beyond this layer
 		bool handleKeyEvents(int key, int scancode, int action, int mods);
@@ -23,6 +23,7 @@ class AppInputSender : public InputSender
 
 		void onMouseDown(int key, int action, int mods) override;
 		void onMouseUp(int key, int action, int mods) override;
+
 };
 
-#endif // !APP_INPUT_H
+#endif //!GAME_INPUT_SENDER_H

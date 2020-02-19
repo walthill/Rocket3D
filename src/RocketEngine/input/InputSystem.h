@@ -23,6 +23,8 @@
 #include <rkutil/Trackable.h>
 #include "../window/Window.h"
 #include "AppInputSender.h"
+#include "ImGuiInputSender.h"
+#include "GameInputSender.h"
 
 class InputSystem : public rkutil::Trackable
 {
@@ -63,10 +65,11 @@ class InputSystem : public rkutil::Trackable
 
 	private:
 		AppInputSender* mpAppInput;
+		ImGuiInputSender* mpImGuiInput;
+		GameInputSender* mpGameInput;
 
 		GLFWwindow* mpWindowHandle;
-		bool firstMouse, mPlayMode = true;
-		double lastX, lastY;
+		bool mPlayMode = true;
 };
 
 #endif // !INPUT_SYS_H

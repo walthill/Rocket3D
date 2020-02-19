@@ -6,7 +6,7 @@
 /*
 ===========================================================
 
-			Game Key DOWN Messages
+			ImGui Key DOWN Messages
 
 ============================================================
 */
@@ -39,7 +39,7 @@ private:
 /*
 ===========================================================
 
-			Game Mouse DOWN Messages
+			ImGui Mouse DOWN Messages
 
 ============================================================
 */
@@ -67,5 +67,70 @@ class ImGuiMouseDown : public Message
 		int mMouseCode;
 		double x, y;
 };
+
+/*
+===========================================================
+
+			ImGui Mouse UP Messages
+
+============================================================
+*/
+
+
+class ImGuiMouseUp : public Message
+{
+public:
+	/*
+		* The constructor requires an input keycode parameter
+	*/
+	ImGuiMouseUp(const int& mouseKey, double x = 0, double y = 0);
+
+	/*
+		* Destructor
+	*/
+	~ImGuiMouseUp();
+
+	/*
+		* Convert player input into an action based on the given key code.
+	*/
+	void process(float deltaTime);
+
+private:
+	int mMouseCode;
+	double x, y;
+};
+
+/*
+===========================================================
+
+			ImGui Mouse DOWN Messages
+
+============================================================
+*/
+
+
+class ImGuiMouseMove : public Message
+{
+public:
+	/*
+		* The constructor requires an input keycode parameter
+	*/
+	ImGuiMouseMove(const int& mouseKey, double x = 0, double y = 0);
+
+	/*
+		* Destructor
+	*/
+	~ImGuiMouseMove();
+
+	/*
+		* Convert player input into an action based on the given key code.
+	*/
+	void process(float deltaTime);
+
+private:
+	int mMouseMoveCode;
+	double xPos, yPos;
+};
+
 
 #endif // !IMGUI_MESSAGES_H
