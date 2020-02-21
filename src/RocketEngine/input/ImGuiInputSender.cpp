@@ -50,12 +50,12 @@ void ImGuiInputSender::onMouseDown(int key, int action, int mods)
 {
 	if (key == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 	{
-		Message* pMessage = new ImGuiMouseDown(LEFT_MOUSE_DOWN);
+		Message* pMessage = new ImGuiMouseDown(LEFT_MOUSE);
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
 	if (key == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 	{
-		Message* pMessage = new ImGuiMouseDown(RIGHT_MOUSE_DOWN);
+		Message* pMessage = new ImGuiMouseDown(RIGHT_MOUSE);
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
 }
@@ -64,31 +64,19 @@ void ImGuiInputSender::onMouseUp(int key, int action, int mods)
 {
 	if (key == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
 	{
-		Message* pMessage = new ImGuiMouseDown(LEFT_MOUSE_UP);
+		Message* pMessage = new ImGuiMouseUp(LEFT_MOUSE);
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
 	if (key == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE)
 	{
-		Message* pMessage = new ImGuiMouseDown(RIGHT_MOUSE_UP);
+		Message* pMessage = new ImGuiMouseUp(RIGHT_MOUSE);
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
 }
 
 void ImGuiInputSender::onMouseMove(double xpos, double ypos)
 {
-	if (mFirstMouse)
-	{
-		mLastX = xpos;
-		mLastY = ypos;
-		mFirstMouse = false;
-	}
-
-	float xOffset = (float)(xpos - mLastX);
-	float yOffset = (float)(mLastY- ypos);
-	mLastY = ypos;
-	mLastX = xpos;
-
-	Message* pMessage = new ImGuiMouseMove(MOUSE_MOVE, xOffset, yOffset);
+	Message* pMessage = new ImGuiMouseMove(MOUSE_MOVE, xpos, ypos);
 	Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 }
 

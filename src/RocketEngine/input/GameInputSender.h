@@ -23,7 +23,6 @@ class GameInputSender : public InputSender
 
 		void onMouseDown(int key, int action, int mods) override;
 		void onMouseUp(int key, int action, int mods) override;
-
 };
 
 #endif //!GAME_INPUT_SENDER_H

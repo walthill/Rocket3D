@@ -14,6 +14,8 @@ ImGuiLayer::ImGuiLayer()
 
 ImGuiLayer::~ImGuiLayer()
 {
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui::DestroyContext();
 }
 
 void ImGuiLayer::onAttach()
@@ -49,7 +51,7 @@ void ImGuiLayer::onAttach()
 	io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
 	io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
 
-	ImGui_ImplOpenGL3_Init("#version 410");
+	ImGui_ImplOpenGL3_Init("#version 330");
 }
 
 void ImGuiLayer::onDetach()

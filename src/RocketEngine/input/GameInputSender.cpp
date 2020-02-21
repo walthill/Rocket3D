@@ -39,14 +39,14 @@ void GameInputSender::onMouseMove(double xPos, double yPos)
 	if (mFirstMouse)
 	{
 		mLastX = xPos;
-		mLastY = xPos;
+		mLastY = yPos;
 		mFirstMouse = false;
 	}
 
 	float xOffset = (float)(xPos - mLastX);
-	float yOffset = (float)(mLastY - xPos);
-	mLastY = xPos;
+	float yOffset = (float)(mLastY - yPos);
 	mLastX = xPos;
+	mLastY = yPos;
 
 	Message* pMessage = new GameMouseMove(CAM_MOUSE_MOVE, xOffset, yOffset);
 	Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
@@ -74,12 +74,12 @@ void GameInputSender::onMouseDown(int key, int action, int mods)
 {
 	if (key == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 	{
-		Message* pMessage = new GameMouseDown(LEFT_MOUSE_DOWN);
+		Message* pMessage = new GameMouseDown(LEFT_MOUSE);
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
 	if (key == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 	{
-		Message* pMessage = new GameMouseDown(RIGHT_MOUSE_DOWN);
+		Message* pMessage = new GameMouseDown(RIGHT_MOUSE);
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
 }

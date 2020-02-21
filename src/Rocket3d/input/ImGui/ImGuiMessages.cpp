@@ -70,19 +70,18 @@ ImGuiMouseDown::~ImGuiMouseDown()
 void ImGuiMouseDown::process(float deltaTime)
 {
 	ImGuiIO& io = ImGui::GetIO();
-	if (mMouseCode == LEFT_MOUSE_DOWN)
+	io.MouseDown[mMouseCode] = true;
+
+	if (mMouseCode == LEFT_MOUSE)
 	{
-		io.MouseDown[mMouseCode] = true;
 		RK_LOG_C("IMGUI LEFT MOUSE DOWN");
 	}
-	if (mMouseCode == RIGHT_MOUSE_DOWN)
+	if (mMouseCode == RIGHT_MOUSE)
 	{
-		io.MouseDown[mMouseCode] = true;
 		RK_LOG_C("IMGUI RIGHT MOUSE DOWN");
 	}
-	if (mMouseCode == MIDDLE_MOUSE_DOWN)
+	if (mMouseCode == MIDDLE_MOUSE)
 	{
-		io.MouseDown[mMouseCode] = true;
 		RK_LOG_C("IMGUI MIDDLE MOUSE DOWN");
 	}
 	if (mMouseCode == MOUSE_SCROLL)
@@ -119,13 +118,13 @@ void ImGuiMouseUp::process(float deltaTime)
 	ImGuiIO& io = ImGui::GetIO();
 	io.MouseDown[mMouseCode] = false;
 
-	if (mMouseCode == LEFT_MOUSE_UP)
+	if (mMouseCode == LEFT_MOUSE)
 	{
 		RK_LOG_C("IMGUI LEFT MOUSE UP");
 	}
-	if (mMouseCode == RIGHT_MOUSE_UP)
+	if (mMouseCode == RIGHT_MOUSE)
 	{
-		io.MouseDown[mMouseCode] = false;
+//		io.MouseDown[mMouseCode] = false;
 		RK_LOG_C("IMGUI RIGHT MOUSE UP");
 	}
 }
@@ -156,5 +155,5 @@ ImGuiMouseMove::~ImGuiMouseMove()
 void ImGuiMouseMove::process(float deltaTime)
 {
 	ImGuiIO& io = ImGui::GetIO();
-	io.MousePos = ImVec2(xPos, yPos);
+	io.MousePos = ImVec2((float)xPos, (float)yPos);
 }

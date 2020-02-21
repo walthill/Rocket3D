@@ -18,7 +18,7 @@ class InputSender
 		virtual void onMouseUp(int button, int action, int mods) = 0;
 
 		bool mFirstMouse = true;
-		double mLastX, mLastY;
+		double mLastX = 0, mLastY = 0;
 };
 
 #endif // !INPUT_INTERFACE_H

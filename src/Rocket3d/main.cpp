@@ -16,8 +16,7 @@
 	The GameApp class is initialized and destroyed here. The engine loop is entered from here.
 
 ********/
-
-#include "core/GameApp.h"
+#include <rkutil/MemoryTracker.h>
 #include "../RocketEngine/logging/RK_Log.h"
 #include "core/Application.h"
 

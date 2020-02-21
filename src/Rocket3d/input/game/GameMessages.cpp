@@ -87,22 +87,21 @@ void GameMouseDown::process(float deltaTime)
 
 	if (pGame != nullptr)
 	{
-		if (mMouseCode == LEFT_MOUSE_DOWN)
+		if (mMouseCode == LEFT_MOUSE)
 		{
 			RK_LOG_C("LEFT MOUSE DOWN");
 		}
-		if (mMouseCode == RIGHT_MOUSE_DOWN)
+		if (mMouseCode == RIGHT_MOUSE)
 		{
 			RK_LOG_C("RIGHT MOUSE DOWN");
 		}
-		if (mMouseCode == MIDDLE_MOUSE_DOWN)
+		if (mMouseCode == MIDDLE_MOUSE)
 		{
 			RK_LOG_C("MIDDLE MOUSE DOWN");
 		}
 		if (mMouseCode == MOUSE_SCROLL)
 		{
 			pGame->getInstance()->getRocketEngine()->getCamera()->processMouseScroll((float)y);
-
 		}
 	}
 }
