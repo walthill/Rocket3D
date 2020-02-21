@@ -29,7 +29,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) //TODO: move to callback class
 {
 	InputSystem* wind = reinterpret_cast<InputSystem*>(glfwGetWindowUserPointer(window));
-	wind->getWindow()->setViewport(0, 0, width, height);
+	wind->onWindowResize(width, height);
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -58,6 +58,27 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 }
 
 #pragma endregion
+
+
+InputSystem::InputSystem(Window* window)
+{
+	mpAppInput = new AppInputSender();
+	mpImGuiInput = new ImGuiInputSender();
+	mpGameInput = new GameInputSender();
+
+	mpWindow = window;
+	GLFWwindow* wind = mpWindow->getWindowHandle();
+
+	//give this class "user" access to callbacks
+	glfwSetWindowUserPointer(mpWindow->getWindowHandle(), reinterpret_cast<void*>(this));
+
+	glfwSetCursorPosCallback(wind, mouse_move_callback);
+	glfwSetScrollCallback(wind, scroll_callback);
+	glfwSetMouseButtonCallback(wind, mouse_click_callback);
+	glfwSetKeyCallback(wind, key_callback);
+	glfwSetFramebufferSizeCallback(wind, framebuffer_size_callback);
+}
+
 
 void InputSystem::onMouseScroll(double xoffset, double yoffset)
 {
@@ -116,23 +137,10 @@ void InputSystem::onKeyEvent(int key, int scancode, int action, int mods)
 	mpAppInput->handleKeyEvents(key, scancode, action, mods);
 }
 
-InputSystem::InputSystem(Window* window)
+void InputSystem::onWindowResize(int width, int height)
 {
-	mpAppInput = new AppInputSender();
-	mpImGuiInput = new ImGuiInputSender();
-	mpGameInput = new GameInputSender();
-
-	mpWindow = window;
-	GLFWwindow* wind = mpWindow->getWindowHandle();
-	
-	//give this class "user" access to callbacks
-	glfwSetWindowUserPointer(mpWindow->getWindowHandle(), reinterpret_cast<void*>(this));
-
-	glfwSetCursorPosCallback(wind, mouse_move_callback);
-	glfwSetScrollCallback(wind, scroll_callback);
-	glfwSetMouseButtonCallback(wind, mouse_click_callback);
-	glfwSetKeyCallback(wind, key_callback);
-	glfwSetFramebufferSizeCallback(wind, framebuffer_size_callback);
+	mpWindow->setViewport(0, 0, width, height);
+	mpImGuiInput->onWindowResize(width, height);
 }
 
 void InputSystem::processInput()

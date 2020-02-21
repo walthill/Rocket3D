@@ -86,3 +86,9 @@ void ImGuiInputSender::onMouseScroll(double xoffset, double yoffset)
 	Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 }
 
+void ImGuiInputSender::onWindowResize(int width, int height)
+{
+	Message* pMessage = new ImGuiUilityMsg(WIND_RESIZE, width, height);
+	Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+}
+

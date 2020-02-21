@@ -4,8 +4,7 @@
 #include "../core/Application.h"
 #include <glfw3.h>
 
-//TODO	-- Get imgui ui objects to recieve input --> refactor input system? 
-//		-- Create application event system
+//TODO	-- Finish adding ImGui inputs (text input, etc)
 
 ImGuiLayer::ImGuiLayer()
 :Layer("ImGui")
@@ -52,6 +51,9 @@ void ImGuiLayer::onAttach()
 	io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
 
 	ImGui_ImplOpenGL3_Init("#version 330"); //TODO: get version from window
+
+	io.DisplaySize = ImVec2(Application::getInstance()->getAppWindow()->getWidth(), 
+							Application::getInstance()->getAppWindow()->getHeight());
 }
 
 void ImGuiLayer::onDetach()
@@ -60,10 +62,7 @@ void ImGuiLayer::onDetach()
 
 void ImGuiLayer::onUpdate()
 {
-	Application* app = Application::getInstance();
 	ImGuiIO& io = ImGui::GetIO();
-	io.DisplaySize = ImVec2((float)app->getAppWindow()->getWidth(), (float)app->getAppWindow()->getHeight());
-
 	float time = (float)glfwGetTime();
 	io.DeltaTime = mTime > 0.0 ? (time - mTime) : (1.0f / 60.0f);
 	mTime = time;

@@ -6,6 +6,39 @@
 /*
 ===========================================================
 
+			ImGui Key UP Messages
+
+============================================================
+*/
+
+
+class ImGuiKeyUp : public Message
+{
+	public:
+		/*
+			* The constructor requires an input keycode parameter
+		*/
+		ImGuiKeyUp(const int& key);
+
+		/*
+			* Destructor
+		*/
+		~ImGuiKeyUp();
+
+		/*
+			* Convert player input into an action based on the given key code.
+		*/
+		void process(float deltaTime);
+
+	private:
+		//The input enum needed for processing player input
+		int mKeyCode;
+};
+
+
+/*
+===========================================================
+
 			ImGui Key DOWN Messages
 
 ============================================================
@@ -18,7 +51,7 @@ public:
 	/*
 		* The constructor requires an input keycode parameter
 	*/
-	ImGuiKeyDown(const int& key);
+	ImGuiKeyDown(const int& key, const int& mod = 0);
 
 	/*
 		* Destructor
@@ -32,7 +65,7 @@ public:
 
 private:
 	//The input enum needed for processing player input
-	int mKeyCode;
+	int mKeyCode, mKeyMod;
 };
 
 
@@ -130,6 +163,29 @@ public:
 private:
 	int mMouseMoveCode;
 	double xPos, yPos;
+};
+
+class ImGuiUilityMsg : public Message
+{
+public:
+	/*
+		* The constructor requires an input keycode parameter
+	*/
+	ImGuiUilityMsg(const int& mouseKey, double x = 0, double y = 0);
+
+	/*
+		* Destructor
+	*/
+	~ImGuiUilityMsg();
+
+	/*
+		* Convert player input into an action based on the given key code.
+	*/
+	void process(float deltaTime);
+
+private:
+	int mUtilCode;
+	double mX, mY;
 };
 
 

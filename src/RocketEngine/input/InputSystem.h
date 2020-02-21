@@ -52,6 +52,8 @@ class InputSystem : public rkutil::Trackable
 
 		void onKeyEvent(int key, int scancode, int action, int mods);
 
+		void onWindowResize(int width, int height);
+
 		/***
 			* Checks for inputs every frame and queues input message
 		***/

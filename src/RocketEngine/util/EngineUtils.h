@@ -25,6 +25,8 @@
 #include <string>
 #include <vector>
 #include <rkutil/Trackable.h>
+#include "../logging/RK_Log.h"
+
 typedef unsigned int uint32;
 typedef std::string ShaderKey;
 

@@ -32,7 +32,13 @@ enum MessageType
 	BUTTON_DOWN = 0, BUTTON_UP,
 	MOUSE_UP, MOUSE_DOWN,
 	MOUSE_MOVE_TYPE,
+	IMGUI_UTIL_TYPE,
 	NUM_MSG_TYPES
+};
+
+enum ImGuiCodes
+{
+	WIND_RESIZE = 0	
 };
 
 enum AppMessageCategory
