@@ -2,7 +2,7 @@
 #include <platform/OpenGL/ImGuiOpenGLRenderer.h>
 #include <logging/RK_Log.h>
 
-//TODO: remove GLFW & create key code abstraction
+//TODO: remove GLFW
 #include <glfw3.h>
 
 /*

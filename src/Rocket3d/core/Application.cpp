@@ -2,6 +2,15 @@
 #include "../layers/GameLayer.h"
 #include "../layers/ImGuiLayer.h"
 
+/*	TODO	
+ * ============================================================
+ *		-- ImGui docking & viewports
+ *		-- Abstract input codes
+ *		-- Input polling 
+ *		-- fully implement input messaging (flesh out files, etc)
+ */
+
+
 Application* Application::mpApplication = nullptr;
 
 Application::Application()
