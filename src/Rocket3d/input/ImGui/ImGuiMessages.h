@@ -51,7 +51,7 @@ public:
 	/*
 		* The constructor requires an input keycode parameter
 	*/
-	ImGuiKeyDown(const int& key, const int& mod = 0);
+	ImGuiKeyDown(const int& key, const int& mod);
 
 	/*
 		* Destructor
@@ -67,6 +67,41 @@ private:
 	//The input enum needed for processing player input
 	int mKeyCode, mKeyMod;
 };
+
+
+/*
+===========================================================
+
+			ImGui Key Typed Messages
+
+============================================================
+*/
+
+
+class ImGuiKeyTyped : public Message
+{
+public:
+	/*
+		* The constructor requires an input keycode parameter
+	*/
+	ImGuiKeyTyped(const int& key);
+
+	/*
+		* Destructor
+	*/
+	~ImGuiKeyTyped();
+
+	/*
+		* Convert player input into an action based on the given key code.
+	*/
+	void process(float deltaTime);
+
+private:
+	//The input enum needed for processing player input
+	int mKeyCode;
+};
+
+
 
 
 /*

@@ -16,6 +16,8 @@ class ImGuiInputSender : public InputSender
 		void onMouseMove(double xpos, double ypos) override;
 		void onMouseScroll(double xoffset, double yoffset) override;
 
+		void onKeyTyped(int key);
+
 		void onWindowResize(int width, int height);
 
 	private:

@@ -34,12 +34,30 @@ bool ImGuiInputSender::handleMouseButtonEvents(int button, int action, int mods)
 
 void ImGuiInputSender::onKeyDown(int key, int scancode, int action, int mods)
 {
-
+	if (key == GLFW_KEY_BACKSPACE && action == GLFW_PRESS)
+	{
+		Message* pMessage = new ImGuiKeyDown(GLFW_KEY_BACKSPACE, mods);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)
+	{
+		Message* pMessage = new ImGuiKeyDown(GLFW_KEY_ENTER, mods);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
 }
 
 void ImGuiInputSender::onKeyUp(int key, int scancode, int action, int mods)
 {
-
+	if (key == GLFW_KEY_BACKSPACE && action == GLFW_RELEASE)
+	{
+		Message* pMessage = new ImGuiKeyUp(GLFW_KEY_BACKSPACE);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (key == GLFW_KEY_ENTER && action == GLFW_RELEASE)
+	{
+		Message* pMessage = new ImGuiKeyUp(GLFW_KEY_ENTER);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
 }
 
 void ImGuiInputSender::onKeyRepeat(int key, int scancode, int action, int mods)
@@ -83,6 +101,12 @@ void ImGuiInputSender::onMouseMove(double xpos, double ypos)
 void ImGuiInputSender::onMouseScroll(double xoffset, double yoffset)
 {
 	Message* pMessage = new ImGuiMouseDown(MOUSE_SCROLL, xoffset, yoffset);
+	Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+}
+
+void ImGuiInputSender::onKeyTyped(int key)
+{
+	Message* pMessage = new ImGuiKeyTyped(key);
 	Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 }
 

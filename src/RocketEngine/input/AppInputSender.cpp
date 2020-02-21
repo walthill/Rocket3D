@@ -31,7 +31,7 @@ bool AppInputSender::handleMouseButtonEvents(int key, int action, int mods)
 
 void AppInputSender::onKeyDown(int key, int scancode, int action, int mods)
 {
-	if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)
+	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
 	{
 		Message* pMessage = new AppKeyDown(ENTER);
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);

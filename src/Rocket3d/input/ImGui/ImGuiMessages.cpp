@@ -2,7 +2,7 @@
 #include <platform/OpenGL/ImGuiOpenGLRenderer.h>
 #include <logging/RK_Log.h>
 
-//TODO: remove GLFW 
+//TODO: remove GLFW & create key code abstraction
 #include <glfw3.h>
 
 /*
@@ -31,6 +31,9 @@ void ImGuiKeyUp::process(float deltaTime)
 	if (mKeyCode == ESC)
 	{
 	}
+	else if (mKeyCode == GLFW_KEY_BACKSPACE)
+	{
+	}
 	else if (mKeyCode == KEY_W)
 	{
 	}
@@ -48,10 +51,6 @@ void ImGuiKeyUp::process(float deltaTime)
 	}
 	else if (mKeyCode == KEY_2)
 	{
-	}
-	else
-	{
-		RK_WARN_C("MESSAGE TYPE NOT REGISTERED FOR KEY DOWN MSG");
 	}
 }
 
@@ -88,6 +87,9 @@ void ImGuiKeyDown::process(float deltaTime)
 	if (mKeyCode == ESC)
 	{
 	}
+	else if (mKeyCode == GLFW_KEY_BACKSPACE)
+	{
+	}
 	else if (mKeyCode == KEY_W)
 	{
 	}
@@ -106,11 +108,40 @@ void ImGuiKeyDown::process(float deltaTime)
 	else if (mKeyCode == KEY_2)
 	{
 	}
+}
+
+/*
+===========================================================
+
+			ImGui Key Down Messages
+
+============================================================
+*/
+
+ImGuiKeyTyped::ImGuiKeyTyped(const int& key)
+	:Message(BUTTON_DOWN)
+	, mKeyCode(key)
+{
+}
+
+ImGuiKeyTyped::~ImGuiKeyTyped()
+{
+}
+
+void ImGuiKeyTyped::process(float deltaTime)
+{
+	ImGuiIO& io = ImGui::GetIO();
+
+	if (mKeyCode > 0 && mKeyCode < 0x10000)
+	{
+		io.AddInputCharacter((unsigned short)mKeyCode);
+	}
 	else
 	{
-		RK_WARN_C("MESSAGE TYPE NOT REGISTERED FOR KEY DOWN MSG");
+		RK_FATAL_ALL("KeyCode {0} does not exist", mKeyCode);
 	}
 }
+
 
 
 /*
