@@ -32,7 +32,7 @@ void Application::clean()
 void Application::init()
 {
 	mpMessageManager = new MessageManager();
-	mpInputSystem = new InputSystem(mpAppWindow->getWindowHandle());
+	mpInputSystem = new InputSystem(mpAppWindow);
 
 	addLayer(new ImGuiLayer());
 	addLayer(new GameLayer());	//game layer created by default for now

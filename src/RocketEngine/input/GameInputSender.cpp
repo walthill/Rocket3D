@@ -4,7 +4,8 @@
 #include <glfw3.h>
 
 
-GameInputSender::GameInputSender()
+GameInputSender::GameInputSender() 
+	: InputSender()
 {
 }
 
@@ -60,6 +61,41 @@ void GameInputSender::onMouseScroll(double xoffset, double yoffset)
 
 void GameInputSender::onKeyDown(int key, int scancode, int action, int mods)
 {
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
+		Message* pMessage = new GameKeyDown(ESC);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (key == GLFW_KEY_W && action == GLFW_PRESS)
+	{
+		Message* pMessage = new GameKeyDown(KEY_W);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (key == GLFW_KEY_S && action == GLFW_PRESS)
+	{
+		Message* pMessage = new GameKeyDown(KEY_S);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (key == GLFW_KEY_A && action == GLFW_PRESS)
+	{
+		Message* pMessage = new GameKeyDown(KEY_A);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (key == GLFW_KEY_D && action == GLFW_PRESS)
+	{
+		Message* pMessage = new GameKeyDown(KEY_D);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+	{
+		Message* pMessage = new GameKeyDown(KEY_1);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (key == GLFW_KEY_2 && action == GLFW_PRESS)
+	{
+		Message* pMessage = new GameKeyDown(KEY_2);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
 }
 
 void GameInputSender::onKeyUp(int key, int scancode, int action, int mods)

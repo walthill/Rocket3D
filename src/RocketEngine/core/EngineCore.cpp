@@ -109,9 +109,11 @@ void EngineCore::calculateDeltaTime()
 //Set vertex shader uniform data for each shader
 void EngineCore::processViewProjectionMatrices()
 {
+	Application* app = Application::getInstance();
+
 	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	rkm::Mat4 proj = rkm::Mat4::identity;
-	proj = rkm::MatProj::perspective(rkm::degToRad(mpCam->getFov()), (float)mWindowWidth / (float)mWindowHeight, 0.1f, 100.0f);
+	proj = rkm::MatProj::perspective(rkm::degToRad(mpCam->getFov()), (float)app->getAppWindow()->getWidth() / (float)app->getAppWindow()->getHeight(), 0.1f, 100.0f);
 	mpShaderManager->setShaderMat4("projection", proj);
 
 	rkm::Mat4 view = rkm::Mat4::identity;

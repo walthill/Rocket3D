@@ -51,7 +51,7 @@ void ImGuiLayer::onAttach()
 	io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
 	io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
 
-	ImGui_ImplOpenGL3_Init("#version 330");
+	ImGui_ImplOpenGL3_Init("#version 330"); //TODO: get version from window
 }
 
 void ImGuiLayer::onDetach()
@@ -71,15 +71,10 @@ void ImGuiLayer::onUpdate()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui::NewFrame();
 
-	//render
+	//render ImGui test window
 	static bool show = true;
 	ImGui::ShowDemoWindow(&show);
 	
-	// render your GUI
-	ImGui::Begin("Demo window");
-	ImGui::Button("Hello!");
-	ImGui::End();
-
 	//show on screen
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

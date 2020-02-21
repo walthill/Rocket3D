@@ -25,14 +25,6 @@
 
 bool Window::mShouldInitGLFW = true;
 
-
-void framebufferSizeCallback(GLFWwindow* window, int width, int height);
-void framebufferSizeCallback(GLFWwindow* window, int width, int height) //TODO: move to callback class - move to input?
-{
-	const int TOP_LEFT = 0;
-	glViewport(TOP_LEFT, TOP_LEFT, width, height);
-}
-
 Window::Window()
 {
 	mpWindow = nullptr;
@@ -49,9 +41,6 @@ void Window::clean()
 
 bool Window::initialize(int width, int height, const char* windowName, int settingsFlags, bool showCursor)
 {
-	w = width; 
-	h = height;
-
 	//Init window
 	mpWindow = glfwCreateWindow(width, height, windowName, nullptr, nullptr);
 
@@ -72,10 +61,9 @@ bool Window::initialize(int width, int height, const char* windowName, int setti
 		return false;
 	}
 
-	setViewport(TOP_LEFT, TOP_LEFT, w, h);
+	setViewport(TOP_LEFT, TOP_LEFT, width, height);
 	enableOpenGLWindowFlags(settingsFlags);
 	setCursor(showCursor);
-	glfwSetFramebufferSizeCallback(mpWindow, framebufferSizeCallback);
 
 	return true;
 }
@@ -114,6 +102,9 @@ void Window::clearToColor(float r, float g, float b, float a)
 
 void Window::setViewport(int x, int y, int width, int height)
 {
+	mWidth = width;
+	mHeight = height;
+
 	glViewport(x, y, width, height);
 }
 

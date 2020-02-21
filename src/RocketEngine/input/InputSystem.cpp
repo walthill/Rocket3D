@@ -15,22 +15,22 @@
 
 ********/
 
-#include <glad/glad.h>
 #include "InputSystem.h"
-#include "../logging/RK_Log.h"
-#include "../../Rocket3d/core/Application.h"
-#include "../core/EngineCore.h"
-#include "../../Rocket3d/input/MessageManager.h"
-#include "../../Rocket3d/input/AppMessages.h"
-#include "../../Rocket3d/input/ImGui/ImGuiMessages.h"
-#include "../../Rocket3d/input/game/GameMessages.h"
 #include <glfw3.h>
 
 #pragma region GLFW Callbacks
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouse_move_callback(GLFWwindow* window, double xpos, double ypos);
 void mouse_click_callback(GLFWwindow* window, int button, int action, int modifier);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) //TODO: move to callback class
+{
+	InputSystem* wind = reinterpret_cast<InputSystem*>(glfwGetWindowUserPointer(window));
+	wind->getWindow()->setViewport(0, 0, width, height);
+}
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -58,7 +58,6 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 }
 
 #pragma endregion
-
 
 void InputSystem::onMouseScroll(double xoffset, double yoffset)
 {
@@ -117,18 +116,23 @@ void InputSystem::onKeyEvent(int key, int scancode, int action, int mods)
 	mpAppInput->handleKeyEvents(key, scancode, action, mods);
 }
 
-InputSystem::InputSystem(GLFWwindow* window)
+InputSystem::InputSystem(Window* window)
 {
 	mpAppInput = new AppInputSender();
 	mpImGuiInput = new ImGuiInputSender();
 	mpGameInput = new GameInputSender();
 
-	mpWindowHandle = window;
-	glfwSetWindowUserPointer(mpWindowHandle, reinterpret_cast<void*>(this));//<--- right here
-	glfwSetCursorPosCallback(mpWindowHandle, mouse_move_callback);
-	glfwSetScrollCallback(mpWindowHandle, scroll_callback);
-	glfwSetMouseButtonCallback(mpWindowHandle, mouse_click_callback);
-	glfwSetKeyCallback(window, key_callback);
+	mpWindow = window;
+	GLFWwindow* wind = mpWindow->getWindowHandle();
+	
+	//give this class "user" access to callbacks
+	glfwSetWindowUserPointer(mpWindow->getWindowHandle(), reinterpret_cast<void*>(this));
+
+	glfwSetCursorPosCallback(wind, mouse_move_callback);
+	glfwSetScrollCallback(wind, scroll_callback);
+	glfwSetMouseButtonCallback(wind, mouse_click_callback);
+	glfwSetKeyCallback(wind, key_callback);
+	glfwSetFramebufferSizeCallback(wind, framebuffer_size_callback);
 }
 
 void InputSystem::processInput()
@@ -136,44 +140,3 @@ void InputSystem::processInput()
 	//Check and call events
 	glfwPollEvents();
 }
-
-/*
-void InputSystem::pollGameInput(int key, int scancode, int action, int mods)
-{
-	if (glfwGetKey(mpWindowHandle, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-	{
-		Message* pMessage = new GameKeyDown(ESC);
-		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-	}
-	if (glfwGetKey(mpWindowHandle, GLFW_KEY_W) == GLFW_PRESS)
-	{
-		Message* pMessage = new GameKeyDown(KEY_W);
-		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-	}
-	if (glfwGetKey(mpWindowHandle, GLFW_KEY_S) == GLFW_PRESS)
-	{
-		Message* pMessage = new GameKeyDown(KEY_S);
-		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-	}
-	if (glfwGetKey(mpWindowHandle, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		Message* pMessage = new GameKeyDown(KEY_A);
-		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-	}
-	if (glfwGetKey(mpWindowHandle, GLFW_KEY_D) == GLFW_PRESS)
-	{
-		Message* pMessage = new GameKeyDown(KEY_D);
-		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-	}
-	if (glfwGetKey(mpWindowHandle, GLFW_KEY_1) == GLFW_PRESS)
-	{
-		Message* pMessage = new GameKeyDown(KEY_1);
-		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-	}
-	if (glfwGetKey(mpWindowHandle, GLFW_KEY_2) == GLFW_PRESS)
-	{
-		Message* pMessage = new GameKeyDown(KEY_2);
-		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
-	}
-}*/
-

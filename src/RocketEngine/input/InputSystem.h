@@ -33,7 +33,7 @@ class InputSystem : public rkutil::Trackable
 		/***
 			* Constructor that takes a GLFW Window context
 		***/
-		InputSystem(GLFWwindow* window);
+		InputSystem(Window* window);
 
 		/***
 			* Callback for resizing the window
@@ -57,18 +57,15 @@ class InputSystem : public rkutil::Trackable
 		***/
 		void processInput();
 
-		//TODO: separate input polling types into files
-		void pollGameInput(int key, int scancode, int action, int mods);
-		void pollEditorInput(int key, int scancode, int action, int mods);
-
 		inline void play() { mPlayMode = !mPlayMode; }
+		Window* getWindow() { return mpWindow; }
 
 	private:
 		AppInputSender* mpAppInput;
 		ImGuiInputSender* mpImGuiInput;
 		GameInputSender* mpGameInput;
 
-		GLFWwindow* mpWindowHandle;
+		Window* mpWindow;
 		bool mPlayMode = true;
 };
 

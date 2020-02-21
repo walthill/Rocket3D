@@ -103,12 +103,12 @@ class Window : public rkutil::Trackable
 		/***
 			* Returns the width of the window
 		***/
-		inline int getWidth() { return w; }
+		inline int getWidth() { return mWidth; }
 		
 		/***
 			* Returns the height of the window
 		***/		
-		inline int getHeight() { return h; }
+		inline int getHeight() { return mHeight; }
 
 		/***
 			* Initialize GLFW library
@@ -123,7 +123,7 @@ class Window : public rkutil::Trackable
 	private:
 		static bool mShouldInitGLFW;
 		const int TOP_LEFT = 0;
-		int w = 0, h = 0;
+		int mWidth = 0, mHeight = 0;
 		GLFWwindow* mpWindow;
 };
 
