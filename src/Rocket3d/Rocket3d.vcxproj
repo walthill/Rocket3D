@@ -145,6 +145,7 @@ IF not exist log ( mkdir log &amp;&amp; type nul &gt; log/applog.txt &amp;&amp; 
     <ClCompile Include="core\GameObjectManager.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="ImGui\imgui.cpp" />
+    <ClCompile Include="ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />

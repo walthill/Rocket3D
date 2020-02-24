@@ -69,6 +69,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
+#include "imgui.h"
 #include "ImGuiOpenGLRenderer.h"
 #include <stdio.h>
 #if defined(_MSC_VER) && _MSC_VER <= 1500 // MSVC 2008 or earlier
