@@ -75,13 +75,13 @@
     <ClInclude Include="input\InputSender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="input\AppInputSender.h">
+    <ClInclude Include="input\senders\AppInputSender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="input\ImGuiInputSender.h">
+    <ClInclude Include="input\senders\GameInputSender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="input\GameInputSender.h">
+    <ClInclude Include="input\senders\ImGuiInputSender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -119,13 +119,13 @@
     <ClCompile Include="platform\OpenGL\ImGuiOpenGLRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="input\AppInputSender.cpp">
+    <ClCompile Include="input\senders\AppInputSender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="input\ImGuiInputSender.cpp">
+    <ClCompile Include="input\senders\GameInputSender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="input\GameInputSender.cpp">
+    <ClCompile Include="input\senders\ImGuiInputSender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

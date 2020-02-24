@@ -1,7 +1,7 @@
 #ifndef GAME_INPUT_SENDER_H
 #define GAME_INPUT_SENDER_H
 
-#include "InputSender.h"
+#include "../InputSender.h"
 
 class GameInputSender : public InputSender
 {

@@ -1,7 +1,7 @@
 #ifndef APP_INPUT_H
 #define APP_INPUT_H
 
-#include "InputSender.h"
+#include "../InputSender.h"
 
 class AppInputSender : public InputSender
 {

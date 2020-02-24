@@ -1,7 +1,7 @@
 #ifndef IMGUI_INPUT_SENDER_H
 #define IMGUI_INPUT_SENDER_H
 
-#include "InputSender.h"
+#include "../InputSender.h"
 
 class ImGuiInputSender : public InputSender
 {

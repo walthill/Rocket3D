@@ -22,9 +22,9 @@
 
 #include <rkutil/Trackable.h>
 #include "../window/Window.h"
-#include "AppInputSender.h"
-#include "ImGuiInputSender.h"
-#include "GameInputSender.h"
+#include "senders/AppInputSender.h"
+#include "senders/ImGuiInputSender.h"
+#include "senders/GameInputSender.h"
 
 class InputSystem : public rkutil::Trackable
 {

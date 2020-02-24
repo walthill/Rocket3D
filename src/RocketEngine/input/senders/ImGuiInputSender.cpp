@@ -1,6 +1,6 @@
 #include "ImGuiInputSender.h"
-#include "../../Rocket3d/input/ImGui/ImGuiMessages.h"
-#include "../../Rocket3d/core/Application.h"
+#include "../../../Rocket3d/input/ImGui/ImGuiMessages.h"
+#include "../../../Rocket3d/core/Application.h"
 #include <glfw3.h>
 
 ImGuiInputSender::ImGuiInputSender()
@@ -44,6 +44,26 @@ void ImGuiInputSender::onKeyDown(int key, int scancode, int action, int mods)
 		Message* pMessage = new ImGuiKeyDown(GLFW_KEY_ENTER, mods);
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
+	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
+	{
+		Message* pMessage = new ImGuiKeyDown(GLFW_KEY_RIGHT, mods);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+	{
+		Message* pMessage = new ImGuiKeyDown(GLFW_KEY_LEFT, mods);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (key == GLFW_KEY_UP && action == GLFW_PRESS)
+	{
+		Message* pMessage = new ImGuiKeyDown(GLFW_KEY_UP, mods);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+	{
+		Message* pMessage = new ImGuiKeyDown(GLFW_KEY_DOWN, mods);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
 }
 
 void ImGuiInputSender::onKeyUp(int key, int scancode, int action, int mods)
@@ -58,6 +78,28 @@ void ImGuiInputSender::onKeyUp(int key, int scancode, int action, int mods)
 		Message* pMessage = new ImGuiKeyUp(GLFW_KEY_ENTER);
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
+
+	if (key == GLFW_KEY_LEFT && action == GLFW_RELEASE)
+	{
+		Message* pMessage = new ImGuiKeyUp(GLFW_KEY_LEFT);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (key == GLFW_KEY_RIGHT && action == GLFW_RELEASE)
+	{
+		Message* pMessage = new ImGuiKeyUp(GLFW_KEY_RIGHT);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (key == GLFW_KEY_UP && action == GLFW_RELEASE)
+	{
+		Message* pMessage = new ImGuiKeyUp(GLFW_KEY_UP);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE)
+	{
+		Message* pMessage = new ImGuiKeyUp(GLFW_KEY_DOWN);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+
 }
 
 void ImGuiInputSender::onKeyRepeat(int key, int scancode, int action, int mods)

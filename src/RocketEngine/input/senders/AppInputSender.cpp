@@ -1,6 +1,6 @@
 #include "AppInputSender.h"
-#include "../../Rocket3d/core/Application.h"
-#include "../../Rocket3d/input/AppMessages.h"
+#include "../../../Rocket3d/core/Application.h"
+#include "../../../Rocket3d/input/AppMessages.h"
 #include <glfw3.h>
 
 AppInputSender::AppInputSender()

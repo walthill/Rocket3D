@@ -1,6 +1,6 @@
 #include "GameInputSender.h"
-#include "../../Rocket3d/input/game/GameMessages.h"
-#include "../../Rocket3d/core/Application.h"
+#include "../../../Rocket3d/input/game/GameMessages.h"
+#include "../../../Rocket3d/core/Application.h"
 #include <glfw3.h>
 
 

@@ -50,8 +50,8 @@ void ImGuiLayer::onAttach()
 
 	ImGui_ImplOpenGL3_Init("#version 330"); //TODO: get version from window
 
-	io.DisplaySize = ImVec2(Application::getInstance()->getAppWindow()->getWidth(), 
-							Application::getInstance()->getAppWindow()->getHeight());
+	io.DisplaySize = ImVec2((float)Application::getInstance()->getAppWindow()->getWidth(), 
+							(float)Application::getInstance()->getAppWindow()->getHeight());
 }
 
 void ImGuiLayer::onDetach()
@@ -72,6 +72,38 @@ void ImGuiLayer::onUpdate()
 	static bool show = true;
 	ImGui::ShowDemoWindow(&show);
 	
+	//Toolbar
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("New"))
+			{
+
+			}
+			if (ImGui::MenuItem("Quit"))
+			{
+				Application::getInstance()->quit();
+			}
+
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Help"))
+		{
+			if (ImGui::MenuItem("About"))
+			{
+
+			}
+			if (ImGui::MenuItem("Documentation"))
+			{
+			}
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMainMenuBar();
+	}
+
 	//show on screen
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
