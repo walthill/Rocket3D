@@ -13,6 +13,10 @@ class ImGuiLayer : public Layer
 		void onDetach() override;
 		void onUpdate() override;
 
+		void drawToolbar();
+		void drawSceneTree();
+		void drawInspector();
+
 	private:
 		float mTime = 0.0f;
 };

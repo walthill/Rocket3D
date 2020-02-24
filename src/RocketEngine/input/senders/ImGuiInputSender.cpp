@@ -99,7 +99,6 @@ void ImGuiInputSender::onKeyUp(int key, int scancode, int action, int mods)
 		Message* pMessage = new ImGuiKeyUp(GLFW_KEY_DOWN);
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
-
 }
 
 void ImGuiInputSender::onKeyRepeat(int key, int scancode, int action, int mods)

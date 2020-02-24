@@ -73,6 +73,17 @@ void ImGuiLayer::onUpdate()
 	ImGui::ShowDemoWindow(&show);
 	
 	//Toolbar
+	drawToolbar();
+	drawInspector();
+	drawSceneTree();
+
+	//show on screen
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void ImGuiLayer::drawToolbar()
+{
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
@@ -103,8 +114,36 @@ void ImGuiLayer::onUpdate()
 
 		ImGui::EndMainMenuBar();
 	}
+}
 
-	//show on screen
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+void ImGuiLayer::drawInspector()
+{
+	ImGui::SetNextWindowSize(ImVec2(430, 450), ImGuiCond_FirstUseEver);
+	if (!ImGui::Begin("Inspector"))
+	{
+		ImGui::End();
+		return;
+	}
+
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2, 20));
+	ImGui::Separator();
+	ImGui::Columns(1);
+	ImGui::PopStyleVar();
+	ImGui::End();
+}
+
+void ImGuiLayer::drawSceneTree()
+{
+	ImGui::SetNextWindowSize(ImVec2(430, 250), ImGuiCond_FirstUseEver);
+	if (!ImGui::Begin("Scene Tree"))
+	{
+		ImGui::End();
+		return;
+	}
+
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2, 20));
+	ImGui::Separator();
+	ImGui::Columns(1);
+	ImGui::PopStyleVar();
+	ImGui::End();
 }
