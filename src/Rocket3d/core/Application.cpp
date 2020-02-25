@@ -4,7 +4,8 @@
 
 /*	TODO	
  * ============================================================
- *		-- ImGui docking & viewports
+ *		-- Remove ImGui input messaging
+ *		-- Render game scene to ImGui window - https://gamedev.stackexchange.com/questions/140693/how-can-i-render-an-opengl-scene-into-an-imgui-window
  *		-- Abstract input codes
  *		-- Input polling 
  *		-- fully implement input messaging (flesh out files, etc)
