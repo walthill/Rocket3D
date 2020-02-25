@@ -81,10 +81,10 @@
     <ClInclude Include="input\senders\ImGuiInputSender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="platform\OpenGL\imgui_impl_glfw.h">
+    <ClInclude Include="platform\OpenGL\ImGuiOpenGLRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="platform\OpenGL\ImGuiOpenGLRenderer.h">
+    <ClInclude Include="platform\OpenGL\ImGuiGLFWRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -128,10 +128,10 @@
     <ClCompile Include="input\senders\ImGuiInputSender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="platform\OpenGL\imgui_impl_glfw.cpp">
+    <ClCompile Include="platform\OpenGL\ImGuiOpenGLRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="platform\OpenGL\ImGuiOpenGLRenderer.cpp">
+    <ClCompile Include="platform\OpenGL\ImGuiGLFWRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

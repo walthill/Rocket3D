@@ -27,7 +27,7 @@
     <ClInclude Include="input\senders\ImGuiInputSender.h" />
     <ClInclude Include="input\InputSender.h" />
     <ClInclude Include="input\InputSystem.h" />
-    <ClInclude Include="platform\OpenGL\imgui_impl_glfw.h" />
+    <ClInclude Include="platform\OpenGL\ImGuiGLFWRenderer.h" />
     <ClInclude Include="platform\OpenGL\ImGuiOpenGLRenderer.h" />
     <ClInclude Include="render\layers\Layer.h" />
     <ClInclude Include="render\layers\LayerStack.h" />
@@ -48,7 +48,7 @@
     <ClCompile Include="input\senders\GameInputSender.cpp" />
     <ClCompile Include="input\senders\ImGuiInputSender.cpp" />
     <ClCompile Include="input\InputSystem.cpp" />
-    <ClCompile Include="platform\OpenGL\imgui_impl_glfw.cpp" />
+    <ClCompile Include="platform\OpenGL\ImGuiGLFWRenderer.cpp" />
     <ClCompile Include="platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
     <ClCompile Include="render\layers\Layer.cpp" />
     <ClCompile Include="render\layers\LayerStack.cpp" />

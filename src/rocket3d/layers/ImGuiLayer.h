@@ -1,7 +1,7 @@
 #ifndef IMGUI_LAYER_H
 #define IMGUI_LAYER_H
 
-#include <render/layers/Layer.h>
+#include "../../RocketEngine/render/layers/Layer.h"
 
 class ImGuiLayer : public Layer
 {
@@ -12,7 +12,12 @@ class ImGuiLayer : public Layer
 		void onAttach() override;
 		void onDetach() override;
 		void onUpdate() override;
+		void onImGuiRender() override;
 
+		void begin();
+		void end();	
+
+		void drawDockSpace();
 		void drawToolbar();
 		void drawSceneTree();
 		void drawInspector();

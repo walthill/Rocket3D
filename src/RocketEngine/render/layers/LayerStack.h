@@ -23,7 +23,7 @@ class LayerStack
 
 	private:
 		std::vector<Layer*> mLayerStack;
-		std::vector<Layer*>::iterator mLayerInsert; //tracks point at which to insert layer
+		unsigned int mLayerInsertIndex = 0; //tracks point at which to insert layer
 };
 
 #endif // !LAYER_STACK_H

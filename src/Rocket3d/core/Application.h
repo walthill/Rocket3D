@@ -7,6 +7,7 @@
 #include "../../RocketEngine/logging/RK_Log.h"
 #include "../../RocketEngine/input/InputSystem.h"
 #include "../input/MessageManager.h"
+#include "../layers/ImGuiLayer.h"
 
 //Event system? for layer-unique inputs
 
@@ -74,7 +75,8 @@ class Application : public rkutil::Trackable
 		rkutil::Timer* mpMasterTimer;
 		float mLastFrame;
 
-		Window* mpAppWindow;
+		Window* mpAppWindow; //TODO: use unique _ptr
+		ImGuiLayer* mpImGuiLayer; //TODO: use unique _ptr
 		InputSystem* mpInputSystem;
 		MessageManager* mpMessageManager;
 		LayerStack mLayerStack;

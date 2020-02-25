@@ -42,8 +42,10 @@ void Application::init()
 {
 	mpMessageManager = new MessageManager();
 	mpInputSystem = new InputSystem(mpAppWindow);
+	mpImGuiLayer = new ImGuiLayer();
 
-	addLayer(new ImGuiLayer());
+	addOverlay(mpImGuiLayer);
+//	addLayer(new ImGuiLayer());
 	addLayer(new GameLayer());	//game layer created by default for now
 }
 
@@ -79,6 +81,13 @@ bool Application::run()
 		{
 			layer->onUpdate();
 		}
+
+		mpImGuiLayer->begin();
+		for (Layer* layer : mLayerStack)
+		{
+			layer->onImGuiRender();
+		}
+		mpImGuiLayer->end();
 
 		//swap buffer for all draw layers
 		mpAppWindow->swapBuffers();

@@ -12,6 +12,7 @@ class Layer : public rkutil::Trackable
 		virtual void onAttach() {}
 		virtual void onDetach() {}		
 		virtual void onUpdate() {}
+		virtual void onImGuiRender() {}
 		virtual void onEvent() {}
 
 		inline const std::string getLayerName() { return mLayerName; }
