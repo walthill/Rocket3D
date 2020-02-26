@@ -132,6 +132,10 @@ void EngineCore::processViewProjectionMatrices()
 void EngineCore::render()
 {
 	processViewProjectionMatrices();
+}
+
+void EngineCore::renderText()
+{
 	textObj->renderText();
 	textObj2->renderText();
 }
