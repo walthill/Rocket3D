@@ -69,9 +69,9 @@ void ImGuiLayer::onImGuiRender()
 	ImGui::ShowDemoWindow(&show);
 
 	//drawDockSpace();
-	drawToolbar();
-	drawInspector();
-	drawSceneTree();
+	//drawToolbar();
+	//drawInspector();
+	//drawSceneTree();
 }
 
 void ImGuiLayer::begin()
