@@ -17,15 +17,15 @@
 	=========================
 ********/
 
-#include "GameMessage.h"
+#include "Message.h"
 
-GameMessage::GameMessage(GameMessageType type)
+Message::Message(MessageType type)
 	:mType(type)
 	, mSubmittedTime(0)
 	, mScheduledTime(0)
 {
 }
 
-GameMessage::~GameMessage()
+Message::~Message()
 {
 }

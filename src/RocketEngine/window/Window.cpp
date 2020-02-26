@@ -20,18 +20,14 @@
 
 #include "Window.h"
 #include <glad/glad.h>
-#include <glfw3.h>
 #include "../logging/RK_Log.h"
+#include <glfw3.h>
 
-void framebufferSizeCallback(GLFWwindow* window, int width, int height);
-void framebufferSizeCallback(GLFWwindow* window, int width, int height) //TODO: move to callback class - move to input?
-{
-	const int TOP_LEFT = 0;
-	glViewport(TOP_LEFT, TOP_LEFT, width, height);
-}
+bool Window::mShouldInitGLFW = true;
 
 Window::Window()
 {
+	mpWindow = nullptr;
 }
 
 Window::~Window()
@@ -45,13 +41,10 @@ void Window::clean()
 
 bool Window::initialize(int width, int height, const char* windowName, int settingsFlags, bool showCursor)
 {
-	w = width; 
-	h = height;
-
 	//Init window
-	mWindow = glfwCreateWindow(width, height, windowName, nullptr, nullptr);
+	mpWindow = glfwCreateWindow(width, height, windowName, nullptr, nullptr);
 
-	if (mWindow == nullptr)
+	if (mpWindow == nullptr)
 	{
 		RK_CORE_ERROR_ALL("ERROR::WINDOW::FAILED to create GLFW Window");
 		glfwTerminate();
@@ -68,10 +61,9 @@ bool Window::initialize(int width, int height, const char* windowName, int setti
 		return false;
 	}
 
-	setViewport(TOP_LEFT, TOP_LEFT, w, h);
+	setViewport(TOP_LEFT, TOP_LEFT, width, height);
 	enableOpenGLWindowFlags(settingsFlags);
 	setCursor(showCursor);
-	glfwSetFramebufferSizeCallback(mWindow, framebufferSizeCallback);
 
 	return true;
 }
@@ -110,13 +102,16 @@ void Window::clearToColor(float r, float g, float b, float a)
 
 void Window::setViewport(int x, int y, int width, int height)
 {
+	mWidth = width;
+	mHeight = height;
+
 	glViewport(x, y, width, height);
 }
 
 void Window::swapBuffers()
 {
 	// swap the buffers
-	glfwSwapBuffers(mWindow);
+	glfwSwapBuffers(mpWindow);
 }
 
 void Window::setWindowDrawMode(WindowDrawFace faceToDraw, WindowDrawMode drawMode)
@@ -153,9 +148,9 @@ void Window::setWindowDrawMode(WindowDrawFace faceToDraw, WindowDrawMode drawMod
 void Window::setCursor(bool shouldAppear)
 {
 	if(shouldAppear)
-		glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		glfwSetInputMode(mpWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	else
-		glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetInputMode(mpWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void Window::toggleWireframe(bool showWireframe)
@@ -168,10 +163,35 @@ void Window::toggleWireframe(bool showWireframe)
 
 void Window::setWindowToCurrent()
 {
-	glfwMakeContextCurrent(mWindow);
+	glfwMakeContextCurrent(mpWindow);
 }
 
 GLFWwindow* Window::getWindowHandle() const
 {
-	return mWindow;
+	return mpWindow;
+}
+
+void Window::initGLFW()
+{
+	if (mShouldInitGLFW)
+	{
+		glfwInit();
+
+		//Init OpenGL version settings
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_SAMPLES, 4);
+
+		mShouldInitGLFW = false;
+	}
+	else
+	{
+		RK_CORE_WARN_ALL("Attemping to reinitialize GLFW");
+	}
+}
+
+void Window::destroyGLFW()
+{
+	glfwTerminate();
 }

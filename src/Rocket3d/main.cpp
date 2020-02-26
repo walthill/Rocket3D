@@ -16,35 +16,24 @@
 	The GameApp class is initialized and destroyed here. The engine loop is entered from here.
 
 ********/
-
-#include "core/GameApp.h"
+#include <rkutil/MemoryTracker.h>
 #include "../RocketEngine/logging/RK_Log.h"
+#include "core/Application.h"
 
 int main(int argc, char* argv[])
-{
+{	
 	RK_LOGGER_INIT();
 	RK_CORE_INFO_ALL("Rocket Logger initialized");
 
-	GameApp::initInstance();
+	Application::initInstance();
 
-	if (!GameApp::getInstance()->initialize(argv))
-	{
-		RK_CORE_FATAL_ALL("ERROR: DISPLAY CREATION FAILED.");
-		return -1;
-	}
-
-	if (!GameApp::getInstance()->processLoop())
-	{
-		GameApp::getInstance()->cleanInstance();
-		
-		RK_LOGGER_CLEAN();
-
-		//TODO(low): output to logger
-		rkutil::MemoryTracker::getInstance()->reportAllocs(std::cout);
-		system("pause");
-
-		return 1;
-	}
+	if(!Application::getInstance()->run())
+		Application::cleanInstance();
+	
+	//TODO(low): output to logger
+	RK_LOGGER_CLEAN();
+	rkutil::MemoryTracker::getInstance()->reportAllocs(std::cout);
+	system("pause");
 
 	return 0;
 }

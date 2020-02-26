@@ -18,24 +18,24 @@
 
 ********/
 
-#include "GameMessageManager.h"
+#include "MessageManager.h"
 #include "../core/GameApp.h"
-#include "GameMessage.h"
+#include "Message.h"
 
-GameMessageManager::GameMessageManager()
+MessageManager::MessageManager()
 {
 }
 
-GameMessageManager::~GameMessageManager()
+MessageManager::~MessageManager()
 {
-	std::list<GameMessage*>::iterator iter;
+	std::list<Message*>::iterator iter;
 	for (iter = mMessages.begin(); iter != mMessages.end(); ++iter)
 	{
 		delete (*iter);
 	}
 }
 
-void GameMessageManager::addMessage(GameMessage* pMessage, int delay)
+void MessageManager::addMessage(Message* pMessage, int delay)
 {
 	double currentTime = GameApp::getInstance()->getCurrentTime();
 
@@ -47,11 +47,11 @@ void GameMessageManager::addMessage(GameMessage* pMessage, int delay)
 
 }
 
-void GameMessageManager::processMessagesForThisFrame(float deltaTime)
+void MessageManager::processMessagesForThisFrame(float deltaTime)
 {
 	double currentTime = GameApp::getInstance()->getCurrentTime();
 
-	std::list<GameMessage*>::iterator iter = mMessages.begin();
+	std::list<Message*>::iterator iter = mMessages.begin();
 
 	// Execute message if the message has been queued 
 	// for length of the messages mScheduledTime.

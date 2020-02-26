@@ -29,8 +29,8 @@
 #include <cassert>
 
 class EngineCore;
-class GameMessage;
-class GameMessageManager;
+class Message;
+class MessageManager;
 class Timer;
 class GameObject;
 class GameObjectManager;
@@ -74,7 +74,7 @@ class GameApp : public rkutil::Trackable
 			* Instatiate engine, logging, timing, & game variables
 			* Returns true on successful initialization, false on failure
 		***/
-		bool initialize(char * argv[]);
+		bool initialize();
 		
 		/***
 			* Destruction & garbage collection of engine, logging, timing, & game variables
@@ -98,7 +98,7 @@ class GameApp : public rkutil::Trackable
 			* Accessor for the GameMessageManager class. Allows for function calls to the message system.
 			* Returns a pointer to the GameMessageManager class.
 		***/
-		inline GameMessageManager* getGameMessageManager() { return mpGameMessageManager; };
+		inline MessageManager* getGameMessageManager() { return mpGameMessageManager; };
 		
 		inline GameObjectManager* getGameObjectManager() { return mpGameObjectManager; }
 		inline ComponentManager* getComponentManager() { return mpComponentManager; }
@@ -112,20 +112,21 @@ class GameApp : public rkutil::Trackable
 		void moveRight();
 		void moveLeft();
 		void toggleView(bool displayWireframeMode);
-		void quit() { mShouldExit = true; };
+		void quit() { mKeepRunning = false; };
 		#pragma endregion
 
 	private:
 		EngineCore* mpRocketEngine;
-		GameMessageManager* mpGameMessageManager;
+		MessageManager* mpGameMessageManager;
 		GameObjectManager* mpGameObjectManager;
 		ComponentManager* mpComponentManager;
+		rkutil::PerformanceTracker* mpPerformanceTracker;
 
 		//GameObject* g;
 			
 		//Game state vars
 		static GameApp* mpGameApp;
-		bool mShouldExit = false;
+		bool mKeepRunning = false;
 
 		//Performance tracker data
 		rkutil::Timer* mpFrameTimer;

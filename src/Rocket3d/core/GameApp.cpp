@@ -18,8 +18,8 @@
 #include <core/EngineCore.h>
 #include <iostream>
 #include "../../RocketEngine/shader/ShaderManager.h"
-#include "../input/GameMessage.h"
-#include "../input/GameMessageManager.h"
+//#include "../input/Message.h"
+//#include "../input/MessageManager.h"
 #include "../../RocketEngine/logging/RK_Log.h"
 #include "GameObjectManager.h"
 #include "../component/ComponentManager.h"
@@ -32,16 +32,16 @@ GameApp::~GameApp()
 	clean();
 }
 
-bool GameApp::initialize(char* argv[])
+bool GameApp::initialize()
 {
 	rkutil::PerformanceTracker* pPerformanceTracker = new rkutil::PerformanceTracker();
 	pPerformanceTracker->startTracking(mINIT_TRACKER_NAME);
 
 	mpRocketEngine = new EngineCore();
-	mpGameMessageManager = new GameMessageManager();
+//	mpGameMessageManager = new GameMessageManager();
 	mpMasterTimer = new rkutil::Timer();
 
-	if (!mpRocketEngine->initialize(mWindowWidth, mWindowHeight))
+	if (!mpRocketEngine->initialize())
 		return false;
 
 	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);
@@ -127,7 +127,7 @@ bool GameApp::initialize(char* argv[])
 	delete[] pointLightPositions;
 	delete pPerformanceTracker;
 
-	mShouldExit = false;
+	mKeepRunning = true;
 
 	mpMasterTimer->start();
 
@@ -139,49 +139,48 @@ void GameApp::clean()
 	delete mpGameObjectManager;
 	delete mpComponentManager;
 
+	delete mpPerformanceTracker;
 	delete mpFrameTimer;
 	delete mpMasterTimer;
-	delete mpGameMessageManager;
+//	delete mpGameMessageManager;
 	delete mpRocketEngine;
 }
 
 bool GameApp::processLoop()
 {
-	rkutil::PerformanceTracker* pPerformanceTracker = new rkutil::PerformanceTracker();
+	mpPerformanceTracker = new rkutil::PerformanceTracker();
 
 	mpFrameTimer = new rkutil::Timer();
 	
-	while (!mShouldExit)
+	//GameApp loop is now unecessary. the app loop is handled by Application. 
+	//This class is called in the GameLayer and looped through onUpdate()
+	//while (!mShouldExit)
 	{
-		//pPerformanceTracker->clearTracker(mLOOP_TRACKER_NAME);
-		pPerformanceTracker->startTracking(mLOOP_TRACKER_NAME);
+		mpPerformanceTracker->startTracking(mLOOP_TRACKER_NAME);
 
 		mpFrameTimer->start();
 
-		//pPerformanceTracker->clearTracker(mDRAW_TRACKER_NAME);
-		pPerformanceTracker->startTracking(mDRAW_TRACKER_NAME);
+		mpPerformanceTracker->startTracking(mDRAW_TRACKER_NAME);
 	
 		update();
 		render();
 
-		pPerformanceTracker->stopTracking(mDRAW_TRACKER_NAME);
+		mpPerformanceTracker->stopTracking(mDRAW_TRACKER_NAME);
 		mpFrameTimer->sleepUntilElapsed(m60FPS_FRAME_TIME);
-		pPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
+		mpPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
 
-		RK_INFO_C("loop took:" + std::to_string(pPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) + 
-				  "ms draw took:" +  std::to_string(pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) +"ms\n");
-		//mFPS = (int)(1000.0 / pPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
+		RK_INFO_C("loop took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) +
+				  "ms draw took:" +  std::to_string(mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) +"ms\n");
+		//mFPS = (int)(1000.0 / mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
 		//RK_INFO_C("FPS: " + std::to_string(mFPS));
 	}
-
-	//delete pPerformanceTracker;
 	
-	return false;
+	return mKeepRunning;
 }
   
 void GameApp::update()
 {
-	mpGameMessageManager->processMessagesForThisFrame(mpRocketEngine->deltaTime);
+//	mpGameMessageManager->processMessagesForThisFrame(mpRocketEngine->deltaTime);
 	mpRocketEngine->update(); 
 	mpComponentManager->update(mpRocketEngine->deltaTime);
 	mpGameObjectManager->updateAll(mpRocketEngine->deltaTime);
@@ -198,7 +197,7 @@ void GameApp::render()
 double GameApp::getCurrentTime() 
 { 
 	return mpMasterTimer->getTimeElapsedMs(); 
-};
+}
 
 //TODO: everything below this point should be moved into separate classes and accessed via accessor
 // -----------------------------------

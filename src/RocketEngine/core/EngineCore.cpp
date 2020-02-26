@@ -14,13 +14,13 @@
 	=========================
 
 ********/
-#include <glad/glad.h>
-#include <glfw3.h>
+//#include <glfw3.h>
+#include "../../Rocket3d/core/Application.h"
 #include "EngineCore.h"
-#include "../window/Window.h"
+//#include "../window/Window.h"
 #include "../render/Camera.h"
 #include "../asset/image/RocketImgLoader.h"
-#include "../input/InputSystem.h"
+//#include "../input/InputSystem.h"
 //#include "../shader/ShaderBuild.h"
 #include "../shader/RK_Shader.h"
 #include "../shader/ShaderManager.h"
@@ -45,23 +45,10 @@ void EngineCore::clean()
 	delete textObj;
 	delete textObj2;
 	delete mpShaderManager;
-	delete mpInputSystem;
+//	delete mpInputSystem;
 	delete mpCam;
-	delete mpWindow;
-
-	glfwTerminate();
 }
 
-void EngineCore::initGLFW()
-{
-	glfwInit();
-
-	//Init OpenGL version settings
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_SAMPLES, 4);
-}
 
 void EngineCore::initLighting()
 {
@@ -71,22 +58,17 @@ void EngineCore::initLighting()
 	mpShaderManager->setShaderFloat("material.shininess", 32.0f);
 } 
 
-bool EngineCore::initialize(int width, int height)
+
+bool EngineCore::initialize()
 {
-	mWindowWidth = width;
-	mWindowHeight = height;
-
-	initGLFW();
-
-	mpWindow = new Window();
-	
-	//Init window size, name, features, and cursor 
-	if(!mpWindow->initialize(width, height, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE, false))
-		return false;
+	Application* app = Application::getInstance();
+	mWindowWidth = app->getAppWindow()->getWidth();
+	mWindowHeight = app->getAppWindow()->getHeight();
+	mpWindowHandle = app->getAppWindow();
 
 	mpCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
 
-	mpInputSystem = new InputSystem(mpWindow->getWindowHandle());
+//	mpInputSystem = new InputSystem(mpWindowHandle->getWindowHandle());
 	mpShaderManager = new ShaderManager();
 
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
@@ -113,13 +95,13 @@ bool EngineCore::initialize(int width, int height)
 
 void EngineCore::update()
 {
-	mpInputSystem->processInput();
+	//mpInputSystem->processInput();
 	calculateDeltaTime();
 }
 
 void EngineCore::calculateDeltaTime()
 {
-	float currentFrame = (float)glfwGetTime();
+	float currentFrame = (float)Application::getInstance()->getTime();
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
 }
@@ -127,9 +109,11 @@ void EngineCore::calculateDeltaTime()
 //Set vertex shader uniform data for each shader
 void EngineCore::processViewProjectionMatrices()
 {
+	Application* app = Application::getInstance();
+
 	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	rkm::Mat4 proj = rkm::Mat4::identity;
-	proj = rkm::MatProj::perspective(rkm::degToRad(mpCam->getFov()), (float)mWindowWidth / (float)mWindowHeight, 0.1f, 100.0f);
+	proj = rkm::MatProj::perspective(rkm::degToRad(mpCam->getFov()), (float)app->getAppWindow()->getWidth() / (float)app->getAppWindow()->getHeight(), 0.1f, 100.0f);
 	mpShaderManager->setShaderMat4("projection", proj);
 
 	rkm::Mat4 view = rkm::Mat4::identity;
@@ -143,13 +127,10 @@ void EngineCore::processViewProjectionMatrices()
 	mpShaderManager->useShaderByKey(emitterShaderId);
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
-
 }
 
 void EngineCore::render()
 {
-	mpWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
-	mpWindow->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
 	processViewProjectionMatrices();
 }
 
@@ -181,10 +162,5 @@ void EngineCore::moveCameraBack()
 
 void EngineCore::toggleWireframe(bool showWireframe)
 {
-	mpWindow->toggleWireframe(showWireframe);
-}
-
-void EngineCore::swapBuffers()
-{
-	mpWindow->swapBuffers();
+	mpWindowHandle->toggleWireframe(showWireframe);
 }

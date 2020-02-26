@@ -25,18 +25,18 @@
 
 #include <list>
 
-class GameMessage;
+class Message;
 
-class GameMessageManager
+class MessageManager
 {
 	public:
-		GameMessageManager();
-		~GameMessageManager();
+		MessageManager();
+		~MessageManager();
 
 		/***
 			* The manager will own the message and handle processing & deletion
 		***/
-		void addMessage(GameMessage* pMessage, int delay);
+		void addMessage(Message* pMessage, int delay);
 
 		/***
 			* Execute the logic of the queued messages. Messages are processed
@@ -45,7 +45,7 @@ class GameMessageManager
 		void processMessagesForThisFrame(float deltaTime);
 
 	private:
-		std::list<GameMessage*> mMessages;
+		std::list<Message*> mMessages;
 
 };
 

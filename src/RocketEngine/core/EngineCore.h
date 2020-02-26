@@ -12,6 +12,7 @@
 	=========================
 			 EngineCore.h
 	=========================
+	This is the header for the Rocket Engine renderer
 
 ********/
 
@@ -60,7 +61,7 @@ class EngineCore : public rkutil::Trackable
 		/***
 			* Initialize engine components
 		***/
-		bool initialize(int width, int height); //pass in data for live shader rebuilds
+		bool initialize(); //pass in data for live shader rebuilds
 		
 		/***
 			* Destroy engine component pointers
@@ -111,23 +112,9 @@ class EngineCore : public rkutil::Trackable
 		 *************************************************************************/
 		void toggleWireframe(bool showWireframe);
 
-		/***
-			* Callback for resizing the window
-		***/
-	//	void rk_scroll_callback(double xoffset, double yoffset);
-
-		//void rk_mouse_click_callback(int button, int action, int modifier);
-
-
-		/***
-			* Callback for mouse movement
-		***/
-		//void rk_mouse_move_callback(double xpos, double ypos);
-
 		ShaderManager* getShaderManager() { return mpShaderManager; };
 		Camera* getCamera() { return mpCam; }
-		void swapBuffers();
-
+		
 		// Time between current frame and last frame
 		float deltaTime = 0.0f;	
 
@@ -136,7 +123,7 @@ class EngineCore : public rkutil::Trackable
 		int mWindowWidth = 0, mWindowHeight = 0;
 		float lastFrame = 0.0f; // Time of last frame
 		
-		Window *mpWindow;
+		Window *mpWindowHandle;
 		InputSystem *mpInputSystem;
 		Camera* mpCam;
 

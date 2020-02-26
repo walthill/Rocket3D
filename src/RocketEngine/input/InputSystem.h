@@ -21,8 +21,9 @@
 #define INPUT_SYS_H
 
 #include <rkutil/Trackable.h>
-
-struct GLFWwindow;
+#include "../window/Window.h"
+#include "senders/AppInputSender.h"
+#include "senders/GameInputSender.h"
 
 class InputSystem : public rkutil::Trackable
 {
@@ -31,32 +32,41 @@ class InputSystem : public rkutil::Trackable
 		/***
 			* Constructor that takes a GLFW Window context
 		***/
-		InputSystem(GLFWwindow* window);
+		InputSystem(Window* window);
 
 		/***
 			* Callback for resizing the window
 		***/
-		void rk_scroll_callback(double xoffset, double yoffset);
+		void onMouseScroll(double xoffset, double yoffset);
 
 		/***
-			* Callback for moving the mouse
+			* Callback for mouse clicks
 		***/
-		void rk_mouse_click_callback(int button, int action, int modifier);
+		void onMouseClick(int button, int action, int modifier);
 
 		/***
 			* Callback for mouse movement
 		***/
-		void rk_mouse_move_callback(double xpos, double ypos);
+		void onMouseMove(double xpos, double ypos);
+
+		void onKeyEvent(int key, int scancode, int action, int mods);
+
+		void onWindowResize(int width, int height);
 
 		/***
 			* Checks for inputs every frame and queues input message
 		***/
 		void processInput();
 
+		inline void play() { mPlayMode = !mPlayMode; }
+		Window* getWindow() { return mpWindow; }
+
 	private:
-		GLFWwindow* mpWindowHandle;
-		bool firstMouse;
-		double lastX, lastY;
+		AppInputSender* mpAppInput;
+		GameInputSender* mpGameInput;
+
+		Window* mpWindow;
+		bool mPlayMode = true;
 };
 
 #endif // !INPUT_SYS_H
