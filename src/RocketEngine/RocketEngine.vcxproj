@@ -24,7 +24,6 @@
     <ClInclude Include="core\EngineCore.h" />
     <ClInclude Include="input\senders\AppInputSender.h" />
     <ClInclude Include="input\senders\GameInputSender.h" />
-    <ClInclude Include="input\senders\ImGuiInputSender.h" />
     <ClInclude Include="input\InputSender.h" />
     <ClInclude Include="input\InputSystem.h" />
     <ClInclude Include="platform\OpenGL\ImGuiGLFWRenderer.h" />
@@ -46,7 +45,6 @@
     <ClCompile Include="core\EngineCore.cpp" />
     <ClCompile Include="input\senders\AppInputSender.cpp" />
     <ClCompile Include="input\senders\GameInputSender.cpp" />
-    <ClCompile Include="input\senders\ImGuiInputSender.cpp" />
     <ClCompile Include="input\InputSystem.cpp" />
     <ClCompile Include="platform\OpenGL\ImGuiGLFWRenderer.cpp" />
     <ClCompile Include="platform\OpenGL\ImGuiOpenGLRenderer.cpp" />

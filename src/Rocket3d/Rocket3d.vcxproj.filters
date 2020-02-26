@@ -66,9 +66,6 @@
     <ClCompile Include="input\game\GameMessages.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="input\ImGui\ImGuiMessages.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="input\AppMessages.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -78,19 +75,16 @@
     <ClCompile Include="input\MessageManager.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
-    <ClCompile Include="ImGui\ImGuiBuild.cpp">
+    <ClCompile Include="platform\ImGui\imgui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImGui\imgui.cpp">
+    <ClCompile Include="platform\ImGui\imgui_demo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImGui\imgui_demo.cpp">
+    <ClCompile Include="platform\ImGui\imgui_draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImGui\imgui_draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_widgets.cpp">
+    <ClCompile Include="platform\ImGui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -132,9 +126,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="input\game\GameMessages.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="input\ImGui\ImGuiMessages.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="input\AppMessages.h">

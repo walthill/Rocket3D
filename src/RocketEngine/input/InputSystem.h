@@ -23,7 +23,6 @@
 #include <rkutil/Trackable.h>
 #include "../window/Window.h"
 #include "senders/AppInputSender.h"
-#include "senders/ImGuiInputSender.h"
 #include "senders/GameInputSender.h"
 
 class InputSystem : public rkutil::Trackable
@@ -52,8 +51,6 @@ class InputSystem : public rkutil::Trackable
 
 		void onKeyEvent(int key, int scancode, int action, int mods);
 
-		void onKeyTyped(unsigned int codepoint);
-
 		void onWindowResize(int width, int height);
 
 		/***
@@ -66,7 +63,6 @@ class InputSystem : public rkutil::Trackable
 
 	private:
 		AppInputSender* mpAppInput;
-		ImGuiInputSender* mpImGuiInput;
 		GameInputSender* mpGameInput;
 
 		Window* mpWindow;

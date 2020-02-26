@@ -25,7 +25,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_move_callback(GLFWwindow* window, double xpos, double ypos);
 void mouse_click_callback(GLFWwindow* window, int button, int action, int modifier);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void character_callback(GLFWwindow* window, unsigned int codepoint);
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) //TODO: move to callback class
 {
@@ -58,20 +57,13 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	wind->onMouseScroll(xoffset, yoffset);
 }
 
-void character_callback(GLFWwindow* window, unsigned int codepoint)
-{
-	InputSystem* wind = reinterpret_cast<InputSystem*>(glfwGetWindowUserPointer(window));
-	wind->onKeyTyped(codepoint);
-}
-
-
 #pragma endregion
 
 
 InputSystem::InputSystem(Window* window)
 {
 	mpAppInput = new AppInputSender();
-	mpImGuiInput = new ImGuiInputSender();
+//	mpImGuiInput = new ImGuiInputSender();
 	mpGameInput = new GameInputSender();
 
 	mpWindow = window;
@@ -85,7 +77,6 @@ InputSystem::InputSystem(Window* window)
 	glfwSetMouseButtonCallback(wind, mouse_click_callback);
 	glfwSetKeyCallback(wind, key_callback);
 	glfwSetFramebufferSizeCallback(wind, framebuffer_size_callback);
-	glfwSetCharCallback(wind, character_callback);
 }
 
 
@@ -94,10 +85,6 @@ void InputSystem::onMouseScroll(double xoffset, double yoffset)
 	if (mPlayMode)
 	{
 		mpGameInput->onMouseScroll(xoffset, yoffset);
-	}
-	else
-	{
-		mpImGuiInput->onMouseScroll(xoffset, yoffset);
 	}
 
 	mpAppInput->onMouseScroll(xoffset, yoffset);
@@ -109,10 +96,6 @@ void InputSystem::onMouseClick(int button, int action, int modifier)
 	{
 		mpGameInput->handleMouseButtonEvents(button, action, modifier);
 	}
-	else
-	{
-		mpImGuiInput->handleMouseButtonEvents(button, action, modifier);		
-	}
 
 	mpAppInput->handleMouseButtonEvents(button, action, modifier);
 }
@@ -123,11 +106,7 @@ void InputSystem::onMouseMove(double xpos, double ypos)
 	{
 		mpGameInput->onMouseMove(xpos, ypos);
 	}
-	else
-	{
-		mpImGuiInput->onMouseMove(xpos, ypos);
-	}
-
+	
 	mpAppInput->onMouseMove(xpos, ypos);
 }
 
@@ -138,23 +117,13 @@ void InputSystem::onKeyEvent(int key, int scancode, int action, int mods)
 	{
 		mpGameInput->handleKeyEvents(key, scancode, action, mods);
 	}
-	else
-	{
-		mpImGuiInput->handleKeyEvents(key, scancode, action, mods);
-	}
-
+	
 	mpAppInput->handleKeyEvents(key, scancode, action, mods);
-}
-
-void InputSystem::onKeyTyped(unsigned int codepoint)
-{
-	mpImGuiInput->onKeyTyped(codepoint);
 }
 
 void InputSystem::onWindowResize(int width, int height)
 {
 	mpWindow->setViewport(0, 0, width, height);
-	mpImGuiInput->onWindowResize(width, height);
 }
 
 void InputSystem::processInput()

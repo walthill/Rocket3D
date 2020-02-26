@@ -78,9 +78,6 @@
     <ClInclude Include="input\senders\GameInputSender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="input\senders\ImGuiInputSender.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="platform\OpenGL\ImGuiOpenGLRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -123,9 +120,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="input\senders\GameInputSender.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="input\senders\ImGuiInputSender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="platform\OpenGL\ImGuiOpenGLRenderer.cpp">
