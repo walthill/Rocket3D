@@ -17,7 +17,7 @@ bool GameInputSender::handleKeyEvents(int key, int scancode, int action, int mod
 {
 	bool shouldConsumeEvent = false;
 
-	onKeyDown(key, scancode, action, mods);
+//	onKeyDown(key, scancode, action, mods);
 	onKeyUp(key, scancode, action, mods);
 	onKeyRepeat(key, scancode, action, mods);
 
@@ -124,5 +124,31 @@ void GameInputSender::onMouseUp(int key, int action, int mods)
 {
 	if (key == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
 	{
+	}
+}
+
+void GameInputSender::processInput(Window* wind)
+{
+	GLFWwindow* windowHandle = wind->getWindowHandle();
+
+	if (glfwGetKey(windowHandle, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		Message* pMessage = new GameKeyDown(KEY_W);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (glfwGetKey(windowHandle, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		Message* pMessage = new GameKeyDown(KEY_S);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (glfwGetKey(windowHandle, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		Message* pMessage = new GameKeyDown(KEY_A);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+	}
+	if (glfwGetKey(windowHandle, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		Message* pMessage = new GameKeyDown(KEY_D);
+		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
 }

@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+    <None Include="shader\glsl\fDepthBuffer.glsl" />
     <None Include="shader\glsl\fDirectionalLight.glsl" />
     <None Include="shader\glsl\fLamp.glsl" />
     <None Include="shader\glsl\fPointLight.glsl" />
