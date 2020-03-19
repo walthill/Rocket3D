@@ -26,6 +26,7 @@ Application::Application()
 	
 	mpAppWindow = new Window();
 	mpAppWindow->initialize(800, 600, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE);
+//	mpAppWindow->setWindowDrawMode(FRONT_AND_BACK, WIREFRAME);
 }
 
 Application::~Application()

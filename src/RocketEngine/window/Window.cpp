@@ -41,6 +41,9 @@ void Window::clean()
 
 bool Window::initialize(int width, int height, const char* windowName, int settingsFlags, bool showCursor)
 {
+	mWidth = width;
+	mHeight = height;
+
 	//Init window
 	mpWindow = glfwCreateWindow(width, height, windowName, nullptr, nullptr);
 
@@ -62,18 +65,24 @@ bool Window::initialize(int width, int height, const char* windowName, int setti
 	}
 
 	setViewport(TOP_LEFT, TOP_LEFT, width, height);
-	enableOpenGLWindowFlags(settingsFlags);
+	enableWindowFlags(settingsFlags);
 	setCursor(showCursor);
 
 	return true;
 }
 
-void Window::enableOpenGLWindowFlags(int settingsToEnable)
+void Window::enableWindowFlags(int settingsToEnable)
 {
 	if (settingsToEnable & AA_MULTISAMPLE)
 		glEnable(GL_MULTISAMPLE);
 	if (settingsToEnable & DEPTH_TEST)
 		glEnable(GL_DEPTH_TEST);
+	if (settingsToEnable & STENCIL_TEST)
+	{
+		glEnable(GL_STENCIL_TEST);
+		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	}
 	if (settingsToEnable & CULL_FACE)
 		glEnable(GL_CULL_FACE);
 	if (settingsToEnable & BLEND)
@@ -81,6 +90,20 @@ void Window::enableOpenGLWindowFlags(int settingsToEnable)
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
+}
+
+void Window::disableWindowFlags(int settingsToDisable)
+{
+	if (settingsToDisable & AA_MULTISAMPLE)
+		glDisable(GL_MULTISAMPLE);
+	if (settingsToDisable & DEPTH_TEST)
+		glDisable(GL_DEPTH_TEST);
+	if (settingsToDisable & STENCIL_TEST)
+		glDisable(GL_STENCIL_TEST);
+	if (settingsToDisable & CULL_FACE)
+		glDisable(GL_CULL_FACE);
+	if (settingsToDisable & BLEND)
+		glDisable(GL_BLEND);
 }
 
 void Window::clearWindowBuffers(int buffersToClear)
@@ -102,9 +125,6 @@ void Window::clearToColor(float r, float g, float b, float a)
 
 void Window::setViewport(int x, int y, int width, int height)
 {
-	mWidth = width;
-	mHeight = height;
-
 	glViewport(x, y, width, height);
 }
 
@@ -169,6 +189,22 @@ void Window::setWindowToCurrent()
 GLFWwindow* Window::getWindowHandle() const
 {
 	return mpWindow;
+}
+
+void Window::setScreenDimensions(int width, int height)
+{
+	mWidth = width;
+	mHeight = height;
+}
+
+void Window::setHeight(int height)
+{
+	mHeight = height;
+}
+
+void Window::setWidth(int width)
+{
+	mWidth = width;
 }
 
 void Window::initGLFW()

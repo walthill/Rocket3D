@@ -26,10 +26,10 @@
 
 struct GLFWwindow;
 
-enum WindowBufferType {	COLOR_BUFFER = 1, DEPTH_BUFFER, ACCUM_BUFFER, STENCIL_BUFFER };
+enum WindowBufferType {	COLOR_BUFFER = 1, DEPTH_BUFFER = 2, ACCUM_BUFFER = 4, STENCIL_BUFFER = 8 };
 enum WindowDrawMode { WIREFRAME = 1, VERTICES, FILL };
 enum WindowDrawFace { FRONT = 1, BACK, FRONT_AND_BACK };
-enum WindowCapabilityFlags { AA_MULTISAMPLE = 1, DEPTH_TEST, CULL_FACE, BLEND };
+enum WindowCapabilityFlags { AA_MULTISAMPLE = 1, DEPTH_TEST = 2, STENCIL_TEST = 4, CULL_FACE = 8, BLEND = 16};
 
 class Window : public rkutil::Trackable
 {
@@ -46,10 +46,15 @@ class Window : public rkutil::Trackable
 		bool initialize(int width, int height, const char* windowName, int settingsFlags = 0, bool showCursor = true);
 
 		/***
-			* Set window OpenGL capabilities
+			* Set window rendering capabilities
 		***/
-		void enableOpenGLWindowFlags(int settingsToEnable);
-		
+		void enableWindowFlags(int settingsToEnable);
+
+		/***
+			* Turn off window rendering capabilities
+		***/
+		void disableWindowFlags(int settingsToEnable);
+
 		/***
 			* Set window OpenGL capabilities
 		***/
@@ -99,6 +104,10 @@ class Window : public rkutil::Trackable
 			* Returns pointer to the window
 		***/
 		GLFWwindow* getWindowHandle() const;
+
+		void setScreenDimensions(int width, int height);
+		void setHeight(int height);
+		void setWidth(int width);
 
 		/***
 			* Returns the width of the window
