@@ -190,6 +190,7 @@ void GameApp::render()
 {
 	mpRocketEngine->render();
 	mpComponentManager->renderMeshes();
+	mpRocketEngine->renderFramebufferScreen();
 	mpRocketEngine->renderText();
 }
 

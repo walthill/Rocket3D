@@ -69,6 +69,11 @@ class Window : public rkutil::Trackable
 			* Clear OpenGL render buffers based on specified bit parameter
 		****/
 		void clearWindowBuffers(int buffersToClear);
+		
+		/***
+			* Set size of this window using stored width & height
+		***/
+		void setViewport(int xpos, int ypos);
 
 		/***
 			* Set size of this window

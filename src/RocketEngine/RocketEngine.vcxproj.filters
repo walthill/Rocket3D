@@ -128,6 +128,9 @@
     <ClCompile Include="platform\OpenGL\ImGuiGLFWRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="asset\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\glsl\fSoftSpotlight.glsl">
@@ -162,5 +165,9 @@
     <None Include="shader\glsl\vTextRender.glsl" />
     <None Include="shader\glsl\fTextRender.glsl" />
     <None Include="shader\glsl\fDepthBuffer.glsl" />
+    <None Include="shader\glsl\fFrameBuffer.glsl" />
+    <None Include="shader\glsl\vFrameBufferScreen.glsl" />
+    <None Include="shader\glsl\fFrameBufferScreen.glsl" />
+    <None Include="shader\glsl\vFrameBuffer.glsl" />
   </ItemGroup>
 </Project>

@@ -80,6 +80,8 @@ class EngineCore : public rkutil::Trackable
 			* Draw models and lighting data to the window
 		***/
 		void render();
+		
+		void renderFramebufferScreen();
 
 		/***
 			* Draw ui elements to the window. Should be called last before SwapBuffer()
@@ -120,9 +122,18 @@ class EngineCore : public rkutil::Trackable
 
 	private:
 		const std::string mMODEL_PATH = "../../assets/models/";
-		int mWindowWidth = 0, mWindowHeight = 0;
+		int mOriginalWindowWidth = 0, mOriginalWindowHeight = 0;
 		float lastFrame = 0.0f; // Time of last frame
 		
+		unsigned int framebuffer;
+		unsigned int textureColorbuffer;
+		unsigned int floorTexture;
+		unsigned int planeVAO, planeVBO;
+
+		// screen quad VAO
+		unsigned int quadVAO, quadVBO;
+
+
 		Window *mpWindowHandle;
 		InputSystem *mpInputSystem;
 		Camera* mpCam;

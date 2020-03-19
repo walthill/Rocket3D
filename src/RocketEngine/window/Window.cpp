@@ -41,9 +41,6 @@ void Window::clean()
 
 bool Window::initialize(int width, int height, const char* windowName, int settingsFlags, bool showCursor)
 {
-	mWidth = width;
-	mHeight = height;
-
 	//Init window
 	mpWindow = glfwCreateWindow(width, height, windowName, nullptr, nullptr);
 
@@ -123,9 +120,15 @@ void Window::clearToColor(float r, float g, float b, float a)
 	glClearColor(r, g, b, a);
 }
 
+void Window::setViewport(int x, int y)
+{
+	glViewport(x, y, mWidth, mHeight);
+}
+
 void Window::setViewport(int x, int y, int width, int height)
 {
-	glViewport(x, y, width, height);
+	setScreenDimensions(width, height);
+	glViewport(x, y, mWidth, mHeight);
 }
 
 void Window::swapBuffers()
