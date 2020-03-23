@@ -20,7 +20,7 @@ void AppKeyDown::process(float deltaTime)
 	{
 		app->quit();
 	}
-	else if (mKeyCode == ENTER)
+	else if (mKeyCode == F5)
 	{
 		RK_LOG_C("PLAY MODE TOGGLE");
 		app->play();

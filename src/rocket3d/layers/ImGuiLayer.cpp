@@ -43,9 +43,6 @@ void ImGuiLayer::onAttach()
 
 	ImGui_ImplGlfw_InitForOpenGL(app->getAppWindow()->getWindowHandle(), true);
 	ImGui_ImplOpenGL3_Init("#version 410"); //TODO: get version from window
-
-//	io.DisplaySize = ImVec2((float)Application::getInstance()->getAppWindow()->getWidth(), 
-//							(float)Application::getInstance()->getAppWindow()->getHeight());
 }
 
 void ImGuiLayer::onDetach()
@@ -54,24 +51,19 @@ void ImGuiLayer::onDetach()
 
 void ImGuiLayer::onUpdate()
 {
-/*	ImGuiIO& io = ImGui::GetIO();
-	float time = (float)glfwGetTime();
-	io.DeltaTime = mTime > 0.0 ? (time - mTime) : (1.0f / 60.0f);
-	mTime = time;
-
-	*/
 }
 
 void ImGuiLayer::onImGuiRender()
 {
 	//render ImGui test window
-	static bool show = true;
-	ImGui::ShowDemoWindow(&show);
+//	static bool show = true;
+//	ImGui::ShowDemoWindow(&show);
 
-	//drawDockSpace();
-	//drawToolbar();
-	//drawInspector();
-	//drawSceneTree();
+	drawDockSpace();
+	drawToolbar();
+	drawInspector();
+	drawSceneTree();
+	drawGameWindow();
 }
 
 void ImGuiLayer::begin()
@@ -79,7 +71,6 @@ void ImGuiLayer::begin()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
-
 }
 
 void ImGuiLayer::end()
@@ -213,5 +204,39 @@ void ImGuiLayer::drawSceneTree()
 	ImGui::Separator();
 	ImGui::Columns(1);
 	ImGui::PopStyleVar();
+	ImGui::End();
+}
+
+void ImGuiLayer::drawGameWindow()
+{
+	//-- Render game scene to ImGui window - https://gamedev.stackexchange.com/questions/140693/how-can-i-render-an-opengl-scene-into-an-imgui-window
+
+	Application* app = Application::getInstance();
+	mGameWindowTexture = (void*)app->getRenderTexture();
+	
+	//TODO: generalize game render texture width and height
+
+	// My Game has a different viewport than the editor's one:
+	const int W = 600;
+	const int H = 450;
+
+	// We set the same viewport size (plus margin) to the next window (if first use)
+	ImGui::SetNextWindowSize(ImVec2(W+15, H+35), ImGuiCond_Once);
+
+	ImGui::Begin("Game rendering");
+	{
+		// Get the current cursor position (where your window is)
+		ImVec2 pos = ImGui::GetCursorScreenPos();
+
+		app->getAppWindow()->setViewport(0, 0, W, H);
+
+		// Ask ImGui to draw it as an image:
+		// Under OpenGL the ImGUI image type is GLuint
+		// So make sure to use "(void *)tex" but not "&tex"
+		ImGui::GetWindowDrawList()->AddImage(mGameWindowTexture, 
+			ImVec2(ImGui::GetItemRectMin().x + 5, ImGui::GetItemRectMin().y+30),
+			ImVec2(pos.x + W, pos.y + H), 
+			ImVec2(0, 1), ImVec2(1, 0));
+	}
 	ImGui::End();
 }

@@ -58,7 +58,8 @@ class InputSystem : public rkutil::Trackable
 		***/
 		void processInput();
 
-		inline void play() { mPlayMode = !mPlayMode; }
+		inline void play() { mPlayMode = !mPlayMode; mpWindow->setCursor(!mPlayMode); }
+		bool isPlaying() { return mPlayMode; }
 		Window* getWindow() { return mpWindow; }
 
 	private:

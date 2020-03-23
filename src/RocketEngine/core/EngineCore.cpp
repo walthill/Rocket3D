@@ -217,14 +217,18 @@ void EngineCore::processViewProjectionMatrices()
 
 void EngineCore::render()
 {
+	prepFrambuffer();
+	processViewProjectionMatrices();
+}
+
+void EngineCore::prepFrambuffer()
+{
 	mpWindowHandle->setViewport(0, 0, mOriginalWindowWidth, mOriginalWindowHeight);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	mpWindowHandle->enableWindowFlags(DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
 
 	mpWindowHandle->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
-
-	processViewProjectionMatrices();
 }
 
 void EngineCore::renderFramebufferScreen()
@@ -239,12 +243,13 @@ void EngineCore::renderFramebufferScreen()
 	mpWindowHandle->clearWindowBuffers(COLOR_BUFFER);
 
 	//render to a texture that isn't at screen size
-	mpWindowHandle->setViewport(10, 10, 600, 300);
+//	mpWindowHandle->setViewport(10, 10, 600, 300);
 
 	mpShaderManager->useShaderByKey("framebuffer");
 	glBindVertexArray(quadVAO);
 	glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	Application::getInstance()->setGameRenderTexture(textureColorbuffer);
+//glDrawArrays(GL_TRIANGLES, 0, 6);
 
 }
 

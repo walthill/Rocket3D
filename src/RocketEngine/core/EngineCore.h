@@ -81,6 +81,8 @@ class EngineCore : public rkutil::Trackable
 		***/
 		void render();
 		
+		void prepFrambuffer();
+
 		void renderFramebufferScreen();
 
 		/***

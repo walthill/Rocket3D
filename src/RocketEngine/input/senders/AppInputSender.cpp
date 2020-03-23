@@ -33,7 +33,7 @@ void AppInputSender::onKeyDown(int key, int scancode, int action, int mods)
 {
 	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
 	{
-		Message* pMessage = new AppKeyDown(ENTER);
+		Message* pMessage = new AppKeyDown(F5);
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
 

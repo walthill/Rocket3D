@@ -58,6 +58,9 @@ class Application : public rkutil::Trackable
 
 		bool run();
 		void play();
+		bool isPlaying();
+		unsigned int getRenderTexture() { return mGameWindowTexture; }
+		void setGameRenderTexture(unsigned int texId);
 		void calculateDeltaTime();
 		
 		inline void quit() { mIsRunning = false; }
@@ -75,6 +78,7 @@ class Application : public rkutil::Trackable
 		rkutil::Timer* mpMasterTimer;
 		float mLastFrame;
 
+		unsigned int mGameWindowTexture;
 		Window* mpAppWindow; //TODO: use unique _ptr
 		ImGuiLayer* mpImGuiLayer; //TODO: use unique _ptr
 		InputSystem* mpInputSystem;

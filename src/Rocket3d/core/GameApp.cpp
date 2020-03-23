@@ -127,6 +127,7 @@ bool GameApp::initialize()
 	delete[] pointLightPositions;
 	delete pPerformanceTracker;
 
+	mpAppHandle = Application::getInstance();
 	mKeepRunning = true;
 
 	mpMasterTimer->start();
@@ -148,33 +149,37 @@ void GameApp::clean()
 
 bool GameApp::processLoop()
 {
-	mpPerformanceTracker = new rkutil::PerformanceTracker();
-
-	mpFrameTimer = new rkutil::Timer();
-	
-	//GameApp loop is now unecessary. the app loop is handled by Application. 
-	//This class is called in the GameLayer and looped through onUpdate()
-	//while (!mShouldExit)
+	if (mpAppHandle->isPlaying())
 	{
-		mpPerformanceTracker->startTracking(mLOOP_TRACKER_NAME);
 
-		mpFrameTimer->start();
+		mpPerformanceTracker = new rkutil::PerformanceTracker();
 
-		mpPerformanceTracker->startTracking(mDRAW_TRACKER_NAME);
-	
-		update();
-		render();
+		mpFrameTimer = new rkutil::Timer();
 
-		mpPerformanceTracker->stopTracking(mDRAW_TRACKER_NAME);
-		mpFrameTimer->sleepUntilElapsed(m60FPS_FRAME_TIME);
-		mpPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
+		//GameApp loop is now unecessary. the app loop is handled by Application. 
+		//This class is called in the GameLayer and looped through onUpdate()
+		//while (!mShouldExit)
+		{
+			mpPerformanceTracker->startTracking(mLOOP_TRACKER_NAME);
 
-		RK_INFO_C("loop took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) +
-				  "ms draw took:" +  std::to_string(mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) +"ms\n");
-		//mFPS = (int)(1000.0 / mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
-		//RK_INFO_C("FPS: " + std::to_string(mFPS));
+			mpFrameTimer->start();
+
+			mpPerformanceTracker->startTracking(mDRAW_TRACKER_NAME);
+
+			update();
+			render();
+
+			mpPerformanceTracker->stopTracking(mDRAW_TRACKER_NAME);
+			mpFrameTimer->sleepUntilElapsed(m60FPS_FRAME_TIME);
+			mpPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
+
+			RK_INFO_C("loop took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) +
+				"ms draw took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) + "ms\n");
+			//mFPS = (int)(1000.0 / mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
+			//RK_INFO_C("FPS: " + std::to_string(mFPS));
+		}
 	}
-	
+
 	return mKeepRunning;
 }
   

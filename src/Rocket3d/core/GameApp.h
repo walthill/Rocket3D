@@ -27,6 +27,7 @@
 #include <rkutil/PerformanceTracker.h>
 #include <string>
 #include <cassert>
+#include "Application.h"
 
 class EngineCore;
 class Message;
@@ -116,6 +117,7 @@ class GameApp : public rkutil::Trackable
 		#pragma endregion
 
 	private:
+		Application* mpAppHandle;
 		EngineCore* mpRocketEngine;
 		MessageManager* mpGameMessageManager;
 		GameObjectManager* mpGameObjectManager;
