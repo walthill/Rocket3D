@@ -116,15 +116,15 @@ class EngineCore : public rkutil::Trackable
 		 *************************************************************************/
 		void toggleWireframe(bool showWireframe);
 
-		ShaderManager* getShaderManager() { return mpShaderManager; };
-		Camera* getCamera() { return mpCam; }
+		inline ShaderManager* getShaderManager() { return mpShaderManager; };
+		inline Camera* getCamera() { return mpCam; }
 		
 		// Time between current frame and last frame
 		float deltaTime = 0.0f;	
 
 	private:
 		const std::string mMODEL_PATH = "../../assets/models/";
-		int mOriginalWindowWidth = 0, mOriginalWindowHeight = 0;
+		int mAppWindowWidth = 0, mAppWindowHeight = 0;
 		float lastFrame = 0.0f; // Time of last frame
 		
 		unsigned int framebuffer;

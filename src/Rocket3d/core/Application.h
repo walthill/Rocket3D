@@ -1,13 +1,12 @@
 #ifndef APP_H
 #define APP_H
 
-#include <rkutil/PerformanceTracker.h>
 #include <rkutil/Timer.h>
 #include "../../RocketEngine/render/layers/LayerStack.h"
+#include "../layers/ImGuiLayer.h"
 #include "../../RocketEngine/logging/RK_Log.h"
 #include "../../RocketEngine/input/InputSystem.h"
 #include "../input/MessageManager.h"
-#include "../layers/ImGuiLayer.h"
 
 //Event system? for layer-unique inputs
 

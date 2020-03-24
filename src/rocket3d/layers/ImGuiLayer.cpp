@@ -223,19 +223,22 @@ void ImGuiLayer::drawGameWindow()
 	// We set the same viewport size (plus margin) to the next window (if first use)
 	ImGui::SetNextWindowSize(ImVec2(W+15, H+35), ImGuiCond_Once);
 
-	ImGui::Begin("Game rendering");
+	ImGui::Begin("Game");
 	{
+		float h = ImGui::GetWindowHeight();
+		float w = ImGui::GetWindowWidth();
+		h -= 35;
+		w -= 15;
+
 		// Get the current cursor position (where your window is)
 		ImVec2 pos = ImGui::GetCursorScreenPos();
-
-		app->getAppWindow()->setViewport(0, 0, W, H);
 
 		// Ask ImGui to draw it as an image:
 		// Under OpenGL the ImGUI image type is GLuint
 		// So make sure to use "(void *)tex" but not "&tex"
 		ImGui::GetWindowDrawList()->AddImage(mGameWindowTexture, 
-			ImVec2(ImGui::GetItemRectMin().x + 5, ImGui::GetItemRectMin().y+30),
-			ImVec2(pos.x + W, pos.y + H), 
+			ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y+30),
+			ImVec2(pos.x + w, pos.y + h), 
 			ImVec2(0, 1), ImVec2(1, 0));
 	}
 	ImGui::End();

@@ -6,19 +6,21 @@ GameLayer::GameLayer()
 	:Layer("Game")
 {
 	GameApp::initInstance();
-
-	if (!GameApp::getInstance()->initialize())
+	mpGameInstance = GameApp::getInstance();
+	
+	if (!mpGameInstance->initialize())
 	{
 		RK_CORE_FATAL_ALL("ERROR: RENDERER CREATION FAILED.");
 		return;
 	}
 }
+
 GameLayer::~GameLayer()
 {
-	GameApp::getInstance()->cleanInstance();
+	mpGameInstance->cleanInstance();
 }
 
 void GameLayer::onUpdate()
 {
-	GameApp::getInstance()->processLoop();
+	mpGameInstance->processLoop();
 }

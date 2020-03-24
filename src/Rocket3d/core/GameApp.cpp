@@ -195,8 +195,8 @@ void GameApp::render()
 {
 	mpRocketEngine->render();
 	mpComponentManager->renderMeshes();
-	mpRocketEngine->renderFramebufferScreen();
 	mpRocketEngine->renderText();
+	mpRocketEngine->renderFramebufferScreen();
 }
 
 double GameApp::getCurrentTime() 

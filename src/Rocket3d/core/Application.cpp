@@ -1,6 +1,5 @@
 #include "Application.h"
 #include "../layers/GameLayer.h"
-#include "../layers/ImGuiLayer.h"
 
 /*	TODO	
  * ============================================================
@@ -46,7 +45,7 @@ void Application::init()
 	mpMessageManager = new MessageManager();
 	mpInputSystem = new InputSystem(mpAppWindow);
 	mpImGuiLayer = new ImGuiLayer();
-
+	
 	addOverlay(mpImGuiLayer);
 	addLayer(new GameLayer());	//game layer created by default for now - TODO: add game window size (used for render tex & rendering text
 }

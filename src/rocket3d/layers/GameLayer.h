@@ -3,6 +3,8 @@
 
 #include <render/layers/Layer.h>
 
+class GameApp;
+
 class GameLayer : public Layer
 {
 	public:
@@ -10,6 +12,9 @@ class GameLayer : public Layer
 		~GameLayer();
 
 		void onUpdate() override;
+		
+	private:
+		GameApp* mpGameInstance;
 };
 
 

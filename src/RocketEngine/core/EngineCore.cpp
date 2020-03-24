@@ -65,8 +65,8 @@ bool EngineCore::initialize()
 {
 	Application* app = Application::getInstance();
 	mpWindowHandle = app->getAppWindow();
-	mOriginalWindowWidth = mpWindowHandle->getWidth();
-	mOriginalWindowHeight = mpWindowHandle->getHeight();
+	mAppWindowWidth = mpWindowHandle->getWidth();
+	mAppWindowHeight = mpWindowHandle->getHeight();
 	
 	float planeVertices[] = {
 		// positions          // texture Coords 
@@ -115,7 +115,7 @@ bool EngineCore::initialize()
 	// create a color attachment texture
 	glGenTextures(1, &textureColorbuffer);
 	glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mOriginalWindowWidth, mOriginalWindowHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mAppWindowWidth, mAppWindowHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
@@ -123,7 +123,7 @@ bool EngineCore::initialize()
 	unsigned int rbo;
 	glGenRenderbuffers(1, &rbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, mOriginalWindowWidth, mOriginalWindowHeight); // use a single renderbuffer object for both a depth AND stencil buffer.
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, mAppWindowWidth, mAppWindowHeight); // use a single renderbuffer object for both a depth AND stencil buffer.
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
 	
 	// now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
@@ -160,10 +160,10 @@ bool EngineCore::initialize()
 	TextData data = { "This is sample text", Color(127, 204, 51), rkm::Vector2(25.0f, 25.0f), 1.0f };
 	textObj->initTextData(data);
 	textObj2 = new Text("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId));
-	data = { "(C) Rocket3d", Color(76.5f, 178.5f, 229.5f), rkm::Vector2(540.0f, 570.0f), 0.5f };
+	data = { "(C) Rocket3d", Color(76.5f, 178.5f, 229.5f), rkm::Vector2((float)mAppWindowWidth - 140.0f, (float)mAppWindowHeight-30.0f), 0.5f };
 	textObj2->initTextData(data);
 	// Compile and setup the shader
-	rkm::Mat4 projection = rkm::MatProj::orthographic(0.0f, 800.0f, 0.0f, 600.0f);
+	rkm::Mat4 projection = rkm::MatProj::orthographic(0.0f, (float)mAppWindowWidth, 0.0f, (float)mAppWindowHeight);
 	mpShaderManager->useShaderByKey(textShaderId);
 	mpShaderManager->getShaderInUse()->setMat4("projection", projection);
 	return true;
@@ -223,7 +223,7 @@ void EngineCore::render()
 
 void EngineCore::prepFrambuffer()
 {
-	mpWindowHandle->setViewport(0, 0, mOriginalWindowWidth, mOriginalWindowHeight);
+	mpWindowHandle->setViewport(0, 0, mAppWindowWidth, mAppWindowHeight);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	mpWindowHandle->enableWindowFlags(DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
@@ -243,7 +243,7 @@ void EngineCore::renderFramebufferScreen()
 	mpWindowHandle->clearWindowBuffers(COLOR_BUFFER);
 
 	//render to a texture that isn't at screen size
-//	mpWindowHandle->setViewport(10, 10, 600, 300);
+	//mpWindowHandle->setViewport(0, 0, mWindowWidth, mWindowHeight);
 
 	mpShaderManager->useShaderByKey("framebuffer");
 	glBindVertexArray(quadVAO);
@@ -256,6 +256,13 @@ void EngineCore::renderFramebufferScreen()
 
 void EngineCore::renderText()
 {
+
+	Application* app = Application::getInstance();
+
+	rkm::Mat4 projection = rkm::MatProj::orthographic(0.0f, (float)app->getAppWindow()->getWidth(), 0.0f, (float)app->getAppWindow()->getHeight());
+	mpShaderManager->useShaderByKey(textShaderId);
+	mpShaderManager->getShaderInUse()->setMat4("projection", projection);
+
 	textObj->renderText();
 	textObj2->renderText();
 }
