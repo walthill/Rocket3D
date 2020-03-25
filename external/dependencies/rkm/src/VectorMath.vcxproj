@@ -92,6 +92,9 @@
       <Command>
       </Command>
     </PreLinkEvent>
+    <PostBuildEvent>
+      <Command>xcopy $(SolutionDir)..\..\external\dependencies\rkm\src\cpp\include $(SolutionDir)..\..\external\include\rkm\ /s /e /h /y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -128,7 +131,7 @@
     <ClInclude Include="cpp\include\Vector2.h" />
     <ClInclude Include="cpp\include\Vector3.h" />
     <ClInclude Include="cpp\include\Vector4.h" />
-    <ClInclude Include="cpp\include\RK_Timer.h" />
+    <ClInclude Include="cpp\RK_Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="masm\vector3.asm" />

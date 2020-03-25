@@ -27,9 +27,9 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-#include <rkutil/Trackable.h>
+#include <rkutil/MemoryTracker.h>
 
-class RK_Log : public rkutil::Trackable
+class RK_Log
 {
 	public:
 		#pragma region Static Class Functions
@@ -68,6 +68,11 @@ class RK_Log : public rkutil::Trackable
 			* Initializes loggers for console and file outputs
 		***/
 		static void initialize();
+
+		/***
+			* Report current memory allocations to console and file logs
+		***/
+		static void reportAllocs();
 
 		/***
 			* Cleanup console and file loggers

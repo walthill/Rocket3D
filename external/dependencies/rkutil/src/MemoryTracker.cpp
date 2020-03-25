@@ -1,5 +1,6 @@
 #include "include/MemoryTracker.h"
 #include <map>
+#include <sstream>
 
 namespace rkutil {
 
@@ -42,14 +43,6 @@ namespace rkutil {
 		stream << "Current memory allocations" << std::endl;
 
 		//add each allocation (ordered, with ptr & size) to a map
-		struct ReportData
-		{
-			ReportData() {};
-			ReportData(void* anAddr, size_t aSize): address(anAddr), size(aSize) {};
-			void* address;
-			unsigned int size;
-		};
-
 		std::map<int, ReportData> reportMap;
 
 		//build map for sorting
@@ -67,9 +60,46 @@ namespace rkutil {
 		for (recordIter = reportMap.begin(); recordIter != reportMap.end(); ++recordIter)
 		{
 			stream << "Allocation Num: " << recordIter->first
-				   << " | Address: " << recordIter->second.address
-				   << " | Bytes: " << recordIter->second.size 
-				   << std::endl;
+				<< " | Address: " << recordIter->second.address
+				<< " | Bytes: " << recordIter->second.size
+				<< std::endl;
+		}		
+	}
+
+	std::vector<std::string> MemoryTracker::logAllocs()
+	{
+		std::string title = "Current memory allocations";
+		mMemoryReports.push_back(title);
+
+		//add each allocation (ordered, with ptr & size) to a map
+		std::map<int, ReportData> reportMap;
+
+		//build map for sorting
+		std::unordered_map<void*, AllocRecord>::iterator iter;
+		for (iter = mAllocRecordMap.begin(); iter != mAllocRecordMap.end(); ++iter)
+		{
+			//iter->first == mem address
+			//iter->second == byte size of ptr
+			ReportData data(iter->first, iter->second.mByteSize);
+			reportMap[iter->second.mRecordNum] = data;
 		}
+
+		//display allocation report in order
+		std::map<int, ReportData>::iterator recordIter;
+		for (recordIter = reportMap.begin(); recordIter != reportMap.end(); ++recordIter)
+		{
+			std::stringstream ss;
+			ss << recordIter->second.address;
+			std::string hexAddress = ss.str();
+
+			std::string allocString = "Allocation Num: " + std::to_string(recordIter->first),
+
+						addressString = " | Address: " + hexAddress,
+
+						byteString = " | Bytes: " + std::to_string(recordIter->second.size);
+			
+			mMemoryReports.push_back(allocString+addressString+byteString);
+		}
+		return mMemoryReports;
 	}
 }

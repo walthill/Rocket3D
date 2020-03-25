@@ -59,8 +59,7 @@ class InputSystem : public rkutil::Trackable
 		void processInput();
 
 		inline void play() { mPlayMode = !mPlayMode; }
-		Window* getWindow() { return mpWindow; }
-
+		
 	private:
 		AppInputSender* mpAppInput;
 		GameInputSender* mpGameInput;
