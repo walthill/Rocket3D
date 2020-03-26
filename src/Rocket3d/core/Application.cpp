@@ -1,10 +1,8 @@
 #include "Application.h"
 #include "../layers/GameLayer.h"
-#include "../layers/ImGuiLayer.h"
 
 /*	TODO	
  * ============================================================
- *		-- Render game scene to ImGui window - https://gamedev.stackexchange.com/questions/140693/how-can-i-render-an-opengl-scene-into-an-imgui-window
  *		
  *		
  *		
@@ -25,7 +23,8 @@ Application::Application()
 	mpMasterTimer->start();
 	
 	mpAppWindow = new Window();
-	mpAppWindow->initialize(800, 600, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE);
+	mpAppWindow->initialize(1000, 750, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE, false);
+//	mpAppWindow->setWindowDrawMode(FRONT_AND_BACK, WIREFRAME);
 }
 
 Application::~Application()
@@ -46,10 +45,9 @@ void Application::init()
 	mpMessageManager = new MessageManager();
 	mpInputSystem = new InputSystem(mpAppWindow);
 	mpImGuiLayer = new ImGuiLayer();
-
+	
 	addOverlay(mpImGuiLayer);
-//	addLayer(new ImGuiLayer());
-	addLayer(new GameLayer());	//game layer created by default for now
+	addLayer(new GameLayer());	//game layer created by default for now - TODO: add game window size (used for render tex & rendering text
 }
 
 void Application::addLayer(Layer* layer)
@@ -102,6 +100,16 @@ bool Application::run()
 void Application::play()
 {
 	mpInputSystem->play();
+}
+
+bool Application::isPlaying()
+{
+	return mpInputSystem->isPlaying();
+}
+
+void Application::setGameRenderTexture(unsigned int texId)
+{
+	mGameWindowTexture = texId;
 }
 
 void Application::calculateDeltaTime()

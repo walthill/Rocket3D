@@ -2,6 +2,7 @@
 #define GAME_INPUT_SENDER_H
 
 #include "../InputSender.h"
+#include "../../window/Window.h"
 
 class GameInputSender : public InputSender
 {
@@ -15,6 +16,8 @@ class GameInputSender : public InputSender
 
 		void onMouseMove(double xPos, double yPos) override;
 		void onMouseScroll(double xoffset, double yoffset) override;
+
+		void processInput(Window* wind);
 
 	private:
 		void onKeyDown(int key, int scancode, int action, int mods) override;

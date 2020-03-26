@@ -129,5 +129,8 @@ void InputSystem::onWindowResize(int width, int height)
 void InputSystem::processInput()
 {
 	//Check and call events
+	if(mPlayMode)
+		mpGameInput->processInput(mpWindow);
+
 	glfwPollEvents();
 }

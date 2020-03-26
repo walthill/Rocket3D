@@ -1,13 +1,12 @@
 #ifndef APP_H
 #define APP_H
 
-#include <rkutil/PerformanceTracker.h>
 #include <rkutil/Timer.h>
 #include "../../RocketEngine/render/layers/LayerStack.h"
+#include "../layers/ImGuiLayer.h"
 #include "../../RocketEngine/logging/RK_Log.h"
 #include "../../RocketEngine/input/InputSystem.h"
 #include "../input/MessageManager.h"
-#include "../layers/ImGuiLayer.h"
 
 //Event system? for layer-unique inputs
 
@@ -58,6 +57,9 @@ class Application : public rkutil::Trackable
 
 		bool run();
 		void play();
+		bool isPlaying();
+		unsigned int getRenderTexture() { return mGameWindowTexture; }
+		void setGameRenderTexture(unsigned int texId);
 		void calculateDeltaTime();
 		
 		inline void quit() { mIsRunning = false; }
@@ -75,6 +77,7 @@ class Application : public rkutil::Trackable
 		rkutil::Timer* mpMasterTimer;
 		float mLastFrame;
 
+		unsigned int mGameWindowTexture;
 		Window* mpAppWindow; //TODO: use unique _ptr
 		ImGuiLayer* mpImGuiLayer; //TODO: use unique _ptr
 		InputSystem* mpInputSystem;

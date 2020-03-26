@@ -21,9 +21,12 @@ class ImGuiLayer : public Layer
 		void drawToolbar();
 		void drawSceneTree();
 		void drawInspector();
+		void drawGameWindow();
 
 	private:
 		float mTime = 0.0f;
+
+		void* mGameWindowTexture;
 };
 
 #endif // !IMGUI_LAYER_H

@@ -42,6 +42,7 @@
     <ClInclude Include="window\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="asset\Model.cpp" />
     <ClCompile Include="core\EngineCore.cpp" />
     <ClCompile Include="input\senders\AppInputSender.cpp" />
     <ClCompile Include="input\senders\GameInputSender.cpp" />
@@ -59,7 +60,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+    <None Include="shader\glsl\fDepthBuffer.glsl" />
     <None Include="shader\glsl\fDirectionalLight.glsl" />
+    <None Include="shader\glsl\fFrameBuffer.glsl" />
+    <None Include="shader\glsl\fFrameBufferScreen.glsl" />
     <None Include="shader\glsl\fLamp.glsl" />
     <None Include="shader\glsl\fPointLight.glsl" />
     <None Include="shader\glsl\fLighting.glsl" />
@@ -67,6 +71,8 @@
     <None Include="shader\glsl\fSoftSpotlight.glsl" />
     <None Include="shader\glsl\fSpotlight.glsl" />
     <None Include="shader\glsl\fTextRender.glsl" />
+    <None Include="shader\glsl\vFrameBuffer.glsl" />
+    <None Include="shader\glsl\vFrameBufferScreen.glsl" />
     <None Include="shader\glsl\vLamp.glsl" />
     <None Include="shader\glsl\vLighting.glsl" />
     <None Include="shader\glsl\vShader.glsl" />

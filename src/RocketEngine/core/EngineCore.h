@@ -80,6 +80,10 @@ class EngineCore : public rkutil::Trackable
 			* Draw models and lighting data to the window
 		***/
 		void render();
+		
+		void prepFrambuffer();
+
+		void renderFramebufferScreen();
 
 		/***
 			* Draw ui elements to the window. Should be called last before SwapBuffer()
@@ -112,17 +116,26 @@ class EngineCore : public rkutil::Trackable
 		 *************************************************************************/
 		void toggleWireframe(bool showWireframe);
 
-		ShaderManager* getShaderManager() { return mpShaderManager; };
-		Camera* getCamera() { return mpCam; }
+		inline ShaderManager* getShaderManager() { return mpShaderManager; };
+		inline Camera* getCamera() { return mpCam; }
 		
 		// Time between current frame and last frame
 		float deltaTime = 0.0f;	
 
 	private:
 		const std::string mMODEL_PATH = "../../assets/models/";
-		int mWindowWidth = 0, mWindowHeight = 0;
+		int mAppWindowWidth = 0, mAppWindowHeight = 0;
 		float lastFrame = 0.0f; // Time of last frame
 		
+		unsigned int framebuffer;
+		unsigned int textureColorbuffer;
+		unsigned int floorTexture;
+		unsigned int planeVAO, planeVBO;
+
+		// screen quad VAO
+		unsigned int quadVAO, quadVBO;
+
+
 		Window *mpWindowHandle;
 		InputSystem *mpInputSystem;
 		Camera* mpCam;
