@@ -112,6 +112,9 @@ class RK_Log
 //Destroy macro
 #define RK_LOGGER_CLEAN()		::RK_Log::cleanInstance();
 
+//Memory leak report macro
+#define RK_LOGGER_MEMREPORT()	::RK_Log::getInstance()->reportAllocs();
+
 
 /* Core console macros
 ============================================================= */

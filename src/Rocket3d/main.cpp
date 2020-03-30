@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 	if(!Application::getInstance()->run())
 		Application::cleanInstance();
 
-	RK_Log::getInstance()->reportAllocs();
+	RK_LOGGER_MEMREPORT();
 
 	//console report
 	//rkutil::MemoryTracker::getInstance()->reportAllocs(std::cout);
