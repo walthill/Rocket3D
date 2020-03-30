@@ -22,7 +22,7 @@
 #ifndef GAME_APP_H
 #define GAME_APP_H
 
-#include <rkutil/Trackable.h>
+#include <util/EngineUtils.h>
 #include <rkutil/MemoryTracker.h>
 #include <rkutil/PerformanceTracker.h>
 #include <string>
@@ -95,12 +95,6 @@ class GameApp : public rkutil::Trackable
 		***/
 		inline EngineCore* getRocketEngine() { return mpRocketEngine; };
 		
-		/***
-			* Accessor for the GameMessageManager class. Allows for function calls to the message system.
-			* Returns a pointer to the GameMessageManager class.
-		***/
-		inline MessageManager* getGameMessageManager() { return mpGameMessageManager; };
-		
 		inline GameObjectManager* getGameObjectManager() { return mpGameObjectManager; }
 		inline ComponentManager* getComponentManager() { return mpComponentManager; }
 
@@ -113,16 +107,13 @@ class GameApp : public rkutil::Trackable
 		void moveRight();
 		void moveLeft();
 		void toggleView(bool displayWireframeMode);
-		void quit() { mKeepRunning = false; };
 		#pragma endregion
 
 	private:
 		Application* mpAppHandle;
 		EngineCore* mpRocketEngine;
-		MessageManager* mpGameMessageManager;
 		GameObjectManager* mpGameObjectManager;
 		ComponentManager* mpComponentManager;
-		rkutil::PerformanceTracker* mpPerformanceTracker;
 
 		//GameObject* g;
 			
@@ -131,17 +122,14 @@ class GameApp : public rkutil::Trackable
 		bool mKeepRunning = false;
 
 		//Performance tracker data
+		rkutil::PerformanceTracker* mpPerformanceTracker;
 		rkutil::Timer* mpFrameTimer;
 		rkutil::Timer* mpMasterTimer;
 		int mFPS = 0;
 		const std::string mINIT_TRACKER_NAME = "init";
 		const std::string mDRAW_TRACKER_NAME = "draw";
 		const std::string mLOOP_TRACKER_NAME = "loop";
-		const double m60FPS_FRAME_TIME = 16.7;
-		const double m30FPS_FRAME_TIME = 33.3;
 		const int MAX_NUM_OBJECTS = 10;
-		const int mWindowWidth = 800, mWindowHeight = 600;
-
 
 		GameApp() {}; //Empty constuctor
 		~GameApp();

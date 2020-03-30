@@ -87,6 +87,9 @@
     <ClCompile Include="platform\ImGui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="core\Editor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\GameApp.h">
@@ -136,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="input\MessageManager.h">
       <Filter>Header Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Editor.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

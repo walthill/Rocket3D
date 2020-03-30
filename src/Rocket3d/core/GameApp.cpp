@@ -44,6 +44,7 @@ bool GameApp::initialize()
 	if (!mpRocketEngine->initialize())
 		return false;
 
+	//TODO: move gameobject and component manager objects into EngineCore - editor and game should share that data
 	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);
 	mpComponentManager = new ComponentManager(MAX_NUM_OBJECTS, mpRocketEngine->getShaderManager(), STANDARD_SHADER_KEY);
 	
@@ -170,7 +171,7 @@ bool GameApp::processLoop()
 			render();
 
 			mpPerformanceTracker->stopTracking(mDRAW_TRACKER_NAME);
-			mpFrameTimer->sleepUntilElapsed(m60FPS_FRAME_TIME);
+			mpFrameTimer->sleepUntilElapsed(FRAME_TIME_60FPS);
 			mpPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
 
 			RK_INFO_C("loop took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) +
