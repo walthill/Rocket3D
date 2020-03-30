@@ -23,6 +23,7 @@
 #include "../logging/RK_Log.h"
 #include <glfw3.h>
 
+WindowAPI Window::sWindowAPI = WindowAPI::OPENGL;
 bool Window::mShouldInitGLFW = true;
 
 Window::Window()

@@ -78,12 +78,6 @@
     <ClInclude Include="input\senders\GameInputSender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="platform\OpenGL\ImGuiOpenGLRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="platform\OpenGL\ImGuiGLFWRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="core\GameObjectManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -106,6 +100,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="component\TransformComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render\platform\OpenGL\ImGuiGLFWRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render\platform\OpenGL\ImGuiOpenGLRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render\platform\OpenGL\OpenGLBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -146,12 +152,6 @@
     <ClCompile Include="input\senders\GameInputSender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="platform\OpenGL\ImGuiOpenGLRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="platform\OpenGL\ImGuiGLFWRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="asset\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -177,6 +177,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="component\TransformComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="render\platform\OpenGL\ImGuiGLFWRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="render\platform\OpenGL\ImGuiOpenGLRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="render\platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Buffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

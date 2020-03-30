@@ -26,6 +26,7 @@
 
 struct GLFWwindow;
 
+enum class WindowAPI { NONE = 0, OPENGL = 1 };
 enum WindowBufferType {	COLOR_BUFFER = 1, DEPTH_BUFFER = 2, ACCUM_BUFFER = 4, STENCIL_BUFFER = 8 };
 enum WindowDrawMode { WIREFRAME = 1, VERTICES, FILL };
 enum WindowDrawFace { FRONT = 1, BACK, FRONT_AND_BACK };
@@ -133,8 +134,11 @@ class Window : public rkutil::Trackable
 			* Clean up GLFW library
 		***/
 		static void destroyGLFW();
+		static void setAPI(WindowAPI api) { sWindowAPI = api; }
+		inline static WindowAPI getAPI() { return sWindowAPI; }
 
 	private:
+		static WindowAPI sWindowAPI;
 		static bool mShouldInitGLFW;
 		const int TOP_LEFT = 0;
 		int mWidth = 0, mHeight = 0;
