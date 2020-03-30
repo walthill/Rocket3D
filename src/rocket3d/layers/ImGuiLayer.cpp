@@ -64,6 +64,7 @@ void ImGuiLayer::onImGuiRender()
 	drawInspector();
 	drawSceneTree();
 	drawGameWindow();
+	drawEditorWindow();
 }
 
 void ImGuiLayer::begin()
@@ -212,7 +213,7 @@ void ImGuiLayer::drawGameWindow()
 	//-- Render game scene to ImGui window - https://gamedev.stackexchange.com/questions/140693/how-can-i-render-an-opengl-scene-into-an-imgui-window
 
 	Application* app = Application::getInstance();
-	mGameWindowTexture = (void*)app->getRenderTexture();
+	mGameWindowTexture = (void*)app->getRenderTexture(GAME_WINDOW);
 	
 	//TODO: generalize game render texture width and height
 
@@ -239,6 +240,41 @@ void ImGuiLayer::drawGameWindow()
 		ImGui::GetWindowDrawList()->AddImage(mGameWindowTexture, 
 			ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y+30),
 			ImVec2(pos.x + w, pos.y + h), 
+			ImVec2(0, 1), ImVec2(1, 0));
+	}
+	ImGui::End();
+}
+
+void ImGuiLayer::drawEditorWindow()
+{
+	Application* app = Application::getInstance();
+	mGameWindowTexture = (void*)app->getRenderTexture(EDITOR_WINDOW);
+
+	//TODO: generalize game render texture width and height
+
+	// My Game has a different viewport than the editor's one:
+	const int W = 600;
+	const int H = 450;
+
+	// We set the same viewport size (plus margin) to the next window (if first use)
+	ImGui::SetNextWindowSize(ImVec2(W + 15, H + 35), ImGuiCond_Once);
+
+	ImGui::Begin("Editor");
+	{
+		float h = ImGui::GetWindowHeight();
+		float w = ImGui::GetWindowWidth();
+		h -= 35;
+		w -= 15;
+
+		// Get the current cursor position (where your window is)
+		ImVec2 pos = ImGui::GetCursorScreenPos();
+
+		// Ask ImGui to draw it as an image:
+		// Under OpenGL the ImGUI image type is GLuint
+		// So make sure to use "(void *)tex" but not "&tex"
+		ImGui::GetWindowDrawList()->AddImage(mGameWindowTexture,
+			ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y + 30),
+			ImVec2(pos.x + w, pos.y + h),
 			ImVec2(0, 1), ImVec2(1, 0));
 	}
 	ImGui::End();

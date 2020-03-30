@@ -101,7 +101,7 @@ void GameMouseDown::process(float deltaTime)
 		}
 		if (mMouseCode == MOUSE_SCROLL)
 		{
-			pGame->getInstance()->getRocketEngine()->getCamera()->processMouseScroll((float)y);
+			pGame->getInstance()->getRocketEngine()->getGameCamera()->processMouseScroll((float)y);
 		}
 	}
 }
@@ -134,7 +134,7 @@ void GameMouseMove::process(float deltaTime)
 	{
 		if (mMouseMoveCode == CAM_MOUSE_MOVE)
 		{
-			pGame->getRocketEngine()->getCamera()->processMouseMovement(deltaTime, xPos, yPos);
+			pGame->getRocketEngine()->getGameCamera()->processMouseMovement(deltaTime, xPos, yPos);
 		}
 	}
 }

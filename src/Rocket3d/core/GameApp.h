@@ -22,7 +22,7 @@
 #ifndef GAME_APP_H
 #define GAME_APP_H
 
-#include <util/EngineUtils.h>
+#include "../../RocketEngine/util/EngineUtils.h"
 #include <rkutil/MemoryTracker.h>
 #include <rkutil/PerformanceTracker.h>
 #include <string>
@@ -95,9 +95,6 @@ class GameApp : public rkutil::Trackable
 		***/
 		inline EngineCore* getRocketEngine() { return mpRocketEngine; };
 		
-		inline GameObjectManager* getGameObjectManager() { return mpGameObjectManager; }
-		inline ComponentManager* getComponentManager() { return mpComponentManager; }
-
 		/***
 			* Returns a double representing the runtime of the engine since startup.
 		***/
@@ -112,8 +109,6 @@ class GameApp : public rkutil::Trackable
 	private:
 		Application* mpAppHandle;
 		EngineCore* mpRocketEngine;
-		GameObjectManager* mpGameObjectManager;
-		ComponentManager* mpComponentManager;
 
 		//GameObject* g;
 			

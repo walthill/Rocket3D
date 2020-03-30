@@ -41,7 +41,7 @@ class Editor : public rkutil::Trackable
 		}
 		#pragma endregion
 
-		bool initialize();
+		bool initialize(EngineCore* engineHandle);
 		void clean();
 
 		bool processLoop();

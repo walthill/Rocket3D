@@ -107,9 +107,24 @@ bool Application::isPlaying()
 	return mpInputSystem->isPlaying();
 }
 
-void Application::setGameRenderTexture(unsigned int texId)
+unsigned int Application::getRenderTexture(AppWindowType texId)
 {
-	mGameWindowTexture = texId;
+	unsigned int returnId = -1;
+
+	if (texId == GAME_WINDOW)
+		returnId = mGameWindowTexture;
+	else if(texId == EDITOR_WINDOW)
+		returnId = mEditorWindowTexture;
+
+	return returnId;
+}
+
+void Application::setRenderTexture(AppWindowType type, unsigned int texId)
+{
+	if (type == GAME_WINDOW)
+		mGameWindowTexture = texId;
+	else if (type == EDITOR_WINDOW)
+		mEditorWindowTexture = texId;
 }
 
 void Application::calculateDeltaTime()

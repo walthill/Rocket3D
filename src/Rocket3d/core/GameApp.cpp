@@ -21,8 +21,6 @@
 //#include "../input/Message.h"
 //#include "../input/MessageManager.h"
 #include "../../RocketEngine/logging/RK_Log.h"
-#include "GameObjectManager.h"
-#include "../component/ComponentManager.h"
 #include <window/Window.h>
 
 GameApp* GameApp::mpGameApp = nullptr;
@@ -38,15 +36,10 @@ bool GameApp::initialize()
 	pPerformanceTracker->startTracking(mINIT_TRACKER_NAME);
 
 	mpRocketEngine = new EngineCore();
-//	mpGameMessageManager = new GameMessageManager();
 	mpMasterTimer = new rkutil::Timer();
 
 	if (!mpRocketEngine->initialize())
 		return false;
-
-	//TODO: move gameobject and component manager objects into EngineCore - editor and game should share that data
-	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);
-	mpComponentManager = new ComponentManager(MAX_NUM_OBJECTS, mpRocketEngine->getShaderManager(), STANDARD_SHADER_KEY);
 	
 	//=========================================================================
 	//		Creating GameObjects
@@ -58,7 +51,7 @@ bool GameApp::initialize()
 	
 	//MaterialData matData = { meshData.shader, STANDARD_SHADER };
 	
-	GameObject* o =	mpGameObjectManager->createGameObject(t, meshData);// , matData);
+	GameObject* o =	mpRocketEngine->getGameObjectManager()->createGameObject(t, meshData);// , matData);
 
 
 	TransformData t2 = { rkm::Vector3(1.5f,  -1.5f, -2.5f), rkm::Vector3::one * 0.1f, rkm::Vector3::up, 0 };
@@ -101,24 +94,24 @@ bool GameApp::initialize()
 	spotData.mQuadratic = quadratic;
 	spotData.mCutoff = cos(rkm::degToRad(12.5f));
 	spotData.mOuterCutoff = cos(rkm::degToRad(17.5f));
-	spotData.mpCamHandle = mpRocketEngine->getCamera();
+	spotData.mpCamHandle = mpRocketEngine->getGameCamera();
 
 	//Point lights
 	for (size_t i = 0; i < 4; i++)
 	{
 		t2.position = pointLightPositions[i];
-		GameObject* pointLight = mpGameObjectManager->createGameObject(t2, lightMeshData);
+		GameObject* pointLight = mpRocketEngine->getGameObjectManager()->createGameObject(t2, lightMeshData);
 		pointLightData.mPosition = pointLightPositions[i];
-		mpGameObjectManager->addPointLight(pointLight->getId(), pointLightData);
+		mpRocketEngine->getGameObjectManager()->addPointLight(pointLight->getId(), pointLightData);
 	}
 
 	//Directional light
-	GameObject* dirLight = mpGameObjectManager->createGameObject(t2, lightMeshData);
-	mpGameObjectManager->addDirectionalLight(dirLight->getId(), dirData);
+	GameObject* dirLight = mpRocketEngine->getGameObjectManager()->createGameObject(t2, lightMeshData);
+	mpRocketEngine->getGameObjectManager()->addDirectionalLight(dirLight->getId(), dirData);
 
 	//Spotlight light
-	GameObject* spotLight = mpGameObjectManager->createGameObject();
-	mpGameObjectManager->addSpotLight(spotLight->getId(), spotData);
+	GameObject* spotLight = mpRocketEngine->getGameObjectManager()->createGameObject();
+	mpRocketEngine->getGameObjectManager()->addSpotLight(spotLight->getId(), spotData);
 
 	//=========================================================================
 
@@ -138,13 +131,9 @@ bool GameApp::initialize()
 
 void GameApp::clean()
 {
-	delete mpGameObjectManager;
-	delete mpComponentManager;
-
 	delete mpPerformanceTracker;
 	delete mpFrameTimer;
 	delete mpMasterTimer;
-//	delete mpGameMessageManager;
 	delete mpRocketEngine;
 }
 
@@ -186,18 +175,12 @@ bool GameApp::processLoop()
   
 void GameApp::update()
 {
-//	mpGameMessageManager->processMessagesForThisFrame(mpRocketEngine->deltaTime);
 	mpRocketEngine->update(); 
-	mpComponentManager->update(mpRocketEngine->deltaTime);
-	mpGameObjectManager->updateAll(mpRocketEngine->deltaTime);
 }
 
 void GameApp::render()
 {
-	mpRocketEngine->render();
-	mpComponentManager->renderMeshes();
-	mpRocketEngine->renderText();
-	mpRocketEngine->renderFramebufferScreen();
+	mpRocketEngine->renderGame();
 }
 
 double GameApp::getCurrentTime() 

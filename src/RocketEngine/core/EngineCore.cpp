@@ -44,11 +44,14 @@ EngineCore::~EngineCore()
 
 void EngineCore::clean()
 {
+	delete mpGameObjectManager;
+	delete mpComponentManager;
+
 	delete textObj;
 	delete textObj2;
 	delete mpShaderManager;
 //	delete mpInputSystem;
-	delete mpCam;
+	delete mpGameCam;
 }
 
 
@@ -136,7 +139,7 @@ bool EngineCore::initialize()
 
 	floorTexture = Model::TextureFromFile("metal.png", "../../assets/textures");
 
-	mpCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
+	mpGameCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
 
 //	mpInputSystem = new InputSystem(mpWindowHandle->getWindowHandle());
 	mpShaderManager = new ShaderManager();
@@ -152,7 +155,11 @@ bool EngineCore::initialize()
 
 	mpShaderManager->useShaderByKey("framebuffer");
 	mpShaderManager->setShaderInt("screenTexture", 0);
+
 	//initLighting();
+
+	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);
+	mpComponentManager = new ComponentManager(MAX_NUM_COMPONENETS, mpShaderManager, STANDARD_SHADER_KEY);
 
 	processViewProjectionMatrices();
 
@@ -172,8 +179,9 @@ bool EngineCore::initialize()
 
 void EngineCore::update()
 {
-	//mpInputSystem->processInput();
 	calculateDeltaTime();
+	mpComponentManager->update(deltaTime);
+	mpGameObjectManager->updateAll(deltaTime);
 }
 
 void EngineCore::calculateDeltaTime()
@@ -190,11 +198,11 @@ void EngineCore::processViewProjectionMatrices()
 
 	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	rkm::Mat4 proj = rkm::Mat4::identity;
-	proj = rkm::MatProj::perspective(rkm::degToRad(mpCam->getFov()), (float)app->getAppWindow()->getWidth() / (float)app->getAppWindow()->getHeight(), 0.1f, 100.0f);
+	proj = rkm::MatProj::perspective(rkm::degToRad(mpGameCam->getFov()), (float)app->getAppWindow()->getWidth() / (float)app->getAppWindow()->getHeight(), 0.1f, 100.0f);
 	mpShaderManager->setShaderMat4("projection", proj);
 
 	rkm::Mat4 view = rkm::Mat4::identity;
-	view = mpCam->getViewMatrix();
+	view = mpGameCam->getViewMatrix();
 	mpShaderManager->setShaderMat4("view", view);
 
 	rkm::Mat4 model = rkm::Mat4::identity;
@@ -215,10 +223,19 @@ void EngineCore::processViewProjectionMatrices()
 	mpShaderManager->setShaderMat4("view", view);
 }
 
-void EngineCore::render()
+void EngineCore::renderGame()
 {
 	prepFrambuffer();
 	processViewProjectionMatrices();
+	mpComponentManager->renderMeshes();
+	renderText();
+	renderFramebufferScreen(GAME_SCREEN);
+}
+
+//Editor should render the same game objects, update() them in the same fashion too
+void renderEditor()
+{
+//	mpComponentManager->renderMeshes();
 }
 
 void EngineCore::prepFrambuffer()
@@ -231,7 +248,7 @@ void EngineCore::prepFrambuffer()
 	mpWindowHandle->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
 }
 
-void EngineCore::renderFramebufferScreen()
+void EngineCore::renderFramebufferScreen(int screenType)
 {
 	// now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -248,8 +265,9 @@ void EngineCore::renderFramebufferScreen()
 	mpShaderManager->useShaderByKey("framebuffer");
 	glBindVertexArray(quadVAO);
 	glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
-	Application::getInstance()->setGameRenderTexture(textureColorbuffer);
-//glDrawArrays(GL_TRIANGLES, 0, 6);
+	Application::getInstance()->setRenderTexture((AppWindowType)screenType, textureColorbuffer);
+	//Application::getInstance()->setRenderTexture(EDITOR_WINDOW, textureColorbuffer);
+	//glDrawArrays(GL_TRIANGLES, 0, 6);
 
 }
 
@@ -269,22 +287,22 @@ void EngineCore::renderText()
 
 void EngineCore::moveCameraLeft()
 {
-	mpCam->moveCameraLeft(deltaTime);
+	mpGameCam->moveCameraLeft(deltaTime);
 }
 
 void EngineCore::moveCameraRight()
 {
-	mpCam->moveCameraRight(deltaTime);
+	mpGameCam->moveCameraRight(deltaTime);
 }
 
 void EngineCore::moveCameraForward()
 {
-	mpCam->moveCameraForward(deltaTime);
+	mpGameCam->moveCameraForward(deltaTime);
 }
 
 void EngineCore::moveCameraBack()
 {
-	mpCam->moveCameraBack(deltaTime);
+	mpGameCam->moveCameraBack(deltaTime);
 }
 
 void EngineCore::toggleWireframe(bool showWireframe)

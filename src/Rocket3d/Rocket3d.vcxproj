@@ -133,17 +133,9 @@ IF not exist log ( mkdir log &amp;&amp; type nul &gt; log/applog.txt &amp;&amp; 
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="component\Component.cpp" />
-    <ClCompile Include="component\ComponentManager.cpp" />
-    <ClCompile Include="component\LightComponent.cpp" />
-    <ClCompile Include="component\MaterialComponent.cpp" />
-    <ClCompile Include="component\MeshComponent.cpp" />
-    <ClCompile Include="component\TransformComponent.cpp" />
     <ClCompile Include="core\Application.cpp" />
     <ClCompile Include="core\Editor.cpp" />
     <ClCompile Include="core\GameApp.cpp" />
-    <ClCompile Include="core\GameObject.cpp" />
-    <ClCompile Include="core\GameObjectManager.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="input\AppMessages.cpp" />
     <ClCompile Include="input\Message.cpp" />
@@ -158,17 +150,9 @@ IF not exist log ( mkdir log &amp;&amp; type nul &gt; log/applog.txt &amp;&amp; 
     <ClCompile Include="platform\ImGui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="component\Component.h" />
-    <ClInclude Include="component\ComponentManager.h" />
-    <ClInclude Include="component\MaterialComponent.h" />
-    <ClInclude Include="component\MeshComponent.h" />
-    <ClInclude Include="component\LightComponent.h" />
-    <ClInclude Include="component\TransformComponent.h" />
     <ClInclude Include="core\Application.h" />
     <ClInclude Include="core\Editor.h" />
     <ClInclude Include="core\GameApp.h" />
-    <ClInclude Include="core\GameObject.h" />
-    <ClInclude Include="core\GameObjectManager.h" />
     <ClInclude Include="input\AppMessages.h" />
     <ClInclude Include="input\Message.h" />
     <ClInclude Include="input\MessageManager.h" />

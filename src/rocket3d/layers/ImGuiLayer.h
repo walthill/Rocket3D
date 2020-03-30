@@ -22,6 +22,7 @@ class ImGuiLayer : public Layer
 		void drawSceneTree();
 		void drawInspector();
 		void drawGameWindow();
+		void drawEditorWindow();
 
 	private:
 		float mTime = 0.0f;

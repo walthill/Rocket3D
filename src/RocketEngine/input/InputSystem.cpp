@@ -79,6 +79,9 @@ InputSystem::InputSystem(Window* window)
 	glfwSetFramebufferSizeCallback(wind, framebuffer_size_callback);
 }
 
+//TODO: when not in play mode, send editor input to mpAppInput
+//Application will need to store a pointer to the game layer
+//May need to pass mPlayMode into app input
 
 void InputSystem::onMouseScroll(double xoffset, double yoffset)
 {

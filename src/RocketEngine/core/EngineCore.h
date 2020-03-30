@@ -25,6 +25,8 @@
 #endif
 
 #include "../util/EngineUtils.h"
+#include "GameObjectManager.h"
+#include "../component/ComponentManager.h"
 
 class Camera;
 class Window;
@@ -79,11 +81,11 @@ class EngineCore : public rkutil::Trackable
 		/***
 			* Draw models and lighting data to the window
 		***/
-		void render();
+		void renderGame();
 		
 		void prepFrambuffer();
 
-		void renderFramebufferScreen();
+		void renderFramebufferScreen(int screenType);
 
 		/***
 			* Draw ui elements to the window. Should be called last before SwapBuffer()
@@ -116,14 +118,17 @@ class EngineCore : public rkutil::Trackable
 		 *************************************************************************/
 		void toggleWireframe(bool showWireframe);
 
+		inline GameObjectManager* getGameObjectManager() { return mpGameObjectManager; }
+		inline ComponentManager* getComponentManager() { return mpComponentManager; }
 		inline ShaderManager* getShaderManager() { return mpShaderManager; };
-		inline Camera* getCamera() { return mpCam; }
+		inline Camera* getGameCamera() { return mpGameCam; }
 		
 		// Time between current frame and last frame
 		float deltaTime = 0.0f;	
 
 	private:
 		const std::string mMODEL_PATH = "../../assets/models/";
+		const int MAX_NUM_OBJECTS = 300, MAX_NUM_COMPONENETS = 1000, GAME_SCREEN = 0, EDITOR_SCREEN = 1;
 		int mAppWindowWidth = 0, mAppWindowHeight = 0;
 		float lastFrame = 0.0f; // Time of last frame
 		
@@ -138,10 +143,13 @@ class EngineCore : public rkutil::Trackable
 
 		Window *mpWindowHandle;
 		InputSystem *mpInputSystem;
-		Camera* mpCam;
-
+		Camera* mpGameCam;
+		Camera* mpEditorCam;
 		ShaderManager* mpShaderManager;
-		
+
+		GameObjectManager* mpGameObjectManager;
+		ComponentManager* mpComponentManager;
+
 		ShaderKey standardLightingShaderId = "standardLightingShader", emitterShaderId = "emitter";
 		Text* textObj;
 		Text* textObj2;

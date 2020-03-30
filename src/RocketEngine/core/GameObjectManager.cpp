@@ -1,6 +1,6 @@
 #include "GameObjectManager.h"
-#include "GameApp.h"
-#include "../component/ComponentManager.h"
+#include "../../Rocket3d/core/GameApp.h"
+#include "EngineCore.h"
 
 GameObjectId GameObjectManager::msNextUnitId = PLAYER_OBJ_ID + 1;
 
@@ -38,7 +38,7 @@ GameObject* GameObjectManager::createGameObject(const TransformData& transform, 
 		newObj->setId(newId);
 
 		//Hook up components
-		ComponentManager* pComponentManager = GameApp::getInstance()->getComponentManager();
+		ComponentManager* pComponentManager = GameApp::getInstance()->getRocketEngine()->getComponentManager();
 		
 		//TRANSFORM
 		ComponentId newTransformId = pComponentManager->allocateTransformComponent(transform);
@@ -76,7 +76,7 @@ void GameObjectManager::destroy(const GameObjectId & id)
 		mGameObjMap.erase(it);
 
 		//remove components from manager
-		ComponentManager* pComponentManager = GameApp::getInstance()->getComponentManager();
+		ComponentManager* pComponentManager = GameApp::getInstance()->getRocketEngine()->getComponentManager();
 		pComponentManager->deallocateTransformComponent(obj->getTransformId());
 
 		//call destructor on gameObj
@@ -89,7 +89,7 @@ void GameObjectManager::destroy(const GameObjectId & id)
 
 void GameObjectManager::addPointLight(const GameObjectId& id, const PointLightData& pointLightData)
 {
-	ComponentManager* pComponentManager = GameApp::getInstance()->getComponentManager();
+	ComponentManager* pComponentManager = GameApp::getInstance()->getRocketEngine()->getComponentManager();
 	GameObject* obj = mGameObjMap[id];
 
 	ComponentId pointLight = pComponentManager->allocatePointLightComponent(obj->getTransformId(), pointLightData);
@@ -98,7 +98,7 @@ void GameObjectManager::addPointLight(const GameObjectId& id, const PointLightDa
 
 void GameObjectManager::addDirectionalLight(const GameObjectId& id, const DirectionalLightData& dirLightDat)
 {
-	ComponentManager* pComponentManager = GameApp::getInstance()->getComponentManager();
+	ComponentManager* pComponentManager = GameApp::getInstance()->getRocketEngine()->getComponentManager();
 	GameObject* obj = mGameObjMap[id];
 
 	ComponentId dirLight = pComponentManager->allocateDirectionalLightComponent(obj->getTransformId(), dirLightDat);
@@ -107,7 +107,7 @@ void GameObjectManager::addDirectionalLight(const GameObjectId& id, const Direct
 
 void GameObjectManager::addSpotLight(const GameObjectId& id, const SpotLightData& spotlightData)
 {
-	ComponentManager* pComponentManager = GameApp::getInstance()->getComponentManager();
+	ComponentManager* pComponentManager = GameApp::getInstance()->getRocketEngine()->getComponentManager();
 	GameObject* obj = mGameObjMap[id];
 
 	ComponentId spotLight = pComponentManager->allocateSpotlightComponent(obj->getTransformId(), spotlightData);

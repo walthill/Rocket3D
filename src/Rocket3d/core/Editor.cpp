@@ -7,10 +7,12 @@ Editor::~Editor()
 	clean();
 }
 
-bool Editor::initialize()
+bool Editor::initialize(EngineCore* engineHandle)
 {
 	rkutil::PerformanceTracker* pPerformanceTracker = new rkutil::PerformanceTracker();
 	pPerformanceTracker->startTracking(mINIT_TRACKER_NAME);
+
+	mpEngineHandle = engineHandle;
 
 	delete pPerformanceTracker;
 
@@ -41,13 +43,15 @@ bool Editor::processLoop()
 	render();
 
 	mpPerformanceTracker->stopTracking(mDRAW_TRACKER_NAME);
-	mpFrameTimer->sleepUntilElapsed(FRAME_TIME_60FPS);
+	//mpFrameTimer->sleepUntilElapsed(FRAME_TIME_60FPS);
 	mpPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
 
-	RK_INFO_C("loop took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) +
-		"ms draw took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) + "ms\n");
+	//RK_INFO_C("loop took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) +
+	//	"ms draw took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) + "ms\n");
 	//mFPS = (int)(1000.0 / mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
 	//RK_INFO_C("FPS: " + std::to_string(mFPS));
+
+	return mKeepRunning;
 }
 
 void Editor::update()

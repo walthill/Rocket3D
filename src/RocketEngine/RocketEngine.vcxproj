@@ -21,7 +21,15 @@
   <ItemGroup>
     <ClInclude Include="asset\image\RocketImgLoader.h" />
     <ClInclude Include="asset\Model.h" />
+    <ClInclude Include="component\Component.h" />
+    <ClInclude Include="component\ComponentManager.h" />
+    <ClInclude Include="component\LightComponent.h" />
+    <ClInclude Include="component\MaterialComponent.h" />
+    <ClInclude Include="component\MeshComponent.h" />
+    <ClInclude Include="component\TransformComponent.h" />
     <ClInclude Include="core\EngineCore.h" />
+    <ClInclude Include="core\GameObject.h" />
+    <ClInclude Include="core\GameObjectManager.h" />
     <ClInclude Include="input\senders\AppInputSender.h" />
     <ClInclude Include="input\senders\GameInputSender.h" />
     <ClInclude Include="input\InputSender.h" />
@@ -43,7 +51,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="asset\Model.cpp" />
+    <ClCompile Include="component\Component.cpp" />
+    <ClCompile Include="component\ComponentManager.cpp" />
+    <ClCompile Include="component\LightComponent.cpp" />
+    <ClCompile Include="component\MaterialComponent.cpp" />
+    <ClCompile Include="component\MeshComponent.cpp" />
+    <ClCompile Include="component\TransformComponent.cpp" />
     <ClCompile Include="core\EngineCore.cpp" />
+    <ClCompile Include="core\GameObject.cpp" />
+    <ClCompile Include="core\GameObjectManager.cpp" />
     <ClCompile Include="input\senders\AppInputSender.cpp" />
     <ClCompile Include="input\senders\GameInputSender.cpp" />
     <ClCompile Include="input\InputSystem.cpp" />
