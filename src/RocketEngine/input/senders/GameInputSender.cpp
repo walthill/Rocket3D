@@ -152,3 +152,8 @@ void GameInputSender::processInput(Window* wind)
 		Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 	}
 }
+
+void GameInputSender::setFirstMouse(bool firstMouse)
+{
+	mFirstMouse = firstMouse;
+}

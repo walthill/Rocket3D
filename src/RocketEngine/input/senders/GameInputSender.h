@@ -19,6 +19,8 @@ class GameInputSender : public InputSender
 
 		void processInput(Window* wind);
 
+		void setFirstMouse(bool firstMouse);
+
 	private:
 		void onKeyDown(int key, int scancode, int action, int mods) override;
 		void onKeyUp(int key, int scancode, int action, int mods) override;

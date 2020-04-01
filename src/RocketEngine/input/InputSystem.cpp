@@ -107,7 +107,19 @@ void InputSystem::onMouseMove(double xpos, double ypos)
 {
 	if (mPlayMode)
 	{
+		if (modeSwitched)
+		{
+			modeSwitched = false;
+			mpGameInput->setFirstMouse(true);
+		}
+
 		mpGameInput->onMouseMove(xpos, ypos);
+
+	}
+	else
+	{
+		if (!modeSwitched)
+			modeSwitched = true;
 	}
 	
 	mpAppInput->onMouseMove(xpos, ypos);

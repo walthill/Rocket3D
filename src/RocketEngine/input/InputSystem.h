@@ -68,6 +68,7 @@ class InputSystem : public rkutil::Trackable
 
 		Window* mpWindow;
 		bool mPlayMode = true;
+		bool modeSwitched = false;
 };
 
 #endif // !INPUT_SYS_H
