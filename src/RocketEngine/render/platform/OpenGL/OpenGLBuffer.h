@@ -1,13 +1,13 @@
 #ifndef OPENGL_BUFFER_H
 #define OPENGL_BUFFER_H
 
-#include "../../render/Buffer.h"
+#include "../../buffers/Buffer.h"
 
 //Vertex Buffer - OpenGL VBO
 class OpenGLVertexBuffer : public VertexBuffer
 {
 	public:
-		OpenGLVertexBuffer(VertexData* vertices, uint32 size);
+		OpenGLVertexBuffer(float* vertices, uint32 size);
 		virtual ~OpenGLVertexBuffer();
 
 		virtual void Bind() const;
@@ -30,6 +30,24 @@ class OpenGLIndexBuffer : public IndexBuffer
 	private:
 		uint32 mRendererId = -1;
 		uint32 mCount;
+};
+
+//Frame Buffer - OpenGL FBO
+class OpenGLFrameBuffer : public FrameBuffer
+{
+public:
+	OpenGLFrameBuffer(int texWidth, int texHeight);
+	virtual ~OpenGLFrameBuffer();
+
+	virtual void Bind() const;
+	virtual void Unbind() const;
+
+	virtual uint32 getTextureId() const { return mTextureColorBuffer; };
+private:
+	int mTexWidth, mTexHeight;		// move to texture class
+	uint32 mTextureColorBuffer;		//TODO: texture class
+	uint32 mFramebufferId = -1;
+	uint32 mRenderBufferId;			//TODO: render buffer class
 };
 
 #endif // !OPENGL_BUFFER_H

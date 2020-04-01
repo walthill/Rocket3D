@@ -1,7 +1,7 @@
 #include "OpenGLBuffer.h"
 #include <glad/glad.h>
 
-OpenGLVertexBuffer::OpenGLVertexBuffer(VertexData* vertices, uint32 size) //size in bytes
+OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32 size) //size in bytes
 {
 	glGenBuffers(1, &mRendererId);
 	glBindBuffer(GL_ARRAY_BUFFER, mRendererId);
@@ -50,4 +50,33 @@ void OpenGLIndexBuffer::Bind() const
 void OpenGLIndexBuffer::Unbind() const
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+/*********************************************************************
+
+Frame Buffer for OpenGL -- aka Frame Buffer Object (FBO)
+
+**********************************************************************/
+
+OpenGLFrameBuffer::OpenGLFrameBuffer(int texWidth, int texHeight) :
+	mTexWidth(texWidth), 
+	mTexHeight(texHeight)
+{
+	glGenFramebuffers(1, &mFramebufferId);
+	glBindFramebuffer(GL_FRAMEBUFFER, mFramebufferId);
+}
+
+OpenGLFrameBuffer::~OpenGLFrameBuffer()
+{
+	glDeleteFramebuffers(1, &mFramebufferId);
+}
+
+void OpenGLFrameBuffer::Bind() const
+{
+	glBindFramebuffer(1, mFramebufferId);
+}
+
+void OpenGLFrameBuffer::Unbind() const
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

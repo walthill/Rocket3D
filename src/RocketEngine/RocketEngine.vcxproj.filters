@@ -111,7 +111,7 @@
     <ClInclude Include="render\platform\OpenGL\OpenGLBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="render\Buffer.h">
+    <ClInclude Include="render\buffers\Buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -188,7 +188,10 @@
     <ClCompile Include="render\platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="render\Buffer.cpp">
+    <ClCompile Include="render\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="render\buffers\Buffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

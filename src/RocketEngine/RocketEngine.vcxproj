@@ -34,7 +34,7 @@
     <ClInclude Include="input\senders\GameInputSender.h" />
     <ClInclude Include="input\InputSender.h" />
     <ClInclude Include="input\InputSystem.h" />
-    <ClInclude Include="render\Buffer.h" />
+    <ClInclude Include="render\buffers\Buffer.h" />
     <ClInclude Include="render\platform\OpenGL\ImGuiGLFWRenderer.h" />
     <ClInclude Include="render\platform\OpenGL\ImGuiOpenGLRenderer.h" />
     <ClInclude Include="render\layers\Layer.h" />
@@ -65,7 +65,8 @@
     <ClCompile Include="input\senders\AppInputSender.cpp" />
     <ClCompile Include="input\senders\GameInputSender.cpp" />
     <ClCompile Include="input\InputSystem.cpp" />
-    <ClCompile Include="render\Buffer.cpp" />
+    <ClCompile Include="render\buffers\Buffer.cpp" />
+    <ClCompile Include="render\Camera.cpp" />
     <ClCompile Include="render\platform\OpenGL\ImGuiGLFWRenderer.cpp" />
     <ClCompile Include="render\platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
     <ClCompile Include="render\layers\Layer.cpp" />
