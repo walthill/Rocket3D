@@ -62,7 +62,6 @@ class Editor : public rkutil::Trackable
 		const std::string mDRAW_TRACKER_NAME = "draw";
 		const std::string mLOOP_TRACKER_NAME = "loop";
 
-
 		Editor() {};
 		~Editor();
 

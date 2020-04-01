@@ -61,4 +61,5 @@ void Editor::update()
 void Editor::render()
 {
 	//render identally to the game scene BUT w/ different camera & editor gizmos
+	mpEngineHandle->render(EngineCore::EDITOR_VIEW);
 }

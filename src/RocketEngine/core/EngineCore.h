@@ -45,7 +45,7 @@ class Text;
 class EngineCore : public rkutil::Trackable
 {
 	public:
-
+		enum ViewId { GAME_VIEW = 0, EDITOR_VIEW  };
 		//doxygen example
 		/// Empty class constructor
 		EngineCore();
@@ -55,11 +55,6 @@ class EngineCore : public rkutil::Trackable
 		***/
 		~EngineCore();
 		
-		/***
-			* Initialize GLFW and set OpenGL flags
-		***/
-		void initGLFW();
-
 		/***
 			* Initialize engine components
 		***/
@@ -75,18 +70,11 @@ class EngineCore : public rkutil::Trackable
 		***/
 		void update();
 		
-		void processViewProjectionMatrices();
-
-
 		/***
 			* Draw models and lighting data to the window
 		***/
-		void renderGame();
+		void render(int screenType);
 		
-		void prepFrambuffer();
-
-		void renderFramebufferScreen(int screenType);
-
 		/***
 			* Draw ui elements to the window. Should be called last before SwapBuffer()
 		***/
@@ -132,8 +120,8 @@ class EngineCore : public rkutil::Trackable
 		int mAppWindowWidth = 0, mAppWindowHeight = 0;
 		float lastFrame = 0.0f; // Time of last frame
 		
-		unsigned int framebuffer;
-		unsigned int textureColorbuffer;
+		unsigned int framebuffer, editorFramebuffer;
+		unsigned int textureColorbuffer, textureColorbuffer2;
 		unsigned int floorTexture;
 		unsigned int planeVAO, planeVBO;
 
@@ -164,6 +152,18 @@ class EngineCore : public rkutil::Trackable
 			* Calculate real time between frames
 		***/
 		void calculateDeltaTime();
+
+		void processViewProjectionMatrices(int screenType);
+
+		void beginRender(int screenType);
+
+		/***
+			* Draw models and lighting data to the window
+		***/
+
+		void endRender(int screenType);
+		void prepFrambuffer(int screenType);
+		void renderFramebufferScreen(int screenType);
 };
 
 #endif // !ENGINE_CORE_H

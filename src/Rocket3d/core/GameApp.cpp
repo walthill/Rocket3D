@@ -180,7 +180,7 @@ void GameApp::update()
 
 void GameApp::render()
 {
-	mpRocketEngine->renderGame();
+	mpRocketEngine->render(EngineCore::GAME_VIEW);
 }
 
 double GameApp::getCurrentTime() 
