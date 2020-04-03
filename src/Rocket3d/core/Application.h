@@ -43,7 +43,7 @@ class Application : public rkutil::Trackable
 		***/
 		static Application* getInstance()
 		{
-			assert(mpApplication != nullptr);
+			RK_ASSERT(mpApplication != nullptr);
 			return mpApplication;
 		}
 		#pragma endregion

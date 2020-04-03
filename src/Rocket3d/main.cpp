@@ -23,13 +23,12 @@ int main(int argc, char* argv[])
 {	
 	RK_LOGGER_INIT();
 	RK_CORE_INFO_ALL("Rocket Logger initialized");
-	
 	Application::initInstance();
 
 	if(!Application::getInstance()->run())
 		Application::cleanInstance();
 
-	RK_LOGGER_MEMREPORT();
+	RK_MEMREPORT();
 
 	//console report
 	//rkutil::MemoryTracker::getInstance()->reportAllocs(std::cout);

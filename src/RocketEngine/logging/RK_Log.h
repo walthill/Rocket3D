@@ -23,7 +23,6 @@
 #ifndef RK_LOG_H
 #define RK_LOG_H
 
-#include <memory>
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -113,8 +112,10 @@ class RK_Log
 #define RK_LOGGER_CLEAN()		::RK_Log::cleanInstance();
 
 //Memory leak report macro
-#define RK_LOGGER_MEMREPORT()	::RK_Log::getInstance()->reportAllocs();
+#define RK_MEMREPORT()			::RK_Log::getInstance()->reportAllocs();
 
+//Assertion wrapper
+#define RK_ASSERT(...)			assert(__VA_ARGS__)
 
 /* Core console macros
 ============================================================= */
