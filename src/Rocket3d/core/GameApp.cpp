@@ -20,7 +20,6 @@
 #include "../../RocketEngine/shader/ShaderManager.h"
 //#include "../input/Message.h"
 //#include "../input/MessageManager.h"
-#include "../../RocketEngine/logging/RK_Log.h"
 #include "GameObjectManager.h"
 #include "../component/ComponentManager.h"
 #include <window/Window.h>

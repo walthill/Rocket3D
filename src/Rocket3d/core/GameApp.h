@@ -26,7 +26,7 @@
 #include <rkutil/MemoryTracker.h>
 #include <rkutil/PerformanceTracker.h>
 #include <string>
-#include <cassert>
+#include <logging/RK_Log.h>
 #include "Application.h"
 
 class EngineCore;
@@ -66,7 +66,7 @@ class GameApp : public rkutil::Trackable
 		***/
 		static GameApp* getInstance()
 		{
-			assert(mpGameApp != nullptr);
+			RK_ASSERT(mpGameApp != nullptr);
 			return mpGameApp;
 		}
 		#pragma endregion

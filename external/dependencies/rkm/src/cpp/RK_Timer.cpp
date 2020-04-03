@@ -1,4 +1,4 @@
-#include "include/RK_Timer.h"
+#include "RK_Timer.h"
 
 RK_Timer::RK_Timer()
 {

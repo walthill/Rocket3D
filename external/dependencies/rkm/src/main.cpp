@@ -2,7 +2,7 @@
 #include <vector>
 #include <random>
 #include "cpp/include/MathUtils.h"
-#include "cpp/include/RK_Timer.h"
+#include "cpp/RK_Timer.h"
 
 //stretch goals to test for - normalize(), dot()
 

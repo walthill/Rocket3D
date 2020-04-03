@@ -82,3 +82,15 @@ void RK_Log::initialize()
 		std::cout << "Log init failed: " << ex.what() << std::endl;
 	}
 }
+
+void RK_Log::reportAllocs()
+{
+	std::vector<std::string> reportList = rkutil::MemoryTracker::getInstance()->logAllocs();
+
+	RK_CORE_INFO_ALL(reportList[0]);
+
+	for (auto it = reportList.begin()+1; it != reportList.end(); ++it)
+	{
+		RK_CORE_ERROR_ALL(it->c_str());
+	}
+}

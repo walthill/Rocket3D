@@ -17,8 +17,8 @@ namespace rkm
 	inline static float clamp(float val, float min, float max)
 	{
 		if (val > max) return max;
-		else if (val < min) return min;
-		else return val;
+		if (val < min) return min;
+		return val;
 	};
 }
 

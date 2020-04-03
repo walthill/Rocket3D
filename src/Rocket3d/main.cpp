@@ -16,7 +16,6 @@
 	The GameApp class is initialized and destroyed here. The engine loop is entered from here.
 
 ********/
-#include <rkutil/MemoryTracker.h>
 #include "../RocketEngine/logging/RK_Log.h"
 #include "core/Application.h"
 
@@ -24,15 +23,18 @@ int main(int argc, char* argv[])
 {	
 	RK_LOGGER_INIT();
 	RK_CORE_INFO_ALL("Rocket Logger initialized");
-
 	Application::initInstance();
 
 	if(!Application::getInstance()->run())
 		Application::cleanInstance();
-	
-	//TODO(low): output to logger
+
+	RK_MEMREPORT();
+
+	//console report
+	//rkutil::MemoryTracker::getInstance()->reportAllocs(std::cout);
+
 	RK_LOGGER_CLEAN();
-	rkutil::MemoryTracker::getInstance()->reportAllocs(std::cout);
+
 	system("pause");
 
 	return 0;

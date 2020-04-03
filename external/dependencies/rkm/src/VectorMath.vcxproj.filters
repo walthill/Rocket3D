@@ -56,7 +56,7 @@
     <ClInclude Include="cpp\include\Vector4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cpp\include\RK_Timer.h">
+    <ClInclude Include="cpp\RK_Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
