@@ -27,6 +27,7 @@
 #include "../util/EngineUtils.h"
 #include "GameObjectManager.h"
 #include "../component/ComponentManager.h"
+#include "../render/buffers/Buffer.h"
 
 class Camera;
 class Window;
@@ -127,6 +128,8 @@ class EngineCore : public rkutil::Trackable
 
 		// screen quad VAO
 		unsigned int quadVAO, quadVBO;
+
+		//std::unique_ptr<IndexBuffer> mQuadVB, mPlaneVB;
 
 
 		Window *mpWindowHandle;

@@ -13,12 +13,12 @@ OpenGLVertexBuffer::~OpenGLVertexBuffer()
 	glDeleteBuffers(1, &mRendererId);
 }
 
-void OpenGLVertexBuffer::Bind() const
+void OpenGLVertexBuffer::bind() const
 {
 	glBindBuffer(GL_ARRAY_BUFFER, mRendererId);
 }
 
-void OpenGLVertexBuffer::Unbind() const
+void OpenGLVertexBuffer::unbind() const
 {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -42,12 +42,12 @@ OpenGLIndexBuffer::~OpenGLIndexBuffer()
 	glDeleteBuffers(1, &mRendererId);
 }
 
-void OpenGLIndexBuffer::Bind() const
+void OpenGLIndexBuffer::bind() const
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mRendererId);
 }
 
-void OpenGLIndexBuffer::Unbind() const
+void OpenGLIndexBuffer::unbind() const
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
@@ -71,12 +71,12 @@ OpenGLFrameBuffer::~OpenGLFrameBuffer()
 	glDeleteFramebuffers(1, &mFramebufferId);
 }
 
-void OpenGLFrameBuffer::Bind() const
+void OpenGLFrameBuffer::bind() const
 {
 	glBindFramebuffer(1, mFramebufferId);
 }
 
-void OpenGLFrameBuffer::Unbind() const
+void OpenGLFrameBuffer::unbind() const
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

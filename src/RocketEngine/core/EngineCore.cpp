@@ -29,6 +29,29 @@
 #include "../render/Text.h"
 #include "../asset/Model.h"
 
+static uint32 ShaderDataTypeToGLType(ShaderDataType type)
+{
+	if (Window::getAPI() == WindowAPI::OPENGL)
+	{
+		switch (type)
+		{
+		case ShaderDataType::Float:		return GL_FLOAT;
+		case ShaderDataType::Float2:	return GL_FLOAT;
+		case ShaderDataType::Float3:	return GL_FLOAT;
+		case ShaderDataType::Float4:	return GL_FLOAT;
+		case ShaderDataType::Mat3:		return GL_FLOAT;
+		case ShaderDataType::Mat4:		return GL_FLOAT;
+		case ShaderDataType::Int:		return GL_INT;
+		case ShaderDataType::Int2:		return GL_INT;
+		case ShaderDataType::Int3:		return GL_INT;
+		case ShaderDataType::Int4:		return GL_INT;
+		case ShaderDataType::Bool:		return GL_BOOL;
+		}
+	}
+
+	assert(false);
+	return 0;
+}
 
 //mouse selection: http://antongerdelan.net/opengl/raycasting.html
 // also helpful? https://www.bfilipek.com/2012/06/select-mouse-opengl.html
@@ -66,6 +89,27 @@ void EngineCore::initLighting()
 
 bool EngineCore::initialize()
 {
+	//abstraction test	
+	BufferLayout layout = {
+		{ ShaderDataType::Float3, "aPos" },
+		{ ShaderDataType::Float2, "aTexCoords" }
+	};
+
+	//Pack vertex data
+/*	uint32 index = 0;
+	for (auto& el : layout)
+	{
+		glEnableVertexAttribArray(index);
+		glVertexAttribPointer(index,
+			el.getComponentCount(),
+			ShaderDataTypeToGLType(el.type),
+			el.normalized ? GL_TRUE : GL_FALSE,
+			layout.getStride(),
+			(const void*)el.offset);
+		index++;
+	}
+	*/
+
 	Application* app = Application::getInstance();
 	mpWindowHandle = app->getAppWindow();
 	mAppWindowWidth = mpWindowHandle->getWidth();
@@ -92,26 +136,47 @@ bool EngineCore::initialize()
 		1.0f,  1.0f,  1.0f, 1.0f
 	};
 
+	std::unique_ptr<VertexBuffer> mQuadVB, mPlaneVB;
+	mQuadVB.reset(VertexBuffer::create(quadVertices, sizeof(quadVertices)));
 	glGenVertexArrays(1, &quadVAO);
-	glGenBuffers(1, &quadVBO);
+//	glGenBuffers(1, &quadVBO);
 	glBindVertexArray(quadVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+//	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+//	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+	uint32 index = 0;
+	for (auto& el : layout)
+	{
+		glEnableVertexAttribArray(index);
+		glVertexAttribPointer(index,
+			el.getComponentCount(),
+			ShaderDataTypeToGLType(el.type),
+			el.normalized ? GL_TRUE : GL_FALSE,
+			layout.getStride(),
+			(const void*)el.offset);
+		index++;
+	}
 
+	mPlaneVB.reset(VertexBuffer::create(planeVertices, sizeof(planeVertices)));
 	// plane VAO
 	glGenVertexArrays(1, &planeVAO);
-	glGenBuffers(1, &planeVBO);
+//	glGenBuffers(1, &planeVBO);
 	glBindVertexArray(planeVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), &planeVertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+//	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+//	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), &planeVertices, GL_STATIC_DRAW);
+//	glEnableVertexAttribArray(0);
+	
+	index = 0;
+	for (auto& el : layout)
+	{
+		glEnableVertexAttribArray(index);
+		glVertexAttribPointer(index,
+			el.getComponentCount(),
+			ShaderDataTypeToGLType(el.type),
+			el.normalized ? GL_TRUE : GL_FALSE,
+			layout.getStride(),
+			(const void*)el.offset);
+		index++;
+	}
 
 	glGenFramebuffers(1, &framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);

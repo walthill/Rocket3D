@@ -3,7 +3,7 @@
 #include "../../window/Window.h"
 #include "../platform/OpenGL/OpenGLBuffer.h"
 
-VertexBuffer* VertexBuffer::Create(float* vertices, uint32 size)
+VertexBuffer* VertexBuffer::create(float* vertices, uint32 size)
 {
 	switch (Window::getAPI())
 	{
@@ -13,7 +13,7 @@ VertexBuffer* VertexBuffer::Create(float* vertices, uint32 size)
 	return nullptr;
 }
 
-IndexBuffer* IndexBuffer::Create(uint32* indicies, uint32 count)
+IndexBuffer* IndexBuffer::create(uint32* indicies, uint32 count)
 {
 	switch (Window::getAPI())
 	{
@@ -24,7 +24,7 @@ IndexBuffer* IndexBuffer::Create(uint32* indicies, uint32 count)
 }
 
 
-FrameBuffer* FrameBuffer::Create(int width, int height)
+FrameBuffer* FrameBuffer::create(int width, int height)
 {
 	switch (Window::getAPI())
 	{

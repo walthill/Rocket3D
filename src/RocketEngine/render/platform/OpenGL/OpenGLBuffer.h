@@ -10,10 +10,15 @@ class OpenGLVertexBuffer : public VertexBuffer
 		OpenGLVertexBuffer(float* vertices, uint32 size);
 		virtual ~OpenGLVertexBuffer();
 
-		virtual void Bind() const;
-		virtual void Unbind() const;
+		virtual void bind() const override;
+		virtual void unbind() const override;
+
+		virtual void setLayout(const BufferLayout& layout) override { mLayout = layout; }
+		virtual const BufferLayout& getLayout() const override { return mLayout; }
+	
 	private:
 		uint32 mRendererId = -1;
+		BufferLayout mLayout;
 };
 
 //Index Buffer - OpenGL EBO
@@ -23,8 +28,8 @@ class OpenGLIndexBuffer : public IndexBuffer
 		OpenGLIndexBuffer(uint32* indices, uint32 count);
 		virtual ~OpenGLIndexBuffer();
 
-		virtual void Bind() const;
-		virtual void Unbind() const;
+		virtual void bind() const;
+		virtual void unbind() const;
 
 		virtual uint32 getCount() const { return mCount; };
 	private:
@@ -39,8 +44,8 @@ public:
 	OpenGLFrameBuffer(int texWidth, int texHeight);
 	virtual ~OpenGLFrameBuffer();
 
-	virtual void Bind() const;
-	virtual void Unbind() const;
+	virtual void bind() const;
+	virtual void unbind() const;
 
 	virtual uint32 getTextureId() const { return mTextureColorBuffer; };
 private:
