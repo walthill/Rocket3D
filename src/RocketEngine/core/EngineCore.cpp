@@ -29,29 +29,6 @@
 #include "../render/Text.h"
 #include "../asset/Model.h"
 
-static uint32 ShaderDataTypeToGLType(ShaderDataType type)
-{
-	if (Window::getAPI() == WindowAPI::OPENGL)
-	{
-		switch (type)
-		{
-		case ShaderDataType::Float:		return GL_FLOAT;
-		case ShaderDataType::Float2:	return GL_FLOAT;
-		case ShaderDataType::Float3:	return GL_FLOAT;
-		case ShaderDataType::Float4:	return GL_FLOAT;
-		case ShaderDataType::Mat3:		return GL_FLOAT;
-		case ShaderDataType::Mat4:		return GL_FLOAT;
-		case ShaderDataType::Int:		return GL_INT;
-		case ShaderDataType::Int2:		return GL_INT;
-		case ShaderDataType::Int3:		return GL_INT;
-		case ShaderDataType::Int4:		return GL_INT;
-		case ShaderDataType::Bool:		return GL_BOOL;
-		}
-	}
-
-	assert(false);
-	return 0;
-}
 
 //mouse selection: http://antongerdelan.net/opengl/raycasting.html
 // also helpful? https://www.bfilipek.com/2012/06/select-mouse-opengl.html
@@ -89,26 +66,6 @@ void EngineCore::initLighting()
 
 bool EngineCore::initialize()
 {
-	//abstraction test	
-	BufferLayout layout = {
-		{ ShaderDataType::Float3, "aPos" },
-		{ ShaderDataType::Float2, "aTexCoords" }
-	};
-
-	//Pack vertex data
-/*	uint32 index = 0;
-	for (auto& el : layout)
-	{
-		glEnableVertexAttribArray(index);
-		glVertexAttribPointer(index,
-			el.getComponentCount(),
-			ShaderDataTypeToGLType(el.type),
-			el.normalized ? GL_TRUE : GL_FALSE,
-			layout.getStride(),
-			(const void*)el.offset);
-		index++;
-	}
-	*/
 
 	Application* app = Application::getInstance();
 	mpWindowHandle = app->getAppWindow();
@@ -136,47 +93,33 @@ bool EngineCore::initialize()
 		1.0f,  1.0f,  1.0f, 1.0f
 	};
 
-	std::unique_ptr<VertexBuffer> mQuadVB, mPlaneVB;
-	mQuadVB.reset(VertexBuffer::create(quadVertices, sizeof(quadVertices)));
-	glGenVertexArrays(1, &quadVAO);
-//	glGenBuffers(1, &quadVBO);
-	glBindVertexArray(quadVAO);
-//	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-	uint32 index = 0;
-	for (auto& el : layout)
-	{
-		glEnableVertexAttribArray(index);
-		glVertexAttribPointer(index,
-			el.getComponentCount(),
-			ShaderDataTypeToGLType(el.type),
-			el.normalized ? GL_TRUE : GL_FALSE,
-			layout.getStride(),
-			(const void*)el.offset);
-		index++;
-	}
+	std::shared_ptr<IndexBuffer> mPlaneIB;
+	std::shared_ptr<VertexBuffer> mQuadVB, mPlaneVB;
 
-	mPlaneVB.reset(VertexBuffer::create(planeVertices, sizeof(planeVertices)));
-	// plane VAO
-	glGenVertexArrays(1, &planeVAO);
-//	glGenBuffers(1, &planeVBO);
-	glBindVertexArray(planeVAO);
-//	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), &planeVertices, GL_STATIC_DRAW);
-//	glEnableVertexAttribArray(0);
+	//init array
+	mQuadVA.reset(VertexArray::create());
+	//init buffer
+	mQuadVB.reset(VertexBuffer::create(quadVertices, sizeof(quadVertices)));
+
+	BufferLayout layout = {
+		{ ShaderDataType::Float3, "aPos" },
+		{ ShaderDataType::Float2, "aTexCoords" }
+	};
+
+	//store buffer
+	mQuadVB->setLayout(layout);
+	//add buffer
+	mQuadVA->addVertexBuffer(mQuadVB);
 	
-	index = 0;
-	for (auto& el : layout)
-	{
-		glEnableVertexAttribArray(index);
-		glVertexAttribPointer(index,
-			el.getComponentCount(),
-			ShaderDataTypeToGLType(el.type),
-			el.normalized ? GL_TRUE : GL_FALSE,
-			layout.getStride(),
-			(const void*)el.offset);
-		index++;
-	}
+	mPlaneVA.reset(VertexArray::create());	//glGenVertexArrays
+	mPlaneVB.reset(VertexBuffer::create(planeVertices, sizeof(planeVertices)));
+	mPlaneVB->setLayout(layout);
+	mPlaneVA->addVertexBuffer(mPlaneVB);	//glBindVertexArray
+
+	uint32 planeIndicies[6] = { 0,1,2,3,4,5 };
+	mPlaneIB.reset(IndexBuffer::create(planeIndicies, sizeof(planeIndicies) / sizeof(uint32)));
+	mPlaneVA->setIndexBuffer(mPlaneIB);
+
 
 	glGenFramebuffers(1, &framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
@@ -303,17 +246,18 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	proj = rkm::MatProj::perspective(fov, (float)app->getAppWindow()->getWidth() / (float)app->getAppWindow()->getHeight(), 0.1f, 100.0f);
 
 	mpShaderManager->setShaderMat4("projection", proj);
-	mpShaderManager->setShaderMat4("view", view);
+	mpShaderManager->setShaderMat4 ("view", view);
 
 	model = rkm::Mat4::scale(model, rkm::Vector3(1, 1, -1));
 	model = rkm::Mat4::translate(model, rkm::Vector3(0, -1, 0));
 
 	// floor
-	glBindVertexArray(planeVAO);
-	glBindTexture(GL_TEXTURE_2D, floorTexture);
+	mPlaneVA->bind();
+//	glBindVertexArray(planeVAO);
+	glBindTexture(GL_TEXTURE_2D, floorTexture); 
 	mpShaderManager->setShaderMat4("model", model);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glBindVertexArray(0);
+	glDrawArrays(GL_TRIANGLES, 0 , mPlaneVA->getIndexBuffer()->getCount());
+	mPlaneVA->unbind();//	glBindVertexArray(0);
 
 	// Light "emitters" are not affected by the lighting shader 
 	// and mark the location of the light sources

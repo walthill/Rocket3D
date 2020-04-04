@@ -35,6 +35,7 @@
     <ClInclude Include="input\InputSender.h" />
     <ClInclude Include="input\InputSystem.h" />
     <ClInclude Include="render\buffers\Buffer.h" />
+    <ClInclude Include="render\buffers\VertexArray.h" />
     <ClInclude Include="render\platform\OpenGL\ImGuiGLFWRenderer.h" />
     <ClInclude Include="render\platform\OpenGL\ImGuiOpenGLRenderer.h" />
     <ClInclude Include="render\layers\Layer.h" />
@@ -43,6 +44,7 @@
     <ClInclude Include="render\Camera.h" />
     <ClInclude Include="render\Color.h" />
     <ClInclude Include="render\platform\OpenGL\OpenGLBuffer.h" />
+    <ClInclude Include="render\platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="render\Text.h" />
     <ClInclude Include="render\Mesh.h" />
     <ClInclude Include="shader\RK_Shader.h" />
@@ -66,6 +68,7 @@
     <ClCompile Include="input\senders\GameInputSender.cpp" />
     <ClCompile Include="input\InputSystem.cpp" />
     <ClCompile Include="render\buffers\Buffer.cpp" />
+    <ClCompile Include="render\buffers\VertexArray.cpp" />
     <ClCompile Include="render\Camera.cpp" />
     <ClCompile Include="render\platform\OpenGL\ImGuiGLFWRenderer.cpp" />
     <ClCompile Include="render\platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
@@ -74,6 +77,7 @@
     <ClCompile Include="logging\RK_Log.cpp" />
     <ClCompile Include="render\Color.cpp" />
     <ClCompile Include="render\platform\OpenGL\OpenGLBuffer.cpp" />
+    <ClCompile Include="render\platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="render\Text.cpp" />
     <ClCompile Include="shader\RK_Shader.cpp" />
     <ClCompile Include="shader\ShaderManager.cpp" />

@@ -27,7 +27,7 @@
 #include "../util/EngineUtils.h"
 #include "GameObjectManager.h"
 #include "../component/ComponentManager.h"
-#include "../render/buffers/Buffer.h"
+#include "../render/buffers/VertexArray.h"
 
 class Camera;
 class Window;
@@ -129,8 +129,7 @@ class EngineCore : public rkutil::Trackable
 		// screen quad VAO
 		unsigned int quadVAO, quadVBO;
 
-		//std::unique_ptr<IndexBuffer> mQuadVB, mPlaneVB;
-
+		std::shared_ptr<VertexArray> mQuadVA, mPlaneVA;
 
 		Window *mpWindowHandle;
 		InputSystem *mpInputSystem;
