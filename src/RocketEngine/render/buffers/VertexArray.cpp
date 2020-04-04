@@ -1,13 +1,13 @@
 #include "VertexArray.h"
-#include "../../window/Window.h"
+#include "../../core/RenderCore.h"
 #include "../platform/OpenGL/OpenGLVertexArray.h"
 
 VertexArray* VertexArray::create()
 {
-	switch (Window::getAPI())
+	switch (RenderCore::getAPI())
 	{
-		case WindowAPI::NONE:		/*assert(false);*/ return nullptr; //not supported
-		case WindowAPI::OPENGL:		return new OpenGLVertexArray();
+		case Renderer::API::NONE:		/*assert(false);*/ return nullptr; //not supported
+		case Renderer::API::OPENGL:		return new OpenGLVertexArray();
 	}
 	
 	assert(false);	//unknown api

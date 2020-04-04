@@ -1,24 +1,24 @@
 #include "Buffer.h"
 
-#include "../../window/Window.h"
+#include "../../core/RenderCore.h"
 #include "../platform/OpenGL/OpenGLBuffer.h"
 
 VertexBuffer* VertexBuffer::create(float* vertices, uint32 size)
 {
-	switch (Window::getAPI())
+	switch (RenderCore::getAPI())
 	{
-		case WindowAPI::NONE:		return nullptr;
-		case WindowAPI::OPENGL:		return new OpenGLVertexBuffer(vertices, size);
+	case Renderer::API::NONE:		return nullptr;
+		case Renderer::API::OPENGL:		return new OpenGLVertexBuffer(vertices, size);
 	}
 	return nullptr;
 }
 
 IndexBuffer* IndexBuffer::create(uint32* indicies, uint32 count)
 {
-	switch (Window::getAPI())
+	switch (RenderCore::getAPI())
 	{
-		case WindowAPI::NONE:		return nullptr;
-		case WindowAPI::OPENGL:		return new OpenGLIndexBuffer(indicies, count * sizeof(indicies));
+		case Renderer::API::NONE:		return nullptr;
+		case Renderer::API::OPENGL:		return new OpenGLIndexBuffer(indicies, count * sizeof(indicies));
 	}
 	return nullptr;
 }
@@ -26,10 +26,10 @@ IndexBuffer* IndexBuffer::create(uint32* indicies, uint32 count)
 
 FrameBuffer* FrameBuffer::create(int width, int height)
 {
-	switch (Window::getAPI())
+	switch (RenderCore::getAPI())
 	{
-		case WindowAPI::NONE:		return nullptr;
-		case WindowAPI::OPENGL:		return new OpenGLFrameBuffer(width, height);
+		case Renderer::API::NONE:		return nullptr;
+		case Renderer::API::OPENGL:		return new OpenGLFrameBuffer(width, height);
 	}
 	return nullptr;
 }

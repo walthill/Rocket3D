@@ -14,18 +14,16 @@
 	=========================
 
 ********/
-//#include <glfw3.h>
 #include <glad/glad.h>
 #include "../../Rocket3d/core/Application.h"
 #include "EngineCore.h"
-//#include "../window/Window.h"
 #include "../render/Camera.h"
 #include "../asset/image/RocketImgLoader.h"
-//#include "../input/InputSystem.h"
 //#include "../shader/ShaderBuild.h"
 #include "../shader/RK_Shader.h"
 #include "../shader/ShaderManager.h"
 #include "../logging/RK_Log.h"
+#include "RenderCore.h"
 #include "../render/Text.h"
 #include "../asset/Model.h"
 
@@ -251,12 +249,15 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	model = rkm::Mat4::scale(model, rkm::Vector3(1, 1, -1));
 	model = rkm::Mat4::translate(model, rkm::Vector3(0, -1, 0));
 
+
 	// floor
-	mPlaneVA->bind();
-//	glBindVertexArray(planeVAO);
+	mPlaneVA->bind(); //	glBindVertexArray(planeVAO);
+
 	glBindTexture(GL_TEXTURE_2D, floorTexture); 
 	mpShaderManager->setShaderMat4("model", model);
-	glDrawArrays(GL_TRIANGLES, 0 , mPlaneVA->getIndexBuffer()->getCount());
+
+	RenderCore::submit(mPlaneVA); //	glDrawElements(GL_TRIANGLES, mPlaneVA->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
+
 	mPlaneVA->unbind();//	glBindVertexArray(0);
 
 	// Light "emitters" are not affected by the lighting shader 
@@ -269,6 +270,9 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 
 void EngineCore::beginRender(int screenType)
 {
+	RenderCommand::clearColor(Color(102, 153, 153));
+	RenderCore::beginScene();	//placeholder for now will take data on camera, lighting, etc
+
 	prepFrambuffer(screenType);
 	processViewProjectionMatrices(screenType);		//before drawing
 }
@@ -283,6 +287,7 @@ void EngineCore::render(int screenType)
 
 void EngineCore::endRender(int screenType)
 {
+	RenderCore::endScene();	//placeholder for now
 	renderFramebufferScreen(screenType);
 }
 
@@ -300,7 +305,7 @@ void EngineCore::prepFrambuffer(int screenType)
 	}
 	mpWindowHandle->enableWindowFlags(DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
 
-	mpWindowHandle->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
+	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER | Renderer::DEPTH_BUFFER);
 }
 
 void EngineCore::renderFramebufferScreen(int screenType)
@@ -312,13 +317,14 @@ void EngineCore::renderFramebufferScreen(int screenType)
 
 	// clear all relevant buffers
 	//mpWindowHandle->clearToColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
-	mpWindowHandle->clearWindowBuffers(COLOR_BUFFER);
+	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER);
 
 	//render to a texture that isn't at screen size
 	//mpWindowHandle->setViewport(0, 0, mWindowWidth, mWindowHeight);
 
 	mpShaderManager->useShaderByKey("framebuffer");
-	glBindVertexArray(quadVAO);
+	mQuadVA->bind();
+//	glBindVertexArray(quadVAO);
 
 	if (screenType == GAME_VIEW)
 	{

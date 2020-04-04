@@ -120,9 +120,9 @@ void Text::renderText(TextData data)
 	int val = glGetUniformLocation(mpShader->shaderID, mTEXT_COLOR_UNIFORM);
 
 	//allow for values from 0 to 255
-	glUniform3f(val, data.color.getRedValue()*RGB01_CONVERSION, 
-					 data.color.getGreenValue()*RGB01_CONVERSION, 
-					 data.color.getBlueValue()*RGB01_CONVERSION);
+	glUniform3f(val, data.color.getR01(), 
+					 data.color.getG01(), 
+					 data.color.getB01());
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(VAO);

@@ -71,9 +71,6 @@ bool Application::run()
 {
 	while (mIsRunning)
 	{
-		mpAppWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
-		mpAppWindow->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
-
 		onMessage(mDeltaTime);
 		mpInputSystem->processInput();
 		calculateDeltaTime();

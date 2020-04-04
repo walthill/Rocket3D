@@ -30,6 +30,7 @@
     <ClInclude Include="core\EngineCore.h" />
     <ClInclude Include="core\GameObject.h" />
     <ClInclude Include="core\GameObjectManager.h" />
+    <ClInclude Include="core\RenderCore.h" />
     <ClInclude Include="input\senders\AppInputSender.h" />
     <ClInclude Include="input\senders\GameInputSender.h" />
     <ClInclude Include="input\InputSender.h" />
@@ -44,7 +45,10 @@
     <ClInclude Include="render\Camera.h" />
     <ClInclude Include="render\Color.h" />
     <ClInclude Include="render\platform\OpenGL\OpenGLBuffer.h" />
+    <ClInclude Include="render\platform\OpenGL\OpenGLRenderer.h" />
     <ClInclude Include="render\platform\OpenGL\OpenGLVertexArray.h" />
+    <ClInclude Include="render\RenderCommand.h" />
+    <ClInclude Include="render\Renderer.h" />
     <ClInclude Include="render\Text.h" />
     <ClInclude Include="render\Mesh.h" />
     <ClInclude Include="shader\RK_Shader.h" />
@@ -64,6 +68,7 @@
     <ClCompile Include="core\EngineCore.cpp" />
     <ClCompile Include="core\GameObject.cpp" />
     <ClCompile Include="core\GameObjectManager.cpp" />
+    <ClCompile Include="core\RenderCore.cpp" />
     <ClCompile Include="input\senders\AppInputSender.cpp" />
     <ClCompile Include="input\senders\GameInputSender.cpp" />
     <ClCompile Include="input\InputSystem.cpp" />
@@ -77,7 +82,10 @@
     <ClCompile Include="logging\RK_Log.cpp" />
     <ClCompile Include="render\Color.cpp" />
     <ClCompile Include="render\platform\OpenGL\OpenGLBuffer.cpp" />
+    <ClCompile Include="render\platform\OpenGL\OpenGLRenderer.cpp" />
     <ClCompile Include="render\platform\OpenGL\OpenGLVertexArray.cpp" />
+    <ClCompile Include="render\RenderCommand.cpp" />
+    <ClCompile Include="render\Renderer.cpp" />
     <ClCompile Include="render\Text.cpp" />
     <ClCompile Include="shader\RK_Shader.cpp" />
     <ClCompile Include="shader\ShaderManager.cpp" />
