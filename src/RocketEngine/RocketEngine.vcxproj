@@ -30,6 +30,7 @@
     <ClInclude Include="core\EngineCore.h" />
     <ClInclude Include="core\GameObject.h" />
     <ClInclude Include="core\GameObjectManager.h" />
+    <ClInclude Include="core\Raycast.h" />
     <ClInclude Include="input\senders\AppInputSender.h" />
     <ClInclude Include="input\senders\GameInputSender.h" />
     <ClInclude Include="input\InputSender.h" />
@@ -62,6 +63,7 @@
     <ClCompile Include="core\EngineCore.cpp" />
     <ClCompile Include="core\GameObject.cpp" />
     <ClCompile Include="core\GameObjectManager.cpp" />
+    <ClCompile Include="core\Raycast.cpp" />
     <ClCompile Include="input\senders\AppInputSender.cpp" />
     <ClCompile Include="input\senders\GameInputSender.cpp" />
     <ClCompile Include="input\InputSystem.cpp" />

@@ -96,7 +96,19 @@ namespace rkm {
 		matrix.mMatrixValues[11] = translationVec.getZ();
 
 		return matrix;
-	};
+	}
+	
+	Mat4 Mat4::inverse(Mat4 matrixToInvert)
+	{
+		//Inverse of Matrix A is A^-1
+		Mat4 inverseMatrix(matrixToInvert.unwrapMatrix());
+		float* inverseValues = matrixToInvert.unwrapMatrix();
+		
+
+
+		return inverseMatrix;
+	}
+	
 
 	//Written with help from https://learnopengl.com/code_viewer.php?code=getting-started/camera-exercise2
 	Mat4 Mat4::lookAt(Vector3 pos, Vector3 target, Vector3 worldUp)

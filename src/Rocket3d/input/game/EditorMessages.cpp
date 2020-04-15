@@ -3,6 +3,7 @@
 
 #include <render/Camera.h>
 #include <core/EngineCore.h>
+#include <core/Raycast.h>
 #include <logging/RK_Log.h>
 
 /*
@@ -92,6 +93,7 @@ void EditorMouseDown::process(float deltaTime)
 	{
 		if (mMouseCode == LEFT_MOUSE)
 		{
+			Raycast::cast();
 		}
 		if (mMouseCode == RIGHT_MOUSE)
 		{

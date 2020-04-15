@@ -40,6 +40,7 @@ namespace rkm {
 			static Mat4 scale(Mat4 matrix, Vector3 scaleVec);
 			static Mat4 rotate(Mat4 matrix, float angle, Vector3 rotationAxis);
 			static Mat4 translate(Mat4 matrix, Vector3 translationVec);
+			static Mat4 inverse(Mat4 matrixToInvert);
 
 			//Written with help from https://learnopengl.com/code_viewer.php?code=getting-started/camera-exercise2
 			static Mat4 lookAt(Vector3 pos, Vector3 target, Vector3 worldUp = Vector3::up);
@@ -62,6 +63,7 @@ namespace rkm {
 			friend std::ostream& operator<<(std::ostream& os, const Mat4& mat);
 
 			inline const float* getMatrixValues() const { return mMatrixValues; };
+			inline float* unwrapMatrix() { return mMatrixValues; }
 			static Mat4 identity;
 
 		private:
