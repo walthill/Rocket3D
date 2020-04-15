@@ -123,6 +123,10 @@ bool GameApp::initialize()
 
 	mpAppHandle = Application::getInstance();
 	mKeepRunning = true;
+	
+	//render first scene frame when running engine editor app
+	update();
+	render();
 
 	mpMasterTimer->start();
 

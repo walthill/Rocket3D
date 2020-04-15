@@ -1,4 +1,5 @@
 #include "Editor.h"
+#include <render/Camera.h>
 
 Editor* Editor::mpEditor = nullptr;
 
@@ -62,4 +63,14 @@ void Editor::render()
 {
 	//render identally to the game scene BUT w/ different camera & editor gizmos
 	mpEngineHandle->render(EngineCore::EDITOR_VIEW);
+}
+
+void Editor::setSceneToWireFrame()
+{
+	mpEngineHandle->toggleWireframe(true);
+}
+
+void Editor::setSceneToNormal()
+{
+	mpEngineHandle->toggleWireframe(false);
 }

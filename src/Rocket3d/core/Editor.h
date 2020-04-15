@@ -46,6 +46,11 @@ class Editor : public rkutil::Trackable
 
 		bool processLoop();
 
+		void setSceneToWireFrame();
+		void setSceneToNormal();
+
+		inline EngineCore* getRocketEngine() { return mpEngineHandle; }
+
 	private:
 		Application* mpAppHandle;
 		EngineCore* mpEngineHandle;

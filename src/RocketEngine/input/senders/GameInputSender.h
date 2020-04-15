@@ -19,9 +19,11 @@ class GameInputSender : public InputSender
 
 		void processInput(Window* wind);
 
+		void setPlayMode(bool isPlayMode);
 		void setFirstMouse(bool firstMouse);
 
 	private:
+		bool mInPlayMode, mEnableEditorMouseMove=false;
 		void onKeyDown(int key, int scancode, int action, int mods) override;
 		void onKeyUp(int key, int scancode, int action, int mods) override;
 		void onKeyRepeat(int key, int scancode, int action, int mods) override;

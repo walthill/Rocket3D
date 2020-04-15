@@ -110,6 +110,7 @@ class EngineCore : public rkutil::Trackable
 		inline ComponentManager* getComponentManager() { return mpComponentManager; }
 		inline ShaderManager* getShaderManager() { return mpShaderManager; };
 		inline Camera* getGameCamera() { return mpGameCam; }
+		inline Camera* getEditorCamera() { return mpEditorCam; }
 		
 		// Time between current frame and last frame
 		float deltaTime = 0.0f;	

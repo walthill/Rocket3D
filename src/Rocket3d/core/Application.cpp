@@ -23,8 +23,8 @@ Application::Application()
 	mpMasterTimer->start();
 	
 	mpAppWindow = new Window();
-	mpAppWindow->initialize(1000, 750, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE, false);
-//	mpAppWindow->setWindowDrawMode(FRONT_AND_BACK, WIREFRAME);
+	mpAppWindow->initialize(1000, 750, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE);
+	mpAppWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
 }
 
 Application::~Application()

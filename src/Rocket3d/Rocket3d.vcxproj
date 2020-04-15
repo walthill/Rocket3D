@@ -138,6 +138,7 @@ IF not exist log ( mkdir log &amp;&amp; type nul &gt; log/applog.txt &amp;&amp; 
     <ClCompile Include="core\GameApp.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="input\AppMessages.cpp" />
+    <ClCompile Include="input\game\EditorMessages.cpp" />
     <ClCompile Include="input\Message.cpp" />
     <ClCompile Include="input\MessageManager.cpp" />
     <ClCompile Include="input\game\GameMessages.cpp" />
@@ -154,6 +155,7 @@ IF not exist log ( mkdir log &amp;&amp; type nul &gt; log/applog.txt &amp;&amp; 
     <ClInclude Include="core\Editor.h" />
     <ClInclude Include="core\GameApp.h" />
     <ClInclude Include="input\AppMessages.h" />
+    <ClInclude Include="input\game\EditorMessages.h" />
     <ClInclude Include="input\Message.h" />
     <ClInclude Include="input\MessageManager.h" />
     <ClInclude Include="input\game\GameMessages.h" />
