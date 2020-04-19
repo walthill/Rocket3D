@@ -93,7 +93,7 @@ void EditorMouseDown::process(float deltaTime)
 	{
 		if (mMouseCode == LEFT_MOUSE)
 		{
-			Raycast::cast();
+			//Raycast::cast(x,y);
 		}
 		if (mMouseCode == RIGHT_MOUSE)
 		{

@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "../layers/GameLayer.h"
+#include <rkm/Mat4.h>
 
 /*	TODO	
  * ============================================================
@@ -25,6 +26,13 @@ Application::Application()
 	mpAppWindow = new Window();
 	mpAppWindow->initialize(1000, 750, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE);
 	mpAppWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
+	float arr[16] = { 1, 3, 5, 9,
+					  1, 3, 1, 7,
+					  4, 3, 9, 7,
+					  5, 2, 0, 9 };
+	rkm::Mat4 mat(arr);
+	
+	rkm::Mat4::inverse(mat);
 }
 
 Application::~Application()

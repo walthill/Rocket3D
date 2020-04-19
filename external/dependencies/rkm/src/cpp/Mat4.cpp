@@ -1,4 +1,5 @@
 #include "include/Mat4.h"
+#include <vector>
 
 namespace rkm {
 
@@ -98,17 +99,106 @@ namespace rkm {
 		return matrix;
 	}
 	
-	Mat4 Mat4::inverse(Mat4 matrixToInvert)
+	Mat4 Mat4::inverse(Mat4 mat)
 	{
 		//Inverse of Matrix A is A^-1
-		Mat4 inverseMatrix(matrixToInvert.unwrapMatrix());
-		float* inverseValues = matrixToInvert.unwrapMatrix();
-		
+//			Mat4 inverseMatrix(matrixToInvert.unwrapMatrix());
+
+		std::vector<Mat3> mat3List;
+		float* mat3Arr = new float[9];
+		float determinant = 0;
+		int sign = 1;
+
+		for (size_t i = 0; i < 4; i++)
+		{
+			//Set Mat3 cofactors 
+			if (i == 0)
+			{
+				mat3Arr[0] = mat(1, 1);
+				mat3Arr[1] = mat(1, 2);
+				mat3Arr[2] = mat(1, 3);
+				mat3Arr[3] = mat(2, 1);
+				mat3Arr[4] = mat(2, 2);
+				mat3Arr[5] = mat(2, 3);
+				mat3Arr[6] = mat(3, 1);
+				mat3Arr[7] = mat(3, 2);
+				mat3Arr[8] = mat(3, 3);
+				sign = 1;
+			}
+			else if(i == 1)
+			{
+				mat3Arr[0] = mat(1, 0);
+				mat3Arr[1] = mat(1, 2);
+				mat3Arr[2] = mat(1, 3);
+				mat3Arr[3] = mat(2, 0);
+				mat3Arr[4] = mat(2, 2);
+				mat3Arr[5] = mat(2, 3);
+				mat3Arr[6] = mat(3, 0);
+				mat3Arr[7] = mat(3, 2);
+				mat3Arr[8] = mat(3, 3);
+				sign = -1;
+			}
+			else if (i == 2)
+			{
+				mat3Arr[0] = mat(1, 0);
+				mat3Arr[1] = mat(1, 1);
+				mat3Arr[2] = mat(1, 3);
+				mat3Arr[3] = mat(2, 0);
+				mat3Arr[4] = mat(2, 1);
+				mat3Arr[5] = mat(2, 3);
+				mat3Arr[6] = mat(3, 0);
+				mat3Arr[7] = mat(3, 1);
+				mat3Arr[8] = mat(3, 3);
+				sign = 1;
+			}
+			else if (i == 3)
+			{
+				mat3Arr[0] = mat(1, 0);
+				mat3Arr[1] = mat(1, 1);
+				mat3Arr[2] = mat(1, 2);
+				mat3Arr[3] = mat(2, 0);
+				mat3Arr[4] = mat(2, 1);
+				mat3Arr[5] = mat(2, 2);
+				mat3Arr[6] = mat(3, 0);
+				mat3Arr[7] = mat(3, 1);
+				mat3Arr[8] = mat(3, 2);
+
+				sign = -1;
+			}
+
+			Mat3 mat3 = Mat3(mat3Arr);
+			mat3List.push_back(mat3);
+			determinant +=  ( sign * mat(0, i) * calculateDeterminate(mat3));
+		}
 
 
-		return inverseMatrix;
+
+		//Calculate cofactor of all 3x3 matrices
+/*		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++)
+				((mat[(j + 1) % 3][(i + 1) % 3] * mat[(j + 2) % 3][(i + 2) % 3]) - (mat[(j + 1) % 3][(i + 2) % 3] * mat[(j + 2) % 3][(i + 1) % 3])) / determinant << "\t";
+
+		}*/
+
+
+
+		return mat;
 	}
-	
+
+
+	//Calculation help from https://www.thecrazyprogrammer.com/2017/02/c-c-program-find-inverse-matrix.html
+	float Mat4::calculateDeterminate(Mat3 mat)
+	{
+		float det = 0;
+
+		//finding determinant
+		for (int i = 0; i < 3; i++)
+			det += (mat(0, i)) * (mat(1, (i + 1) % 3) * mat(2, (i + 2) % 3) - mat(1, (i + 2) % 3) * mat(2, (i + 1) % 3));
+		
+		return det;
+	}
+
+
 
 	//Written with help from https://learnopengl.com/code_viewer.php?code=getting-started/camera-exercise2
 	Mat4 Mat4::lookAt(Vector3 pos, Vector3 target, Vector3 worldUp)

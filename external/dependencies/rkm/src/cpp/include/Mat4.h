@@ -3,6 +3,7 @@
 
 #include <ostream>
 #include <iostream>
+#include "Mat3.h"
 #include "Vector3.h"
 #include "Vector4.h"
 
@@ -62,6 +63,9 @@ namespace rkm {
 			//Output overload
 			friend std::ostream& operator<<(std::ostream& os, const Mat4& mat);
 
+			//Access array value w/ row col indeces
+			float operator()(int row, int col) { return mMatrixValues[row * mROW_SIZE + col]; };
+
 			inline const float* getMatrixValues() const { return mMatrixValues; };
 			inline float* unwrapMatrix() { return mMatrixValues; }
 			static Mat4 identity;
@@ -76,6 +80,8 @@ namespace rkm {
 				0, 0, 0, 0
 			};
 
+			static float calculateDeterminate(Mat3 mat);
+			
 			void matrixMultiplication(Mat4 &newMat, float* vec)
 			{
 				//Calculate result for each matrix element
