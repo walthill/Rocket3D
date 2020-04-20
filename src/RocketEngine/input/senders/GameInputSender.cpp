@@ -110,6 +110,16 @@ void GameInputSender::onKeyDown(int key, int scancode, int action, int mods) //T
 	}
 	else
 	{
+		if (key == GLFW_KEY_Q && action == GLFW_PRESS)
+		{
+			Message* pMessage = new EditorKeyDown(KEY_Q);
+			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+		}
+		if (key == GLFW_KEY_E && action == GLFW_PRESS)
+		{
+			Message* pMessage = new EditorKeyDown(KEY_E);
+			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+		}
 		if (key == GLFW_KEY_W && action == GLFW_PRESS)
 		{
 		}

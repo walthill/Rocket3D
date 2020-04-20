@@ -14,6 +14,8 @@
 ============================================================
 */
 
+unsigned int EditorKeyDown::id = -1;
+
 EditorKeyDown::EditorKeyDown(const int& key)
 	:Message(BUTTON_DOWN)
 	, mKeyCode(key)
@@ -24,34 +26,53 @@ EditorKeyDown::~EditorKeyDown()
 {
 }
 
+//TODO: separate polling input handling (continuous on hold) from callback input handling (single press, single message)
+
 void EditorKeyDown::process(float deltaTime)
 {
 	Editor* pGameEditor = Editor::getInstance();
 
 	if (pGameEditor != nullptr)
 	{
-		if (mKeyCode == ESC)
+		if (mKeyCode == KEY_Q)
 		{
+			//TEMP - OBJ CREATION TEST
+			TransformData t = { rkm::Vector3(0.0f, 2.1f, -3.0f), rkm::Vector3::one * 0.5f, rkm::Vector3::up, 45.0f };
+
+			MeshComponentData meshData = { "cube", STANDARD_SHADER_KEY, pGameEditor->getRocketEngine()->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY) };
+
+			GameObject* go = pGameEditor->getRocketEngine()->getGameObjectManager()->createGameObject(t, meshData);
+			id = go->getId();
+			RK_LOG_C("Creating GameObject -- name: " + go->name);
+
+			pGameEditor->sceneNeedsUpdate();
+		}
+		if (mKeyCode == KEY_E)
+		{
+			//TEMP - OBJ DELETION TEST
+			RK_LOG_C("Destroying GameObject");
+			pGameEditor->getRocketEngine()->getGameObjectManager()->destroy(id);
+			pGameEditor->sceneNeedsUpdate();
 		}
 		if (mKeyCode == KEY_W)
 		{
 			EngineCore* pEngine = pGameEditor->getRocketEngine();
-			pEngine->getEditorCamera()->moveCameraForward(pEngine->deltaTime * 0.01f);
+			pEngine->getEditorCamera()->moveCameraForward(pEngine->deltaTime);
 		}
 		if (mKeyCode == KEY_A)
 		{
 			EngineCore* pEngine = pGameEditor->getRocketEngine();
-			pEngine->getEditorCamera()->moveCameraLeft(pEngine->deltaTime * 0.01f);
+			pEngine->getEditorCamera()->moveCameraLeft(pEngine->deltaTime);
 		}
 		if (mKeyCode == KEY_S)
 		{
 			EngineCore* pEngine = pGameEditor->getRocketEngine();
-			pEngine->getEditorCamera()->moveCameraBack(pEngine->deltaTime * 0.01f);
+			pEngine->getEditorCamera()->moveCameraBack(pEngine->deltaTime);
 		}
 		if (mKeyCode == KEY_D)
 		{
 			EngineCore* pEngine = pGameEditor->getRocketEngine();
-			pEngine->getEditorCamera()->moveCameraRight(pEngine->deltaTime * 0.01f);
+			pEngine->getEditorCamera()->moveCameraRight(pEngine->deltaTime);
 		}
 		if (mKeyCode == KEY_1)
 		{
@@ -71,7 +92,6 @@ void EditorKeyDown::process(float deltaTime)
 
 ============================================================
 */
-
 
 EditorMouseDown::EditorMouseDown(const int& mouseKey, double x, double y)
 	:Message(MOUSE_DOWN)

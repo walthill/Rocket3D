@@ -57,12 +57,19 @@ bool Editor::processLoop()
 
 void Editor::update()
 {
+	mpEngineHandle->update();
 }
 
 void Editor::render()
 {
 	//render identally to the game scene BUT w/ different camera & editor gizmos
 	mpEngineHandle->render(EngineCore::EDITOR_VIEW);
+	
+	if (mSceneNeedsUpdate)
+	{
+		mpEngineHandle->render(EngineCore::GAME_VIEW);
+		mSceneNeedsUpdate = false;
+	}
 }
 
 void Editor::setSceneToWireFrame()

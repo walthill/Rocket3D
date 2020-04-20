@@ -33,6 +33,7 @@ public:
 private:
 	//The input enum needed for processing player input
 	int mKeyCode;
+	static unsigned int id;
 };
 
 

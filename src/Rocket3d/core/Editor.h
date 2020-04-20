@@ -50,6 +50,7 @@ class Editor : public rkutil::Trackable
 		void setSceneToNormal();
 
 		inline EngineCore* getRocketEngine() { return mpEngineHandle; }
+		inline void sceneNeedsUpdate() { mSceneNeedsUpdate = true; }
 
 	private:
 		Application* mpAppHandle;
@@ -57,7 +58,7 @@ class Editor : public rkutil::Trackable
 
 		//State vars
 		static Editor* mpEditor;
-		bool mKeepRunning = false;
+		bool mKeepRunning = false, mSceneNeedsUpdate;
 
 		//Performance tracking
 		rkutil::PerformanceTracker* mpPerformanceTracker;

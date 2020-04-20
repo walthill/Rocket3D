@@ -78,6 +78,7 @@ void GameObjectManager::destroy(const GameObjectId & id)
 		//remove components from manager
 		ComponentManager* pComponentManager = GameApp::getInstance()->getRocketEngine()->getComponentManager();
 		pComponentManager->deallocateTransformComponent(obj->getTransformId());
+		pComponentManager->deallocateMeshComponent(obj->getMeshId());
 
 		//call destructor on gameObj
 		obj->~GameObject();
