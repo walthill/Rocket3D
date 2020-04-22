@@ -9,7 +9,7 @@ TransformComponent::~TransformComponent()
 {
 }
 
-inline void TransformComponent::setPosition(rkm::Vector3 pos)
+void TransformComponent::setPosition(rkm::Vector3 pos)
 {
 	mTransformData.position = pos;
 	mDataChanged = true;
@@ -24,7 +24,7 @@ void TransformComponent::setData(const TransformData & data)
 	mDataChanged = true;
 }
 
-inline void TransformComponent::setScale(rkm::Vector3 scale)
+void TransformComponent::setScale(rkm::Vector3 scale)
 {
 	mTransformData.scale = scale;
 	mDataChanged = true;

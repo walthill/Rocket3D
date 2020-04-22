@@ -2,7 +2,8 @@
 #define EDITOR_MESSAGES_H
 
 #include "../Message.h"
-
+//TEMP
+class GameObject;
 /*
 ===========================================================
 
@@ -34,6 +35,7 @@ private:
 	//The input enum needed for processing player input
 	int mKeyCode;
 	static unsigned int id;
+	static GameObject* obj;
 };
 
 

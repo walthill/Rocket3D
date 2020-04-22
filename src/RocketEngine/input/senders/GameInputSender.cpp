@@ -120,6 +120,18 @@ void GameInputSender::onKeyDown(int key, int scancode, int action, int mods) //T
 			Message* pMessage = new EditorKeyDown(KEY_E);
 			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 		}
+		if (key == GLFW_KEY_I && action == GLFW_PRESS)
+		{
+		}
+		if (key == GLFW_KEY_J && action == GLFW_PRESS)
+		{
+		}
+		if (key == GLFW_KEY_K && action == GLFW_PRESS)
+		{
+		}
+		if (key == GLFW_KEY_L && action == GLFW_PRESS)
+		{
+		}
 		if (key == GLFW_KEY_W && action == GLFW_PRESS)
 		{
 		}
@@ -258,6 +270,36 @@ void GameInputSender::processInput(Window* wind)
 	}
 	else
 	{
+		if (glfwGetKey(windowHandle, GLFW_KEY_N) == GLFW_PRESS)
+		{
+			Message* pMessage = new EditorKeyDown(KEY_N);
+			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+		}
+		if (glfwGetKey(windowHandle, GLFW_KEY_M) == GLFW_PRESS)
+		{
+			Message* pMessage = new EditorKeyDown(KEY_M);
+			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+		}
+		if (glfwGetKey(windowHandle, GLFW_KEY_I) == GLFW_PRESS)
+		{
+			Message* pMessage = new EditorKeyDown(KEY_I);
+			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+		}
+		if (glfwGetKey(windowHandle, GLFW_KEY_J) == GLFW_PRESS)
+		{
+			Message* pMessage = new EditorKeyDown(KEY_J);
+			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+		}
+		if (glfwGetKey(windowHandle, GLFW_KEY_K) == GLFW_PRESS)
+		{
+			Message* pMessage = new EditorKeyDown(KEY_K);
+			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+		}
+		if (glfwGetKey(windowHandle, GLFW_KEY_L) == GLFW_PRESS)
+		{
+			Message* pMessage = new EditorKeyDown(KEY_L);
+			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
+		}
 		if (glfwGetKey(windowHandle, GLFW_KEY_W) == GLFW_PRESS)
 		{
 			Message* pMessage = new EditorKeyDown(KEY_W);

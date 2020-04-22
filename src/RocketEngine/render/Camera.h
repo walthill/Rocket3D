@@ -75,12 +75,12 @@ class Camera : public rkutil::Trackable
 		/***
 			* Move camera forward
 		***/
-		void moveCameraForward(float deltaTime);
+		void moveCameraForward(float deltaTime, bool canFly = false);
 
 		/***
 			* Move camera back
 		***/
-		void moveCameraBack(float deltaTime);
+		void moveCameraBack(float deltaTime, bool canFly = false);
 
 		/***
 			* Access the camera's view matrix

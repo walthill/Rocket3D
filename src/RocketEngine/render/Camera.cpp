@@ -2,7 +2,7 @@
 
 Camera::Camera(rkm::Vector3 position, rkm::Vector3 up, float yaw, float pitch)
 {
-	mMoveSpeed = 2.5f;
+	mMoveSpeed = 3;
 	mMouseSensitivity = 0.1f;
 	mZoom = 45.0f;
 
@@ -46,16 +46,20 @@ void Camera::moveCameraRight(float deltaTime)
 	mPos += mRight * mMoveSpeed * deltaTime;
 }
 
-void Camera::moveCameraForward(float deltaTime)
+void Camera::moveCameraForward(float deltaTime, bool canFly)
 {
-	mPos += rkm::Vector3::cross(mUp, mRight).normalize() * mMoveSpeed * deltaTime;
-	//mPos += Vector3::cross(mWorldUp, mRight).normalize() * mMoveSpeed * deltaTime;
+	if(canFly)
+		mPos += rkm::Vector3::cross(mUp, mRight).normalize() * mMoveSpeed * deltaTime;
+	else
+		mPos += rkm::Vector3::cross(mWorldUp, mRight).normalize() * mMoveSpeed * deltaTime;
 }
 
-void Camera::moveCameraBack(float deltaTime)
+void Camera::moveCameraBack(float deltaTime, bool canFly)
 {
-	mPos -= rkm::Vector3::cross(mUp, mRight).normalize() * mMoveSpeed * deltaTime;
-	//mPos -= Vector3::cross(mWorldUp, mRight).normalize() * mMoveSpeed * deltaTime;
+	if(canFly)
+		mPos -= rkm::Vector3::cross(mUp, mRight).normalize() * mMoveSpeed * deltaTime;
+	else
+		mPos -= rkm::Vector3::cross(mWorldUp, mRight).normalize() * mMoveSpeed * deltaTime;
 }
 
 

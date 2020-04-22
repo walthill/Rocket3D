@@ -161,8 +161,8 @@ bool EngineCore::initialize()
 
 	floorTexture = Model::TextureFromFile("metal.png", "../../assets/textures");
 
-	mpGameCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
-	mpEditorCam = new Camera(rkm::Vector3(-1.5f, -0.5f, 2.0f));
+	mpGameCam = new Camera(rkm::Vector3(0.0f, 2.0f, 3.0f));
+	mpEditorCam = new Camera(rkm::Vector3(-1.5f, 2.5f, 2.0f));
 
 //	mpInputSystem = new InputSystem(mpWindowHandle->getWindowHandle());
 	mpShaderManager = new ShaderManager();
@@ -241,7 +241,7 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	mpShaderManager->setShaderMat4("view", view);
 
 	model = rkm::Mat4::scale(model, rkm::Vector3(1, 1, -1));
-	model = rkm::Mat4::translate(model, rkm::Vector3(0, -1, 0));
+	model = rkm::Mat4::translate(model, rkm::Vector3(0, 1, 0));
 
 	// floor
 	glBindVertexArray(planeVAO);
@@ -344,22 +344,22 @@ void EngineCore::renderText()
 
 void EngineCore::moveCameraLeft()
 {
-	mpGameCam->moveCameraLeft(deltaTime);
+	mpGameCam->moveCameraLeft(deltaTime * 5);
 }
 
 void EngineCore::moveCameraRight()
 {
-	mpGameCam->moveCameraRight(deltaTime);
+	mpGameCam->moveCameraRight(deltaTime * 5);
 }
 
 void EngineCore::moveCameraForward()
 {
-	mpGameCam->moveCameraForward(deltaTime);
+	mpGameCam->moveCameraForward(deltaTime * 5);
 }
 
 void EngineCore::moveCameraBack()
 {
-	mpGameCam->moveCameraBack(deltaTime);
+	mpGameCam->moveCameraBack(deltaTime * 5);
 }
 
 void EngineCore::toggleWireframe(bool showWireframe)

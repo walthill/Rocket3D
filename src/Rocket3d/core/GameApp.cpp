@@ -45,7 +45,7 @@ bool GameApp::initialize()
 	//		Creating GameObjects
 	//=========================================================================
 
-	TransformData t = { rkm::Vector3(0, -1, -3), rkm::Vector3::one * 0.5f, rkm::Vector3::up, 45.0f };
+	TransformData t = { rkm::Vector3(0, 1, -3), rkm::Vector3::one * 0.5f, rkm::Vector3::up, 45.0f };
 	
 	MeshComponentData meshData = {"cube", STANDARD_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY)};
 	
@@ -67,10 +67,10 @@ bool GameApp::initialize()
 	rkm::Vector3* pointLightPositions;
 	
 	pointLightPositions = new rkm::Vector3[4]{
-		rkm::Vector3(0.7f,  0.2f,  2.0f),
-		rkm::Vector3(2.3f, -3.3f, -4.0f),
-		rkm::Vector3(-4.0f,  2.0f, -12.0f),
-		rkm::Vector3(0.0f,  -1.0f, -1.0f)
+		rkm::Vector3(0.7f,  2.2f,  2.0f),
+		rkm::Vector3(2.3f, -1.3f, -4.0f),
+		rkm::Vector3(-4.0f,  4.0f, -12.0f),
+		rkm::Vector3(0.0f,  1.0f, -1.0f)
 	};
 
 	BaseLightData baseLightData = { ambient, diffuse, specular };
