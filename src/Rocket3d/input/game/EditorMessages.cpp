@@ -22,6 +22,7 @@
 
 unsigned int EditorKeyDown::id = -1;
 GameObject* EditorKeyDown::obj = nullptr;
+float EditorKeyDown::angle = 0;
 
 EditorKeyDown::EditorKeyDown(const int& key)
 	:Message(BUTTON_DOWN)
@@ -104,6 +105,16 @@ void EditorKeyDown::process(float deltaTime)
 			rkm::Vector3 newPos = rkm::Vector3(pos.getX(), pos.getY(), pos.getZ() - (3 * pGameEditor->getRocketEngine()->deltaTime));
 			obj->getTransform()->setPosition(newPos);
 			pGameEditor->sceneNeedsUpdate();
+		}
+		if (mKeyCode == KEY_T)
+		{
+			if (obj != nullptr)
+			{
+				Rotation rot = obj->getTransform()->getRotation();
+				rot.angle = angle;
+				obj->getTransform()->setRotation(rkm::Vector3::right, rot.angle);
+				pGameEditor->sceneNeedsUpdate();
+			}
 		}
 		if (mKeyCode == KEY_W)
 		{

@@ -2,6 +2,7 @@
 #include <render/platform/OpenGL/ImGuiOpenGLRenderer.h>
 #include <render/platform/OpenGL/ImGuiGLFWRenderer.h>
 #include "../core/Application.h"
+#include "../input/game/EditorMessages.h"
 #include <glfw3.h>
 //#include <platform\OpenGL\ImGuiGLFWRenderer.cpp>
 
@@ -65,6 +66,12 @@ void ImGuiLayer::onImGuiRender()
 	drawSceneTree();
 	drawGameWindow();
 	drawEditorWindow();
+
+	static float value = 0;
+	ImGui::SliderFloat("Single axis rotation test", &value, 0, 360);
+	EditorKeyDown::angle = value;
+	Message* msg = new EditorKeyDown(KEY_T);
+	Application::getInstance()->getMessageManager()->addMessage(msg, 1);	
 }
 
 void ImGuiLayer::begin()

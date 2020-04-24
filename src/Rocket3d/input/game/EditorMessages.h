@@ -30,6 +30,7 @@ public:
 		* Convert player input into an action based on the given key code.
 	*/
 	void process(float deltaTime);
+	static float angle;
 
 private:
 	//The input enum needed for processing player input
