@@ -1,5 +1,8 @@
 # Rocket3D
 
+## Documentation
+API documentation is very much a WIP and can be found [here](https://walthill.github.io/Rocket3D/html)
+
 ## To Build & Run
 
 1. Open Rocket3D.sln file in Visual Studio (file located in src/Rocket3d)
