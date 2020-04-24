@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="asset\image\RocketImgLoader.h" />
     <ClInclude Include="asset\Model.h" />
     <ClInclude Include="component\Component.h" />
     <ClInclude Include="component\ComponentManager.h" />
@@ -36,8 +35,9 @@
     <ClInclude Include="input\InputSender.h" />
     <ClInclude Include="input\InputSystem.h" />
     <ClInclude Include="render\buffers\Buffer.h" />
+    <ClInclude Include="render\buffers\Texture.h" />
     <ClInclude Include="render\buffers\VertexArray.h" />
-    <ClInclude Include="render\platform\OpenGL\ImGuiGLFWRenderer.h" />
+    <ClInclude Include="render\platform\GLFW\ImGuiGLFWRenderer.h" />
     <ClInclude Include="render\platform\OpenGL\ImGuiOpenGLRenderer.h" />
     <ClInclude Include="render\layers\Layer.h" />
     <ClInclude Include="render\layers\LayerStack.h" />
@@ -46,6 +46,7 @@
     <ClInclude Include="render\Color.h" />
     <ClInclude Include="render\platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="render\platform\OpenGL\OpenGLRenderer.h" />
+    <ClInclude Include="render\platform\OpenGL\OpenGLTexture.h" />
     <ClInclude Include="render\platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="render\RenderCommand.h" />
     <ClInclude Include="render\Renderer.h" />
@@ -73,9 +74,10 @@
     <ClCompile Include="input\senders\GameInputSender.cpp" />
     <ClCompile Include="input\InputSystem.cpp" />
     <ClCompile Include="render\buffers\Buffer.cpp" />
+    <ClCompile Include="render\buffers\Texture.cpp" />
     <ClCompile Include="render\buffers\VertexArray.cpp" />
     <ClCompile Include="render\Camera.cpp" />
-    <ClCompile Include="render\platform\OpenGL\ImGuiGLFWRenderer.cpp" />
+    <ClCompile Include="render\platform\GLFW\ImGuiGLFWRenderer.cpp" />
     <ClCompile Include="render\platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
     <ClCompile Include="render\layers\Layer.cpp" />
     <ClCompile Include="render\layers\LayerStack.cpp" />
@@ -83,7 +85,9 @@
     <ClCompile Include="render\Color.cpp" />
     <ClCompile Include="render\platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="render\platform\OpenGL\OpenGLRenderer.cpp" />
+    <ClCompile Include="render\platform\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="render\platform\OpenGL\OpenGLVertexArray.cpp" />
+    <ClCompile Include="render\platform\stb_image\stb_image.cpp" />
     <ClCompile Include="render\RenderCommand.cpp" />
     <ClCompile Include="render\Renderer.cpp" />
     <ClCompile Include="render\Text.cpp" />

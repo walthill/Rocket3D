@@ -19,11 +19,6 @@
 #ifndef ENGINE_CORE_H
 #define ENGINE_CORE_H
 
-//See RocketImgLoader.h
-#ifndef STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
-#endif
-
 #include "../util/EngineUtils.h"
 #include "GameObjectManager.h"
 #include "../component/ComponentManager.h"

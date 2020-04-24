@@ -1,6 +1,6 @@
 #include "ImGuiLayer.h"
 #include <render/platform/OpenGL/ImGuiOpenGLRenderer.h>
-#include <render/platform/OpenGL/ImGuiGLFWRenderer.h>
+#include <render/platform/GLFW/ImGuiGLFWRenderer.h>
 #include "../core/Application.h"
 #include <glfw3.h>
 //#include <platform\OpenGL\ImGuiGLFWRenderer.cpp>
