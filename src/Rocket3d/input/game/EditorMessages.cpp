@@ -44,67 +44,91 @@ void EditorKeyDown::process(float deltaTime)
 	{
 		if (mKeyCode == KEY_Q)
 		{
-			//TEMP - OBJ CREATION TEST
-			TransformData t = { rkm::Vector3(0.0f, 2.1f, -3.0f), rkm::Vector3::one * 0.5f, rkm::Vector3::up, 45.0f };
+			if (obj == nullptr)
+			{
+				//TEMP - OBJ CREATION TEST
+				TransformData t = { rkm::Vector3(0.0f, 2.1f, -3.0f), rkm::Vector3::one * 0.5f, rkm::Vector3::up, 45.0f };
+				MeshComponentData meshData = { "cube", STANDARD_SHADER_KEY, pGameEditor->getRocketEngine()->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY) };
 
-			MeshComponentData meshData = { "cube", STANDARD_SHADER_KEY, pGameEditor->getRocketEngine()->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY) };
+				obj = pGameEditor->getRocketEngine()->getGameObjectManager()->createGameObject(t, meshData);
+				id = obj->getId();
+				RK_LOG_C("Creating GameObject -- name: " + obj->name);
 
-			obj = pGameEditor->getRocketEngine()->getGameObjectManager()->createGameObject(t, meshData);
-			id = obj->getId();
-			RK_LOG_C("Creating GameObject -- name: " + obj->name);
-
-			pGameEditor->sceneNeedsUpdate();
+				pGameEditor->sceneNeedsUpdate();
+			}
 		}
 		if (mKeyCode == KEY_E)
 		{
-			//TEMP - OBJ DELETION TEST
-			RK_LOG_C("Destroying GameObject");
-			pGameEditor->getRocketEngine()->getGameObjectManager()->destroy(id);
-			pGameEditor->sceneNeedsUpdate();
+			if (obj != nullptr)
+			{
+				//TEMP - OBJ DELETION TEST
+				RK_LOG_C("Destroying GameObject");
+				pGameEditor->getRocketEngine()->getGameObjectManager()->destroy(id);
+				obj = nullptr;
+				pGameEditor->sceneNeedsUpdate();
+			}
 		}
 
 		if (mKeyCode == KEY_I)
 		{
-			rkm::Vector3 pos = obj->getTransform()->getPosition();
-			rkm::Vector3 newPos = rkm::Vector3(pos.getX(), pos.getY() + (3*pGameEditor->getRocketEngine()->deltaTime), pos.getZ());
-			obj->getTransform()->setPosition(newPos);
-			pGameEditor->sceneNeedsUpdate();
+			if (obj != nullptr)
+			{
+				rkm::Vector3 pos = obj->getTransform()->getPosition();
+				rkm::Vector3 newPos = rkm::Vector3(pos.getX(), pos.getY() + (3 * pGameEditor->getRocketEngine()->deltaTime), pos.getZ());
+				obj->getTransform()->setPosition(newPos);
+				pGameEditor->sceneNeedsUpdate();
+			}
 		}
 		if (mKeyCode == KEY_J)
 		{
-			rkm::Vector3 pos = obj->getTransform()->getPosition();
-			rkm::Vector3 newPos = rkm::Vector3(pos.getX() - (3 * pGameEditor->getRocketEngine()->deltaTime), pos.getY(), pos.getZ());
-			obj->getTransform()->setPosition(newPos);
-			pGameEditor->sceneNeedsUpdate();
+			if (obj != nullptr)
+			{
+				rkm::Vector3 pos = obj->getTransform()->getPosition();
+				rkm::Vector3 newPos = rkm::Vector3(pos.getX() - (3 * pGameEditor->getRocketEngine()->deltaTime), pos.getY(), pos.getZ());
+				obj->getTransform()->setPosition(newPos);
+				pGameEditor->sceneNeedsUpdate();
+			}
 		}
 		if (mKeyCode == KEY_K)
 		{
-			rkm::Vector3 pos = obj->getTransform()->getPosition();
-			rkm::Vector3 newPos = rkm::Vector3(pos.getX(), pos.getY() - (3 * pGameEditor->getRocketEngine()->deltaTime), pos.getZ());
-			obj->getTransform()->setPosition(newPos);
-			pGameEditor->sceneNeedsUpdate();
+			if (obj != nullptr)
+			{
 
+				rkm::Vector3 pos = obj->getTransform()->getPosition();
+				rkm::Vector3 newPos = rkm::Vector3(pos.getX(), pos.getY() - (3 * pGameEditor->getRocketEngine()->deltaTime), pos.getZ());
+				obj->getTransform()->setPosition(newPos);
+				pGameEditor->sceneNeedsUpdate();
+			}
 		}
 		if (mKeyCode == KEY_L)
 		{
-			rkm::Vector3 pos = obj->getTransform()->getPosition();
-			rkm::Vector3 newPos = rkm::Vector3(pos.getX() + (3 * pGameEditor->getRocketEngine()->deltaTime), pos.getY(), pos.getZ());
-			obj->getTransform()->setPosition(newPos);
-			pGameEditor->sceneNeedsUpdate();
+			if (obj != nullptr)
+			{
+				rkm::Vector3 pos = obj->getTransform()->getPosition();
+				rkm::Vector3 newPos = rkm::Vector3(pos.getX() + (3 * pGameEditor->getRocketEngine()->deltaTime), pos.getY(), pos.getZ());
+				obj->getTransform()->setPosition(newPos);
+				pGameEditor->sceneNeedsUpdate();
+			}
 		}
 		if (mKeyCode == KEY_M)
 		{
-			rkm::Vector3 pos = obj->getTransform()->getPosition();
-			rkm::Vector3 newPos = rkm::Vector3(pos.getX(), pos.getY(), pos.getZ() + (3 * pGameEditor->getRocketEngine()->deltaTime));
-			obj->getTransform()->setPosition(newPos);
-			pGameEditor->sceneNeedsUpdate();
+			if (obj != nullptr)
+			{
+				rkm::Vector3 pos = obj->getTransform()->getPosition();
+				rkm::Vector3 newPos = rkm::Vector3(pos.getX(), pos.getY(), pos.getZ() + (3 * pGameEditor->getRocketEngine()->deltaTime));
+				obj->getTransform()->setPosition(newPos);
+				pGameEditor->sceneNeedsUpdate();
+			}
 		}
 		if (mKeyCode == KEY_N)
 		{
-			rkm::Vector3 pos = obj->getTransform()->getPosition();
-			rkm::Vector3 newPos = rkm::Vector3(pos.getX(), pos.getY(), pos.getZ() - (3 * pGameEditor->getRocketEngine()->deltaTime));
-			obj->getTransform()->setPosition(newPos);
-			pGameEditor->sceneNeedsUpdate();
+			if (obj != nullptr)
+			{
+				rkm::Vector3 pos = obj->getTransform()->getPosition();
+				rkm::Vector3 newPos = rkm::Vector3(pos.getX(), pos.getY(), pos.getZ() - (3 * pGameEditor->getRocketEngine()->deltaTime));
+				obj->getTransform()->setPosition(newPos);
+				pGameEditor->sceneNeedsUpdate();
+			}
 		}
 		if (mKeyCode == KEY_T)
 		{
