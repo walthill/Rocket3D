@@ -1,7 +1,7 @@
 # Rocket3D
 
 ## Documentation
-API documentation is very much a WIP and can be found [here](https://walthill.github.io/Rocket3D/html)
+API documentation is very much a WIP and can be found [here](https://walthill.github.io/Rocket3D/html). (Webpage setup help [here](https://martinhh.github.io/2014/08/27/hosting-doxygen-as-github-page/))
 
 ## To Build & Run
 
