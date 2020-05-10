@@ -37,7 +37,7 @@ struct Vertex {
 };
 
 /* Texture Data */
-struct Texture {
+struct TextureData {
     TextureId id = -1;
     std::string type, path;
 };
@@ -46,7 +46,7 @@ struct Texture {
 struct MeshData {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
-	std::vector<Texture> textures;
+	std::vector<TextureData> textures;
 };
 
 class Mesh

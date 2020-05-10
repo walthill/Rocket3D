@@ -100,11 +100,11 @@ Mesh Model::assimpToMesh(aiMesh* mesh, const aiScene* scene)
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
 		//Diffuse maps
-		std::vector<Texture> diffuseMaps = getTexturesFromMaterial(material, aiTextureType_DIFFUSE, "texture_diffuse");
+		std::vector<TextureData> diffuseMaps = getTexturesFromMaterial(material, aiTextureType_DIFFUSE, "texture_diffuse");
 		data.textures.insert(data.textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
 		//Specular maps
-		std::vector<Texture> specularMaps = getTexturesFromMaterial(material, aiTextureType_SPECULAR, "texture_specular");
+		std::vector<TextureData> specularMaps = getTexturesFromMaterial(material, aiTextureType_SPECULAR, "texture_specular");
 		data.textures.insert(data.textures.end(), specularMaps.begin(), specularMaps.end());
 
 
@@ -117,9 +117,9 @@ Mesh Model::assimpToMesh(aiMesh* mesh, const aiScene* scene)
 /*
 	* Takes in a material object. Accesses & stores textures from that material
 */
-std::vector<Texture> Model::getTexturesFromMaterial(aiMaterial* mat, aiTextureType type, std::string typeName)
+std::vector<TextureData> Model::getTexturesFromMaterial(aiMaterial* mat, aiTextureType type, std::string typeName)
 {
-	std::vector<Texture> textures;
+	std::vector<TextureData> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		aiString str;
@@ -140,7 +140,7 @@ std::vector<Texture> Model::getTexturesFromMaterial(aiMaterial* mat, aiTextureTy
 		//load in new texture from file
 		if (!loadFromMemory)
 		{
-			Texture texture;
+			TextureData texture;
 			texture.id = TextureFromFile(str.C_Str(), mModelData.directory);
 			texture.type = typeName;
 			texture.path = str.C_Str();

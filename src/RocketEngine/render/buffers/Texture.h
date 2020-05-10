@@ -19,6 +19,7 @@ class Texture2D : public Texture
 {
 	public:
 		static Texture2D* Create(const std::string& path);
+		virtual void bind()			const PURE_VIRTUAL;
 
 	private:
 };

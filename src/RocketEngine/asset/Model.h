@@ -63,7 +63,7 @@ class Model : public rkutil::Trackable
 
 	private:
 		ModelData mModelData;
-		std::vector<Texture> texturesLoaded;
+		std::vector<TextureData> texturesLoaded;
 
 		/*
 			* Initialize model data and store in a ModelData struct 
@@ -84,7 +84,7 @@ class Model : public rkutil::Trackable
 		/*
 			* Takes in a material object. Accesses & stores textures from that material
 		*/
-		std::vector<Texture> getTexturesFromMaterial(aiMaterial* mat, aiTextureType type, std::string typeName); 
+		std::vector<TextureData> getTexturesFromMaterial(aiMaterial* mat, aiTextureType type, std::string typeName); 
 };
 
 #endif // !MODEL_H

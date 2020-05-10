@@ -23,6 +23,7 @@
 #include "GameObjectManager.h"
 #include "../component/ComponentManager.h"
 #include "../render/buffers/VertexArray.h"
+#include "../render/buffers/Texture.h"
 
 class Camera;
 class Window;
@@ -125,6 +126,7 @@ class EngineCore : public rkutil::Trackable
 		unsigned int quadVAO, quadVBO;
 
 		std::shared_ptr<VertexArray> mQuadVA, mPlaneVA;
+		std::shared_ptr<Texture2D> mFloorTex;
 
 		Window *mpWindowHandle;
 		InputSystem *mpInputSystem;

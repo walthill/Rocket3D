@@ -165,7 +165,7 @@ bool EngineCore::initialize()
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	floorTexture = Model::TextureFromFile("metal.png", "../../assets/textures");
+	mFloorTex.reset(Texture2D::Create("../../assets/textures/metal.png")); //	floorTexture = Model::TextureFromFile("metal.png", "../../assets/textures");
 
 	mpGameCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
 	mpEditorCam = new Camera(rkm::Vector3(-1.5f, -0.5f, 2.0f));
@@ -253,7 +253,8 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	// floor
 	mPlaneVA->bind(); //	glBindVertexArray(planeVAO);
 
-	glBindTexture(GL_TEXTURE_2D, floorTexture); 
+	mFloorTex->bind(); //	glBindTexture(GL_TEXTURE_2D, mFloorTex); 
+
 	mpShaderManager->setShaderMat4("model", model);
 
 	RenderCore::submit(mPlaneVA); //	glDrawElements(GL_TRIANGLES, mPlaneVA->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
