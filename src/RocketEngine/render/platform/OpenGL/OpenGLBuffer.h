@@ -45,9 +45,10 @@ public:
 	virtual ~OpenGLFrameBuffer();
 
 	virtual void bind() const;
+	virtual void bindTexture() const;
 	virtual void unbind() const;
 
-	virtual uint32 getTextureId() const { return mTextureColorBuffer; };
+	virtual uint32 getTexture() const { return mTextureColorBuffer; };
 private:
 	int mTexWidth, mTexHeight;		// move to texture class
 	uint32 mTextureColorBuffer;		//TODO: texture class

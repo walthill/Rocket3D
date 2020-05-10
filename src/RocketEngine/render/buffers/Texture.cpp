@@ -4,7 +4,7 @@
 #include "../../core/RenderCore.h"
 #include "../platform/OpenGL/OpenGLTexture.h"
 
-Texture2D* Texture2D::Create(const std::string& path)
+Texture2D* Texture2D::create(const std::string& path)
 {
 	switch (RenderCore::getAPI())
 	{

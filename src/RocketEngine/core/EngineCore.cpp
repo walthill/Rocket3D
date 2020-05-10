@@ -117,60 +117,17 @@ bool EngineCore::initialize()
 	uint32 planeIndicies[6] = { 0,1,2,3,4,5 };
 	mPlaneIB.reset(IndexBuffer::create(planeIndicies, sizeof(planeIndicies) / sizeof(uint32)));
 	mPlaneVA->setIndexBuffer(mPlaneIB);
-
-
-	glGenFramebuffers(1, &framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-	// create a color attachment texture
-	glGenTextures(1, &textureColorbuffer);
-	glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mAppWindowWidth, mAppWindowHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
-	// create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
-	unsigned int rbo;
-	glGenRenderbuffers(1, &rbo);
-	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, mAppWindowWidth, mAppWindowHeight); // use a single renderbuffer object for both a depth AND stencil buffer.
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
 	
-	// now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		RK_ERROR_ALL("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
-	}
+	//Render texture init
+	mGameRenderTex.reset(FrameBuffer::create(mAppWindowWidth, mAppWindowHeight));
+	mEditorRenderTex.reset(FrameBuffer::create(mAppWindowWidth, mAppWindowHeight));
+	mEditorRenderTex->unbind();
 
-	glGenFramebuffers(1, &editorFramebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, editorFramebuffer);
-	// create a color attachment texture
-	glGenTextures(1, &textureColorbuffer2);
-	glBindTexture(GL_TEXTURE_2D, textureColorbuffer2);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mAppWindowWidth, mAppWindowHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer2, 0);
-	// create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
-	unsigned int rbo2;
-	glGenRenderbuffers(1, &rbo2);
-	glBindRenderbuffer(GL_RENDERBUFFER, rbo2);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, mAppWindowWidth, mAppWindowHeight); // use a single renderbuffer object for both a depth AND stencil buffer.
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo2); // now actually attach it
-
-	// now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		RK_ERROR_ALL("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
-	}
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	mFloorTex.reset(Texture2D::Create("../../assets/textures/metal.png")); //	floorTexture = Model::TextureFromFile("metal.png", "../../assets/textures");
+	mFloorTex.reset(Texture2D::create("../../assets/textures/metal.png")); //	floorTexture = Model::TextureFromFile("metal.png", "../../assets/textures");
 
 	mpGameCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
 	mpEditorCam = new Camera(rkm::Vector3(-1.5f, -0.5f, 2.0f));
 
-//	mpInputSystem = new InputSystem(mpWindowHandle->getWindowHandle());
 	mpShaderManager = new ShaderManager();
 
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vFrameBuffer.glsl", "fFrameBuffer.glsl"));
@@ -249,17 +206,15 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	model = rkm::Mat4::scale(model, rkm::Vector3(1, 1, -1));
 	model = rkm::Mat4::translate(model, rkm::Vector3(0, -1, 0));
 
-
 	// floor
-	mPlaneVA->bind(); //	glBindVertexArray(planeVAO);
-
-	mFloorTex->bind(); //	glBindTexture(GL_TEXTURE_2D, mFloorTex); 
+	mPlaneVA->bind(); 
+	mFloorTex->bind(); 
 
 	mpShaderManager->setShaderMat4("model", model);
 
-	RenderCore::submit(mPlaneVA); //	glDrawElements(GL_TRIANGLES, mPlaneVA->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
+	RenderCore::submit(mPlaneVA); 
 
-	mPlaneVA->unbind();//	glBindVertexArray(0);
+	mPlaneVA->unbind();
 
 	// Light "emitters" are not affected by the lighting shader 
 	// and mark the location of the light sources
@@ -298,11 +253,11 @@ void EngineCore::prepFrambuffer(int screenType)
 
 	if (screenType == GAME_VIEW)
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+		mGameRenderTex->bind();
 	}
 	else
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, editorFramebuffer);
+		mEditorRenderTex->bind();
 	}
 	mpWindowHandle->enableWindowFlags(DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
 
@@ -312,42 +267,33 @@ void EngineCore::prepFrambuffer(int screenType)
 void EngineCore::renderFramebufferScreen(int screenType)
 {
 	// now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	mGameRenderTex->unbind();
 
 	mpWindowHandle->disableWindowFlags(DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
 
 	// clear all relevant buffers
-	//mpWindowHandle->clearToColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
 	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER);
 
 	//render to a texture that isn't at screen size
-	//mpWindowHandle->setViewport(0, 0, mWindowWidth, mWindowHeight);
 
 	mpShaderManager->useShaderByKey("framebuffer");
 	mQuadVA->bind();
-//	glBindVertexArray(quadVAO);
 
 	if (screenType == GAME_VIEW)
 	{
-		glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
-		Application::getInstance()->setRenderTexture((AppWindowType)screenType, textureColorbuffer);
-
+		mGameRenderTex->bindTexture();
+		Application::getInstance()->setRenderTexture((AppWindowType)screenType, mGameRenderTex->getTexture());
 	}
 	else
 	{
-		glBindTexture(GL_TEXTURE_2D, textureColorbuffer2);	// use the color attachment texture as the texture of the quad plane
-		Application::getInstance()->setRenderTexture((AppWindowType)screenType, textureColorbuffer2);
-
+		mEditorRenderTex->bindTexture(); 
+		Application::getInstance()->setRenderTexture((AppWindowType)screenType, mEditorRenderTex->getTexture());
 	}
-	//Application::getInstance()->setRenderTexture(EDITOR_WINDOW, textureColorbuffer);
-	//glDrawArrays(GL_TRIANGLES, 0, 6);
-
 }
 
 
 void EngineCore::renderText()
 {
-
 	Application* app = Application::getInstance();
 
 	rkm::Mat4 projection = rkm::MatProj::orthographic(0.0f, (float)app->getAppWindow()->getWidth(), 0.0f, (float)app->getAppWindow()->getHeight());

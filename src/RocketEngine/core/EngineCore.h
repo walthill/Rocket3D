@@ -24,6 +24,7 @@
 #include "../component/ComponentManager.h"
 #include "../render/buffers/VertexArray.h"
 #include "../render/buffers/Texture.h"
+#include "../render/buffers/Buffer.h"
 
 class Camera;
 class Window;
@@ -127,6 +128,7 @@ class EngineCore : public rkutil::Trackable
 
 		std::shared_ptr<VertexArray> mQuadVA, mPlaneVA;
 		std::shared_ptr<Texture2D> mFloorTex;
+		std::shared_ptr<FrameBuffer> mGameRenderTex, mEditorRenderTex;
 
 		Window *mpWindowHandle;
 		InputSystem *mpInputSystem;

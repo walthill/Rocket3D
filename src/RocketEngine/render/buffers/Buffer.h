@@ -152,8 +152,8 @@ class FrameBuffer
 
 		  virtual void bind()	const PURE_VIRTUAL;
 		  virtual void unbind() const PURE_VIRTUAL;
-
-		  virtual uint32 getTextureId() const PURE_VIRTUAL;
+		  virtual void bindTexture() const PURE_VIRTUAL;
+		  virtual uint32 getTexture() const PURE_VIRTUAL;
 
 		  static FrameBuffer* create(int width, int height);
 	private:
