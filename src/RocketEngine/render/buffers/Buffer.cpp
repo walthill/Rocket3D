@@ -3,12 +3,12 @@
 #include "../../core/RenderCore.h"
 #include "../platform/OpenGL/OpenGLBuffer.h"
 
-VertexBuffer* VertexBuffer::create(float* vertices, uint32 size)
+VertexBuffer* VertexBuffer::create(float* vertices, uint32 size, DataType usage)
 {
 	switch (RenderCore::getAPI())
 	{
-	case Renderer::API::NONE:		return nullptr;
-		case Renderer::API::OPENGL:		return new OpenGLVertexBuffer(vertices, size);
+		case Renderer::API::NONE:		return nullptr;
+		case Renderer::API::OPENGL:		return new OpenGLVertexBuffer(vertices, size, usage);
 	}
 	return nullptr;
 }

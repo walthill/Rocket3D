@@ -7,6 +7,7 @@
 #include "Color.h"
 #include "../util/EngineUtils.h"
 #include <map>
+#include "buffers/VertexArray.h"
 
 struct TextData
 {
@@ -50,7 +51,9 @@ class Text : public rkutil::Trackable
 		
 		TextData mTextData;
 		RK_Shader* mpShader;
-		uint32 VAO, VBO;
+		std::shared_ptr<VertexBuffer> glyphVB;
+		std::shared_ptr<VertexArray> glyphVA;
+
 		std::map<char, Character> characters;
 };
 

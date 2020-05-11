@@ -81,16 +81,19 @@ void Text::init(std::string fontName, RK_Shader *shader)
 	FT_Done_FreeType(ft);
 
 	// Configure VAO/VBO for texture quads
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+	glyphVA.reset(VertexArray::create());
 
+	glyphVB.reset(VertexBuffer::create(nullptr, sizeof(GLfloat) * 6 * 4, VertexBuffer::DataType::DYNAMIC));
+
+	BufferLayout layout = {
+		{ ShaderDataType::Float4, "vertex" }
+	};
+
+	glyphVB->setLayout(layout);
+	glyphVA->addVertexBuffer(glyphVB);
+
+	glyphVB->unbind();
+	glyphVA->unbind();
 }
 
 void Text::initTextData(TextData data)
@@ -125,7 +128,7 @@ void Text::renderText(TextData data)
 					 data.color.getB01());
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindVertexArray(VAO);
+	glyphVA->bind();
 
 	// Iterate through all characters
 	std::string::const_iterator c;
@@ -139,29 +142,31 @@ void Text::renderText(TextData data)
 		GLfloat w = ch.size.getX() * data.scale;
 		GLfloat h = ch.size.getY() * data.scale;
 		// Update VBO for each character
-		GLfloat vertices[6][4] = {
-			{ xpos,     ypos + h,   0.0, 0.0 },
-			{ xpos,     ypos,       0.0, 1.0 },
-			{ xpos + w, ypos,       1.0, 1.0 },
+		float vertices[] = {
+			 xpos,     ypos + h,   0.0, 0.0 ,
+			 xpos,     ypos,       0.0, 1.0 ,
+			 xpos + w, ypos,       1.0, 1.0 ,
 
-			{ xpos,     ypos + h,   0.0, 0.0 },
-			{ xpos + w, ypos,       1.0, 1.0 },
-			{ xpos + w, ypos + h,   1.0, 0.0 }
+			 xpos,     ypos + h,   0.0, 0.0 ,
+			 xpos + w, ypos,       1.0, 1.0 ,
+			 xpos + w, ypos + h,   1.0, 0.0 
 		};
 		// Render glyph texture over quad
 		glBindTexture(GL_TEXTURE_2D, ch.textureId);
 		// Update content of VBO memory
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
+		//glyphVB.reset(VertexBuffer::create(vertices, sizeof(vertices)));
+		glyphVB->bind();//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glyphVB->updateBufferData(vertices, sizeof(vertices), 0);
+//		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
+		glyphVB->unbind();
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		// Render quad
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
 		float x = (ch.advance >> 6) * data.scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
 		data.position = rkm::Vector2(data.position.getX() + x, data.position.getY());
 	}
-	glBindVertexArray(0);
+	glyphVA->unbind();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 

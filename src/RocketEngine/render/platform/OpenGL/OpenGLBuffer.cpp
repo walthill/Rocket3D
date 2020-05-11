@@ -1,11 +1,23 @@
 #include "OpenGLBuffer.h"
 #include <glad/glad.h>
 
-OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32 size) //size in bytes
+OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32 size, DataType usage) //size in bytes
 {
 	glGenBuffers(1, &mRendererId);
 	glBindBuffer(GL_ARRAY_BUFFER, mRendererId);
-	glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+
+	switch (usage)
+	{
+		case VertexBuffer::DataType::STATIC:
+			glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+			break;
+		case VertexBuffer::DataType::DYNAMIC:
+			glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_DYNAMIC_DRAW);
+			break;
+		case VertexBuffer::DataType::STREAM:
+			glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STREAM_DRAW);
+			break;
+	}
 }
 
 OpenGLVertexBuffer::~OpenGLVertexBuffer()
@@ -21,6 +33,11 @@ void OpenGLVertexBuffer::bind() const
 void OpenGLVertexBuffer::unbind() const
 {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void OpenGLVertexBuffer::updateBufferData(float* vertices, uint32 size, int offset)
+{
+	glBufferSubData(GL_ARRAY_BUFFER, offset, size, vertices); 
 }
 
 /*********************************************************************

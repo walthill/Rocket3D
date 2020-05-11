@@ -119,15 +119,20 @@ class BufferLayout
 class VertexBuffer : public rkutil::Trackable
 {
 	public:
+		enum DataType { STATIC, DYNAMIC, STREAM };
+
 		virtual ~VertexBuffer() {}
 
 		virtual void bind() const PURE_VIRTUAL;
 		virtual void unbind() const PURE_VIRTUAL;
+		
+		//Used to update some portion of an existing buffer (call glBufferSubData)
+		virtual void updateBufferData(float* vertices, uint32 size, int offset) PURE_VIRTUAL;
 
 		virtual void setLayout(const BufferLayout& layout) PURE_VIRTUAL;
 		virtual const BufferLayout& getLayout() const PURE_VIRTUAL;
 
-		static VertexBuffer* create(float* vertices, uint32 size);
+		static VertexBuffer* create(float* vertices, uint32 size, DataType usage = DataType::STATIC);
 	private:
 };
 

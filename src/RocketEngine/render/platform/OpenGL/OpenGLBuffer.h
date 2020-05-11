@@ -7,7 +7,7 @@
 class OpenGLVertexBuffer : public VertexBuffer
 {
 	public:
-		OpenGLVertexBuffer(float* vertices, uint32 size);
+		OpenGLVertexBuffer(float* vertices, uint32 size, DataType usage);
 		virtual ~OpenGLVertexBuffer();
 
 		virtual void bind() const override;
@@ -15,7 +15,10 @@ class OpenGLVertexBuffer : public VertexBuffer
 
 		virtual void setLayout(const BufferLayout& layout) override { mLayout = layout; }
 		virtual const BufferLayout& getLayout() const override { return mLayout; }
-	
+		
+		//Used to update some portion of an existing buffer (call glBufferSubData)
+		virtual void updateBufferData(float* vertices, uint32 size, int offset) override;
+
 	private:
 		uint32 mRendererId = -1;
 		BufferLayout mLayout;
