@@ -242,6 +242,9 @@
     <ClCompile Include="render\platform\stb_image\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="render\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\glsl\fSoftSpotlight.glsl">

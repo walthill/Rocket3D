@@ -77,6 +77,7 @@
     <ClCompile Include="render\buffers\Texture.cpp" />
     <ClCompile Include="render\buffers\VertexArray.cpp" />
     <ClCompile Include="render\Camera.cpp" />
+    <ClCompile Include="render\Mesh.cpp" />
     <ClCompile Include="render\platform\GLFW\ImGuiGLFWRenderer.cpp" />
     <ClCompile Include="render\platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
     <ClCompile Include="render\layers\Layer.cpp" />

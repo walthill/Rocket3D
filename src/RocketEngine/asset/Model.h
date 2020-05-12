@@ -29,8 +29,6 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include <stb_image.h>
-#include "../logging/RK_Log.h"
 #include <rkutil/Trackable.h>
 
 //unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
