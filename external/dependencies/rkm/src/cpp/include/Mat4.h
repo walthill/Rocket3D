@@ -38,10 +38,10 @@ namespace rkm {
 			// 2. Rotation
 			// 3. Translation
 
-			static Mat4 scale(Mat4 matrix, Vector3 scaleVec);
+			static Mat4 scale(Mat4 matrix, const Vector3& scaleVec);
 			static Mat4 rotate(Mat4 matrix, float angle, Vector3 rotationAxis);
-			static Mat4 translate(Mat4 matrix, Vector3 translationVec);
-			static Mat4 inverse(Mat4 matrixToInvert);
+			static Mat4 translate(Mat4 matrix, const Vector3& translationVec);
+			static Mat4 invert(const Mat4& matrixToInvert);
 
 			//Written with help from https://learnopengl.com/code_viewer.php?code=getting-started/camera-exercise2
 			static Mat4 lookAt(Vector3 pos, Vector3 target, Vector3 worldUp = Vector3::up);
@@ -52,19 +52,19 @@ namespace rkm {
 			Mat4 operator*(float val);
 
 			//Matrix-matrix operations
-			Mat4 operator*(Mat4 rhs);
+			Mat4 operator*(const Mat4& rhs);
 			   
 			//Matrix-Vector operations
-			Vector3 operator*(Vector3 rhs);
+			Vector3 operator*(const Vector3& rhs);
 
 			//Matrix-Vector operations
-			Vector4 operator*(Vector4 rhs);
+			Vector4 operator*(const Vector4& rhs);
 
 			//Output overload
 			friend std::ostream& operator<<(std::ostream& os, const Mat4& mat);
 
 			//Access array value w/ row col indeces
-			float operator()(int row, int col) { return mMatrixValues[row * mROW_SIZE + col]; };
+			const float& operator()(int row, int col) const { return mMatrixValues[row * mROW_SIZE + col]; };
 
 			inline const float* getMatrixValues() const { return mMatrixValues; };
 			inline float* unwrapMatrix() { return mMatrixValues; }
@@ -80,8 +80,13 @@ namespace rkm {
 				0, 0, 0, 0
 			};
 
-			static float calculateDeterminate(Mat3 mat);
-			
+			static Mat4 invertAffine(const Mat4& mat);
+			static Mat4 invertGeneral(const Mat4& mat);
+			static float calculateDeterminate(const Mat4& mat);
+			static float calculateCofactor(float m0, float m1, float m2,
+											float m3, float m4, float m5,
+											float m6, float m7, float m8);
+
 			void matrixMultiplication(Mat4 &newMat, float* vec)
 			{
 				//Calculate result for each matrix element

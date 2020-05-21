@@ -9,6 +9,7 @@
 namespace rkm
 {
 	constexpr auto PI = 3.141592653589793238463f;
+	const float epsilon = 0.00001f;
 
 	inline static float radToDeg(float rad) { return rad * (180.0f / PI); };
 	inline static float degToRad(float deg) { return deg * (PI / 180.0f); };

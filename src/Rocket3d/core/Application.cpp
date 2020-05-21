@@ -32,7 +32,7 @@ Application::Application()
 					  5, 2, 0, 9 };
 	rkm::Mat4 mat(arr);
 	
-	rkm::Mat4::inverse(mat);
+	rkm::Mat4::invert(mat);
 }
 
 Application::~Application()
