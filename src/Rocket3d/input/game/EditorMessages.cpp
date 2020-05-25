@@ -199,7 +199,10 @@ void EditorMouseDown::process(float deltaTime)
 	{
 		if (mMouseCode == LEFT_MOUSE)
 		{
-			//Raycast::cast(x,y);
+			auto wind = Application::getInstance()->getAppWindow();
+		
+			//TODO: make raycast bounds map to editor window - something like Application::getInstance()->getEditorWindowBounds();
+			Raycast::cast(wind->getWidth(), wind->getHeight(), x,y);
 		}
 		if (mMouseCode == RIGHT_MOUSE)
 		{

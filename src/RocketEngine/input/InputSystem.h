@@ -42,7 +42,7 @@ class InputSystem : public rkutil::Trackable
 		/***
 			* Callback for mouse clicks
 		***/
-		void onMouseClick(int button, int action, int modifier);
+		void onMouseClick(int button, int action, int modifier, double xpos, double ypos);
 
 		/***
 			* Callback for mouse movement

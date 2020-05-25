@@ -28,7 +28,7 @@
 #include "../logging/RK_Log.h"
 #include "../render/Text.h"
 #include "../asset/Model.h"
-
+#include "Raycast.h"
 
 //mouse selection: http://antongerdelan.net/opengl/raycasting.html
 // also helpful? https://www.bfilipek.com/2012/06/select-mouse-opengl.html
@@ -194,6 +194,9 @@ bool EngineCore::initialize()
 	rkm::Mat4 projection = rkm::MatProj::orthographic(0.0f, (float)mAppWindowWidth, 0.0f, (float)mAppWindowHeight);
 	mpShaderManager->useShaderByKey(textShaderId);
 	mpShaderManager->getShaderInUse()->setMat4("projection", projection);
+
+	Raycast::initEditorRaycast(mpEditorCam);
+
 	return true;
 }
 
@@ -236,6 +239,7 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 
 	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	proj = rkm::MatProj::perspective(fov, (float)app->getAppWindow()->getWidth() / (float)app->getAppWindow()->getHeight(), 0.1f, 100.0f);
+	mpEditorCam->storePerspectiveMatrix(proj);
 
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);

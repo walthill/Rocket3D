@@ -82,10 +82,14 @@ class Camera : public rkutil::Trackable
 		***/
 		void moveCameraBack(float deltaTime, bool canFly = false);
 
+		inline void storePerspectiveMatrix(const rkm::Mat4& projMatrix) { mPerspectiveMatrix = projMatrix; }
+
 		/***
 			* Access the camera's view matrix
 		***/
 		inline rkm::Mat4 getViewMatrix() { return rkm::Mat4::lookAt(mPos, mPos + mFront, mUp); };
+
+		inline rkm::Mat4 getPerspectiveMatrix() { return mPerspectiveMatrix; }
 
 		/***
 			* Access camera front vector
@@ -118,7 +122,8 @@ class Camera : public rkutil::Trackable
 		float mMoveSpeed = 2.5f;
 		float mMouseSensitivity = 0.1f;
 		float mZoom = 45.0f;
-
+		
+		rkm::Mat4 mPerspectiveMatrix;
 
 		/***
 			* Calculate camera position and rotation

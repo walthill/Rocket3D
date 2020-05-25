@@ -155,27 +155,29 @@ namespace rkm {
 		Mat3 newMat3(mat3Arr);
 		newMat3 = Mat3::invert(newMat3);
 
-		invertedMat[0]  = newMat3(0, 0);  
-		invertedMat[1]  = newMat3(0, 1);
-		invertedMat[2]  = newMat3(0, 2);
-		invertedMat[4]  = newMat3(1, 0);  
-		invertedMat[5]  = newMat3(1, 1);
-		invertedMat[6]  = newMat3(1, 2);
-		invertedMat[8]  = newMat3(2, 0);  
-		invertedMat[9]  = newMat3(2, 1);
-		invertedMat[10] = newMat3(2, 2);
+		invertedMat[0]  = newMat3(0, 0);	
+		invertedMat[1]  = newMat3(0, 1);	
+		invertedMat[2]  = newMat3(0, 2);	
+		invertedMat[4]  = newMat3(1, 0);	
+		invertedMat[5]  = newMat3(1, 1);	
+		invertedMat[6]  = newMat3(1, 2);	
+		invertedMat[8]  = newMat3(2, 0);	
+		invertedMat[9]  = newMat3(2, 1);	
+		invertedMat[10] = newMat3(2, 2);	
 
 		// -R^-1 * T
-		float x = m(3,0);
+		float x = m(3, 0);
 		float y = m(3, 1);
 		float z = m(3, 2);
-		invertedMat[12] = -(newMat3(0, 0) * x + newMat3(0, 3) * y + newMat3(1, 2) * z);
-		invertedMat[13] = -(newMat3(0, 1) * x + newMat3(1, 0) * y + newMat3(1, 3) * z);
-		invertedMat[14] = -(newMat3(0, 2) * x + newMat3(1, 1) * y + newMat3(2, 0) * z);
+		invertedMat[12] = -(newMat3(0, 0) * x + newMat3(1, 0) * y + newMat3(2, 0) * z);
+		invertedMat[13] = -(newMat3(0, 1) * x + newMat3(1, 1) * y + newMat3(2, 1) * z);
+		invertedMat[14] = -(newMat3(0, 2) * x + newMat3(1, 2) * y + newMat3(2, 2) * z);
 
 		// last row should be unchanged (0,0,0,1)
-		//m[3] = m[7] = m[11] = 0.0f;
-		//m[15] = 1.0f;
+		invertedMat[3] = 0.0f;
+		invertedMat[7] = 0.0f;
+		invertedMat[11] = 0.0f;
+		invertedMat[15] = 1.0f;
 
 		return Mat4(invertedMat);
 	}

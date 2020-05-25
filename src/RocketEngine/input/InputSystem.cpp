@@ -41,7 +41,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_click_callback(GLFWwindow* window, int button, int action, int modifier)
 {
 	InputSystem* wind = reinterpret_cast<InputSystem*>(glfwGetWindowUserPointer(window));
-	wind->onMouseClick(button, action, modifier);
+	double xpos, ypos;
+	//getting cursor position
+	glfwGetCursorPos(window, &xpos, &ypos);
+	wind->onMouseClick(button, action, modifier, xpos, ypos);
 }
 
 //Help found here https://stackoverflow.com/questions/27387040/referencing-glfws-callback-functions-from-a-class
@@ -88,12 +91,12 @@ void InputSystem::onMouseScroll(double xoffset, double yoffset)
 	mpAppInput->onMouseScroll(xoffset, yoffset);
 }
 
-void InputSystem::onMouseClick(int button, int action, int modifier)
+void InputSystem::onMouseClick(int button, int action, int modifier, double xpos, double ypos)
 {
 	mpGameInput->setPlayMode(mIsPlayMode);
-	mpGameInput->handleMouseButtonEvents(button, action, modifier);
+	mpGameInput->handleMouseButtonEvents(button, action, modifier, xpos, ypos);
 
-	mpAppInput->handleMouseButtonEvents(button, action, modifier);
+	mpAppInput->handleMouseButtonEvents(button, action, modifier, xpos, ypos);
 }
 
 void InputSystem::onMouseMove(double xpos, double ypos)

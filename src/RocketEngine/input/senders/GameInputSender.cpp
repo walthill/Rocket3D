@@ -26,12 +26,12 @@ bool GameInputSender::handleKeyEvents(int key, int scancode, int action, int mod
 
 }
 
-bool GameInputSender::handleMouseButtonEvents(int key, int action, int mods)
+bool GameInputSender::handleMouseButtonEvents(int key, int action, int mods, double xpos, double ypos)
 {
 	bool shouldConsumeEvent = false;
 
-	onMouseDown(key, action, mods);
-	onMouseUp(key, action, mods);
+	onMouseDown(key, action, mods, xpos, ypos);
+	onMouseUp(key, action, mods, xpos, ypos);
 
 	return shouldConsumeEvent;
 }
@@ -169,23 +169,23 @@ void GameInputSender::onKeyRepeat(int key, int scancode, int action, int mods)
 }
 
 //TODO: do mouse selection raycast here
-void GameInputSender::onMouseDown(int key, int action, int mods)
+void GameInputSender::onMouseDown(int key, int action, int mods, double xpos, double ypos)
 {
 	if (mInPlayMode) //GAME
 	{
 		if (key == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		{
-			Message* pMessage = new GameMouseDown(LEFT_MOUSE);
+			Message* pMessage = new GameMouseDown(LEFT_MOUSE, xpos, ypos);
 			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 		}
 		if (key == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 		{
-			Message* pMessage = new GameMouseDown(RIGHT_MOUSE);
+			Message* pMessage = new GameMouseDown(RIGHT_MOUSE, xpos, ypos);
 			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 		}
 		if (key == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS)
 		{
-			Message* pMessage = new GameMouseDown(MIDDLE_MOUSE);
+			Message* pMessage = new GameMouseDown(MIDDLE_MOUSE, xpos, ypos);
 			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 		}
 	}
@@ -193,26 +193,26 @@ void GameInputSender::onMouseDown(int key, int action, int mods)
 	{
 		if (key == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		{
-			Message* pMessage = new EditorMouseDown(LEFT_MOUSE);
+			Message* pMessage = new EditorMouseDown(LEFT_MOUSE, xpos, ypos);
 			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 		}
 		if (key == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 		{
 			mEnableEditorMouseMove = true;
 
-			Message* pMessage = new EditorMouseDown(RIGHT_MOUSE);
+			Message* pMessage = new EditorMouseDown(RIGHT_MOUSE, xpos, ypos);
 			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 		}
 		if (key == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS)
 		{
-			Message* pMessage = new EditorMouseDown(MIDDLE_MOUSE);
+			Message* pMessage = new EditorMouseDown(MIDDLE_MOUSE, xpos, ypos);
 			Application::getInstance()->getMessageManager()->addMessage(pMessage, 1);
 		}
 
 	}
 }
 
-void GameInputSender::onMouseUp(int key, int action, int mods)
+void GameInputSender::onMouseUp(int key, int action, int mods, double xpos, double ypos)
 {
 	if (mInPlayMode)
 	{
