@@ -3,19 +3,11 @@
 #include <stb_image.h>
 #include <glad/glad.h>
 
+#include "../render/buffers/Texture.h"
+
 Model::Model(std::string path)
 {
 	initialize(path);
-}
-
-Model::~Model()
-{
-	for (auto& tex : loadTextures)
-	{
-		delete tex;
-	}
-
-	loadTextures.clear();
 }
 
 /*
@@ -172,9 +164,8 @@ unsigned int Model::LoadTextureFromFile(const char* path, const std::string& dir
 	std::string filename = (std::string)path;
 	filename = directory + '/' + filename;
 
-	auto mLoadTex = Texture2D::create(filename, Texture::WrapType::REPEAT, Texture::WrapType::REPEAT, 
-												Texture::MinifyFilter::LINEAR_MIPMAP_LINEAR, Texture::MagnifyFilter::MAG_LINEAR);
-	loadTextures.push_back(mLoadTex);
-
-	return mLoadTex->getId();
+	std::shared_ptr<Texture2D> loadTex;
+	loadTex.reset(Texture2D::create(filename, Texture::WrapType::REPEAT, Texture::WrapType::REPEAT,
+												Texture::MinifyFilter::LINEAR_MIPMAP_LINEAR, Texture::MagnifyFilter::MAG_LINEAR));
+	return loadTex->getId();
 }

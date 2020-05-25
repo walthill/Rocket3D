@@ -26,7 +26,6 @@
 #define MODEL_H
 
 #include "../render/Mesh.h"
-#include "../render/buffers/Texture.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -49,8 +48,6 @@ class Model : public rkutil::Trackable
 		*/
 		Model(std::string path);
 
-		~Model();
-
 		/*
 			* Render meshes to display model on-screen
 		*/
@@ -65,7 +62,6 @@ class Model : public rkutil::Trackable
 	private:
 		ModelData mModelData;
 
-		std::vector<Texture2D*> loadTextures;
 		std::vector<TextureData> texturesLoaded;
 
 		/*

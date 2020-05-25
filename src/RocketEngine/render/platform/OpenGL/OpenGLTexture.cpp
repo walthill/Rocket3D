@@ -32,7 +32,7 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path, int sWrapParam, int tW
 	glTexImage2D(GL_TEXTURE_2D, detailReductionLevel, format, mWidth, mHeight, BORDER_DEFAULT, format, GL_UNSIGNED_BYTE, data);
 
 	//Set texture parameters
-	GLint sWrap, tWrap, minificationFilter, magnificationFilter;
+	GLint sWrap = -1, tWrap = -1, minificationFilter = -1, magnificationFilter = -1;
 
 	switch (sWrapParam)
 	{	
@@ -79,7 +79,9 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path, int sWrapParam, int tW
 
 OpenGLTexture2D::~OpenGLTexture2D()
 {
-	glDeleteTextures(1, &mRendererId);
+	//  NOTE: Freed when the OpenGL context is cleaned up. 
+	// Not explicitly deleting here to avoid requiring all Texture2D objects to be stored in program memory
+	//glDeleteTextures(1, &mRendererId); 
 }
 
 void OpenGLTexture2D::bind() const
