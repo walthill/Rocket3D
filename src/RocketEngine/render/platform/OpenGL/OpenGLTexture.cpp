@@ -4,7 +4,7 @@
 
 const int OpenGLTexture2D::BORDER_DEFAULT = 0;
 
-OpenGLTexture2D::OpenGLTexture2D(const std::string& path, int detailReductionLevel)
+OpenGLTexture2D::OpenGLTexture2D(const std::string& path, int sWrapParam, int tWrapParam, int miniFilter, int magFilter, int detailReductionLevel)
 	: mPath(path)
 {
 	int width, height, channels;
@@ -21,14 +21,56 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path, int detailReductionLev
 	glGenTextures(1, &mRendererId);
 	glBindTexture(GL_TEXTURE_2D, mRendererId);
 
-	glTexImage2D(GL_TEXTURE_2D, detailReductionLevel, GL_RGB, mWidth, mHeight, BORDER_DEFAULT, GL_RGB, GL_UNSIGNED_BYTE, data);
+	GLenum format = GL_RGB;
+	if (channels == 1)
+		format = GL_RED;
+	else if (channels == 3)
+		format = GL_RGB;
+	else if (channels == 4)
+		format = GL_RGBA;
+
+	glTexImage2D(GL_TEXTURE_2D, detailReductionLevel, format, mWidth, mHeight, BORDER_DEFAULT, format, GL_UNSIGNED_BYTE, data);
+
+	//Set texture parameters
+	GLint sWrap, tWrap, minificationFilter, magnificationFilter;
+
+	switch (sWrapParam)
+	{	
+		case WrapType::REPEAT:						sWrap = GL_REPEAT;				break;
+		case WrapType::MIRRORED_REPEAT:				sWrap = GL_MIRRORED_REPEAT;		break;
+		case WrapType::CLAMP_EDGE:					sWrap = GL_CLAMP_TO_EDGE;		break;
+	}
+
+	switch (tWrapParam)
+	{
+		case WrapType::REPEAT:						tWrap = GL_REPEAT;				break;
+		case WrapType::MIRRORED_REPEAT:				tWrap = GL_MIRRORED_REPEAT;		break;
+		case WrapType::CLAMP_EDGE:					tWrap = GL_CLAMP_TO_EDGE;		break;
+	}
+
+	switch (miniFilter)
+	{
+		case MinifyFilter::MIN_LINEAR:				minificationFilter = GL_LINEAR;				break;
+		case MinifyFilter::MIN_NEAREST:				minificationFilter = GL_NEAREST;			break;
+		case MinifyFilter::LINEAR_MIPMAP_NEAREST:	minificationFilter = GL_CLAMP_TO_EDGE;		break;
+		case MinifyFilter::LINEAR_MIPMAP_LINEAR:	minificationFilter = GL_MIRRORED_REPEAT;	break;
+		case MinifyFilter::NEAREST_MIPMAP_NEAREST:	minificationFilter = GL_CLAMP_TO_EDGE;		break;
+		case MinifyFilter::NEAREST_MIPMAP_LINEAR:	minificationFilter = GL_MIRRORED_REPEAT;	break;
+	}
+
+	switch (magFilter)
+	{
+		case MagnifyFilter::MAG_LINEAR:				magnificationFilter = GL_LINEAR;		break;
+		case MagnifyFilter::MAG_NEAREST:			magnificationFilter = GL_NEAREST;		break;
+	}
+
 	//Texture wrapping
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, sWrap);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, tWrap);
 	//Minification
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //TODO: Linear & nearest should be API-exposed
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minificationFilter); 
 	//Magnification
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magnificationFilter);
 
 	glGenerateMipmap(GL_TEXTURE_2D);
 

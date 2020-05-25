@@ -1,6 +1,5 @@
 #include "MeshComponent.h"
 #include "MaterialComponent.h"
-#include "../../RocketEngine/asset/Model.h"
 
 MeshComponent::MeshComponent(const ComponentId& id) :
 	Component(id)

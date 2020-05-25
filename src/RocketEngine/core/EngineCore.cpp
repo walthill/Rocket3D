@@ -130,19 +130,20 @@ bool EngineCore::initialize()
 
 	mpShaderManager = new ShaderManager();
 
-	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vFrameBuffer.glsl", "fFrameBuffer.glsl"));
+	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
 	mpShaderManager->addShader("f", new RK_Shader("vFrameBuffer.glsl", "fFrameBuffer.glsl"));
 	mpShaderManager->addShader("framebuffer", new RK_Shader("vFrameBufferScreen.glsl", "fFrameBufferScreen.glsl"));
 	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
 	mpShaderManager->addShader(textShaderId, new RK_Shader("vTextRender.glsl", "fTextRender.glsl"));
 
-	mpShaderManager->useShaderByKey(standardLightingShaderId);
+
+	initLighting();
+	mpShaderManager->useShaderByKey("f");
 	mpShaderManager->setShaderInt("texture1", 0);
 
 	mpShaderManager->useShaderByKey("framebuffer");
 	mpShaderManager->setShaderInt("screenTexture", 0);
 
-	//initLighting();
 
 	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);
 	mpComponentManager = new ComponentManager(MAX_NUM_COMPONENETS, mpShaderManager, STANDARD_SHADER_KEY);
@@ -207,7 +208,10 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	model = rkm::Mat4::translate(model, rkm::Vector3(0, -1, 0));
 
 	// floor
-	mPlaneVA->bind(); 
+	mpShaderManager->useShaderByKey("f");
+	mpShaderManager->setShaderMat4("projection", proj);
+	mpShaderManager->setShaderMat4("view", view);
+	mPlaneVA->bind();
 	mFloorTex->bind(); 
 
 	mpShaderManager->setShaderMat4("model", model);
