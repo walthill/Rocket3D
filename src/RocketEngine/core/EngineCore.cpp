@@ -298,7 +298,7 @@ void EngineCore::renderText()
 
 	rkm::Mat4 projection = rkm::MatProj::orthographic(0.0f, (float)app->getAppWindow()->getWidth(), 0.0f, (float)app->getAppWindow()->getHeight());
 	mpShaderManager->useShaderByKey(textShaderId);
-	mpShaderManager->getShaderInUse()->setMat4("projection", projection);
+	mpShaderManager->setShaderMat4("projection", projection);
 
 	textObj->renderText();
 	textObj2->renderText();
