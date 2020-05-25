@@ -14,18 +14,15 @@
 	=========================
 
 ********/
-#include <glad/glad.h>
-#include "../../Rocket3d/core/Application.h"
 #include "EngineCore.h"
+#include "../../Rocket3d/core/Application.h"
 #include "../render/Camera.h"
 //#include "../asset/image/RocketImgLoader.h"
 //#include "../shader/ShaderBuild.h"
-#include "../shader/RK_Shader.h"
 #include "../shader/ShaderManager.h"
 #include "../logging/RK_Log.h"
 #include "RenderCore.h"
 #include "../render/Text.h"
-#include "../asset/Model.h"
 
 
 //mouse selection: http://antongerdelan.net/opengl/raycasting.html
@@ -44,9 +41,6 @@ void EngineCore::clean()
 {
 	delete mpGameObjectManager;
 	delete mpComponentManager;
-
-	delete textObj;
-	delete textObj2;
 	delete mpShaderManager;
 	delete mpEditorCam;
 	delete mpGameCam;
@@ -148,12 +142,14 @@ bool EngineCore::initialize()
 	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);
 	mpComponentManager = new ComponentManager(MAX_NUM_COMPONENETS, mpShaderManager, STANDARD_SHADER_KEY);
 
-	textObj = new Text("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId));
+	textObj.reset(Text::create("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId)));
 	TextData data = { "This is sample text", Color(127, 204, 51), rkm::Vector2(25.0f, 25.0f), 1.0f };
 	textObj->initTextData(data);
-	textObj2 = new Text("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId));
+	
+	textObj2.reset(Text::create("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId)));
 	data = { "(C) Rocket3d", Color(76.5f, 178.5f, 229.5f), rkm::Vector2((float)mAppWindowWidth - 140.0f, (float)mAppWindowHeight-30.0f), 0.5f };
 	textObj2->initTextData(data);
+
 	// Compile and setup the shader
 	rkm::Mat4 projection = rkm::MatProj::orthographic(0.0f, (float)mAppWindowWidth, 0.0f, (float)mAppWindowHeight);
 	mpShaderManager->useShaderByKey(textShaderId);

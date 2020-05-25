@@ -140,8 +140,8 @@ class EngineCore : public rkutil::Trackable
 		ComponentManager* mpComponentManager;
 
 		ShaderKey standardLightingShaderId = "standardLightingShader", emitterShaderId = "emitter";
-		Text* textObj;
-		Text* textObj2;
+		std::shared_ptr<Text> textObj, textObj2;
+
 		ShaderKey textShaderId = "textShader";
 
 		/***

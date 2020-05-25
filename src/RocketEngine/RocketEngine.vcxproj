@@ -46,6 +46,7 @@
     <ClInclude Include="render\Color.h" />
     <ClInclude Include="render\platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="render\platform\OpenGL\OpenGLRenderer.h" />
+    <ClInclude Include="render\platform\OpenGL\OpenGLText.h" />
     <ClInclude Include="render\platform\OpenGL\OpenGLTexture.h" />
     <ClInclude Include="render\platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="render\RenderCommand.h" />
@@ -86,6 +87,7 @@
     <ClCompile Include="render\Color.cpp" />
     <ClCompile Include="render\platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="render\platform\OpenGL\OpenGLRenderer.cpp" />
+    <ClCompile Include="render\platform\OpenGL\OpenGLText.cpp" />
     <ClCompile Include="render\platform\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="render\platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="render\platform\stb_image\stb_image.cpp" />

@@ -1,9 +1,10 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+#include <rkutil/Trackable.h>
 #include "../../util/EngineUtils.h"
 
-class Texture
+class Texture : public rkutil::Trackable
 {
 	public:
 		enum WrapType { REPEAT = 0, MIRRORED_REPEAT, CLAMP_EDGE };
