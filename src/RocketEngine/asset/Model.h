@@ -26,9 +26,7 @@
 #define MODEL_H
 
 #include "../render/Mesh.h"
-#include <assimp/Importer.hpp>
 #include <assimp/scene.h>
-#include <assimp/postprocess.h>
 #include <rkutil/Trackable.h>
 
 //unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);

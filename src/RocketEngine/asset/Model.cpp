@@ -1,4 +1,6 @@
 #include "Model.h"
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
 #include "../logging/RK_Log.h"
 #include <stb_image.h>
 #include <glad/glad.h>
