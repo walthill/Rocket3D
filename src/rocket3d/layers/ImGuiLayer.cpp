@@ -67,6 +67,7 @@ void ImGuiLayer::onImGuiRender()
 	drawGameWindow();
 	drawEditorWindow();
 
+	//TODO: tmp
 	static float value = 0;
 	ImGui::SliderFloat("Single axis rotation test", &value, 0, 360);
 	EditorKeyDown::angle = value;
@@ -229,7 +230,7 @@ void ImGuiLayer::drawGameWindow()
 	const int H = 450;
 
 	// We set the same viewport size (plus margin) to the next window (if first use)
-	ImGui::SetNextWindowSize(ImVec2(W+15, H+35), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(W+10, H+35), ImGuiCond_Once);
 
 	ImGui::Begin("Game");
 	{
@@ -245,7 +246,7 @@ void ImGuiLayer::drawGameWindow()
 		// Under OpenGL the ImGUI image type is GLuint
 		// So make sure to use "(void *)tex" but not "&tex"
 		ImGui::GetWindowDrawList()->AddImage(mGameWindowTexture, 
-			ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y+30),
+			ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y+20),
 			ImVec2(pos.x + w, pos.y + h), 
 			ImVec2(0, 1), ImVec2(1, 0));
 	}
@@ -264,14 +265,14 @@ void ImGuiLayer::drawEditorWindow()
 	const int H = 450;
 
 	// We set the same viewport size (plus margin) to the next window (if first use)
-	ImGui::SetNextWindowSize(ImVec2(W + 15, H + 35), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(W + 10, H + 35), ImGuiCond_Once);
 
 	ImGui::Begin("Editor");
 	{
-		float h = ImGui::GetWindowHeight();
-		float w = ImGui::GetWindowWidth();
-		h -= 35;
-		w -= 15;
+		mEditorWindowHeight = ImGui::GetWindowHeight();
+		mEditorWindowWidth = ImGui::GetWindowWidth();
+		float h = mEditorWindowHeight - 35;
+		float w = mEditorWindowWidth - 15;
 
 		// Get the current cursor position (where your window is)
 		ImVec2 pos = ImGui::GetCursorScreenPos();
@@ -280,9 +281,22 @@ void ImGuiLayer::drawEditorWindow()
 		// Under OpenGL the ImGUI image type is GLuint
 		// So make sure to use "(void *)tex" but not "&tex"
 		ImGui::GetWindowDrawList()->AddImage(mGameWindowTexture,
-			ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y + 30),
+			ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y + 20),
 			ImVec2(pos.x + w, pos.y + h),
 			ImVec2(0, 1), ImVec2(1, 0));
+
+		mEditorPos = rkm::Vector2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+
 	}
 	ImGui::End();
+}
+
+rkm::Vector2 ImGuiLayer::getEditorWindowDimensions()
+{
+	return rkm::Vector2(mEditorWindowWidth, mEditorWindowHeight);
+}
+
+rkm::Vector2 ImGuiLayer::getEditorWindowPos()
+{
+	return mEditorPos;
 }

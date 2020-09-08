@@ -69,6 +69,7 @@ class Application : public rkutil::Trackable
 		inline double getTime() { return mpMasterTimer->getTimeElapsedInSeconds(); };
 		inline Window* getAppWindow() { return mpAppWindow; };
 		inline MessageManager* getMessageManager() { return mpMessageManager;  }
+		inline ImGuiLayer* getEditor() { return mpImGuiLayer; }
 
 		float mDeltaTime;
 	private:

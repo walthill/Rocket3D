@@ -10,7 +10,7 @@ class Raycast
 		~Raycast();
 
 		static void initEditorRaycast(Camera* camera);
-		static bool cast(int width, int height, float mouseX, float mouseY);
+		static bool calculateScreenRay(int left, int top, int width, int height, float mouseX, float mouseY);
 
 	private:
 		static Camera* mpCam;
