@@ -20,19 +20,20 @@ bool Editor::initialize(EngineCore* engineHandle)
 	mpAppHandle = Application::getInstance();
 	mKeepRunning = true;
 
+	mpPerformanceTracker = new rkutil::PerformanceTracker();
+	mpFrameTimer = new rkutil::Timer();
+
 	return true;
 }
 
 void Editor::clean()
 {
+	delete mpPerformanceTracker;
+	delete mpFrameTimer;
 }
 
 bool Editor::processLoop()
 {
-
-	mpPerformanceTracker = new rkutil::PerformanceTracker();
-	mpFrameTimer = new rkutil::Timer();
-
 	
 	mpPerformanceTracker->startTracking(mLOOP_TRACKER_NAME);
 

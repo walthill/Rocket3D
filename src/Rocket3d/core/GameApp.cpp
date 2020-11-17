@@ -123,7 +123,10 @@ bool GameApp::initialize()
 
 	mpAppHandle = Application::getInstance();
 	mKeepRunning = true;
-	
+
+	mpPerformanceTracker = new rkutil::PerformanceTracker();
+	mpFrameTimer = new rkutil::Timer();
+
 	//render first scene frame when running engine editor app
 	update();
 	render();
@@ -145,33 +148,27 @@ bool GameApp::processLoop()
 {
 	if (mpAppHandle->isPlaying())
 	{
-
-		mpPerformanceTracker = new rkutil::PerformanceTracker();
-
-		mpFrameTimer = new rkutil::Timer();
-
 		//GameApp loop is now unecessary. the app loop is handled by Application. 
 		//This class is called in the GameLayer and looped through onUpdate()
 		//while (!mShouldExit)
-		{
-			mpPerformanceTracker->startTracking(mLOOP_TRACKER_NAME);
 
-			mpFrameTimer->start();
+		mpPerformanceTracker->startTracking(mLOOP_TRACKER_NAME);
 
-			mpPerformanceTracker->startTracking(mDRAW_TRACKER_NAME);
+		mpFrameTimer->start();
 
-			update();
-			render();
+		mpPerformanceTracker->startTracking(mDRAW_TRACKER_NAME);
 
-			mpPerformanceTracker->stopTracking(mDRAW_TRACKER_NAME);
-			mpFrameTimer->sleepUntilElapsed(FRAME_TIME_60FPS);
-			mpPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
+		update();
+		render();
 
-			RK_INFO_C("loop took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) +
-				"ms draw took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) + "ms\n");
-			//mFPS = (int)(1000.0 / mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
-			//RK_INFO_C("FPS: " + std::to_string(mFPS));
-		}
+		mpPerformanceTracker->stopTracking(mDRAW_TRACKER_NAME);
+		mpFrameTimer->sleepUntilElapsed(FRAME_TIME_60FPS);
+		mpPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
+
+		RK_INFO_C("loop took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) +
+			"ms draw took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) + "ms\n");
+		//mFPS = (int)(1000.0 / mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
+		//RK_INFO_C("FPS: " + std::to_string(mFPS));
 	}
 
 	return mKeepRunning;
