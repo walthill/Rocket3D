@@ -31,7 +31,7 @@ namespace rkm {
 
 		//Convert Vector object into float collection 
 		//(NOTE): Good for referencing uniform values on shaders
-		const float* toArray() const;
+		inline const float* toArray() const { return mVecArr; };
 
 		//comparison
 		bool operator==(const Vector3& rhs);
@@ -54,15 +54,16 @@ namespace rkm {
 		//Output overload
 		friend std::ostream& operator<<(std::ostream& os, const Vector3& vec);
 
-		inline float getX() const { return mX; };
-		inline float getY() const { return mY; };
-		inline float getZ() const { return mZ; };
+		inline float getX() const { return mVecArr[0]; };
+		inline float getY() const { return mVecArr[1]; };
+		inline float getZ() const { return mVecArr[2]; };
 
 		static Vector3 left, right, up, down;
 		static Vector3 forward, back, one, zero;
 
 	private:
-		float mX = 0, mY = 0, mZ = 0;
+		float mVecArr[3] = {0,0,0};
+		static const char X = 0, Y = 1, Z = 2;
 	};
 }
 #endif // !VEC3_H

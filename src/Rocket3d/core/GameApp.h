@@ -26,7 +26,7 @@
 #include <rkutil/MemoryTracker.h>
 #include <rkutil/PerformanceTracker.h>
 #include <string>
-#include <logging/RK_Log.h>
+#include "../../RocketEngine/logging/RK_Log.h"
 #include "Application.h"
 
 class EngineCore;

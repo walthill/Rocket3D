@@ -13,23 +13,23 @@ namespace rkm {
 
 	Vector3::Vector3()
 	{
-		mX = 0;
-		mY = 0;
-		mZ = 0;
+		mVecArr[X] = 0;
+		mVecArr[Y] = 0;
+		mVecArr[Z] = 0;
 	};
 
 	Vector3::Vector3(float x, float y, float z)
 	{
-		mX = x;
-		mY = y;
-		mZ = z;
+		mVecArr[X] = x;
+		mVecArr[Y] = y;
+		mVecArr[Z] = z;
 	};
 	
 	Vector3::Vector3(int x, int y, int z) 
 	{ 
-		mX = (float)x; 
-		mY = (float)y; 
-		mZ = (float)z; 
+		mVecArr[X] = (float)x;
+		mVecArr[Y] = (float)y;
+		mVecArr[Z] = (float)z;
 	};
 	
 	Vector3::~Vector3()
@@ -37,7 +37,7 @@ namespace rkm {
 
 	}
 
-	float Vector3::getMagnitude() { return sqrtf((mX*mX) + (mY*mY) + (mZ*mZ)); };
+	float Vector3::getMagnitude() { return sqrtf((mVecArr[X] * mVecArr[X]) + (mVecArr[Y] * mVecArr[Y]) + (mVecArr[Z] * mVecArr[Z])); };
 	float Vector3::getSqrMagnitude() { return getMagnitude() * getMagnitude(); };
 	Vector3 Vector3::normalize() { return *this / getMagnitude(); };
 
@@ -45,18 +45,18 @@ namespace rkm {
 	Vector3 Vector3::operator!()
 	{
 		Vector3 newVec;
-		newVec.mX = -mX;
-		newVec.mY = -mY;
-		newVec.mZ = -mZ;
+		newVec.mVecArr[X] = -mVecArr[X];
+		newVec.mVecArr[Y] = -mVecArr[Y];
+		newVec.mVecArr[Z] = -mVecArr[Z];
 		return newVec;
 	};
 
 	Vector3 Vector3::operator-()
 	{
 		Vector3 newVec;
-		newVec.mX = -mX;
-		newVec.mY = -mY;
-		newVec.mZ = -mZ;
+		newVec.mVecArr[X] = -mVecArr[X];
+		newVec.mVecArr[Y] = -mVecArr[Y];
+		newVec.mVecArr[Z] = -mVecArr[Z];
 		return newVec;
 	};
 
@@ -76,23 +76,16 @@ namespace rkm {
 		return Vector3(x, y, z);
 	}
 
-	//Convert Vector object into float collection 
-	//(NOTE): Good for referencing uniform values on shaders
-	const float* Vector3::toArray() const
-	{
-		float arr[3] = { mX, mY, mZ };
-		return arr;
-	}
 
 	//comparison
 	bool Vector3::operator==(const Vector3& rhs) 
 	{ 
-		return mX == rhs.mX && mY == rhs.mY && mZ == rhs.mZ; 
+		return mVecArr[X] == rhs.mVecArr[X] && mVecArr[Y] == rhs.mVecArr[Y] && mVecArr[Z] == rhs.mVecArr[Z];
 	}
 	
 	bool Vector3::operator!=(const Vector3& rhs) 
 	{ 
-		return (mX != rhs.mX) || (mY == rhs.mY) || (mZ != rhs.mZ); 
+		return (mVecArr[X] != rhs.mVecArr[X]) || (mVecArr[Y] == rhs.mVecArr[Y]) || (mVecArr[Z] != rhs.mVecArr[Z]);
 	}
 
 	//Component-wise overloads
@@ -100,17 +93,17 @@ namespace rkm {
 	{
 		Vector3 newVec;
 
-		newVec.mX = mX + rhs.mX;
-		newVec.mY = mY + rhs.mY;
-		newVec.mZ = mZ + rhs.mZ;
+		newVec.mVecArr[X] = mVecArr[X] + rhs.mVecArr[X];
+		newVec.mVecArr[Y] = mVecArr[Y] + rhs.mVecArr[Y];
+		newVec.mVecArr[Z] = mVecArr[Z] + rhs.mVecArr[Z];
 
 		return newVec;
 	};
 	Vector3 Vector3::operator+=(const Vector3& rhs)
 	{
-		mX = mX + rhs.mX;
-		mY = mY + rhs.mY;
-		mZ = mZ + rhs.mZ;
+		mVecArr[X] = mVecArr[X] + rhs.mVecArr[X];
+		mVecArr[Y] = mVecArr[Y] + rhs.mVecArr[Y];
+		mVecArr[Z] = mVecArr[Z] + rhs.mVecArr[Z];
 
 		return *this;
 	};
@@ -118,17 +111,17 @@ namespace rkm {
 	{
 		Vector3 newVec;
 
-		newVec.mX = mX - rhs.mX;
-		newVec.mY = mY - rhs.mY;
-		newVec.mZ = mZ - rhs.mZ;
+		newVec.mVecArr[X] = mVecArr[X] - rhs.mVecArr[X];
+		newVec.mVecArr[Y] = mVecArr[Y] - rhs.mVecArr[Y];
+		newVec.mVecArr[Z] = mVecArr[Z] - rhs.mVecArr[Z];
 
 		return newVec;
 	};
 	Vector3 Vector3::operator-=(const Vector3& rhs)
 	{
-		mX = mX - rhs.mX;
-		mY = mY - rhs.mY;
-		mZ = mZ - rhs.mZ;
+		mVecArr[X] = mVecArr[X] - rhs.mVecArr[X];
+		mVecArr[Y] = mVecArr[Y] - rhs.mVecArr[Y];
+		mVecArr[Z] = mVecArr[Z] - rhs.mVecArr[Z];
 
 		return *this;
 	};
@@ -136,9 +129,9 @@ namespace rkm {
 	{
 		Vector3 newVec;
 
-		newVec.mX = mX / rhs.mX;
-		newVec.mY = mY / rhs.mY;
-		newVec.mZ = mZ / rhs.mZ;
+		newVec.mVecArr[X] = mVecArr[X] / rhs.mVecArr[X];
+		newVec.mVecArr[Y] = mVecArr[Y] / rhs.mVecArr[Y];
+		newVec.mVecArr[Z] = mVecArr[Z] / rhs.mVecArr[Z];
 
 		return newVec;
 	};
@@ -146,9 +139,9 @@ namespace rkm {
 	{
 		Vector3 newVec;
 
-		newVec.mX = mX * rhs.mX;
-		newVec.mY = mY * rhs.mY;
-		newVec.mZ = mZ * rhs.mZ;
+		newVec.mVecArr[X] = mVecArr[X] * rhs.mVecArr[X];
+		newVec.mVecArr[Y] = mVecArr[Y] * rhs.mVecArr[Y];
+		newVec.mVecArr[Z] = mVecArr[Z] * rhs.mVecArr[Z];
 
 		return newVec;
 	};
@@ -158,9 +151,9 @@ namespace rkm {
 	{
 		Vector3 newVec;
 
-		newVec.mX = mX + val;
-		newVec.mY = mY + val;
-		newVec.mZ = mZ + val;
+		newVec.mVecArr[X] = mVecArr[X] + val;
+		newVec.mVecArr[Y] = mVecArr[Y] + val;
+		newVec.mVecArr[Z] = mVecArr[Z] + val;
 
 		return newVec;
 	};
@@ -168,9 +161,9 @@ namespace rkm {
 	{
 		Vector3 newVec;
 
-		newVec.mX = mX - val;
-		newVec.mY = mY - val;
-		newVec.mZ = mZ - val;
+		newVec.mVecArr[X] = mVecArr[X] - val;
+		newVec.mVecArr[Y] = mVecArr[Y] - val;
+		newVec.mVecArr[Z] = mVecArr[Z] - val;
 
 		return newVec;
 	};
@@ -178,9 +171,9 @@ namespace rkm {
 	{
 		Vector3 newVec;
 
-		newVec.mX = mX * val;
-		newVec.mY = mY * val;
-		newVec.mZ = mZ * val;
+		newVec.mVecArr[X] = mVecArr[X] * val;
+		newVec.mVecArr[Y] = mVecArr[Y] * val;
+		newVec.mVecArr[Z] = mVecArr[Z] * val;
 
 		return newVec;
 	};
@@ -188,9 +181,9 @@ namespace rkm {
 	{
 		Vector3 newVec;
 
-		newVec.mX = mX / val;
-		newVec.mY = mY / val;
-		newVec.mZ = mZ / val;
+		newVec.mVecArr[X] = mVecArr[X] / val;
+		newVec.mVecArr[Y] = mVecArr[Y] / val;
+		newVec.mVecArr[Z] = mVecArr[Z] / val;
 
 		return newVec;
 	};
@@ -198,7 +191,7 @@ namespace rkm {
 	//Output overload
 	std::ostream& operator<<(std::ostream& os, const Vector3& vec)
 	{
-		std::cout << "(" << vec.mX << ", " << vec.mY << ", " << vec.mZ << ")";
+		std::cout << "(" << vec.mVecArr[0] << ", " << vec.mVecArr[1] << ", " << vec.mVecArr[2] << ")";
 		return os;
 	};
 }

@@ -23,6 +23,7 @@
 #include "../logging/RK_Log.h"
 #include "RenderCore.h"
 #include "../render/Text.h"
+#include "Raycast.h"
 
 //mouse selection: http://antongerdelan.net/opengl/raycasting.html
 // also helpful? https://www.bfilipek.com/2012/06/select-mouse-opengl.html
@@ -124,14 +125,14 @@ bool EngineCore::initialize()
 	mpShaderManager = new ShaderManager();
 
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
-	mpShaderManager->addShader("f", new RK_Shader("vFrameBuffer.glsl", "fFrameBuffer.glsl"));
+	mpShaderManager->addShader("basicTexture", new RK_Shader("vFrameBuffer.glsl", "fFrameBuffer.glsl"));
 	mpShaderManager->addShader("framebuffer", new RK_Shader("vFrameBufferScreen.glsl", "fFrameBufferScreen.glsl"));
 	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
 	mpShaderManager->addShader(textShaderId, new RK_Shader("vTextRender.glsl", "fTextRender.glsl"));
 
 
 	initLighting();
-	mpShaderManager->useShaderByKey("f");
+	mpShaderManager->useShaderByKey("basicTexture");
 	mpShaderManager->setShaderInt("texture1", 0);
 
 	mpShaderManager->useShaderByKey("framebuffer");
@@ -207,7 +208,7 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	model = rkm::Mat4::translate(model, rkm::Vector3(0, 1, 0));
 
 	// floor
-	mpShaderManager->useShaderByKey("f");
+	mpShaderManager->useShaderByKey("basicTexture");
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
 	mPlaneVA->bind();
