@@ -199,20 +199,7 @@ void EditorMouseDown::process(float deltaTime)
 	{
 		if (mMouseCode == LEFT_MOUSE)
 		{
-			auto wind = Application::getInstance()->getEditor();
-
-			//TODO: data drive this
-			const int leftOffset = 15;
-			const int topOffset = 18;
-			const int widthOffset = 20;
-			const int heightOffset = 26;
-
-			float left = wind->getEditorWindowPos().getX() + leftOffset;
-			float top = wind->getEditorWindowPos().getY() + topOffset;
-			float width = wind->getEditorWindowDimensions().getX() - widthOffset;
-			float height = wind->getEditorWindowDimensions().getY() - heightOffset;
-
-			Raycast::calculateScreenRay(left, top, width, height, x, y);
+			Raycast::calculateScreenRay(x, y);
 		}
 		if (mMouseCode == RIGHT_MOUSE)
 		{
