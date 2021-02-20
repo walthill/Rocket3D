@@ -1,5 +1,7 @@
 #include "Color.h"
 
+const float Color::RGB01_CONVERSION = 0.00392156863f;
+
 Color Color::black(0, 0, 0);
 Color Color::white(255, 255, 255);
 Color Color::grey(127.5f, 127.5f, 127.5f);
@@ -46,28 +48,4 @@ void Color::setColor(float r, float g, float b, float a)
 void Color::setColor(float setRGB)
 {
 	mColorValue = rkm::Vector4(setRGB, setRGB, setRGB, setRGB);
-}
-
-
-float Color::getRedValue()
-{
-	return mColorValue.getX();
-}
-
-
-float Color::getGreenValue()
-{
-	return mColorValue.getY();
-}
-
-
-float Color::getBlueValue()
-{
-	return mColorValue.getZ();
-}
-
-
-float Color::getAlphaValue()
-{
-	return mColorValue.getW();
 }

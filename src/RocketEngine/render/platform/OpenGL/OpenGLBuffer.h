@@ -7,13 +7,21 @@
 class OpenGLVertexBuffer : public VertexBuffer
 {
 	public:
-		OpenGLVertexBuffer(float* vertices, uint32 size);
+		OpenGLVertexBuffer(float* vertices, uint32 size, DataType usage);
 		virtual ~OpenGLVertexBuffer();
 
-		virtual void Bind() const;
-		virtual void Unbind() const;
+		virtual void bind() const override;
+		virtual void unbind() const override;
+
+		virtual void setLayout(const BufferLayout& layout) override { mLayout = layout; }
+		virtual const BufferLayout& getLayout() const override { return mLayout; }
+		
+		//Used to update some portion of an existing buffer (call glBufferSubData)
+		virtual void updateBufferData(float* vertices, uint32 size, int offset) override;
+
 	private:
 		uint32 mRendererId = -1;
+		BufferLayout mLayout;
 };
 
 //Index Buffer - OpenGL EBO
@@ -23,8 +31,8 @@ class OpenGLIndexBuffer : public IndexBuffer
 		OpenGLIndexBuffer(uint32* indices, uint32 count);
 		virtual ~OpenGLIndexBuffer();
 
-		virtual void Bind() const;
-		virtual void Unbind() const;
+		virtual void bind() const;
+		virtual void unbind() const;
 
 		virtual uint32 getCount() const { return mCount; };
 	private:
@@ -39,10 +47,11 @@ public:
 	OpenGLFrameBuffer(int texWidth, int texHeight);
 	virtual ~OpenGLFrameBuffer();
 
-	virtual void Bind() const;
-	virtual void Unbind() const;
+	virtual void bind() const;
+	virtual void bindTexture() const;
+	virtual void unbind() const;
 
-	virtual uint32 getTextureId() const { return mTextureColorBuffer; };
+	virtual uint32 getTexture() const { return mTextureColorBuffer; };
 private:
 	int mTexWidth, mTexHeight;		// move to texture class
 	uint32 mTextureColorBuffer;		//TODO: texture class

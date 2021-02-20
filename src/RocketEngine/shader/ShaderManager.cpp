@@ -19,6 +19,12 @@
 
 std::map<ShaderKey, RK_Shader*> ShaderManager::mShaderList;
 
+ShaderManager::ShaderManager()
+{
+	mpCurrentShader = nullptr;
+	mShaderList = {}; 
+}
+
 ShaderManager::~ShaderManager()
 {
 	clean();
@@ -44,92 +50,53 @@ void ShaderManager::buildShaders()
 	}
 }
 
-void ShaderManager::useShaders()
+void ShaderManager::useShaderByKey(const ShaderKey& key)
 {
-	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.begin();
-
-	if (iter != mShaderList.end())
+	if (key != mShaderInUse)
 	{
-		iter->second->use();
+		std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(key);
+
+		if (iter != mShaderList.end())
+		{
+			mpCurrentShader = iter->second;
+			mpCurrentShader->use();
+			mShaderInUse = key;
+		}
 	}
 }
 
-void ShaderManager::useShaderByKey(ShaderKey key)
+void ShaderManager::setShaderInt(const std::string& intName, int value)
 {
-	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(key);
+	mpCurrentShader->setInt(intName, value);
+}
 
-	if (iter != mShaderList.end())
-	{
-		iter->second->use();
-		mShaderInUse = key;
-	}
+void ShaderManager::setShaderBool(const std::string& boolName, bool value)
+{
+	mpCurrentShader->setBool(boolName, value);
+}
+
+void ShaderManager::setShaderFloat(const std::string& floatName, float value)
+{
+	mpCurrentShader->setFloat(floatName, value);
 }
 
 
-void ShaderManager::setShaderInt(std::string intName, int value)
+void ShaderManager::setShaderMat4(const std::string& matrixName, const rkm::Mat4 &mat)
 {
-	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(mShaderInUse);
-
-	if (iter != mShaderList.end())
-	{
-		iter->second->setInt(intName, value);
-	}
-
+	mpCurrentShader->setMat4(matrixName, mat);
 }
 
-void ShaderManager::setShaderBool(std::string boolName, bool value)
+void ShaderManager::setShaderVec3(const std::string& vecName, const rkm::Vector3 &vec)
 {
-	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(mShaderInUse);
-
-	if (iter != mShaderList.end())
-	{
-		iter->second->setBool(boolName, value);
-	}
+	mpCurrentShader->setVec3(vecName, vec);
 }
 
-void ShaderManager::setShaderFloat(std::string floatName, float value)
+void ShaderManager::setShaderVec3(const std::string& vecName, float x, float y, float z)
 {
-	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(mShaderInUse);
-
-	if (iter != mShaderList.end())
-	{
-		iter->second->setFloat(floatName, value);
-	}
+	mpCurrentShader->setVec3(vecName, rkm::Vector3(x, y, z));
 }
 
-
-void ShaderManager::setShaderMat4(std::string matrixName, const rkm::Mat4 &mat)
-{
-	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(mShaderInUse);
-
-	if (iter != mShaderList.end())
-	{
-		iter->second->setMat4(matrixName, mat);
-	}
-}
-
-void ShaderManager::setShaderVec3(std::string vecName, const rkm::Vector3 &vec)
-{
-	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(mShaderInUse);
-
-	if (iter != mShaderList.end())
-	{
-		iter->second->setVec3(vecName, vec);
-	}
-}
-
-void ShaderManager::setShaderVec3(std::string vecName, float x, float y, float z)
-{
-	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(mShaderInUse);
-
-	if (iter != mShaderList.end())
-	{
-		rkm::Vector3 vec = rkm::Vector3(x,y,z);
-		iter->second->setVec3(vecName, vec);
-	}
-}
-
-RK_Shader* ShaderManager::getShaderByKey(ShaderKey key)
+RK_Shader* ShaderManager::getShaderByKey(const ShaderKey& key)
 {
 	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(key);
 

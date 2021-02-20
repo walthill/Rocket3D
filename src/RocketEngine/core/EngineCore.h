@@ -19,14 +19,12 @@
 #ifndef ENGINE_CORE_H
 #define ENGINE_CORE_H
 
-//See RocketImgLoader.h
-#ifndef STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
-#endif
-
 #include "../util/EngineUtils.h"
 #include "GameObjectManager.h"
 #include "../component/ComponentManager.h"
+#include "../render/buffers/VertexArray.h"
+#include "../render/buffers/Texture.h"
+#include "../render/buffers/Buffer.h"
 
 class Camera;
 class Window;
@@ -129,6 +127,9 @@ class EngineCore : public rkutil::Trackable
 		// screen quad VAO
 		unsigned int quadVAO, quadVBO;
 
+		std::shared_ptr<VertexArray> mQuadVA, mPlaneVA;
+		std::shared_ptr<Texture2D> mFloorTex;
+		std::shared_ptr<FrameBuffer> mGameRenderTex, mEditorRenderTex;
 
 		Window *mpWindowHandle;
 		InputSystem *mpInputSystem;
@@ -140,8 +141,8 @@ class EngineCore : public rkutil::Trackable
 		ComponentManager* mpComponentManager;
 
 		ShaderKey standardLightingShaderId = "standardLightingShader", emitterShaderId = "emitter";
-		Text* textObj;
-		Text* textObj2;
+		std::shared_ptr<Text> textObj, textObj2;
+
 		ShaderKey textShaderId = "textShader";
 
 		/***
