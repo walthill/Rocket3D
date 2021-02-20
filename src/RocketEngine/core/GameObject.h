@@ -142,6 +142,8 @@ class GameObject : public rkutil::Trackable
 		///Acesss the GameObject's point light
 		PointLightComponent* getPointLight();
 
+		std::string name = "New Gameobject";
+
 	private:
 		uint32 mId; //change in GameObjectId
 	//	ComponentId mMaterialId;

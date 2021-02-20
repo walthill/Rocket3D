@@ -2,8 +2,8 @@
 #define GAME_LAYER_H
 
 #include <render/layers/Layer.h>
-
-class GameApp;
+#include "../core/Editor.h"
+#include "../core/GameApp.h"
 
 class GameLayer : public Layer
 {
@@ -15,6 +15,7 @@ class GameLayer : public Layer
 		
 	private:
 		GameApp* mpGameInstance;
+		Editor* mpEditorInstance;
 };
 
 

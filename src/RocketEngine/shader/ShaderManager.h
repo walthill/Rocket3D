@@ -28,14 +28,13 @@
 const ShaderKey STANDARD_SHADER_KEY = "standardLightingShader";
 const ShaderKey EMITTER_SHADER_KEY = "emitter";
 
-
 class ShaderManager : public rkutil::Trackable
 {
 	public:
 		/***
 			* Constrcutor
 		***/
-		ShaderManager() { mShaderList = {}; };
+		ShaderManager();
 		/***
 			* Deconstrcutor cleans shader vector
 		***/
@@ -52,14 +51,9 @@ class ShaderManager : public rkutil::Trackable
 		static void buildShaders();
 
 		/***
-			* Run all stored shader programs
-		***/
-		void useShaders();
-		
-		/***
 			* Run shader program by passing in the corresponding key
 		***/
-		void useShaderByKey(ShaderKey key);
+		void useShaderByKey(const ShaderKey& key);
 
 		/***
 			* Add shader to the vector along with an identifier
@@ -70,12 +64,12 @@ class ShaderManager : public rkutil::Trackable
 			Assign value to the shader currently in use
 		****************************************/
 
-		void setShaderInt(std::string intName, int value);
-		void setShaderBool(std::string boolName, bool value);
-		void setShaderFloat(std::string floatName, float value);
-		void setShaderMat4(std::string matrixName, const rkm::Mat4 &mat);
-		void setShaderVec3(std::string vecName, float x, float y, float z); //Use three float values
-		void setShaderVec3(std::string vecName, const rkm::Vector3 &vec); //use Vector object in param
+		void setShaderInt(const std::string& intName, int value);
+		void setShaderBool(const std::string& boolName, bool value);
+		void setShaderFloat(const std::string& floatName, float value);
+		void setShaderMat4(const std::string& matrixName, const rkm::Mat4 &mat);
+		void setShaderVec3(const std::string& vecName, float x, float y, float z); //Use three float values
+		void setShaderVec3(const std::string& vecName, const rkm::Vector3 &vec); //use Vector object in param
 
 		/***
 			* Access currently used shader
@@ -84,7 +78,7 @@ class ShaderManager : public rkutil::Trackable
 		/***
 			* Access shader by its ShaderKey identifier
 		***/
-		RK_Shader* getShaderByKey(ShaderKey key);
+		RK_Shader* getShaderByKey(const ShaderKey& key);
 
 		/***
 			* Access the entire list of shaders
@@ -93,6 +87,7 @@ class ShaderManager : public rkutil::Trackable
 		
 	private:
 		static std::map<ShaderKey, RK_Shader*> mShaderList;
+		RK_Shader* mpCurrentShader;
 		ShaderKey mShaderInUse;
 
 };

@@ -26,10 +26,11 @@
 
 struct GLFWwindow;
 
-enum WindowBufferType {	COLOR_BUFFER = 1, DEPTH_BUFFER = 2, ACCUM_BUFFER = 4, STENCIL_BUFFER = 8 };
 enum WindowDrawMode { WIREFRAME = 1, VERTICES, FILL };
 enum WindowDrawFace { FRONT = 1, BACK, FRONT_AND_BACK };
 enum WindowCapabilityFlags { AA_MULTISAMPLE = 1, DEPTH_TEST = 2, STENCIL_TEST = 4, CULL_FACE = 8, BLEND = 16};
+
+//TODO: move window flags and draw mode code into render command
 
 class Window : public rkutil::Trackable
 {
@@ -59,16 +60,6 @@ class Window : public rkutil::Trackable
 			* Set window OpenGL capabilities
 		***/
 		void clean();
-
-		/***
-			* Draw a color to the screen
-		****/
-		void clearToColor(float r, float g, float b, float a = 1.0f);
-
-		/***
-			* Clear OpenGL render buffers based on specified bit parameter
-		****/
-		void clearWindowBuffers(int buffersToClear);
 		
 		/***
 			* Set size of this window using stored width & height

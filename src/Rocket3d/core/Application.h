@@ -10,6 +10,8 @@
 
 //Event system? for layer-unique inputs
 
+enum AppWindowType { GAME_WINDOW = 0, EDITOR_WINDOW, NUM_WINDOW_TYPES };
+
 class Application : public rkutil::Trackable
 {
 	//TODO: create play button to differentiate between (with bool flag?) inputs to game and to ImGui
@@ -58,8 +60,8 @@ class Application : public rkutil::Trackable
 		bool run();
 		void play();
 		bool isPlaying();
-		unsigned int getRenderTexture() { return mGameWindowTexture; }
-		void setGameRenderTexture(unsigned int texId);
+		unsigned int getRenderTexture(AppWindowType texId);
+		void setRenderTexture(AppWindowType type, unsigned int texId);
 		void calculateDeltaTime();
 		
 		inline void quit() { mIsRunning = false; }
@@ -67,6 +69,7 @@ class Application : public rkutil::Trackable
 		inline double getTime() { return mpMasterTimer->getTimeElapsedInSeconds(); };
 		inline Window* getAppWindow() { return mpAppWindow; };
 		inline MessageManager* getMessageManager() { return mpMessageManager;  }
+		inline ImGuiLayer* getEditor() { return mpImGuiLayer; }
 
 		float mDeltaTime;
 	private:
@@ -77,7 +80,7 @@ class Application : public rkutil::Trackable
 		rkutil::Timer* mpMasterTimer;
 		float mLastFrame;
 
-		unsigned int mGameWindowTexture;
+		unsigned int mGameWindowTexture, mEditorWindowTexture;
 		Window* mpAppWindow; //TODO: use unique _ptr
 		ImGuiLayer* mpImGuiLayer; //TODO: use unique _ptr
 		InputSystem* mpInputSystem;

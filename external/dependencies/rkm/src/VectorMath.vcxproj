@@ -116,6 +116,7 @@
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cpp\Mat3.cpp" />
     <ClCompile Include="cpp\Mat4.cpp" />
     <ClCompile Include="cpp\MatProj.cpp" />
     <ClCompile Include="cpp\RK_Timer.cpp" />
@@ -125,6 +126,7 @@
     <ClCompile Include="cpp\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cpp\include\Mat3.h" />
     <ClInclude Include="cpp\include\Mat4.h" />
     <ClInclude Include="cpp\include\MathUtils.h" />
     <ClInclude Include="cpp\include\MatProj.h" />

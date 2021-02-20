@@ -41,7 +41,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_click_callback(GLFWwindow* window, int button, int action, int modifier)
 {
 	InputSystem* wind = reinterpret_cast<InputSystem*>(glfwGetWindowUserPointer(window));
-	wind->onMouseClick(button, action, modifier);
+	double xpos, ypos;
+	//getting cursor position
+	glfwGetCursorPos(window, &xpos, &ypos);
+	wind->onMouseClick(button, action, modifier, xpos, ypos);
 }
 
 //Help found here https://stackoverflow.com/questions/27387040/referencing-glfws-callback-functions-from-a-class
@@ -62,6 +65,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 InputSystem::InputSystem(Window* window)
 {
+	mIsPlayMode = false;
 	mpAppInput = new AppInputSender();
 //	mpImGuiInput = new ImGuiInputSender();
 	mpGameInput = new GameInputSender();
@@ -79,44 +83,49 @@ InputSystem::InputSystem(Window* window)
 	glfwSetFramebufferSizeCallback(wind, framebuffer_size_callback);
 }
 
-
 void InputSystem::onMouseScroll(double xoffset, double yoffset)
 {
-	if (mPlayMode)
-	{
-		mpGameInput->onMouseScroll(xoffset, yoffset);
-	}
+	mpGameInput->setPlayMode(mIsPlayMode);
+	mpGameInput->onMouseScroll(xoffset, yoffset);
 
 	mpAppInput->onMouseScroll(xoffset, yoffset);
 }
 
-void InputSystem::onMouseClick(int button, int action, int modifier)
+void InputSystem::onMouseClick(int button, int action, int modifier, double xpos, double ypos)
 {
-	if (mPlayMode)
-	{
-		mpGameInput->handleMouseButtonEvents(button, action, modifier);
-	}
+	mpGameInput->setPlayMode(mIsPlayMode);
+	mpGameInput->handleMouseButtonEvents(button, action, modifier, xpos, ypos);
 
-	mpAppInput->handleMouseButtonEvents(button, action, modifier);
+	mpAppInput->handleMouseButtonEvents(button, action, modifier, xpos, ypos);
 }
 
 void InputSystem::onMouseMove(double xpos, double ypos)
 {
-	if (mPlayMode)
+	if (mIsPlayMode)
 	{
-		mpGameInput->onMouseMove(xpos, ypos);
+		if (modeSwitched)
+		{
+			modeSwitched = false;
+			mpGameInput->setFirstMouse(true);
+		}
 	}
-	
+	else
+	{
+		if (!modeSwitched)
+			modeSwitched = true;
+	}
+
+	mpGameInput->setPlayMode(mIsPlayMode);
+	mpGameInput->onMouseMove(xpos, ypos);
+
 	mpAppInput->onMouseMove(xpos, ypos);
 }
 
 
 void InputSystem::onKeyEvent(int key, int scancode, int action, int mods)
 {
-	if (mPlayMode)
-	{
-		mpGameInput->handleKeyEvents(key, scancode, action, mods);
-	}
+	mpGameInput->setPlayMode(mIsPlayMode);
+	mpGameInput->handleKeyEvents(key, scancode, action, mods);
 	
 	mpAppInput->handleKeyEvents(key, scancode, action, mods);
 }
@@ -129,8 +138,8 @@ void InputSystem::onWindowResize(int width, int height)
 void InputSystem::processInput()
 {
 	//Check and call events
-	if(mPlayMode)
-		mpGameInput->processInput(mpWindow);
+	mpGameInput->setPlayMode(mIsPlayMode);
+	mpGameInput->processInput(mpWindow);
 
 	glfwPollEvents();
 }

@@ -1,7 +1,8 @@
 #include "ImGuiLayer.h"
-#include <platform/OpenGL/ImGuiOpenGLRenderer.h>
-#include <platform/OpenGL/ImGuiGLFWRenderer.h>
+#include <render/platform/OpenGL/ImGuiOpenGLRenderer.h>
+#include <render/platform/GLFW/ImGuiGLFWRenderer.h>
 #include "../core/Application.h"
+#include "../input/game/EditorMessages.h"
 #include <glfw3.h>
 //#include <platform\OpenGL\ImGuiGLFWRenderer.cpp>
 
@@ -64,6 +65,14 @@ void ImGuiLayer::onImGuiRender()
 	drawInspector();
 	drawSceneTree();
 	drawGameWindow();
+	drawEditorWindow();
+
+	//TODO: tmp
+	static float value = 0;
+	ImGui::SliderFloat("Single axis rotation test", &value, 0, 360);
+	EditorKeyDown::angle = value;
+	Message* msg = new EditorKeyDown(KEY_T);
+	Application::getInstance()->getMessageManager()->addMessage(msg, 1);	
 }
 
 void ImGuiLayer::begin()
@@ -212,7 +221,7 @@ void ImGuiLayer::drawGameWindow()
 	//-- Render game scene to ImGui window - https://gamedev.stackexchange.com/questions/140693/how-can-i-render-an-opengl-scene-into-an-imgui-window
 
 	Application* app = Application::getInstance();
-	mGameWindowTexture = (void*)app->getRenderTexture();
+	mGameWindowTexture = (void*)app->getRenderTexture(GAME_WINDOW);
 	
 	//TODO: generalize game render texture width and height
 
@@ -221,7 +230,7 @@ void ImGuiLayer::drawGameWindow()
 	const int H = 450;
 
 	// We set the same viewport size (plus margin) to the next window (if first use)
-	ImGui::SetNextWindowSize(ImVec2(W+15, H+35), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(W+10, H+35), ImGuiCond_Once);
 
 	ImGui::Begin("Game");
 	{
@@ -237,9 +246,57 @@ void ImGuiLayer::drawGameWindow()
 		// Under OpenGL the ImGUI image type is GLuint
 		// So make sure to use "(void *)tex" but not "&tex"
 		ImGui::GetWindowDrawList()->AddImage(mGameWindowTexture, 
-			ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y+30),
+			ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y+20),
 			ImVec2(pos.x + w, pos.y + h), 
 			ImVec2(0, 1), ImVec2(1, 0));
 	}
 	ImGui::End();
+}
+
+void ImGuiLayer::drawEditorWindow()
+{
+	Application* app = Application::getInstance();
+	mGameWindowTexture = (void*)app->getRenderTexture(EDITOR_WINDOW);
+
+	//TODO: generalize game render texture width and height
+
+	// My Game has a different viewport than the editor's one:
+	const int W = 600;
+	const int H = 450;
+
+	// We set the same viewport size (plus margin) to the next window (if first use)
+	ImGui::SetNextWindowSize(ImVec2(W + 10, H + 35), ImGuiCond_Once);
+
+	ImGui::Begin("Editor");
+	{
+		mEditorWindowHeight = ImGui::GetWindowHeight();
+		mEditorWindowWidth = ImGui::GetWindowWidth();
+		float h = mEditorWindowHeight - 35;
+		float w = mEditorWindowWidth - 15;
+
+		// Get the current cursor position (where your window is)
+		ImVec2 pos = ImGui::GetCursorScreenPos();
+
+		// Ask ImGui to draw it as an image:
+		// Under OpenGL the ImGUI image type is GLuint
+		// So make sure to use "(void *)tex" but not "&tex"
+		ImGui::GetWindowDrawList()->AddImage(mGameWindowTexture,
+			ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y + 20),
+			ImVec2(pos.x + w, pos.y + h),
+			ImVec2(0, 1), ImVec2(1, 0));
+
+		mEditorPos = rkm::Vector2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+
+	}
+	ImGui::End();
+}
+
+rkm::Vector2 ImGuiLayer::getEditorWindowDimensions()
+{
+	return rkm::Vector2(mEditorWindowWidth, mEditorWindowHeight);
+}
+
+rkm::Vector2 ImGuiLayer::getEditorWindowPos()
+{
+	return mEditorPos;
 }

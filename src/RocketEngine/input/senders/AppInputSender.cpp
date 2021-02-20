@@ -22,7 +22,7 @@ bool AppInputSender::handleKeyEvents(int key, int scancode, int action, int mods
 	return shouldConsumeEvent;
 }
 
-bool AppInputSender::handleMouseButtonEvents(int key, int action, int mods)
+bool AppInputSender::handleMouseButtonEvents(int key, int action, int mods, double xpos, double ypos)
 {
 	bool shouldConsumeEvent = false;
 
@@ -54,11 +54,11 @@ void AppInputSender::onKeyRepeat(int key, int scancode, int action, int mods)
 
 
 
-void AppInputSender::onMouseDown(int key, int action, int mods)
+void AppInputSender::onMouseDown(int key, int action, int mods, double xpos, double ypos)
 {
 }
 
-void AppInputSender::onMouseUp(int key, int action, int mods)
+void AppInputSender::onMouseUp(int key, int action, int mods, double xpos, double ypos)
 {
 }
 

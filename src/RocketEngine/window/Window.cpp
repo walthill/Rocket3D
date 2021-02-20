@@ -20,8 +20,8 @@
 
 #include "Window.h"
 #include <glad/glad.h>
-#include "../logging/RK_Log.h"
 #include <glfw3.h>
+#include "../logging/RK_Log.h"
 
 bool Window::mShouldInitGLFW = true;
 
@@ -101,23 +101,6 @@ void Window::disableWindowFlags(int settingsToDisable)
 		glDisable(GL_CULL_FACE);
 	if (settingsToDisable & BLEND)
 		glDisable(GL_BLEND);
-}
-
-void Window::clearWindowBuffers(int buffersToClear)
-{
-	if (buffersToClear & COLOR_BUFFER)
-		glClear(GL_COLOR_BUFFER_BIT);
-	if (buffersToClear & DEPTH_BUFFER)
-		glClear(GL_DEPTH_BUFFER_BIT);
-	/*if (buffersToClear & ACCUM_BUFFER)	//Seems to be deprecated in current glfw/OpenGL
-		glClear(GL_ACCUM_BUFFER);*/			// http://stackoverflow.com/questions/23990366/ddg#23995804
-	if (buffersToClear & STENCIL_BUFFER)
-		glClear(GL_STENCIL_BUFFER_BIT);
-}
-
-void Window::clearToColor(float r, float g, float b, float a)
-{
-	glClearColor(r, g, b, a);
 }
 
 void Window::setViewport(int x, int y)

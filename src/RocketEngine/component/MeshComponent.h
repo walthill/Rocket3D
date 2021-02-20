@@ -23,8 +23,7 @@
 #include <rkm/MathUtils.h>
 #include "Component.h"
 #include "../../RocketEngine/shader/ShaderManager.h"
-
-class Model;
+#include "../../RocketEngine/asset/Model.h"
 
 const static std::string modelFileLocation = "../../assets/models/";
 

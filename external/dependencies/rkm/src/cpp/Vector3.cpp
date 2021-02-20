@@ -80,12 +80,7 @@ namespace rkm {
 	//(NOTE): Good for referencing uniform values on shaders
 	const float* Vector3::toArray() const
 	{
-		float *arr = new float[3];
-
-		arr[0] = mX;
-		arr[1] = mY;
-		arr[2] = mZ;
-
+		float arr[3] = { mX, mY, mZ };
 		return arr;
 	}
 

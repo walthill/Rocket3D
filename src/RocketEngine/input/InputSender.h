@@ -14,8 +14,8 @@ class InputSender
 		virtual void onKeyUp(int key, int scancode, int action, int mods) = 0;
 		virtual void onKeyRepeat(int key, int scancode, int action, int mods) = 0;
 
-		virtual void onMouseDown(int button, int action, int mods) = 0;
-		virtual void onMouseUp(int button, int action, int mods) = 0;
+		virtual void onMouseDown(int button, int action, int mods, double xpos, double ypos) = 0;
+		virtual void onMouseUp(int button, int action, int mods, double xpos, double ypos) = 0;
 
 		bool mFirstMouse = true;
 		double mLastX = 0, mLastY = 0;

@@ -1,6 +1,6 @@
 #include "GameObject.h"
-#include "GameApp.h"
-#include "../component/ComponentManager.h"
+#include "../../Rocket3d/core/GameApp.h"
+#include "EngineCore.h"
 
 GameObject::GameObject()
 {
@@ -39,7 +39,7 @@ void GameObject::render()
 
 MeshComponent * GameObject::getMesh()
 {
-	auto pComponent = GameApp::getInstance()->getComponentManager()->getMeshComponent(mMeshId);
+	auto pComponent = GameApp::getInstance()->getRocketEngine()->getComponentManager()->getMeshComponent(mMeshId);
 	return pComponent;
 }
 
@@ -51,18 +51,18 @@ MeshComponent * GameObject::getMesh()
 
 SpotLightComponent* GameObject::getSpotLight()
 {
-	auto pComponent = GameApp::getInstance()->getComponentManager()->getSpotlightComponent(mSpotLightId);
+	auto pComponent = GameApp::getInstance()->getRocketEngine()->getComponentManager()->getSpotlightComponent(mSpotLightId);
 	return pComponent;
 }
 
 DirectionalLightComponent* GameObject::getDirectionalLight()
 {
-	auto pComponent = GameApp::getInstance()->getComponentManager()->getDirectionalLightComponent(mDirectionalLightId);
+	auto pComponent = GameApp::getInstance()->getRocketEngine()->getComponentManager()->getDirectionalLightComponent(mDirectionalLightId);
 	return pComponent;
 }
 
 PointLightComponent* GameObject::getPointLight()
 {
-	auto pComponent = GameApp::getInstance()->getComponentManager()->getPointLightComponent(mPointLightId);
+	auto pComponent = GameApp::getInstance()->getRocketEngine()->getComponentManager()->getPointLightComponent(mPointLightId);
 	return pComponent;
 }

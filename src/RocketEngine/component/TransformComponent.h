@@ -23,6 +23,18 @@
 #include <rkm/Vector3.h>
 #include "Component.h"
 
+struct Rotation
+{
+	float angle;			///< Rotation angle
+	rkm::Vector3 rotationAxis;	///< Axis of rotation
+
+	///Default constructor sets all values to zero
+	Rotation() : angle(0), rotationAxis(rkm::Vector3::up) {}
+	///Constructor that takes in values for struct variables
+	Rotation(rkm::Vector3 axis, float a) : angle(a), rotationAxis(axis) {}
+};
+
+
 /***************************************************************************//**
  * @brief 	Data used in every transform component.
  *
@@ -31,7 +43,7 @@
  ******************************************************************************/
 struct TransformData
 {
-	struct Rotation
+	/*struct Rotation
 	{
 		float angle;			///< Rotation angle
 		rkm::Vector3 rotationAxis;	///< Axis of rotation
@@ -41,7 +53,7 @@ struct TransformData
 		///Constructor that takes in values for struct variables
 		Rotation(rkm::Vector3 axis, float a) : angle(a), rotationAxis(axis) {}
 	};
-
+	*/
 	Rotation rotation;	///< Transform rotation data
 	rkm::Vector3 position;	///< Transform position value
 	rkm::Vector3 scale;		///< Transform scale value
@@ -81,6 +93,8 @@ class TransformComponent : public Component
 		rkm::Vector3 getPosition() { return mTransformData.position; };
 		///Access the transform component scale
 		rkm::Vector3 getScale() { return mTransformData.scale; };
+		///Access the transform component rotation data
+		Rotation getRotation() { return mTransformData.rotation; };
 		///Check if the transform component data has changed
 		bool hasChanged() { return mDataChanged; }
 

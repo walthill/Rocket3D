@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "../layers/GameLayer.h"
+#include <rkm/Mat4.h>
 
 /*	TODO	
  * ============================================================
@@ -23,8 +24,15 @@ Application::Application()
 	mpMasterTimer->start();
 	
 	mpAppWindow = new Window();
-	mpAppWindow->initialize(1000, 750, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE, false);
-//	mpAppWindow->setWindowDrawMode(FRONT_AND_BACK, WIREFRAME);
+	mpAppWindow->initialize(1000, 750, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE);
+	mpAppWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
+	float arr[16] = { 1, 3, 5, 9,
+					  1, 3, 1, 7,
+					  4, 3, 9, 7,
+					  5, 2, 0, 9 };
+	rkm::Mat4 mat(arr);
+	
+	rkm::Mat4::invert(mat);
 }
 
 Application::~Application()
@@ -71,9 +79,6 @@ bool Application::run()
 {
 	while (mIsRunning)
 	{
-		mpAppWindow->clearToColor(0.4f, 0.6f, 0.6f, 1.0f);
-		mpAppWindow->clearWindowBuffers(COLOR_BUFFER | DEPTH_BUFFER);
-
 		onMessage(mDeltaTime);
 		mpInputSystem->processInput();
 		calculateDeltaTime();
@@ -107,9 +112,24 @@ bool Application::isPlaying()
 	return mpInputSystem->isPlaying();
 }
 
-void Application::setGameRenderTexture(unsigned int texId)
+unsigned int Application::getRenderTexture(AppWindowType texId)
 {
-	mGameWindowTexture = texId;
+	unsigned int returnId = -1;
+
+	if (texId == GAME_WINDOW)
+		returnId = mGameWindowTexture;
+	else if(texId == EDITOR_WINDOW)
+		returnId = mEditorWindowTexture;
+
+	return returnId;
+}
+
+void Application::setRenderTexture(AppWindowType type, unsigned int texId)
+{
+	if (type == GAME_WINDOW)
+		mGameWindowTexture = texId;
+	else if (type == EDITOR_WINDOW)
+		mEditorWindowTexture = texId;
 }
 
 void Application::calculateDeltaTime()

@@ -42,7 +42,7 @@ class InputSystem : public rkutil::Trackable
 		/***
 			* Callback for mouse clicks
 		***/
-		void onMouseClick(int button, int action, int modifier);
+		void onMouseClick(int button, int action, int modifier, double xpos, double ypos);
 
 		/***
 			* Callback for mouse movement
@@ -58,8 +58,8 @@ class InputSystem : public rkutil::Trackable
 		***/
 		void processInput();
 
-		inline void play() { mPlayMode = !mPlayMode; mpWindow->setCursor(!mPlayMode); }
-		bool isPlaying() { return mPlayMode; }
+		inline void play() { mIsPlayMode = !mIsPlayMode; mpWindow->setCursor(!mIsPlayMode); }
+		bool isPlaying() { return mIsPlayMode; }
 		Window* getWindow() { return mpWindow; }
 
 	private:
@@ -67,7 +67,8 @@ class InputSystem : public rkutil::Trackable
 		GameInputSender* mpGameInput;
 
 		Window* mpWindow;
-		bool mPlayMode = true;
+		bool mIsPlayMode = true;
+		bool modeSwitched = false;
 };
 
 #endif // !INPUT_SYS_H

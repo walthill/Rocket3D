@@ -20,8 +20,7 @@
 #include "../../RocketEngine/shader/ShaderManager.h"
 //#include "../input/Message.h"
 //#include "../input/MessageManager.h"
-#include "GameObjectManager.h"
-#include "../component/ComponentManager.h"
+#include "../../RocketEngine/logging/RK_Log.h"
 #include <window/Window.h>
 
 GameApp* GameApp::mpGameApp = nullptr;
@@ -37,26 +36,22 @@ bool GameApp::initialize()
 	pPerformanceTracker->startTracking(mINIT_TRACKER_NAME);
 
 	mpRocketEngine = new EngineCore();
-//	mpGameMessageManager = new GameMessageManager();
 	mpMasterTimer = new rkutil::Timer();
 
 	if (!mpRocketEngine->initialize())
 		return false;
-
-	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);
-	mpComponentManager = new ComponentManager(MAX_NUM_OBJECTS, mpRocketEngine->getShaderManager(), STANDARD_SHADER_KEY);
 	
 	//=========================================================================
 	//		Creating GameObjects
 	//=========================================================================
 
-	TransformData t = { rkm::Vector3(0, -1, -3), rkm::Vector3::one * 0.5f, rkm::Vector3::up, 45.0f };
+	TransformData t = { rkm::Vector3(0, 1, -3), rkm::Vector3::one * 0.5f, rkm::Vector3::up, 45.0f };
 	
 	MeshComponentData meshData = {"cube", STANDARD_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY)};
 	
 	//MaterialData matData = { meshData.shader, STANDARD_SHADER };
 	
-	GameObject* o =	mpGameObjectManager->createGameObject(t, meshData);// , matData);
+	GameObject* o =	mpRocketEngine->getGameObjectManager()->createGameObject(t, meshData);// , matData);
 
 
 	TransformData t2 = { rkm::Vector3(1.5f,  -1.5f, -2.5f), rkm::Vector3::one * 0.1f, rkm::Vector3::up, 0 };
@@ -72,10 +67,10 @@ bool GameApp::initialize()
 	rkm::Vector3* pointLightPositions;
 	
 	pointLightPositions = new rkm::Vector3[4]{
-		rkm::Vector3(0.7f,  0.2f,  2.0f),
-		rkm::Vector3(2.3f, -3.3f, -4.0f),
-		rkm::Vector3(-4.0f,  2.0f, -12.0f),
-		rkm::Vector3(0.0f,  -1.0f, -1.0f)
+		rkm::Vector3(0.7f,  2.2f,  2.0f),
+		rkm::Vector3(2.3f, -1.3f, -4.0f),
+		rkm::Vector3(-4.0f,  4.0f, -12.0f),
+		rkm::Vector3(0.0f,  1.0f, -1.0f)
 	};
 
 	BaseLightData baseLightData = { ambient, diffuse, specular };
@@ -99,24 +94,24 @@ bool GameApp::initialize()
 	spotData.mQuadratic = quadratic;
 	spotData.mCutoff = cos(rkm::degToRad(12.5f));
 	spotData.mOuterCutoff = cos(rkm::degToRad(17.5f));
-	spotData.mpCamHandle = mpRocketEngine->getCamera();
+	spotData.mpCamHandle = mpRocketEngine->getGameCamera();
 
 	//Point lights
 	for (size_t i = 0; i < 4; i++)
 	{
 		t2.position = pointLightPositions[i];
-		GameObject* pointLight = mpGameObjectManager->createGameObject(t2, lightMeshData);
+		GameObject* pointLight = mpRocketEngine->getGameObjectManager()->createGameObject(t2, lightMeshData);
 		pointLightData.mPosition = pointLightPositions[i];
-		mpGameObjectManager->addPointLight(pointLight->getId(), pointLightData);
+		mpRocketEngine->getGameObjectManager()->addPointLight(pointLight->getId(), pointLightData);
 	}
 
 	//Directional light
-	GameObject* dirLight = mpGameObjectManager->createGameObject(t2, lightMeshData);
-	mpGameObjectManager->addDirectionalLight(dirLight->getId(), dirData);
+	GameObject* dirLight = mpRocketEngine->getGameObjectManager()->createGameObject(t2, lightMeshData);
+	mpRocketEngine->getGameObjectManager()->addDirectionalLight(dirLight->getId(), dirData);
 
 	//Spotlight light
-	GameObject* spotLight = mpGameObjectManager->createGameObject();
-	mpGameObjectManager->addSpotLight(spotLight->getId(), spotData);
+	GameObject* spotLight = mpRocketEngine->getGameObjectManager()->createGameObject();
+	mpRocketEngine->getGameObjectManager()->addSpotLight(spotLight->getId(), spotData);
 
 	//=========================================================================
 
@@ -129,6 +124,13 @@ bool GameApp::initialize()
 	mpAppHandle = Application::getInstance();
 	mKeepRunning = true;
 
+	mpPerformanceTracker = new rkutil::PerformanceTracker();
+	mpFrameTimer = new rkutil::Timer();
+
+	//render first scene frame when running engine editor app
+	update();
+	render();
+
 	mpMasterTimer->start();
 
 	return true;
@@ -136,13 +138,9 @@ bool GameApp::initialize()
 
 void GameApp::clean()
 {
-	delete mpGameObjectManager;
-	delete mpComponentManager;
-
 	delete mpPerformanceTracker;
 	delete mpFrameTimer;
 	delete mpMasterTimer;
-//	delete mpGameMessageManager;
 	delete mpRocketEngine;
 }
 
@@ -150,33 +148,27 @@ bool GameApp::processLoop()
 {
 	if (mpAppHandle->isPlaying())
 	{
-
-		mpPerformanceTracker = new rkutil::PerformanceTracker();
-
-		mpFrameTimer = new rkutil::Timer();
-
 		//GameApp loop is now unecessary. the app loop is handled by Application. 
 		//This class is called in the GameLayer and looped through onUpdate()
 		//while (!mShouldExit)
-		{
-			mpPerformanceTracker->startTracking(mLOOP_TRACKER_NAME);
 
-			mpFrameTimer->start();
+		mpPerformanceTracker->startTracking(mLOOP_TRACKER_NAME);
 
-			mpPerformanceTracker->startTracking(mDRAW_TRACKER_NAME);
+		mpFrameTimer->start();
 
-			update();
-			render();
+		mpPerformanceTracker->startTracking(mDRAW_TRACKER_NAME);
 
-			mpPerformanceTracker->stopTracking(mDRAW_TRACKER_NAME);
-			mpFrameTimer->sleepUntilElapsed(m60FPS_FRAME_TIME);
-			mpPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
+		update();
+		render();
 
-			RK_INFO_C("loop took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) +
-				"ms draw took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) + "ms\n");
-			//mFPS = (int)(1000.0 / mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
-			//RK_INFO_C("FPS: " + std::to_string(mFPS));
-		}
+		mpPerformanceTracker->stopTracking(mDRAW_TRACKER_NAME);
+		mpFrameTimer->sleepUntilElapsed(FRAME_TIME_60FPS);
+		mpPerformanceTracker->stopTracking(mLOOP_TRACKER_NAME);
+
+		RK_INFO_C("loop took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mLOOP_TRACKER_NAME)) +
+			"ms draw took:" + std::to_string(mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME)) + "ms\n");
+		//mFPS = (int)(1000.0 / mpPerformanceTracker->getElapsedTime(mDRAW_TRACKER_NAME));
+		//RK_INFO_C("FPS: " + std::to_string(mFPS));
 	}
 
 	return mKeepRunning;
@@ -184,18 +176,12 @@ bool GameApp::processLoop()
   
 void GameApp::update()
 {
-//	mpGameMessageManager->processMessagesForThisFrame(mpRocketEngine->deltaTime);
 	mpRocketEngine->update(); 
-	mpComponentManager->update(mpRocketEngine->deltaTime);
-	mpGameObjectManager->updateAll(mpRocketEngine->deltaTime);
 }
 
 void GameApp::render()
 {
-	mpRocketEngine->render();
-	mpComponentManager->renderMeshes();
-	mpRocketEngine->renderText();
-	mpRocketEngine->renderFramebufferScreen();
+	mpRocketEngine->render(EngineCore::GAME_VIEW);
 }
 
 double GameApp::getCurrentTime() 

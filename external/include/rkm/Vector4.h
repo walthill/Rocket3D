@@ -48,6 +48,7 @@ namespace rkm {
 			//Output overload
 			friend std::ostream& operator<<(std::ostream& os, const Vector4& vec);
 
+			inline Vector3 xyz() const { return Vector3(getX(), getY(), getZ()); }
 			inline float getX() const { return mX; };
 			inline float getY() const { return mY; };
 			inline float getZ() const { return mZ; };

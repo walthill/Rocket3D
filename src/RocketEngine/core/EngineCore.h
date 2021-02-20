@@ -19,12 +19,12 @@
 #ifndef ENGINE_CORE_H
 #define ENGINE_CORE_H
 
-//See RocketImgLoader.h
-#ifndef STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
-#endif
-
 #include "../util/EngineUtils.h"
+#include "GameObjectManager.h"
+#include "../component/ComponentManager.h"
+#include "../render/buffers/VertexArray.h"
+#include "../render/buffers/Texture.h"
+#include "../render/buffers/Buffer.h"
 
 class Camera;
 class Window;
@@ -43,7 +43,7 @@ class Text;
 class EngineCore : public rkutil::Trackable
 {
 	public:
-
+		enum ViewId { GAME_VIEW = 0, EDITOR_VIEW  };
 		//doxygen example
 		/// Empty class constructor
 		EngineCore();
@@ -53,11 +53,6 @@ class EngineCore : public rkutil::Trackable
 		***/
 		~EngineCore();
 		
-		/***
-			* Initialize GLFW and set OpenGL flags
-		***/
-		void initGLFW();
-
 		/***
 			* Initialize engine components
 		***/
@@ -73,18 +68,11 @@ class EngineCore : public rkutil::Trackable
 		***/
 		void update();
 		
-		void processViewProjectionMatrices();
-
-
 		/***
 			* Draw models and lighting data to the window
 		***/
-		void render();
+		void render(int screenType);
 		
-		void prepFrambuffer();
-
-		void renderFramebufferScreen();
-
 		/***
 			* Draw ui elements to the window. Should be called last before SwapBuffer()
 		***/
@@ -116,35 +104,45 @@ class EngineCore : public rkutil::Trackable
 		 *************************************************************************/
 		void toggleWireframe(bool showWireframe);
 
+		inline GameObjectManager* getGameObjectManager() { return mpGameObjectManager; }
+		inline ComponentManager* getComponentManager() { return mpComponentManager; }
 		inline ShaderManager* getShaderManager() { return mpShaderManager; };
-		inline Camera* getCamera() { return mpCam; }
+		inline Camera* getGameCamera() { return mpGameCam; }
+		inline Camera* getEditorCamera() { return mpEditorCam; }
 		
 		// Time between current frame and last frame
 		float deltaTime = 0.0f;	
 
 	private:
 		const std::string mMODEL_PATH = "../../assets/models/";
+		const int MAX_NUM_OBJECTS = 300, MAX_NUM_COMPONENETS = 1000, GAME_SCREEN = 0, EDITOR_SCREEN = 1;
 		int mAppWindowWidth = 0, mAppWindowHeight = 0;
 		float lastFrame = 0.0f; // Time of last frame
 		
-		unsigned int framebuffer;
-		unsigned int textureColorbuffer;
+		unsigned int framebuffer, editorFramebuffer;
+		unsigned int textureColorbuffer, textureColorbuffer2;
 		unsigned int floorTexture;
 		unsigned int planeVAO, planeVBO;
 
 		// screen quad VAO
 		unsigned int quadVAO, quadVBO;
 
+		std::shared_ptr<VertexArray> mQuadVA, mPlaneVA;
+		std::shared_ptr<Texture2D> mFloorTex;
+		std::shared_ptr<FrameBuffer> mGameRenderTex, mEditorRenderTex;
 
 		Window *mpWindowHandle;
 		InputSystem *mpInputSystem;
-		Camera* mpCam;
-
+		Camera* mpGameCam;
+		Camera* mpEditorCam;
 		ShaderManager* mpShaderManager;
-		
+
+		GameObjectManager* mpGameObjectManager;
+		ComponentManager* mpComponentManager;
+
 		ShaderKey standardLightingShaderId = "standardLightingShader", emitterShaderId = "emitter";
-		Text* textObj;
-		Text* textObj2;
+		std::shared_ptr<Text> textObj, textObj2;
+
 		ShaderKey textShaderId = "textShader";
 
 		/***
@@ -156,6 +154,18 @@ class EngineCore : public rkutil::Trackable
 			* Calculate real time between frames
 		***/
 		void calculateDeltaTime();
+
+		void processViewProjectionMatrices(int screenType);
+
+		void beginRender(int screenType);
+
+		/***
+			* Draw models and lighting data to the window
+		***/
+
+		void endRender(int screenType);
+		void prepFrambuffer(int screenType);
+		void renderFramebufferScreen(int screenType);
 };
 
 #endif // !ENGINE_CORE_H

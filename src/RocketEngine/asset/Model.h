@@ -26,11 +26,7 @@
 #define MODEL_H
 
 #include "../render/Mesh.h"
-#include <assimp/Importer.hpp>
 #include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include "image/RocketImgLoader.h"
-#include "../logging/RK_Log.h"
 #include <rkutil/Trackable.h>
 
 //unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
@@ -58,12 +54,13 @@ class Model : public rkutil::Trackable
 		/*
 			* Loads in textures from the given file path and stores the textures in an OpenGL-compatible form
 		*/
-		static unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false);
+		unsigned int LoadTextureFromFile(const char* path, const std::string& directory, bool gamma = false);
 
 
 	private:
 		ModelData mModelData;
-		std::vector<Texture> texturesLoaded;
+
+		std::vector<TextureData> texturesLoaded;
 
 		/*
 			* Initialize model data and store in a ModelData struct 
@@ -84,7 +81,7 @@ class Model : public rkutil::Trackable
 		/*
 			* Takes in a material object. Accesses & stores textures from that material
 		*/
-		std::vector<Texture> getTexturesFromMaterial(aiMaterial* mat, aiTextureType type, std::string typeName); 
+		std::vector<TextureData> getTexturesFromMaterial(aiMaterial* mat, aiTextureType type, std::string typeName); 
 };
 
 #endif // !MODEL_H

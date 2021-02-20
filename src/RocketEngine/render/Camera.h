@@ -35,67 +35,31 @@ class Camera : public rkutil::Trackable
 			* Constructor initializes camera member variables from paramters
 			* Calculates Front, Right, and Up for the camera
 		***/
-		Camera(rkm::Vector3 position = rkm::Vector3::zero, rkm::Vector3 up = rkm::Vector3::up, float yaw = -90.0f, float pitch = 0.0f)
-		{
-			mMoveSpeed = 2.5f;
-			mMouseSensitivity = 0.1f;
-			mZoom = 45.0f;
-
-			mPos = position;
-			mWorldUp = up;
-			mYaw = yaw;
-			mPitch = pitch;
-			updateCameraVectors();
-		};
+		Camera(rkm::Vector3 position = rkm::Vector3::zero, rkm::Vector3 up = rkm::Vector3::up, float yaw = -90.0f, float pitch = 0.0f);
+		
 		/* Empty deconstructor */
 		~Camera() {};
 
 		/***
 			* Calculates mouse movement and converts params into a new camera position
 		***/
-		void processMouseMovement(float deltaTime, float xOffset, float yOffset, bool constrainPitch = true)
-		{
-			xOffset *= mMouseSensitivity;
-			yOffset *= mMouseSensitivity;
-
-			mYaw += xOffset;
-			mPitch += yOffset; 
-
-			//First-person camera -- limit ability to look up and down
-			if(constrainPitch)
-				mPitch = rkm::clamp(mPitch, -89.0f, 89.0f);
-
-			updateCameraVectors();
-		};
-
-
+		void processMouseMovement(float deltaTime, float xOffset, float yOffset, bool constrainPitch = true);
 
 		/***
 			* Camera can zoom in/out
 		***/		
-		void processMouseScroll(float yOffset)
-		{
-			if (mZoom >= 1.0f && mZoom <= 45.0f)
-				mZoom -= yOffset;
+		void processMouseScroll(float yOffset);
 
-			mZoom = rkm::clamp(mZoom, 1.0f, 45.0f);
-		};
-
-		/***
-			* Access the camera's view matrix
-		***/
-		rkm::Mat4 getViewMatrix() { return rkm::Mat4::lookAt(mPos, mPos + mFront, mUp); };
-		
 		/***
 			* Move camera left
 		***/
-		void moveCameraLeft(float deltaTime) { mPos -= mRight * mMoveSpeed * deltaTime; };
+		void moveCameraLeft(float deltaTime);
 		
 		/***
 			* Move camera right
 		***/
-		void moveCameraRight(float deltaTime) { mPos += mRight * mMoveSpeed * deltaTime; };
-
+		void moveCameraRight(float deltaTime);
+		
 		/*
 			BenjiHor  @ Learn OpenGl - https://learnopengl.com/Getting-started/Camera
 			
@@ -111,33 +75,36 @@ class Camera : public rkutil::Trackable
 		/***
 			* Move camera forward
 		***/
-		void moveCameraForward(float deltaTime) 
-		{ 
-			mPos += rkm::Vector3::cross(mUp, mRight).normalize() * mMoveSpeed * deltaTime;
-	//		mPos += Vector3::cross(mWorldUp, mRight).normalize() * mMoveSpeed * deltaTime;
-		};
-		
+		void moveCameraForward(float deltaTime, bool canFly = false);
+
 		/***
 			* Move camera back
 		***/
-		void moveCameraBack(float deltaTime)
-		{ 
-			mPos -= rkm::Vector3::cross(mUp, mRight).normalize() * mMoveSpeed * deltaTime;
-//			mPos -= Vector3::cross(mWorldUp, mRight).normalize() * mMoveSpeed * deltaTime;
-		};
+		void moveCameraBack(float deltaTime, bool canFly = false);
+
+		inline void storePerspectiveMatrix(const rkm::Mat4& projMatrix) { mPerspectiveMatrix = projMatrix; }
+
+		/***
+			* Access the camera's view matrix
+		***/
+		inline rkm::Mat4 getViewMatrix() { return rkm::Mat4::lookAt(mPos, mPos + mFront, mUp); };
+
+		inline rkm::Mat4 getPerspectiveMatrix() { return mPerspectiveMatrix; }
 
 		/***
 			* Access camera front vector
 		***/
-		rkm::Vector3* getFront() { return &mFront; };
+		inline rkm::Vector3* getFront() { return &mFront; };
+		
 		/***
 			* Access camera FOV
 		***/
-		float getFov() { return mZoom; };
+		inline float getFov() { return mZoom; };
+		
 		/***
 			* Access camera position vector
 		***/
-		rkm::Vector3* getPosition() { return &mPos; };
+		inline rkm::Vector3* getPosition() { return &mPos; };
 
 	private:
 		// Camera Attributes
@@ -155,7 +122,8 @@ class Camera : public rkutil::Trackable
 		float mMoveSpeed = 2.5f;
 		float mMouseSensitivity = 0.1f;
 		float mZoom = 45.0f;
-
+		
+		rkm::Mat4 mPerspectiveMatrix;
 
 		/***
 			* Calculate camera position and rotation

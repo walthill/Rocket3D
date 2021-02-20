@@ -3,10 +3,8 @@
 
 #include <rkutil/Trackable.h>
 #include <rkm/Vector2.h>
-#include <rkm/Vector3.h>
 #include "Color.h"
 #include "../util/EngineUtils.h"
-#include <map>
 
 struct TextData
 {
@@ -21,37 +19,22 @@ class RK_Shader;
 class Text : public rkutil::Trackable
 {
 	public:
-		Text();
-		Text(std::string fontName, RK_Shader *shader);
-		~Text();
+		virtual ~Text() {};
 
-		void init(std::string fontName, RK_Shader *shader);
+		static Text* create(std::string fontName, RK_Shader *shader);
 		void initTextData(TextData data);
-		void destroy();
 
-		void renderText();
-		void renderText(TextData data);
-
-		void setText(std::string newText) { mTextData.text = newText; }
-		std::string getText() { return mTextData.text; }
-
-	private:
-		struct Character 
-		{
-			uint32 textureId;
-			rkm::Vector2 size;
-			rkm::Vector2 bearing;
-			uint32 advance;
-		};
-
-		const float RGB01_CONVERSION = 0.00392156863f;
-		const char* mTEXT_COLOR_UNIFORM = "textColor";
-		const std::string mFONT_ASSET_PATH = "../../assets/fonts/";
+		virtual void renderText() PURE_VIRTUAL;
+		virtual void renderText(TextData data) PURE_VIRTUAL;
 		
-		TextData mTextData;
-		RK_Shader* mpShader;
-		uint32 VAO, VBO;
-		std::map<char, Character> characters;
+		inline void setText(std::string newText) { mTextData.text = newText; }
+		inline std::string getText() { return mTextData.text; }
+
+	protected:
+		const float RGB01_CONVERSION = 0.00392156863f;
+		const std::string mFONT_ASSET_PATH = "../../assets/fonts/";
+
+		TextData mTextData;		
 };
 
 #endif // !TEXT_H
