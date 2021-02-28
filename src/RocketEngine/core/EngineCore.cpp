@@ -64,6 +64,7 @@ bool EngineCore::initialize()
 	mAppWindowWidth = mpWindowHandle->getWidth();
 	mAppWindowHeight = mpWindowHandle->getHeight();
 	
+	#pragma region Vertices Definitions
 	float planeVertices[] = {
 		// positions          // texture Coords 
 		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
@@ -85,8 +86,56 @@ bool EngineCore::initialize()
 		1.0f,  1.0f,  1.0f, 1.0f
 	};
 
+	float skyboxVertices[] = {
+		// positions          
+	   -1.0f,  1.0f, -1.0f,
+	   -1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f,  1.0f, -1.0f,
+	   -1.0f,  1.0f, -1.0f,
+
+	   -1.0f, -1.0f,  1.0f,
+	   -1.0f, -1.0f, -1.0f,
+	   -1.0f,  1.0f, -1.0f,
+	   -1.0f,  1.0f, -1.0f,
+	   -1.0f,  1.0f,  1.0f,
+	   -1.0f, -1.0f,  1.0f,
+
+		1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+
+	   -1.0f, -1.0f,  1.0f,
+	   -1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f, -1.0f,  1.0f,
+	   -1.0f, -1.0f,  1.0f,
+
+	   -1.0f,  1.0f, -1.0f,
+		1.0f,  1.0f, -1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+	   -1.0f,  1.0f,  1.0f,
+	   -1.0f,  1.0f, -1.0f,
+
+	   -1.0f, -1.0f, -1.0f,
+	   -1.0f, -1.0f,  1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+	   -1.0f, -1.0f,  1.0f,
+		1.0f, -1.0f,  1.0f
+	};
+
+	#pragma endregion
+
+
 	std::shared_ptr<IndexBuffer> mPlaneIB;
-	std::shared_ptr<VertexBuffer> mQuadVB, mPlaneVB;
+	std::shared_ptr<VertexBuffer> mQuadVB, mPlaneVB, mSkyboxVB;
 
 	//init array
 	mQuadVA.reset(VertexArray::create());
@@ -98,11 +147,21 @@ bool EngineCore::initialize()
 		{ ShaderDataType::Float2, "aTexCoords" }
 	};
 
+	BufferLayout skyboxLayout = {
+		{ ShaderDataType::Float3, "aPos" },
+	};
+
+
 	//store buffer
 	mQuadVB->setLayout(layout);
 	//add buffer
 	mQuadVA->addVertexBuffer(mQuadVB);
 	
+	mSkyboxVA.reset(VertexArray::create());
+	mSkyboxVB.reset(VertexBuffer::create(skyboxVertices, sizeof(skyboxVertices)));
+	mSkyboxVB->setLayout(skyboxLayout);
+	mSkyboxVA->addVertexBuffer(mSkyboxVB);
+
 	mPlaneVA.reset(VertexArray::create());	//glGenVertexArrays
 	mPlaneVB.reset(VertexBuffer::create(planeVertices, sizeof(planeVertices)));
 	mPlaneVB->setLayout(layout);
@@ -119,6 +178,18 @@ bool EngineCore::initialize()
 
 	mFloorTex.reset(Texture2D::create("../../assets/textures/metal.png")); //	floorTexture = Model::TextureFromFile("metal.png", "../../assets/textures");
 
+	std::vector<std::string> faces
+	{
+		"../../assets/textures/skybox/right.jpg",
+		"../../assets/textures/skybox/left.jpg",
+		"../../assets/textures/skybox/top.jpg",
+		"../../assets/textures/skybox/bottom.jpg",
+		"../../assets/textures/skybox/front.jpg",
+		"../../assets/textures/skybox/back.jpg"
+	};
+
+	mSkyboxTex.reset(CubemapTexture::create(faces));
+
 	mpGameCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
 	mpEditorCam = new Camera(rkm::Vector3(-1.5f, -0.5f, 2.0f));
 
@@ -129,6 +200,7 @@ bool EngineCore::initialize()
 	mpShaderManager->addShader("framebuffer", new RK_Shader("vFrameBufferScreen.glsl", "fFrameBufferScreen.glsl"));
 	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
 	mpShaderManager->addShader(textShaderId, new RK_Shader("vTextRender.glsl", "fTextRender.glsl"));
+	mpShaderManager->addShader(skyboxShaderId, new RK_Shader("vSkybox.glsl", "fSkybox.glsl"));
 
 
 	initLighting();
@@ -138,6 +210,8 @@ bool EngineCore::initialize()
 	mpShaderManager->useShaderByKey("framebuffer");
 	mpShaderManager->setShaderInt("screenTexture", 0);
 
+	mpShaderManager->useShaderByKey(skyboxShaderId);
+	mpShaderManager->setShaderInt("skybox", 0);
 
 	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);
 	mpComponentManager = new ComponentManager(MAX_NUM_COMPONENETS, mpShaderManager, STANDARD_SHADER_KEY);
@@ -220,6 +294,8 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 
 	mPlaneVA->unbind();
 
+	renderSkybox(view, proj);
+
 	// Light "emitters" are not affected by the lighting shader 
 	// and mark the location of the light sources
 	mpShaderManager->useShaderByKey(emitterShaderId);
@@ -276,7 +352,7 @@ void EngineCore::renderFramebufferScreen(int screenType)
 	mpWindowHandle->disableWindowFlags(DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
 
 	// clear all relevant buffers
-	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER);
+	//RenderCommand::clearBuffer(Renderer::COLOR_BUFFER);
 
 	//render to a texture that isn't at screen size
 
@@ -306,6 +382,21 @@ void EngineCore::renderText()
 
 	textObj->renderText();
 	textObj2->renderText();
+}
+
+void EngineCore::renderSkybox(rkm::Mat4 view, rkm::Mat4 proj)
+{
+	RenderCommand::setDepthBuffer(Renderer::DepthBufferType::LESS_OR_EQUAL);
+	rkm::Mat4 skyboxView = rkm::Mat4(rkm::Mat3(view));
+
+	mpShaderManager->useShaderByKey(skyboxShaderId);
+	mpShaderManager->setShaderMat4("projection", proj);
+	mpShaderManager->setShaderMat4("view", skyboxView);
+	
+	mSkyboxTex->bind();
+	RenderCore::submit(mSkyboxVA);
+
+	RenderCommand::setDepthBuffer(Renderer::DepthBufferType::LESS);
 }
 
 void EngineCore::moveCameraLeft()

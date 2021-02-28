@@ -123,7 +123,7 @@ class Camera : public rkutil::Trackable
 		float mMouseSensitivity = 0.1f;
 		float mZoom = 45.0f;
 		
-		rkm::Mat4 mPerspectiveMatrix;
+		rkm::Mat4 mPerspectiveMatrix = rkm::Mat4::zero;
 
 		/***
 			* Calculate camera position and rotation

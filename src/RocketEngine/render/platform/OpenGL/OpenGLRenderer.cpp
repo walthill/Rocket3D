@@ -19,7 +19,30 @@ void OpenGLRenderer::clearBuffer(int bufferClearFlags)
 		glClear(GL_STENCIL_BUFFER_BIT);
 }
 
+void OpenGLRenderer::SetDepthBuffer(int depthBufferType)
+{
+	GLenum depthComparisonType;
+	switch (depthBufferType)
+	{
+		case NEVER:				depthComparisonType = GL_NEVER;		break;
+		case LESS:				depthComparisonType = GL_LESS;		break;
+		case LESS_OR_EQUAL:		depthComparisonType = GL_LEQUAL;	break;
+		case EQUAL:				depthComparisonType = GL_EQUAL;		break;
+		case NOT_EQUAL:			depthComparisonType = GL_NOTEQUAL;	break;
+		case GREATER:			depthComparisonType = GL_GREATER;	break;
+		case GREAT_OR_EQUAL:	depthComparisonType = GL_GEQUAL;	break;
+		case ALWAYS:			depthComparisonType = GL_ALWAYS;	break;
+	}
+
+	glDepthFunc(depthComparisonType);
+}
+
 void OpenGLRenderer::drawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
 {
 	glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+}
+
+void OpenGLRenderer::drawTriangles(const std::shared_ptr<VertexArray>& vertexArray)
+{
+	glDrawArrays(GL_TRIANGLES, 0, vertexArray->getVertexBuffers()[0]->getLayout().getStride()*3);
 }

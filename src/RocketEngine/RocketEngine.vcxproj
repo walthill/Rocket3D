@@ -46,6 +46,7 @@
     <ClInclude Include="render\Camera.h" />
     <ClInclude Include="render\Color.h" />
     <ClInclude Include="render\platform\OpenGL\OpenGLBuffer.h" />
+    <ClInclude Include="render\platform\OpenGL\OpenGLCubemap.h" />
     <ClInclude Include="render\platform\OpenGL\OpenGLRenderer.h" />
     <ClInclude Include="render\platform\OpenGL\OpenGLText.h" />
     <ClInclude Include="render\platform\OpenGL\OpenGLTexture.h" />
@@ -88,6 +89,7 @@
     <ClCompile Include="logging\RK_Log.cpp" />
     <ClCompile Include="render\Color.cpp" />
     <ClCompile Include="render\platform\OpenGL\OpenGLBuffer.cpp" />
+    <ClCompile Include="render\platform\OpenGL\OpenGLCubemap.cpp" />
     <ClCompile Include="render\platform\OpenGL\OpenGLRenderer.cpp" />
     <ClCompile Include="render\platform\OpenGL\OpenGLText.cpp" />
     <ClCompile Include="render\platform\OpenGL\OpenGLTexture.cpp" />
@@ -110,6 +112,7 @@
     <None Include="shader\glsl\fPointLight.glsl" />
     <None Include="shader\glsl\fLighting.glsl" />
     <None Include="shader\glsl\fShader.glsl" />
+    <None Include="shader\glsl\fSkybox.glsl" />
     <None Include="shader\glsl\fSoftSpotlight.glsl" />
     <None Include="shader\glsl\fSpotlight.glsl" />
     <None Include="shader\glsl\fTextRender.glsl" />
@@ -118,6 +121,7 @@
     <None Include="shader\glsl\vLamp.glsl" />
     <None Include="shader\glsl\vLighting.glsl" />
     <None Include="shader\glsl\vShader.glsl" />
+    <None Include="shader\glsl\vSkybox.glsl" />
     <None Include="shader\glsl\vTextRender.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

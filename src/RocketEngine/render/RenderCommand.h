@@ -16,9 +16,19 @@ class RenderCommand
 			spRendererAPI->clearBuffer(bufferClearFlags);
 		}
 
+		inline static void setDepthBuffer(int depthBufferSetting)
+		{
+			spRendererAPI->SetDepthBuffer(depthBufferSetting);
+		}
+
 		inline static void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
 		{
 			spRendererAPI->drawIndexed(vertexArray);
+		}
+
+		inline static void drawTriangles(const std::shared_ptr<VertexArray>& vertexArray)
+		{
+			spRendererAPI->drawTriangles(vertexArray);
 		}
 
 	private:

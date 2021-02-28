@@ -38,4 +38,13 @@ class Texture2D : public Texture
 	private:
 };
 
+class CubemapTexture : public Texture
+{
+	public:
+		static CubemapTexture* create(std::vector<std::string> faces, int sWrapParam = WrapType::CLAMP_EDGE, int tWrapParam = WrapType::CLAMP_EDGE,
+									  int rWrapParam = WrapType::CLAMP_EDGE, int miniFilter = MinifyFilter::MIN_LINEAR,
+									  int magFilter = MagnifyFilter::MAG_LINEAR, int detailReductionLevel = 0);
+	private:
+};
+
 #endif // !TEXTURE_H
