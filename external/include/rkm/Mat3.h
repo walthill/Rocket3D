@@ -2,17 +2,17 @@
 #define MAT3_H
 
 namespace rkm {
+	class Mat4; 
 	class Mat3
 	{
 		public:
-			Mat3();
 			Mat3(float matrixArray[9]);
 			// initializes values on the matrix's diagonal
 			Mat3(float val);
+			Mat3(Mat4 mat);
 
 			~Mat3();
 
-			static float getDeterminant(const Mat3& mat);
 			static Mat3 invert(const Mat3& mat);
 
 			inline const float* getMatrixValues() const { return mMatrixValues; };
@@ -30,6 +30,7 @@ namespace rkm {
 										0, 0, 0, 
 										0, 0, 0 };
 
+			static float getDeterminant(const Mat3& mat);
 	};
 }
 
