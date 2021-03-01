@@ -303,5 +303,7 @@
     <None Include="shader\glsl\vFrameBuffer.glsl" />
     <None Include="shader\glsl\vSkybox.glsl" />
     <None Include="shader\glsl\fSkybox.glsl" />
+    <None Include="shader\glsl\fSkyboxReflective.glsl" />
+    <None Include="shader\glsl\vSkyboxReflective.glsl" />
   </ItemGroup>
 </Project>

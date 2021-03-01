@@ -47,7 +47,8 @@ bool GameApp::initialize()
 
 	TransformData t = { rkm::Vector3(0, 1, -3), rkm::Vector3::one * 0.5f, rkm::Vector3::up, 45.0f };
 	
-	MeshComponentData meshData = {"cube", STANDARD_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY)};
+	//MeshComponentData meshData = { "cube", STANDARD_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY) };
+	MeshComponentData meshData = {"cube", "reflectiveShader", mpRocketEngine->getShaderManager()->getShaderByKey("reflectiveShader")};
 	
 	//MaterialData matData = { meshData.shader, STANDARD_SHADER };
 	

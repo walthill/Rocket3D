@@ -44,5 +44,5 @@ void OpenGLRenderer::drawIndexed(const std::shared_ptr<VertexArray>& vertexArray
 
 void OpenGLRenderer::drawTriangles(const std::shared_ptr<VertexArray>& vertexArray)
 {
-	glDrawArrays(GL_TRIANGLES, 0, vertexArray->getVertexBuffers()[0]->getLayout().getStride()*3);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
