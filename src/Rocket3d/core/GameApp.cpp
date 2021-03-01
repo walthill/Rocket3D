@@ -49,7 +49,8 @@ bool GameApp::initialize()
 	
 	//MeshComponentData meshData = { "cube", STANDARD_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY) };
 	MeshComponentData meshData = {"cube", "reflectiveShader", mpRocketEngine->getShaderManager()->getShaderByKey("reflectiveShader")};
-	
+	//MeshComponentData meshData = { "cube", "refractionShader", mpRocketEngine->getShaderManager()->getShaderByKey("refractionShader") };
+
 	//MaterialData matData = { meshData.shader, STANDARD_SHADER };
 	
 	GameObject* o =	mpRocketEngine->getGameObjectManager()->createGameObject(t, meshData);// , matData);

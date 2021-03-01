@@ -294,6 +294,7 @@ bool EngineCore::initialize()
 
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
 	mpShaderManager->addShader(reflectiveSkyboxShaderId, new RK_Shader("vSkyboxReflective.glsl", "fSkyboxReflective.glsl"));
+	mpShaderManager->addShader("refractionShader", new RK_Shader("vSkyboxReflective.glsl", "fSkyboxRefraction.glsl"));
 	mpShaderManager->addShader("basicTexture", new RK_Shader("vFrameBuffer.glsl", "fFrameBuffer.glsl"));
 	mpShaderManager->addShader("framebuffer", new RK_Shader("vFrameBufferScreen.glsl", "fFrameBufferScreen.glsl"));
 	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
