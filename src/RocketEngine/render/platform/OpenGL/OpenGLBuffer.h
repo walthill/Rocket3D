@@ -44,19 +44,20 @@ class OpenGLIndexBuffer : public IndexBuffer
 class OpenGLFrameBuffer : public FrameBuffer
 {
 public:
-	OpenGLFrameBuffer(int texWidth, int texHeight);
+	OpenGLFrameBuffer(int texWidth, int texHeight, int aaSamples = 1);
 	virtual ~OpenGLFrameBuffer();
 
 	virtual void bind() const;
-	virtual void bindTexture() const;
+	virtual void bindScreenTexture() const;
 	virtual void unbind() const;
+	virtual void blit() const;
 
-	virtual uint32 getTexture() const { return mTextureColorBuffer; };
+	virtual uint32 getTexture() const { return mScreenTexture; };
 private:
 	int mTexWidth, mTexHeight;		// move to texture class
-	uint32 mTextureColorBuffer;		//TODO: texture class
+	uint32 mTextureColorBuffer, mScreenTexture;		//TODO: texture class
+	uint32 mIntermediateFB;
 	uint32 mFramebufferId = -1;
-	uint32 mRenderBufferId;			//TODO: render buffer class
 };
 
 #endif // !OPENGL_BUFFER_H

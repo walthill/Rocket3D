@@ -23,13 +23,12 @@ IndexBuffer* IndexBuffer::create(uint32* indicies, uint32 count)
 	return nullptr;
 }
 
-
-FrameBuffer* FrameBuffer::create(int width, int height)
+FrameBuffer* FrameBuffer::create(int width, int height, int aaSamples)
 {
 	switch (RenderCore::getAPI())
 	{
 		case Renderer::API::NONE:		return nullptr;
-		case Renderer::API::OPENGL:		return new OpenGLFrameBuffer(width, height);
+		case Renderer::API::OPENGL:		return new OpenGLFrameBuffer(width, height, aaSamples);
 	}
 	return nullptr;
 }

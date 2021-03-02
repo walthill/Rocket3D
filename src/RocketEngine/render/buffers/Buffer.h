@@ -156,11 +156,12 @@ class FrameBuffer
 		virtual ~FrameBuffer() {}
 
 		  virtual void bind()	const PURE_VIRTUAL;
+		  virtual void bindScreenTexture() const PURE_VIRTUAL;
 		  virtual void unbind() const PURE_VIRTUAL;
-		  virtual void bindTexture() const PURE_VIRTUAL;
+		  virtual void blit() const PURE_VIRTUAL;
 		  virtual uint32 getTexture() const PURE_VIRTUAL;
 
-		  static FrameBuffer* create(int width, int height);
+		  static FrameBuffer* create(int width, int height, int aaSamples = 1);
 	private:
 };
 

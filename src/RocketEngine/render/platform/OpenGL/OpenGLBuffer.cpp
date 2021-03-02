@@ -75,33 +75,50 @@ Frame Buffer for OpenGL -- aka Frame Buffer Object (FBO)
 
 **********************************************************************/
 
-OpenGLFrameBuffer::OpenGLFrameBuffer(int texWidth, int texHeight) :
+OpenGLFrameBuffer::OpenGLFrameBuffer(int texWidth, int texHeight, int aaSamples) :
 	mTexWidth(texWidth), 
 	mTexHeight(texHeight)
 {
+	//TODO: pass in format data as parameter
+	//Make struct to hold object data??
+
+	// configure MSAA framebuffer
+	// --------------------------
 	glGenFramebuffers(1, &mFramebufferId);
 	glBindFramebuffer(GL_FRAMEBUFFER, mFramebufferId);
-
-	// create a color attachment texture
+	// create a multisampled color attachment texture
 	glGenTextures(1, &mTextureColorBuffer);
-	glBindTexture(GL_TEXTURE_2D, mTextureColorBuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mTexWidth, mTexHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextureColorBuffer, 0);
-
-	// create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, mTextureColorBuffer);
+	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, aaSamples, GL_RGB, mTexWidth, mTexHeight, GL_TRUE);
+	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, mTextureColorBuffer, 0);
+	// create a (also multisampled) renderbuffer object for depth and stencil attachments
 	unsigned int rbo;
 	glGenRenderbuffers(1, &rbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, mTexWidth, mTexHeight); // use a single renderbuffer object for both a depth AND stencil buffer.
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
+	glRenderbufferStorageMultisample(GL_RENDERBUFFER, aaSamples, GL_DEPTH24_STENCIL8, mTexWidth, mTexHeight);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
-	// now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		RK_ERROR_ALL("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
-	}
+		RK_ASSERT("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// configure second post-processing framebuffer
+	glGenFramebuffers(1, &mIntermediateFB);
+	glBindFramebuffer(GL_FRAMEBUFFER, mIntermediateFB);
+	// create a color attachment texture
+	glGenTextures(1, &mScreenTexture);
+	glBindTexture(GL_TEXTURE_2D, mScreenTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mTexWidth, mTexHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mScreenTexture, 0);	// we only need a color buffer
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		RK_ASSERT("ERROR::FRAMEBUFFER:: Intermediate framebuffer is not complete!");
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 OpenGLFrameBuffer::~OpenGLFrameBuffer()
@@ -114,9 +131,16 @@ void OpenGLFrameBuffer::bind() const
 	glBindFramebuffer(GL_FRAMEBUFFER, mFramebufferId);
 }
 
-void OpenGLFrameBuffer::bindTexture() const
+void OpenGLFrameBuffer::bindScreenTexture() const
 {
-	glBindTexture(GL_TEXTURE_2D, mTextureColorBuffer);
+	glBindTexture(GL_TEXTURE_2D, mScreenTexture);
+}
+
+void OpenGLFrameBuffer::blit() const
+{
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, mFramebufferId);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mIntermediateFB);
+	glBlitFramebuffer(0, 0, mTexWidth, mTexHeight, 0, 0, mTexWidth, mTexHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 }
 
 void OpenGLFrameBuffer::unbind() const
