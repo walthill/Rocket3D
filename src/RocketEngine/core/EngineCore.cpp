@@ -273,7 +273,7 @@ void EngineCore::prepFrambuffer(int screenType)
 
 void EngineCore::renderFramebufferScreen(int screenType)
 {
-	mEditorRenderTex->blit();
+	screenType == GAME_VIEW ? mGameRenderTex->blit() : mEditorRenderTex->blit();
 	// now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
 	mGameRenderTex->unbind();
 
