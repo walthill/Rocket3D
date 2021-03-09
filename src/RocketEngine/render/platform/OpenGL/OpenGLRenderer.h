@@ -8,7 +8,7 @@ class OpenGLRenderer : public Renderer
 	public:
 		virtual void clearColor(Color clearColor) override;
 		virtual void clearBuffer(int bufferClearFlags) override;
-		virtual void SetDepthBuffer(int depthBufferType) override;
+		virtual void setDepthBuffer(int depthBufferType) override;
 
 		virtual void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray) override;
 		virtual void drawTriangles(const std::shared_ptr<VertexArray>& vertexArray) override;

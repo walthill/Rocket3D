@@ -495,7 +495,7 @@ void EngineCore::renderText()
 
 void EngineCore::renderSkybox(rkm::Mat4 view, rkm::Mat4 proj)
 {
-	RenderCommand::setDepthBuffer(Renderer::DepthBufferType::LESS_OR_EQUAL);
+	RenderCommand::setDepthBuffer(Renderer::BufferTestType::LESS_OR_EQUAL);
 	rkm::Mat4 skyboxView = rkm::Mat4(rkm::Mat3(view));
 
 	mpShaderManager->useShaderByKey(skyboxShaderId);
@@ -505,7 +505,7 @@ void EngineCore::renderSkybox(rkm::Mat4 view, rkm::Mat4 proj)
 	mSkyboxTex->bind();
 	RenderCore::submit(mSkyboxVA);
 
-	RenderCommand::setDepthBuffer(Renderer::DepthBufferType::LESS);
+	RenderCommand::setDepthBuffer(Renderer::BufferTestType::LESS);
 }
 
 void EngineCore::moveCameraLeft()

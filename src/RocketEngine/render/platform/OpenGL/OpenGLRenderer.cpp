@@ -19,9 +19,9 @@ void OpenGLRenderer::clearBuffer(int bufferClearFlags)
 		glClear(GL_STENCIL_BUFFER_BIT);
 }
 
-void OpenGLRenderer::SetDepthBuffer(int depthBufferType)
+void OpenGLRenderer::setDepthBuffer(int depthBufferType)
 {
-	GLenum depthComparisonType;
+	GLenum depthComparisonType{};
 	switch (depthBufferType)
 	{
 		case NEVER:				depthComparisonType = GL_NEVER;		break;

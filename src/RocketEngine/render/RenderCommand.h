@@ -18,7 +18,7 @@ class RenderCommand
 
 		inline static void setDepthBuffer(int depthBufferSetting)
 		{
-			spRendererAPI->SetDepthBuffer(depthBufferSetting);
+			spRendererAPI->setDepthBuffer(depthBufferSetting);
 		}
 
 		inline static void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
