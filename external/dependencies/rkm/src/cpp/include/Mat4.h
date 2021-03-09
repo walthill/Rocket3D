@@ -22,14 +22,16 @@
 		|  12 13 14 15  |
 */
 namespace rkm {
+	
+	class Mat3;
 
 	class Mat4
 	{
 		public:
-			Mat4();
 			Mat4(float arr[16]);
 			// initializes values on the matrix's diagonal
 			Mat4(float val);
+			Mat4(Mat3 mat);
 
 			~Mat4();
 
@@ -68,6 +70,7 @@ namespace rkm {
 
 			inline const float* getMatrixValues() const { return mMatrixValues; };
 			inline float* unwrapMatrix() { return mMatrixValues; }
+			static Mat4 zero;
 			static Mat4 identity;
 
 		private:

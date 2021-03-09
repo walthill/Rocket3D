@@ -5,11 +5,6 @@ namespace rkm {
 
     Mat3 Mat3::identity(1);
 
-	Mat3::Mat3()
-	{
-
-	}
-
 	Mat3::Mat3(float matrixArray[9])
 	{
 		for (size_t i = 0; i < 9; i++)
@@ -23,6 +18,20 @@ namespace rkm {
         mMatrixValues[0] = val;
         mMatrixValues[4] = val;
         mMatrixValues[8] = val;
+    }
+
+    Mat3::Mat3(Mat4 mat)
+    {
+        auto values = mat.getMatrixValues();
+        mMatrixValues[0] = values[0];
+        mMatrixValues[1] = values[1];
+        mMatrixValues[2] = values[2];
+        mMatrixValues[3] = values[4];
+        mMatrixValues[4] = values[5];
+        mMatrixValues[5] = values[6];
+        mMatrixValues[6] = values[8];
+        mMatrixValues[7] = values[9];
+        mMatrixValues[8] = values[10];
     }
 
 	Mat3::~Mat3()

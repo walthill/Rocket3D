@@ -141,6 +141,9 @@
     <ClInclude Include="render\platform\OpenGL\OpenGLText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="render\platform\OpenGL\OpenGLCubemap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\EngineCore.cpp">
@@ -257,6 +260,9 @@
     <ClCompile Include="render\platform\OpenGL\OpenGLText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="render\platform\OpenGL\OpenGLCubemap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\glsl\fSoftSpotlight.glsl">
@@ -295,5 +301,9 @@
     <None Include="shader\glsl\vFrameBufferScreen.glsl" />
     <None Include="shader\glsl\fFrameBufferScreen.glsl" />
     <None Include="shader\glsl\vFrameBuffer.glsl" />
+    <None Include="shader\glsl\vSkybox.glsl" />
+    <None Include="shader\glsl\fSkybox.glsl" />
+    <None Include="shader\glsl\fSkyboxReflective.glsl" />
+    <None Include="shader\glsl\vSkyboxReflective.glsl" />
   </ItemGroup>
 </Project>

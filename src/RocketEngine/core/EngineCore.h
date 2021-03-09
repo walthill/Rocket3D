@@ -78,6 +78,8 @@ class EngineCore : public rkutil::Trackable
 		***/
 		void renderText();
 
+		void renderSkybox(rkm::Mat4 view, rkm::Mat4 proj);
+
 		/***
 			* Moves player left
 		***/
@@ -127,8 +129,9 @@ class EngineCore : public rkutil::Trackable
 		// screen quad VAO
 		unsigned int quadVAO, quadVBO;
 
-		std::shared_ptr<VertexArray> mQuadVA, mPlaneVA;
-		std::shared_ptr<Texture2D> mFloorTex;
+		std::shared_ptr<VertexArray> mQuadVA, mPlaneVA, mSkyboxVA, mCubeVA;
+		std::shared_ptr<CubemapTexture> mSkyboxTex;
+		std::shared_ptr<Texture2D> mFloorTex, mCubeTex;
 		std::shared_ptr<FrameBuffer> mGameRenderTex, mEditorRenderTex;
 
 		Window *mpWindowHandle;
@@ -142,9 +145,9 @@ class EngineCore : public rkutil::Trackable
 
 		ShaderKey standardLightingShaderId = "standardLightingShader", emitterShaderId = "emitter";
 		std::shared_ptr<Text> textObj, textObj2;
-
+		ShaderKey reflectiveSkyboxShaderId = "reflectiveShader";
 		ShaderKey textShaderId = "textShader";
-
+		ShaderKey skyboxShaderId = "skyboxShader";
 		/***
 			* Helper function that initializes the lighting system
 		***/

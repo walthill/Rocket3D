@@ -1,15 +1,13 @@
 #include "include/Mat4.h"
+#include "include/Mat3.h"
 #include "include/MathUtils.h"
 #include <vector>
 
 namespace rkm {
 
+	Mat4 Mat4::zero(0.0f);
 	Mat4 Mat4::identity(1);
 
-	Mat4::Mat4() 
-	{
-
-	}
 	Mat4::Mat4(float arr[16])
 	{
 		for (size_t i = 0; i < 16; i++)
@@ -25,7 +23,23 @@ namespace rkm {
 		mMatrixValues[5] = val;
 		mMatrixValues[10] = val;
 		mMatrixValues[15] = val;
-	};
+	}
+
+	Mat4::Mat4(Mat3 mat)
+	{
+
+		auto values = mat.getMatrixValues();
+		mMatrixValues[0] = values[0];
+		mMatrixValues[1] = values[1];
+		mMatrixValues[2] = values[2];
+		mMatrixValues[4] = values[3];
+		mMatrixValues[5] = values[4];
+		mMatrixValues[6] = values[5];
+		mMatrixValues[8] = values[6];
+		mMatrixValues[9] = values[7];
+		mMatrixValues[10] = values[8];
+		mMatrixValues[15] = 1;
+	}
 
 	Mat4::~Mat4() 
 	{
@@ -333,7 +347,7 @@ namespace rkm {
 	//Matrix-matrix operations
 	Mat4 Mat4::operator*(const Mat4& rhs)
 	{
-		Mat4 newMat;
+		Mat4 newMat = Mat4::zero;
 
 		//Calculate result for each matrix element
 		int currentColumn = 0, currentRowStartIndex = 0;
@@ -369,7 +383,7 @@ namespace rkm {
 	//Matrix-Vector operations
 	Vector3 Mat4::operator*(const Vector3& rhs)
 	{
-		Mat4 newMat;
+		Mat4 newMat = Mat4::zero;
 		Vector3 newVec;
 		float vectorMatrix[16] = {}; //treat this as a single column (Nx1) matrix
 		vectorMatrix[0] = rhs.getX();
@@ -388,7 +402,7 @@ namespace rkm {
 	//Matrix-Vector operations
 	Vector4 Mat4::operator*(const Vector4& rhs)
 	{
-		Mat4 newMat;
+		Mat4 newMat = Mat4::zero;
 		Vector4 newVec;
 		float vectorMatrix[16] = {}; //treat this as a single column (Nx1) matrix
 		vectorMatrix[0] = rhs.getX();
