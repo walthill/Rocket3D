@@ -128,6 +128,16 @@ bool EngineCore::initialize()
 	   -1.0f,  1.0f,  0.0f, 1.0f,
 		1.0f, -1.0f,  1.0f, 0.0f,
 		1.0f,  1.0f,  1.0f, 1.0f
+	};    
+	float transparentVertices[] = {
+			// positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
+			0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+			0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
+			1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+
+			0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+			1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+			1.0f,  0.5f,  0.0f,  1.0f,  0.0f
 	};
 
 	float skyboxVertices[] = {
@@ -223,7 +233,7 @@ bool EngineCore::initialize()
 
 
 	std::shared_ptr<IndexBuffer> mPlaneIB;
-	std::shared_ptr<VertexBuffer> mQuadVB, mPlaneVB, mSkyboxVB, mCubeVB;
+	std::shared_ptr<VertexBuffer> mQuadVB, mPlaneVB, mSkyboxVB, mCubeVB, mGrassVB;
 
 	//init array
 	mQuadVA.reset(VertexArray::create());
@@ -253,6 +263,11 @@ bool EngineCore::initialize()
 	mCubeVB.reset(VertexBuffer::create(cubeVertices, sizeof(cubeVertices)));
 	mCubeVB->setLayout(cubeLayout);
 	mCubeVA->addVertexBuffer(mCubeVB);
+
+	mGrassVA.reset(VertexArray::create());
+	mGrassVB.reset(VertexBuffer::create(transparentVertices, sizeof(transparentVertices)));
+	mGrassVB->setLayout(layout);
+	mGrassVA->addVertexBuffer(mGrassVB);
 
 	mSkyboxVA.reset(VertexArray::create());
 	mSkyboxVB.reset(VertexBuffer::create(skyboxVertices, sizeof(skyboxVertices)));
@@ -285,6 +300,14 @@ bool EngineCore::initialize()
 	};
 
 	mSkyboxTex.reset(CubemapTexture::create(faces));
+
+	vegetation.push_back(rkm::Vector3(-1.5f, -1.0f, -0.48f));
+	vegetation.push_back(rkm::Vector3(1.5f, -1.0f, 0.51f));
+	vegetation.push_back(rkm::Vector3(0.0f, -1.0f, 0.7f));
+	vegetation.push_back(rkm::Vector3(-0.3f, -1.0f, -2.3f));
+	vegetation.push_back(rkm::Vector3(0.5f, -1.0f, -0.6f));
+
+	mGrassTex.reset(Texture2D::create("../../assets/textures/grass.png", Texture2D::WrapType::CLAMP_EDGE, Texture2D::WrapType::CLAMP_EDGE));
 
 	mpGameCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
 	mpEditorCam = new Camera(rkm::Vector3(-1.5f, -0.5f, 2.0f));
@@ -384,17 +407,29 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	mpShaderManager->setShaderVec3("cameraPos", *mpEditorCam->getPosition());
 	mSkyboxTex->bind();
 
-	model = rkm::Mat4::scale(model, rkm::Vector3(1, 1, -1));
-	model = rkm::Mat4::translate(model, rkm::Vector3(0, -1, 0));
-
 	// floor
 	mpShaderManager->useShaderByKey("basicTexture");
+	mpShaderManager->setShaderMat4("projection", proj);
+	mpShaderManager->setShaderMat4("view", view);
+
+	//Transparent grass
+	mGrassTex->bind();
+	for (size_t i = 0; i < vegetation.size(); i++)
+	{
+		model = rkm::Mat4::identity;
+		model = rkm::Mat4::translate(model, vegetation[i]);
+		mpShaderManager->setShaderMat4("model", model);
+		RenderCore::submit(mGrassVA);
+	}
 
 	RenderCommand::setStencilBuffer(Renderer::BufferTestType::ALWAYS, 1, 0xFF);
 	RenderCommand::setStencilMask(0xFF);
 
-	mpShaderManager->setShaderMat4("projection", proj);
-	mpShaderManager->setShaderMat4("view", view);
+	
+	model = rkm::Mat4::identity;
+	model = rkm::Mat4::scale(model, rkm::Vector3(1, 1, -1));
+	model = rkm::Mat4::translate(model, rkm::Vector3(0, -1, 0));
+
 	mFloorTex->bind(); 
 
 	mpShaderManager->setShaderMat4("model", model);
