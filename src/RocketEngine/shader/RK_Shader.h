@@ -125,6 +125,8 @@ class RK_Shader
 		//TODO: add ability to re-set bools, ints, floats - vectors that are reapplied on build?
 		//reapply vars w/ reassignVariables()
 		std::string mSHADER_FILE_PATH = "../RocketEngine/shader/glsl/"; ///> Shader file path
+		std::string mVERTEX_PATH = "vertex/";
+		std::string mFRAG_PATH = "fragment/";
 		std::string mVertShaderPath;
 		std::string mFragShaderPath;
 

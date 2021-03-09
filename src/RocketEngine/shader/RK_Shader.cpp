@@ -39,8 +39,8 @@ std::pair<std::string, std::string> RK_Shader::loadFromFile()
 		//Constructor only needs file name and not path
 		std::string vFilePath, fFilePath;
 
-		vFilePath = mSHADER_FILE_PATH + mVertShaderPath;
-		fFilePath = mSHADER_FILE_PATH + mFragShaderPath;
+		vFilePath = mSHADER_FILE_PATH + mVERTEX_PATH + mVertShaderPath;
+		fFilePath = mSHADER_FILE_PATH + mFRAG_PATH + mFragShaderPath;
 
 		vertShaderFile.open(vFilePath, std::ifstream::in);
 		fragShaderFile.open(fFilePath, std::ifstream::in);

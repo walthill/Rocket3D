@@ -104,27 +104,29 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
-    <None Include="shader\glsl\fDepthBuffer.glsl" />
-    <None Include="shader\glsl\fDirectionalLight.glsl" />
-    <None Include="shader\glsl\fFrameBuffer.glsl" />
-    <None Include="shader\glsl\fFrameBufferScreen.glsl" />
-    <None Include="shader\glsl\fLamp.glsl" />
-    <None Include="shader\glsl\fPointLight.glsl" />
-    <None Include="shader\glsl\fLighting.glsl" />
-    <None Include="shader\glsl\fShader.glsl" />
-    <None Include="shader\glsl\fSkybox.glsl" />
-    <None Include="shader\glsl\fSkyboxReflective.glsl" />
-    <None Include="shader\glsl\fSoftSpotlight.glsl" />
-    <None Include="shader\glsl\fSpotlight.glsl" />
-    <None Include="shader\glsl\fTextRender.glsl" />
-    <None Include="shader\glsl\vFrameBuffer.glsl" />
-    <None Include="shader\glsl\vFrameBufferScreen.glsl" />
-    <None Include="shader\glsl\vLamp.glsl" />
-    <None Include="shader\glsl\vLighting.glsl" />
-    <None Include="shader\glsl\vShader.glsl" />
-    <None Include="shader\glsl\vSkybox.glsl" />
-    <None Include="shader\glsl\vSkyboxReflective.glsl" />
-    <None Include="shader\glsl\vTextRender.glsl" />
+    <None Include="shader\glsl\fragment\fDepthBuffer.glsl" />
+    <None Include="shader\glsl\fragment\fDirectionalLight.glsl" />
+    <None Include="shader\glsl\fragment\fFrameBuffer.glsl" />
+    <None Include="shader\glsl\fragment\fFrameBufferScreen.glsl" />
+    <None Include="shader\glsl\fragment\fLamp.glsl" />
+    <None Include="shader\glsl\fragment\fPointLight.glsl" />
+    <None Include="shader\glsl\fragment\fLighting.glsl" />
+    <None Include="shader\glsl\fragment\fShader.glsl" />
+    <None Include="shader\glsl\fragment\fSkybox.glsl" />
+    <None Include="shader\glsl\fragment\fSkyboxReflective.glsl" />
+    <None Include="shader\glsl\fragment\fSkyboxRefraction.glsl" />
+    <None Include="shader\glsl\fragment\fSoftSpotlight.glsl" />
+    <None Include="shader\glsl\fragment\fSpotlight.glsl" />
+    <None Include="shader\glsl\fragment\fStencilBuffer.glsl" />
+    <None Include="shader\glsl\fragment\fTextRender.glsl" />
+    <None Include="shader\glsl\vertex\vFrameBuffer.glsl" />
+    <None Include="shader\glsl\vertex\vFrameBufferScreen.glsl" />
+    <None Include="shader\glsl\vertex\vLamp.glsl" />
+    <None Include="shader\glsl\vertex\vLighting.glsl" />
+    <None Include="shader\glsl\vertex\vShader.glsl" />
+    <None Include="shader\glsl\vertex\vSkybox.glsl" />
+    <None Include="shader\glsl\vertex\vSkyboxReflective.glsl" />
+    <None Include="shader\glsl\vertex\vTextRender.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
