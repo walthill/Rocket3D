@@ -21,6 +21,16 @@ class RenderCommand
 			spRendererAPI->setDepthBuffer(depthBufferSetting);
 		}
 
+		inline static void setStencilBuffer(int bufferComparison, int refValue, int mask)
+		{
+			spRendererAPI->setStencilBuffer(bufferComparison, refValue, mask);
+		}
+
+		inline static void setStencilMask(int mask)
+		{
+			spRendererAPI->setStencilMask(mask);
+		}
+
 		inline static void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
 		{
 			spRendererAPI->drawIndexed(vertexArray);

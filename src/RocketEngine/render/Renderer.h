@@ -24,6 +24,9 @@ class Renderer
 		//Specifies depth comparison
 		virtual void setDepthBuffer(int bufferSettings) PURE_VIRTUAL;
 
+		virtual void setStencilMask(int mask) PURE_VIRTUAL;
+		virtual void setStencilBuffer(int bufferComparison, int refValue, int mask) PURE_VIRTUAL;
+
 		virtual void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray) PURE_VIRTUAL;
 		virtual void drawTriangles(const std::shared_ptr<VertexArray>& vertexArray) PURE_VIRTUAL;
 

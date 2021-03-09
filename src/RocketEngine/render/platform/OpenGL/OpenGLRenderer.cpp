@@ -37,6 +37,29 @@ void OpenGLRenderer::setDepthBuffer(int depthBufferType)
 	glDepthFunc(depthComparisonType);
 }
 
+void OpenGLRenderer::setStencilMask(int mask)
+{
+	glStencilMask(mask);
+}
+
+void OpenGLRenderer::setStencilBuffer(int bufferComparison, int refValue, int mask)
+{
+	GLenum stencilComparisonType{};
+	switch (bufferComparison)
+	{
+		case NEVER:				stencilComparisonType = GL_NEVER;		break;
+		case LESS:				stencilComparisonType = GL_LESS;		break;
+		case LESS_OR_EQUAL:		stencilComparisonType = GL_LEQUAL;		break;
+		case EQUAL:				stencilComparisonType = GL_EQUAL;		break;
+		case NOT_EQUAL:			stencilComparisonType = GL_NOTEQUAL;	break;
+		case GREATER:			stencilComparisonType = GL_GREATER;		break;
+		case GREAT_OR_EQUAL:	stencilComparisonType = GL_GEQUAL;		break;
+		case ALWAYS:			stencilComparisonType = GL_ALWAYS;		break;
+	}
+	glStencilFunc(stencilComparisonType, refValue, mask);
+}
+
+
 void OpenGLRenderer::drawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
 {
 	glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
