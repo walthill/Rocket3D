@@ -39,11 +39,14 @@ void OpenGLRenderer::setDepthBuffer(int depthBufferType)
 
 void OpenGLRenderer::setStencilMask(int mask)
 {
+	//0x00 disables writing to the stencil buffer
+	//0xFF enables writing to the stencil buffer
 	glStencilMask(mask);
 }
 
 void OpenGLRenderer::setStencilBuffer(int bufferComparison, int refValue, int mask)
 {
+	//ref value should be 0 or 1
 	GLenum stencilComparisonType{};
 	switch (bufferComparison)
 	{

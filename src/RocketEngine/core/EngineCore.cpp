@@ -295,6 +295,7 @@ bool EngineCore::initialize()
 	mpShaderManager->addShader(reflectiveSkyboxShaderId, new RK_Shader("vSkyboxReflective.glsl", "fSkyboxReflective.glsl"));
 	mpShaderManager->addShader("refractionShader", new RK_Shader("vSkyboxReflective.glsl", "fSkyboxRefraction.glsl"));
 	mpShaderManager->addShader("basicTexture", new RK_Shader("vFrameBuffer.glsl", "fFrameBuffer.glsl"));
+	mpShaderManager->addShader("stencil", new RK_Shader("vFrameBuffer.glsl", "fStencilBuffer.glsl"));
 	mpShaderManager->addShader("framebuffer", new RK_Shader("vFrameBufferScreen.glsl", "fFrameBufferScreen.glsl"));
 	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
 	mpShaderManager->addShader(textShaderId, new RK_Shader("vTextRender.glsl", "fTextRender.glsl"));
@@ -331,6 +332,7 @@ bool EngineCore::initialize()
 	mpShaderManager->getShaderInUse()->setMat4("projection", projection);
 
 	Raycast::initEditorRaycast(mpEditorCam);
+	RenderCommand::setStencilMask(0x00);	//disables writing to the stencil buffer
 
 	return true;
 }
@@ -387,17 +389,40 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 
 	// floor
 	mpShaderManager->useShaderByKey("basicTexture");
+
+	RenderCommand::setStencilBuffer(Renderer::BufferTestType::ALWAYS, 1, 0xFF);
+	RenderCommand::setStencilMask(0xFF);
+
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
-	mPlaneVA->bind();
 	mFloorTex->bind(); 
 
 	mpShaderManager->setShaderMat4("model", model);
 
 	RenderCore::submit(mPlaneVA); 
 
-	mPlaneVA->unbind();
 
+	//Stencil buffer - floor second render pass
+	RenderCommand::setStencilBuffer(Renderer::BufferTestType::NOT_EQUAL, 1, 0xFF);
+	RenderCommand::setStencilMask(0x00);
+	
+	mpShaderManager->useShaderByKey("stencil");
+	mpShaderManager->setShaderMat4("projection", proj);
+	mpShaderManager->setShaderMat4("view", view);
+	mFloorTex->bind();
+
+	float scale = 1.1f;
+	model = rkm::Mat4::identity;
+	model = rkm::Mat4::scale(model, rkm::Vector3(scale, scale, -scale));
+	model = rkm::Mat4::translate(model, rkm::Vector3(0, -1, 0));
+
+	mpShaderManager->setShaderMat4("model", model);
+	
+	RenderCore::submit(mPlaneVA); 
+	
+	RenderCommand::setStencilMask(0xFF);
+	RenderCommand::setStencilBuffer(Renderer::BufferTestType::ALWAYS, 0, 0xFF);
+	
 	renderSkybox(view, proj);
 
 	// Light "emitters" are not affected by the lighting shader 
@@ -411,7 +436,7 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 void EngineCore::beginRender(int screenType)
 {
 	RenderCommand::clearColor(Color(102, 153, 153));
-	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER | Renderer::DEPTH_BUFFER);
+	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER | Renderer::DEPTH_BUFFER | Renderer::STENCIL_BUFFER);
 
 	RenderCore::beginScene();	//placeholder for now will take data on camera, lighting, etc
 
@@ -461,7 +486,6 @@ void EngineCore::renderFramebufferScreen(int screenType)
 	RenderCommand::clearColor(Color(102, 153, 153));
 	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER);
 	mpWindowHandle->disableWindowFlags(DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
-
 	
 	//render to a texture that isn't at screen size
 
