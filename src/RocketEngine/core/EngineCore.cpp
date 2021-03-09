@@ -264,10 +264,10 @@ bool EngineCore::initialize()
 	mCubeVB->setLayout(cubeLayout);
 	mCubeVA->addVertexBuffer(mCubeVB);
 
-	mGrassVA.reset(VertexArray::create());
+	mTransparentVA.reset(VertexArray::create());
 	mGrassVB.reset(VertexBuffer::create(transparentVertices, sizeof(transparentVertices)));
 	mGrassVB->setLayout(layout);
-	mGrassVA->addVertexBuffer(mGrassVB);
+	mTransparentVA->addVertexBuffer(mGrassVB);
 
 	mSkyboxVA.reset(VertexArray::create());
 	mSkyboxVB.reset(VertexBuffer::create(skyboxVertices, sizeof(skyboxVertices)));
@@ -301,13 +301,13 @@ bool EngineCore::initialize()
 
 	mSkyboxTex.reset(CubemapTexture::create(faces));
 
-	vegetation.push_back(rkm::Vector3(-1.5f, -1.0f, -0.48f));
-	vegetation.push_back(rkm::Vector3(1.5f, -1.0f, 0.51f));
-	vegetation.push_back(rkm::Vector3(0.0f, -1.0f, 0.7f));
-	vegetation.push_back(rkm::Vector3(-0.3f, -1.0f, -2.3f));
-	vegetation.push_back(rkm::Vector3(0.5f, -1.0f, -0.6f));
+	windows.push_back(rkm::Vector3(-1.5f, -1.0f, -0.48f));
+	windows.push_back(rkm::Vector3(1.5f, -1.0f, 0.51f));
+	windows.push_back(rkm::Vector3(0.0f, -1.0f, 0.7f));
+	windows.push_back(rkm::Vector3(-0.3f, -1.0f, -2.3f));
+	windows.push_back(rkm::Vector3(0.5f, -1.0f, -0.6f));
 
-	mGrassTex.reset(Texture2D::create("../../assets/textures/grass.png", Texture2D::WrapType::CLAMP_EDGE, Texture2D::WrapType::CLAMP_EDGE));
+	mWindowTex.reset(Texture2D::create("../../assets/textures/blending_transparent_window.png", Texture2D::WrapType::CLAMP_EDGE, Texture2D::WrapType::CLAMP_EDGE));
 
 	mpGameCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
 	mpEditorCam = new Camera(rkm::Vector3(-1.5f, -0.5f, 2.0f));
@@ -412,16 +412,6 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
 
-	//Transparent grass
-	mGrassTex->bind();
-	for (size_t i = 0; i < vegetation.size(); i++)
-	{
-		model = rkm::Mat4::identity;
-		model = rkm::Mat4::translate(model, vegetation[i]);
-		mpShaderManager->setShaderMat4("model", model);
-		RenderCore::submit(mGrassVA);
-	}
-
 	RenderCommand::setStencilBuffer(Renderer::BufferTestType::ALWAYS, 1, 0xFF);
 	RenderCommand::setStencilMask(0xFF);
 
@@ -457,7 +447,7 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	
 	RenderCommand::setStencilMask(0xFF);
 	RenderCommand::setStencilBuffer(Renderer::BufferTestType::ALWAYS, 0, 0xFF);
-	
+
 	renderSkybox(view, proj);
 
 	// Light "emitters" are not affected by the lighting shader 
@@ -489,7 +479,9 @@ void EngineCore::render(int screenType)
 
 void EngineCore::endRender(int screenType)
 {
+	renderTransparentObjects();
 	RenderCore::endScene();	//placeholder for now
+
 	renderFramebufferScreen(screenType);
 }
 
@@ -541,6 +533,32 @@ void EngineCore::renderFramebufferScreen(int screenType)
 	}
 }
 
+
+void EngineCore::renderTransparentObjects()
+{
+	mpShaderManager->useShaderByKey("basicTexture");
+	mpShaderManager->setShaderMat4("projection", mpEditorCam->getPerspectiveMatrix());
+	mpShaderManager->setShaderMat4("view", mpEditorCam->getViewMatrix());
+
+	//sort blended objects
+	std::map<float, rkm::Vector3> sorted;
+	for (unsigned int i = 0; i < windows.size(); i++)
+	{
+		float distance = rkm::Vector3(*mpEditorCam->getPosition() - windows[i]).getMagnitude();
+		sorted[distance] = windows[i];
+	}
+
+	//Transparent grass
+	rkm::Mat4 model = rkm::Mat4(1.0f);
+	mWindowTex->bind();
+	for (std::map<float, rkm::Vector3>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it)
+	{
+		model = rkm::Mat4(1.0f);
+		model = rkm::Mat4::translate(model, it->second);
+		mpShaderManager->setShaderMat4("model", model);
+		RenderCore::submit(mTransparentVA);
+	}
+}
 
 void EngineCore::renderText()
 {
