@@ -269,9 +269,8 @@ bool EngineCore::initialize()
 	mPlaneVA->setIndexBuffer(mPlaneIB);
 	
 	//Render texture init
-	mGameRenderTex.reset(FrameBuffer::create(mAppWindowWidth, mAppWindowHeight));
-	mEditorRenderTex.reset(FrameBuffer::create(mAppWindowWidth, mAppWindowHeight));
-	mEditorRenderTex->unbind();
+	mGameRenderTex.reset(FrameBuffer::create(mAppWindowWidth, mAppWindowHeight, 4));
+	mEditorRenderTex.reset(FrameBuffer::create(mAppWindowWidth, mAppWindowHeight, 4));
 
 	mFloorTex.reset(Texture2D::create("../../assets/textures/metal.png")); //	floorTexture = Model::TextureFromFile("metal.png", "../../assets/textures");
 
@@ -412,6 +411,8 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 void EngineCore::beginRender(int screenType)
 {
 	RenderCommand::clearColor(Color(102, 153, 153));
+	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER | Renderer::DEPTH_BUFFER);
+
 	RenderCore::beginScene();	//placeholder for now will take data on camera, lighting, etc
 
 	prepFrambuffer(screenType);
@@ -444,21 +445,24 @@ void EngineCore::prepFrambuffer(int screenType)
 	{
 		mEditorRenderTex->bind();
 	}
+
+	RenderCommand::clearColor(Color(102, 153, 153));
+	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER | Renderer::DEPTH_BUFFER);
 	mpWindowHandle->enableWindowFlags(DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
 
-	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER | Renderer::DEPTH_BUFFER);
 }
 
 void EngineCore::renderFramebufferScreen(int screenType)
 {
+	screenType == GAME_VIEW ? mGameRenderTex->blit() : mEditorRenderTex->blit();
 	// now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
 	mGameRenderTex->unbind();
 
+	RenderCommand::clearColor(Color(102, 153, 153));
+	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER);
 	mpWindowHandle->disableWindowFlags(DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
 
-	// clear all relevant buffers
-	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER);
-
+	
 	//render to a texture that isn't at screen size
 
 	mpShaderManager->useShaderByKey("framebuffer");
@@ -466,12 +470,12 @@ void EngineCore::renderFramebufferScreen(int screenType)
 
 	if (screenType == GAME_VIEW)
 	{
-		mGameRenderTex->bindTexture();
+		mGameRenderTex->bindScreenTexture();
 		Application::getInstance()->setRenderTexture((AppWindowType)screenType, mGameRenderTex->getTexture());
 	}
 	else
 	{
-		mEditorRenderTex->bindTexture(); 
+		mEditorRenderTex->bindScreenTexture(); 
 		Application::getInstance()->setRenderTexture((AppWindowType)screenType, mEditorRenderTex->getTexture());
 	}
 }
