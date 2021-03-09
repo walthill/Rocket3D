@@ -317,7 +317,7 @@ bool EngineCore::initialize()
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
 	mpShaderManager->addShader(reflectiveSkyboxShaderId, new RK_Shader("vSkyboxReflective.glsl", "fSkyboxReflective.glsl"));
 	mpShaderManager->addShader("refractionShader", new RK_Shader("vSkyboxReflective.glsl", "fSkyboxRefraction.glsl"));
-	mpShaderManager->addShader("basicTexture", new RK_Shader("vFrameBuffer.glsl", "fFrameBuffer.glsl"));
+	mpShaderManager->addShader("basicTexture", new RK_Shader("vFrameBuffer.glsl", "fTransparentTexture.glsl"));
 	mpShaderManager->addShader("stencil", new RK_Shader("vFrameBuffer.glsl", "fStencilBuffer.glsl"));
 	mpShaderManager->addShader("framebuffer", new RK_Shader("vFrameBufferScreen.glsl", "fFrameBufferScreen.glsl"));
 	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
@@ -470,7 +470,7 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 
 void EngineCore::beginRender(int screenType)
 {
-	RenderCommand::clearColor(Color(102, 153, 153));
+	RenderCommand::clearColor(Color::grey);
 	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER | Renderer::DEPTH_BUFFER | Renderer::STENCIL_BUFFER);
 
 	RenderCore::beginScene();	//placeholder for now will take data on camera, lighting, etc
@@ -506,7 +506,9 @@ void EngineCore::prepFrambuffer(int screenType)
 		mEditorRenderTex->bind();
 	}
 
-	RenderCommand::clearColor(Color(102, 153, 153));
+	//rk_blue 102,153,153
+	//rk_orange 224,172,51
+	RenderCommand::clearColor(Color::grey);
 	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER | Renderer::DEPTH_BUFFER);
 	mpWindowHandle->enableWindowFlags(DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
 
@@ -517,8 +519,8 @@ void EngineCore::renderFramebufferScreen(int screenType)
 	screenType == GAME_VIEW ? mGameRenderTex->blit() : mEditorRenderTex->blit();
 	// now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
 	mGameRenderTex->unbind();
-
-	RenderCommand::clearColor(Color(102, 153, 153));
+	
+	RenderCommand::clearColor(Color::blue);
 	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER);
 	mpWindowHandle->disableWindowFlags(DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
 	

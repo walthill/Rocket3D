@@ -307,5 +307,6 @@
     <None Include="shader\glsl\vertex\vSkyboxReflective.glsl" />
     <None Include="shader\glsl\vertex\vTextRender.glsl" />
     <None Include="shader\glsl\fragment\fStencilBuffer.glsl" />
+    <None Include="shader\glsl\fragment\fTransparentTexture.glsl" />
   </ItemGroup>
 </Project>
