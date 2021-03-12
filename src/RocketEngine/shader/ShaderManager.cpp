@@ -96,6 +96,18 @@ void ShaderManager::setShaderVec3(const std::string& vecName, float x, float y, 
 	mpCurrentShader->setVec3(vecName, rkm::Vector3(x, y, z));
 }
 
+
+void ShaderManager::setShaderVec2(const std::string& vecName, float x, float y)
+{
+	mpCurrentShader->setVec2(vecName, rkm::Vector2(x, y));
+}
+
+void ShaderManager::setShaderVec2(const std::string& vecName, const rkm::Vector2& vec)
+{
+	mpCurrentShader->setVec2(vecName, vec);
+}
+
+
 RK_Shader* ShaderManager::getShaderByKey(const ShaderKey& key)
 {
 	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(key);
