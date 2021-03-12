@@ -488,15 +488,7 @@ void EngineCore::endRender(int screenType)
 void EngineCore::prepFrambuffer(int screenType)
 {
 	mpWindowHandle->setViewport(0, 0, mAppWindowWidth, mAppWindowHeight);
-
-	if (screenType == GAME_VIEW)
-	{
-		mGameRenderTex->bind();
-	}
-	else
-	{
-		mEditorRenderTex->bind();
-	}
+	screenType == GAME_VIEW ? mGameRenderTex->bind() : mEditorRenderTex->bind();
 
 	//rk_blue 102,153,153
 	//rk_orange 224,172,51
@@ -536,6 +528,7 @@ void EngineCore::renderFramebufferScreen(int screenType)
 
 void EngineCore::renderTransparentObjects()
 {
+	mpWindowHandle->disableWindowFlags(CULL_FACE);
 	mpShaderManager->useShaderByKey("basicTexture");
 	mpShaderManager->setShaderMat4("projection", mpEditorCam->getPerspectiveMatrix());
 	mpShaderManager->setShaderMat4("view", mpEditorCam->getViewMatrix());
@@ -558,6 +551,8 @@ void EngineCore::renderTransparentObjects()
 		mpShaderManager->setShaderMat4("model", model);
 		RenderCore::submit(mTransparentVA);
 	}
+
+	mpWindowHandle->enableWindowFlags(CULL_FACE);
 }
 
 void EngineCore::renderText()

@@ -16,6 +16,16 @@ class RenderCommand
 			spRendererAPI->clearBuffer(bufferClearFlags);
 		}
 
+		inline static void setCullOrder(bool isClockwise)
+		{
+			spRendererAPI->setCullOrder(isClockwise);
+		}
+
+		inline static void setCullFace(int faceCullSetting)
+		{
+			spRendererAPI->setCullFace(faceCullSetting);
+		}
+
 		inline static void setDepthBuffer(int depthBufferSetting)
 		{
 			spRendererAPI->setDepthBuffer(depthBufferSetting);

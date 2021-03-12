@@ -8,6 +8,8 @@ class OpenGLRenderer : public Renderer
 	public:
 		virtual void clearColor(Color clearColor) override;
 		virtual void clearBuffer(int bufferClearFlags) override;
+		virtual void setCullOrder(bool isClockwise) override;
+		virtual void setCullFace(int faceToCull) override;
 		virtual void setDepthBuffer(int depthBufferType) override;
 		virtual void setStencilMask(int mask) override;
 		virtual void setStencilBuffer(int bufferComparison, int refValue, int mask) override;

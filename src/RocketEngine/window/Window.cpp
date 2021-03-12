@@ -91,7 +91,10 @@ void Window::enableWindowFlags(int settingsToEnable)
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 	}
 	if (settingsToEnable & CULL_FACE)
+	{
 		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+	}
 	if (settingsToEnable & BLEND)
 	{
 		glEnable(GL_BLEND);

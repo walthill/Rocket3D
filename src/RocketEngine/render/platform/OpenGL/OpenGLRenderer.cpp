@@ -19,6 +19,25 @@ void OpenGLRenderer::clearBuffer(int bufferClearFlags)
 		glClear(GL_STENCIL_BUFFER_BIT);
 }
 
+void OpenGLRenderer::setCullOrder(bool isClockwise)
+{
+	isClockwise ? glFrontFace(GL_CW) : glFrontFace(GL_CCW);
+}
+
+
+void OpenGLRenderer::setCullFace(int faceToCull)
+{
+	GLenum cullFaceType{};
+	switch (faceToCull)
+	{
+		case BACK:					cullFaceType = GL_BACK;				break;
+		case FRONT:					cullFaceType = GL_FRONT;			break;
+		case FRONT_AND_BACK:		cullFaceType = GL_FRONT_AND_BACK;	break;
+	}
+
+	glCullFace(cullFaceType);
+}
+
 void OpenGLRenderer::setDepthBuffer(int depthBufferType)
 {
 	GLenum depthComparisonType{};
