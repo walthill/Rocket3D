@@ -229,11 +229,23 @@ bool EngineCore::initialize()
 	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 	};
 
+
+	float instancedQuadVertices[] = {
+		// positions     // colors
+		-0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
+		 0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
+		-0.05f, -0.05f,  0.0f, 0.0f, 1.0f,
+
+		-0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
+		 0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
+		 0.05f,  0.05f,  0.0f, 1.0f, 1.0f
+	};
+
 	#pragma endregion
 
 
 	std::shared_ptr<IndexBuffer> mPlaneIB;
-	std::shared_ptr<VertexBuffer> mQuadVB, mPlaneVB, mSkyboxVB, mCubeVB, mGrassVB;
+	std::shared_ptr<VertexBuffer> mQuadVB, mInstancedQuadVB, mPlaneVB, mSkyboxVB, mCubeVB, mGrassVB;
 
 	//init array
 	mQuadVA.reset(VertexArray::create());
@@ -243,6 +255,11 @@ bool EngineCore::initialize()
 	BufferLayout layout = {
 		{ ShaderDataType::Float3, "aPos" },
 		{ ShaderDataType::Float2, "aTexCoords" }
+	};
+
+	BufferLayout instancedLayout = {
+		{ ShaderDataType::Float2, "aPos" },
+		{ ShaderDataType::Float3, "aColor" }
 	};
 
 	BufferLayout skyboxLayout = {
@@ -258,6 +275,11 @@ bool EngineCore::initialize()
 	mQuadVB->setLayout(layout);
 	//add buffer
 	mQuadVA->addVertexBuffer(mQuadVB);
+
+	mInstancedQuadVA.reset(VertexArray::create());
+	mInstancedQuadVB.reset(VertexBuffer::create(instancedQuadVertices, sizeof(instancedQuadVertices)));
+	mInstancedQuadVB->setLayout(instancedLayout);
+	mInstancedQuadVA->addVertexBuffer(mInstancedQuadVB);
 
 	mCubeVA.reset(VertexArray::create());
 	mCubeVB.reset(VertexBuffer::create(cubeVertices, sizeof(cubeVertices)));
@@ -307,6 +329,19 @@ bool EngineCore::initialize()
 	windows.push_back(rkm::Vector3(-0.3f, -1.0f, -2.3f));
 	windows.push_back(rkm::Vector3(0.5f, -1.0f, -0.6f));
 
+
+	int index = 0;
+	float offset = 0.1f;
+	for (int y = -10; y < 10; y += 2)
+	{
+		for (int x = -10; x < 10; x += 2)
+		{
+			float newX = (float)x / 10.0f + offset;
+			float newY = (float)y / 10.0f + offset;
+			translations[index++] = rkm::Vector2(newX, newY);
+		}
+	}
+
 	mWindowTex.reset(Texture2D::create("../../assets/textures/blending_transparent_window.png", Texture2D::WrapType::CLAMP_EDGE, Texture2D::WrapType::CLAMP_EDGE));
 
 	mpGameCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
@@ -323,7 +358,13 @@ bool EngineCore::initialize()
 	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
 	mpShaderManager->addShader(textShaderId, new RK_Shader("vTextRender.glsl", "fTextRender.glsl"));
 	mpShaderManager->addShader(skyboxShaderId, new RK_Shader("vSkybox.glsl", "fSkybox.glsl"));
+	mpShaderManager->addShader("instanced", new RK_Shader("vSingleColorInstanced.glsl", "fSingleColor.glsl"));
 
+	mpShaderManager->useShaderByKey("instanced");
+	for (unsigned int i = 0; i < 100; i++)
+	{
+		mpShaderManager->setShaderVec2("offsets[" + std::to_string(i) + "]", translations[i]);
+	}
 
 	initLighting();
 	mpShaderManager->useShaderByKey("basicTexture");
@@ -399,7 +440,7 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 
 	mpShaderManager->useShaderByKey(reflectiveSkyboxShaderId);
 	proj = rkm::MatProj::perspective(fov, (float)app->getAppWindow()->getWidth() / (float)app->getAppWindow()->getHeight(), 0.1f, 100.0f);
-	mpEditorCam->storePerspectiveMatrix(proj);
+	screenType == GAME_VIEW ? mpGameCam->storePerspectiveMatrix(proj)	: mpEditorCam->storePerspectiveMatrix(proj);
 
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4 ("view", view);
@@ -474,12 +515,18 @@ void EngineCore::render(int screenType)
 	beginRender(screenType);
 	mpComponentManager->renderMeshes();
 	renderText();
+	
+	mpWindowHandle->disableWindowFlags(CULL_FACE);
+	mpShaderManager->useShaderByKey("instanced");
+	RenderCore::submit(mInstancedQuadVA, 100);
+	mpWindowHandle->enableWindowFlags(CULL_FACE);
+
 	endRender(screenType);
 }
 
 void EngineCore::endRender(int screenType)
 {
-	renderTransparentObjects();
+	renderTransparentObjects(screenType);
 	RenderCore::endScene();	//placeholder for now
 
 	renderFramebufferScreen(screenType);
@@ -526,12 +573,15 @@ void EngineCore::renderFramebufferScreen(int screenType)
 }
 
 
-void EngineCore::renderTransparentObjects()
+void EngineCore::renderTransparentObjects(int screenType)
 {
+	rkm::Mat4 proj = screenType == GAME_VIEW ? mpGameCam->getPerspectiveMatrix() : mpEditorCam->getPerspectiveMatrix();
+	rkm::Mat4 view = screenType == GAME_VIEW ? mpGameCam->getViewMatrix() : mpEditorCam->getViewMatrix();
+
 	mpWindowHandle->disableWindowFlags(CULL_FACE);
 	mpShaderManager->useShaderByKey("basicTexture");
-	mpShaderManager->setShaderMat4("projection", mpEditorCam->getPerspectiveMatrix());
-	mpShaderManager->setShaderMat4("view", mpEditorCam->getViewMatrix());
+	mpShaderManager->setShaderMat4("projection", proj);
+	mpShaderManager->setShaderMat4("view", view);
 
 	//sort blended objects
 	std::map<float, rkm::Vector3> sorted;

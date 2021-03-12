@@ -308,5 +308,7 @@
     <None Include="shader\glsl\vertex\vTextRender.glsl" />
     <None Include="shader\glsl\fragment\fStencilBuffer.glsl" />
     <None Include="shader\glsl\fragment\fTransparentTexture.glsl" />
+    <None Include="shader\glsl\fragment\fSingleColor.glsl" />
+    <None Include="shader\glsl\vertex\vSingleColorInstanced.glsl" />
   </ItemGroup>
 </Project>

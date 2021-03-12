@@ -16,6 +16,7 @@ class OpenGLRenderer : public Renderer
 
 		virtual void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray) override;
 		virtual void drawTriangles(const std::shared_ptr<VertexArray>& vertexArray) override;
+		virtual void drawInstancedTriangles(const std::shared_ptr<VertexArray>& vertexArray, int instanceCount) override;
 
 	private:
 };

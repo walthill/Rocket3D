@@ -51,6 +51,11 @@ class RenderCommand
 			spRendererAPI->drawTriangles(vertexArray);
 		}
 
+		inline static void drawInstancedTriangles(const std::shared_ptr<VertexArray>& vertexArray, int instanceCount)
+		{
+			spRendererAPI->drawInstancedTriangles(vertexArray, instanceCount);
+		}
+
 	private:
 		static Renderer* spRendererAPI;
 };

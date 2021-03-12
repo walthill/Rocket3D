@@ -112,6 +112,7 @@
     <None Include="shader\glsl\fragment\fPointLight.glsl" />
     <None Include="shader\glsl\fragment\fLighting.glsl" />
     <None Include="shader\glsl\fragment\fShader.glsl" />
+    <None Include="shader\glsl\fragment\fSingleColor.glsl" />
     <None Include="shader\glsl\fragment\fSkybox.glsl" />
     <None Include="shader\glsl\fragment\fSkyboxReflective.glsl" />
     <None Include="shader\glsl\fragment\fSkyboxRefraction.glsl" />
@@ -125,6 +126,7 @@
     <None Include="shader\glsl\vertex\vLamp.glsl" />
     <None Include="shader\glsl\vertex\vLighting.glsl" />
     <None Include="shader\glsl\vertex\vShader.glsl" />
+    <None Include="shader\glsl\vertex\vSingleColorInstanced.glsl" />
     <None Include="shader\glsl\vertex\vSkybox.glsl" />
     <None Include="shader\glsl\vertex\vSkyboxReflective.glsl" />
     <None Include="shader\glsl\vertex\vTextRender.glsl" />
