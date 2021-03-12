@@ -19,9 +19,28 @@ void OpenGLRenderer::clearBuffer(int bufferClearFlags)
 		glClear(GL_STENCIL_BUFFER_BIT);
 }
 
-void OpenGLRenderer::SetDepthBuffer(int depthBufferType)
+void OpenGLRenderer::setCullOrder(bool isClockwise)
 {
-	GLenum depthComparisonType;
+	isClockwise ? glFrontFace(GL_CW) : glFrontFace(GL_CCW);
+}
+
+
+void OpenGLRenderer::setCullFace(int faceToCull)
+{
+	GLenum cullFaceType{};
+	switch (faceToCull)
+	{
+		case BACK:					cullFaceType = GL_BACK;				break;
+		case FRONT:					cullFaceType = GL_FRONT;			break;
+		case FRONT_AND_BACK:		cullFaceType = GL_FRONT_AND_BACK;	break;
+	}
+
+	glCullFace(cullFaceType);
+}
+
+void OpenGLRenderer::setDepthBuffer(int depthBufferType)
+{
+	GLenum depthComparisonType{};
 	switch (depthBufferType)
 	{
 		case NEVER:				depthComparisonType = GL_NEVER;		break;
@@ -36,6 +55,32 @@ void OpenGLRenderer::SetDepthBuffer(int depthBufferType)
 
 	glDepthFunc(depthComparisonType);
 }
+
+void OpenGLRenderer::setStencilMask(int mask)
+{
+	//0x00 disables writing to the stencil buffer
+	//0xFF enables writing to the stencil buffer
+	glStencilMask(mask);
+}
+
+void OpenGLRenderer::setStencilBuffer(int bufferComparison, int refValue, int mask)
+{
+	//ref value should be 0 or 1
+	GLenum stencilComparisonType{};
+	switch (bufferComparison)
+	{
+		case NEVER:				stencilComparisonType = GL_NEVER;		break;
+		case LESS:				stencilComparisonType = GL_LESS;		break;
+		case LESS_OR_EQUAL:		stencilComparisonType = GL_LEQUAL;		break;
+		case EQUAL:				stencilComparisonType = GL_EQUAL;		break;
+		case NOT_EQUAL:			stencilComparisonType = GL_NOTEQUAL;	break;
+		case GREATER:			stencilComparisonType = GL_GREATER;		break;
+		case GREAT_OR_EQUAL:	stencilComparisonType = GL_GEQUAL;		break;
+		case ALWAYS:			stencilComparisonType = GL_ALWAYS;		break;
+	}
+	glStencilFunc(stencilComparisonType, refValue, mask);
+}
+
 
 void OpenGLRenderer::drawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
 {

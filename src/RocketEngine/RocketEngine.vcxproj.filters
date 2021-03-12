@@ -265,45 +265,48 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\glsl\fSoftSpotlight.glsl">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="shader\glsl\fSpotlight.glsl">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="shader\glsl\fPointLight.glsl">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="shader\glsl\fDirectionalLight.glsl">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="shader\glsl\fLamp.glsl">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="shader\glsl\vLamp.glsl">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="shader\glsl\vLighting.glsl">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="shader\glsl\fLighting.glsl">
-      <Filter>shader</Filter>
-    </None>
     <None Include="README.md">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="shader\glsl\fShader.glsl" />
-    <None Include="shader\glsl\vShader.glsl" />
-    <None Include="shader\glsl\vTextRender.glsl" />
-    <None Include="shader\glsl\fTextRender.glsl" />
-    <None Include="shader\glsl\fDepthBuffer.glsl" />
-    <None Include="shader\glsl\fFrameBuffer.glsl" />
-    <None Include="shader\glsl\vFrameBufferScreen.glsl" />
-    <None Include="shader\glsl\fFrameBufferScreen.glsl" />
-    <None Include="shader\glsl\vFrameBuffer.glsl" />
-    <None Include="shader\glsl\vSkybox.glsl" />
-    <None Include="shader\glsl\fSkybox.glsl" />
-    <None Include="shader\glsl\fSkyboxReflective.glsl" />
-    <None Include="shader\glsl\vSkyboxReflective.glsl" />
+    <None Include="shader\glsl\fragment\fDepthBuffer.glsl" />
+    <None Include="shader\glsl\fragment\fDirectionalLight.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\fragment\fFrameBuffer.glsl" />
+    <None Include="shader\glsl\fragment\fFrameBufferScreen.glsl" />
+    <None Include="shader\glsl\fragment\fLamp.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\fragment\fLighting.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\fragment\fPointLight.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\fragment\fShader.glsl" />
+    <None Include="shader\glsl\fragment\fSkybox.glsl" />
+    <None Include="shader\glsl\fragment\fSkyboxReflective.glsl" />
+    <None Include="shader\glsl\fragment\fSkyboxRefraction.glsl" />
+    <None Include="shader\glsl\fragment\fSoftSpotlight.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\fragment\fSpotlight.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\fragment\fTextRender.glsl" />
+    <None Include="shader\glsl\vertex\vFrameBuffer.glsl" />
+    <None Include="shader\glsl\vertex\vFrameBufferScreen.glsl" />
+    <None Include="shader\glsl\vertex\vLamp.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\vertex\vLighting.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\glsl\vertex\vShader.glsl" />
+    <None Include="shader\glsl\vertex\vSkybox.glsl" />
+    <None Include="shader\glsl\vertex\vSkyboxReflective.glsl" />
+    <None Include="shader\glsl\vertex\vTextRender.glsl" />
+    <None Include="shader\glsl\fragment\fStencilBuffer.glsl" />
+    <None Include="shader\glsl\fragment\fTransparentTexture.glsl" />
   </ItemGroup>
 </Project>

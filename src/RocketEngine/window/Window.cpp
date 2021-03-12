@@ -77,11 +77,24 @@ void Window::enableWindowFlags(int settingsToEnable)
 	if (settingsToEnable & STENCIL_TEST)
 	{
 		glEnable(GL_STENCIL_TEST);
+	
+		/*
+			//How to update the stencil buffer when a fragment passes the given test
+			
+			glStencilOp(GLenum sfail, GLenum dpfail, GLenum dppass)
+			
+			sfail: action to take if the stencil test fails.
+			dpfail: action to take if the stencil test passes, but the depth test fails.
+			dppass: action to take if both the stencil and the depth test pass.
+		*/
 		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 	}
 	if (settingsToEnable & CULL_FACE)
+	{
 		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+	}
 	if (settingsToEnable & BLEND)
 	{
 		glEnable(GL_BLEND);

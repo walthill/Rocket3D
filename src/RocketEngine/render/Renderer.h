@@ -8,8 +8,9 @@ class Renderer
 {
 	public:
 		enum class API { NONE = 0, OPENGL = 1 };	
+		enum CullFaceType { BACK = 0, FRONT, FRONT_AND_BACK };
 		enum BufferType { COLOR_BUFFER = 1, DEPTH_BUFFER = 2, ACCUM_BUFFER = 4, STENCIL_BUFFER = 8 };
-		enum DepthBufferType {NEVER=0,LESS, EQUAL, LESS_OR_EQUAL, GREATER, NOT_EQUAL, GREAT_OR_EQUAL, ALWAYS };
+		enum BufferTestType { NEVER = 0, LESS, EQUAL, LESS_OR_EQUAL, GREATER, NOT_EQUAL, GREAT_OR_EQUAL, ALWAYS };
 
 		/***
 			* Draw a color to the screen
@@ -21,8 +22,15 @@ class Renderer
 		****/		
 		virtual void clearBuffer(int bufferClearFlags) PURE_VIRTUAL;
 
+		virtual void setCullOrder(bool isClockwise) PURE_VIRTUAL;
+
+		virtual void setCullFace(int faceToCull) PURE_VIRTUAL;
+
 		//Specifies depth comparison
-		virtual void SetDepthBuffer(int bufferSettings) PURE_VIRTUAL;
+		virtual void setDepthBuffer(int bufferSettings) PURE_VIRTUAL;
+
+		virtual void setStencilMask(int mask) PURE_VIRTUAL;
+		virtual void setStencilBuffer(int bufferComparison, int refValue, int mask) PURE_VIRTUAL;
 
 		virtual void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray) PURE_VIRTUAL;
 		virtual void drawTriangles(const std::shared_ptr<VertexArray>& vertexArray) PURE_VIRTUAL;

@@ -16,9 +16,29 @@ class RenderCommand
 			spRendererAPI->clearBuffer(bufferClearFlags);
 		}
 
+		inline static void setCullOrder(bool isClockwise)
+		{
+			spRendererAPI->setCullOrder(isClockwise);
+		}
+
+		inline static void setCullFace(int faceCullSetting)
+		{
+			spRendererAPI->setCullFace(faceCullSetting);
+		}
+
 		inline static void setDepthBuffer(int depthBufferSetting)
 		{
-			spRendererAPI->SetDepthBuffer(depthBufferSetting);
+			spRendererAPI->setDepthBuffer(depthBufferSetting);
+		}
+
+		inline static void setStencilBuffer(int bufferComparison, int refValue, int mask)
+		{
+			spRendererAPI->setStencilBuffer(bufferComparison, refValue, mask);
+		}
+
+		inline static void setStencilMask(int mask)
+		{
+			spRendererAPI->setStencilMask(mask);
 		}
 
 		inline static void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray)

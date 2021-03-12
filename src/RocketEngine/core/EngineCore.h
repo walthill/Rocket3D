@@ -129,11 +129,13 @@ class EngineCore : public rkutil::Trackable
 		// screen quad VAO
 		unsigned int quadVAO, quadVBO;
 
-		std::shared_ptr<VertexArray> mQuadVA, mPlaneVA, mSkyboxVA, mCubeVA;
+		std::shared_ptr<VertexArray> mQuadVA, mPlaneVA, mSkyboxVA, mCubeVA, mTransparentVA;
 		std::shared_ptr<CubemapTexture> mSkyboxTex;
-		std::shared_ptr<Texture2D> mFloorTex, mCubeTex;
+		std::shared_ptr<Texture2D> mFloorTex, mCubeTex, mWindowTex;
 		std::shared_ptr<FrameBuffer> mGameRenderTex, mEditorRenderTex;
 
+		std::vector<rkm::Vector3> windows;
+	
 		Window *mpWindowHandle;
 		InputSystem *mpInputSystem;
 		Camera* mpGameCam;
@@ -169,6 +171,8 @@ class EngineCore : public rkutil::Trackable
 		void endRender(int screenType);
 		void prepFrambuffer(int screenType);
 		void renderFramebufferScreen(int screenType);
+		void renderTransparentObjects();
+
 };
 
 #endif // !ENGINE_CORE_H

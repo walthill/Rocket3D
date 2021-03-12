@@ -24,7 +24,7 @@ Application::Application()
 	mpMasterTimer->start();
 	
 	mpAppWindow = new Window();
-	mpAppWindow->initialize(1000, 750, "Rocket3D", DEPTH_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE);
+	mpAppWindow->initialize(1000, 750, "Rocket3D", DEPTH_TEST | STENCIL_TEST | AA_MULTISAMPLE | BLEND | CULL_FACE);
 }
 
 Application::~Application()
