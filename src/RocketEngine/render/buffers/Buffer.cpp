@@ -3,7 +3,7 @@
 #include "../../core/RenderCore.h"
 #include "../platform/OpenGL/OpenGLBuffer.h"
 
-VertexBuffer* VertexBuffer::create(float* vertices, uint32 size, DataType usage)
+VertexBuffer* VertexBuffer::create(const float* vertices, uint32 size, DataType usage)
 {
 	switch (RenderCore::getAPI())
 	{

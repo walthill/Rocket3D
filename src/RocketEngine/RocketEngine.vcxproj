@@ -126,6 +126,7 @@
     <None Include="shader\glsl\vertex\vLamp.glsl" />
     <None Include="shader\glsl\vertex\vLighting.glsl" />
     <None Include="shader\glsl\vertex\vShader.glsl" />
+    <None Include="shader\glsl\vertex\vSingleColorInstanceArray.glsl" />
     <None Include="shader\glsl\vertex\vSingleColorInstanced.glsl" />
     <None Include="shader\glsl\vertex\vSkybox.glsl" />
     <None Include="shader\glsl\vertex\vSkyboxReflective.glsl" />

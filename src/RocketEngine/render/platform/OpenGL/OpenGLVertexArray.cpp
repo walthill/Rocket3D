@@ -51,25 +51,31 @@ void OpenGLVertexArray::addVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
 {
 	//VB has no layout
 	assert(vertexBuffer->getLayout().GetElements().size()); 
-
-	glBindVertexArray(mRendererId);
-	vertexBuffer->bind();
-
-	uint32 index = 0;
-	auto& layout = vertexBuffer->getLayout();
-	for (auto& element : layout)
-	{
-		glEnableVertexAttribArray(index);
-		glVertexAttribPointer(index,
-			element.getComponentCount(),
-			ShaderDataTypeToGLType(element.type),
-			element.normalized ? GL_TRUE : GL_FALSE,
-			layout.getStride(),
-			(const void*)element.offset);
-		index++;
-	}
-
 	mVertexBuffers.push_back(vertexBuffer);
+}
+
+void OpenGLVertexArray::processVertexBuffers()
+{
+	glBindVertexArray(mRendererId);
+	uint32 index = 0;
+	for (auto& vertexBuffer : mVertexBuffers)
+	{
+		vertexBuffer->bind();
+
+		auto& layout = vertexBuffer->getLayout();
+		for (auto& element : layout)
+		{
+			glEnableVertexAttribArray(index);
+			glVertexAttribPointer(index,
+				element.getComponentCount(),
+				ShaderDataTypeToGLType(element.type),
+				element.normalized ? GL_TRUE : GL_FALSE,
+				layout.getStride(),
+				(const void*)element.offset);
+			glVertexAttribDivisor(index, element.instanceIterations);
+			index++;
+		}
+	}
 }
 
 void OpenGLVertexArray::setIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)

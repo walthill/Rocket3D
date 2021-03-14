@@ -87,6 +87,7 @@ OpenGLText::OpenGLText(std::string fontName, RK_Shader* shader)
 
 	glyphVB->setLayout(layout);
 	glyphVA->addVertexBuffer(glyphVB);
+	glyphVA->processVertexBuffers();
 
 	uint32 quadIndicies[6] = { 0,1,2,3,4,5 };
 	glyphIB.reset(IndexBuffer::create(quadIndicies, sizeof(quadIndicies) / sizeof(uint32)));

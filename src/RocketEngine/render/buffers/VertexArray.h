@@ -14,6 +14,8 @@ class VertexArray : public rkutil::Trackable
 		virtual void addVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) PURE_VIRTUAL;
 		virtual void setIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) PURE_VIRTUAL;
 
+		virtual void processVertexBuffers() PURE_VIRTUAL;
+
 		virtual const std::vector<std::shared_ptr<VertexBuffer>>& getVertexBuffers() PURE_VIRTUAL;
 		virtual const std::shared_ptr<IndexBuffer>& getIndexBuffer() PURE_VIRTUAL;
 

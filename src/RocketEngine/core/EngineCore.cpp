@@ -63,8 +63,8 @@ bool EngineCore::initialize()
 	mpWindowHandle = app->getAppWindow();
 	mAppWindowWidth = mpWindowHandle->getWidth();
 	mAppWindowHeight = mpWindowHandle->getHeight();
-	
-	#pragma region Vertices Definitions
+
+#pragma region Vertices Definitions
 	float cubeVertices[] = {
 		// positions          // normals
 		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -128,16 +128,16 @@ bool EngineCore::initialize()
 	   -1.0f,  1.0f,  0.0f, 1.0f,
 		1.0f, -1.0f,  1.0f, 0.0f,
 		1.0f,  1.0f,  1.0f, 1.0f
-	};    
+	};
 	float transparentVertices[] = {
-			// positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
-			0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
-			0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
-			1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+		// positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
+		0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+		0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
+		1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
 
-			0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
-			1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
-			1.0f,  0.5f,  0.0f,  1.0f,  0.0f
+		0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+		1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+		1.0f,  0.5f,  0.0f,  1.0f,  0.0f
 	};
 
 	float skyboxVertices[] = {
@@ -241,11 +241,23 @@ bool EngineCore::initialize()
 		 0.05f,  0.05f,  0.0f, 1.0f, 1.0f
 	};
 
-	#pragma endregion
+#pragma endregion
 
+
+	int index = 0;
+	float offset = 0.1f;
+	for (int y = -10; y < 10; y += 2)
+	{
+		for (int x = -10; x < 10; x += 2)
+		{
+			float newX = (float)x / 10.0f + offset;
+			float newY = (float)y / 10.0f + offset;
+			translations[index++] = rkm::Vector2(newX, newY);
+		}
+	}
 
 	std::shared_ptr<IndexBuffer> mPlaneIB;
-	std::shared_ptr<VertexBuffer> mQuadVB, mInstancedQuadVB, mPlaneVB, mSkyboxVB, mCubeVB, mGrassVB;
+	std::shared_ptr<VertexBuffer> mQuadVB, mInstancedQuadVB, mInstancingVB, mPlaneVB, mSkyboxVB, mCubeVB, mGrassVB;
 
 	//init array
 	mQuadVA.reset(VertexArray::create());
@@ -262,6 +274,13 @@ bool EngineCore::initialize()
 		{ ShaderDataType::Float3, "aColor" }
 	};
 
+	BufferLayout instancedArrayLayout = {
+		{ ShaderDataType::Float2, "aPos" },
+		{ ShaderDataType::Float3, "aColor" },
+	};
+	BufferLayout offsetLayout = {
+		{ ShaderDataType::Float2, "aOffset",1 }
+	};
 	BufferLayout skyboxLayout = {
 		{ ShaderDataType::Float3, "aPos" },
 	};
@@ -276,30 +295,40 @@ bool EngineCore::initialize()
 	//add buffer
 	mQuadVA->addVertexBuffer(mQuadVB);
 
-	mInstancedQuadVA.reset(VertexArray::create());
+	mInstancingVB.reset(VertexBuffer::create(translations[0].toArray(), sizeof(rkm::Vector2) * 100));
+	mInstancingVB->setLayout(offsetLayout);
+
 	mInstancedQuadVB.reset(VertexBuffer::create(instancedQuadVertices, sizeof(instancedQuadVertices)));
-	mInstancedQuadVB->setLayout(instancedLayout);
+	mInstancedQuadVB->setLayout(instancedArrayLayout);
+
+	mInstancedQuadVA.reset(VertexArray::create());
 	mInstancedQuadVA->addVertexBuffer(mInstancedQuadVB);
+	mInstancedQuadVA->addVertexBuffer(mInstancingVB);
+	mInstancedQuadVA->processVertexBuffers();
 
 	mCubeVA.reset(VertexArray::create());
 	mCubeVB.reset(VertexBuffer::create(cubeVertices, sizeof(cubeVertices)));
 	mCubeVB->setLayout(cubeLayout);
 	mCubeVA->addVertexBuffer(mCubeVB);
+	mCubeVA->processVertexBuffers();
 
 	mTransparentVA.reset(VertexArray::create());
 	mGrassVB.reset(VertexBuffer::create(transparentVertices, sizeof(transparentVertices)));
 	mGrassVB->setLayout(layout);
 	mTransparentVA->addVertexBuffer(mGrassVB);
+	mTransparentVA->processVertexBuffers();
 
 	mSkyboxVA.reset(VertexArray::create());
 	mSkyboxVB.reset(VertexBuffer::create(skyboxVertices, sizeof(skyboxVertices)));
 	mSkyboxVB->setLayout(skyboxLayout);
 	mSkyboxVA->addVertexBuffer(mSkyboxVB);
+	mSkyboxVA->processVertexBuffers();
 
 	mPlaneVA.reset(VertexArray::create());	//glGenVertexArrays
 	mPlaneVB.reset(VertexBuffer::create(planeVertices, sizeof(planeVertices)));
 	mPlaneVB->setLayout(layout);
 	mPlaneVA->addVertexBuffer(mPlaneVB);	//glBindVertexArray
+	mPlaneVA->processVertexBuffers();
 
 	uint32 planeIndicies[6] = { 0,1,2,3,4,5 };
 	mPlaneIB.reset(IndexBuffer::create(planeIndicies, sizeof(planeIndicies) / sizeof(uint32)));
@@ -330,18 +359,6 @@ bool EngineCore::initialize()
 	windows.push_back(rkm::Vector3(0.5f, -1.0f, -0.6f));
 
 
-	int index = 0;
-	float offset = 0.1f;
-	for (int y = -10; y < 10; y += 2)
-	{
-		for (int x = -10; x < 10; x += 2)
-		{
-			float newX = (float)x / 10.0f + offset;
-			float newY = (float)y / 10.0f + offset;
-			translations[index++] = rkm::Vector2(newX, newY);
-		}
-	}
-
 	mWindowTex.reset(Texture2D::create("../../assets/textures/blending_transparent_window.png", Texture2D::WrapType::CLAMP_EDGE, Texture2D::WrapType::CLAMP_EDGE));
 
 	mpGameCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
@@ -358,13 +375,7 @@ bool EngineCore::initialize()
 	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
 	mpShaderManager->addShader(textShaderId, new RK_Shader("vTextRender.glsl", "fTextRender.glsl"));
 	mpShaderManager->addShader(skyboxShaderId, new RK_Shader("vSkybox.glsl", "fSkybox.glsl"));
-	mpShaderManager->addShader("instanced", new RK_Shader("vSingleColorInstanced.glsl", "fSingleColor.glsl"));
-
-	mpShaderManager->useShaderByKey("instanced");
-	for (unsigned int i = 0; i < 100; i++)
-	{
-		mpShaderManager->setShaderVec2("offsets[" + std::to_string(i) + "]", translations[i]);
-	}
+	mpShaderManager->addShader("instanced", new RK_Shader("vSingleColorInstanceArray.glsl", "fSingleColor.glsl"));
 
 	initLighting();
 	mpShaderManager->useShaderByKey("basicTexture");
