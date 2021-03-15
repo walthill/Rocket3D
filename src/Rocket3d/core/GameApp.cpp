@@ -15,13 +15,19 @@
 ********/
 
 #include "GameApp.h"
+#include "Application.h"
 #include <core/EngineCore.h>
-#include <iostream>
+#include <rkutil/Timer.h>
+#include <rkutil/MemoryTracker.h>
+#include <rkutil/PerformanceTracker.h>
 #include "../../RocketEngine/shader/ShaderManager.h"
 //#include "../input/Message.h"
 //#include "../input/MessageManager.h"
-#include "../../RocketEngine/logging/RK_Log.h"
-#include <window/Window.h>
+#include <component/TransformComponent.h>
+#include <component/MeshComponent.h>
+#include <component/LightComponent.h>
+#include "../../RocketEngine/core/GameObject.h"
+#include <core/GameObjectManager.h>
 
 GameApp* GameApp::mpGameApp = nullptr;
 
@@ -48,7 +54,7 @@ bool GameApp::initialize()
 	TransformData t = { rkm::Vector3(0, 1, -3), rkm::Vector3::one * 0.5f, rkm::Vector3::up, 45.0f };
 	
 	//MeshComponentData meshData = { "cube", STANDARD_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY) };
-	MeshComponentData meshData = {"cube", "reflectiveShader", mpRocketEngine->getShaderManager()->getShaderByKey("reflectiveShader")};
+	MeshComponentData meshData = {"cube.obj", STANDARD_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY)};
 	//MeshComponentData meshData = { "cube", "refractionShader", mpRocketEngine->getShaderManager()->getShaderByKey("refractionShader") };
 
 	//MaterialData matData = { meshData.shader, STANDARD_SHADER };
@@ -58,7 +64,7 @@ bool GameApp::initialize()
 
 	TransformData t2 = { rkm::Vector3(1.5f,  -1.5f, -2.5f), rkm::Vector3::one * 0.1f, rkm::Vector3::up, 0 };
 
-	MeshComponentData lightMeshData = { "cube", EMITTER_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(EMITTER_SHADER_KEY) };
+	MeshComponentData lightMeshData = { "cube.obj", EMITTER_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(EMITTER_SHADER_KEY) };
 	
 	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f;
 

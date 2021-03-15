@@ -1,6 +1,8 @@
 #include "GameObjectManager.h"
 #include "../../Rocket3d/core/GameApp.h"
 #include "EngineCore.h"
+#include "GameObject.h"
+#include "../component/ComponentManager.h"
 
 GameObjectId GameObjectManager::msNextUnitId = PLAYER_OBJ_ID + 1;
 
@@ -11,7 +13,6 @@ GameObjectManager::GameObjectManager(uint32 maxSize) :
 
 GameObjectManager::~GameObjectManager()
 {
-	mpComponentManagerHandle = nullptr;
 }
 
 GameObject* GameObjectManager::createGameObject(const TransformData& transform, const MeshComponentData& meshData,

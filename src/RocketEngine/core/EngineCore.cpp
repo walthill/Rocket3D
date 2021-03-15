@@ -15,12 +15,15 @@
 
 ********/
 #include "EngineCore.h"
+#include "../render/buffers/Texture.h"
+#include "../render/buffers/Buffer.h"
 #include "../../Rocket3d/core/Application.h"
 #include "../render/Camera.h"
+#include "GameObjectManager.h"
+#include "../component/ComponentManager.h"
 //#include "../asset/image/RocketImgLoader.h"
 //#include "../shader/ShaderBuild.h"
 #include "../shader/ShaderManager.h"
-#include "../logging/RK_Log.h"
 #include "RenderCore.h"
 #include "../render/Text.h"
 #include "Raycast.h"

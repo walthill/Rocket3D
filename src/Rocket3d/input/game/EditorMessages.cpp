@@ -8,9 +8,10 @@
 #include <rkm/Vector3.h>
 #include <core/GameObject.h>
 #include "../../../RocketEngine/component/TransformComponent.h"
-
+#include <shader/ShaderManager.h>
 #include <core/Raycast.h>
-#include <logging/RK_Log.h>
+#include <component/MeshComponent.h>
+#include <core/GameObjectManager.h>
 
 /*
 ===========================================================

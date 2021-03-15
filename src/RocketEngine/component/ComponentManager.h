@@ -22,16 +22,14 @@
 #define COMPONENT_MAN_H
 
 #include <map>
-#include <vector>
-#include <rkutil/Trackable.h>
 #include <rkutil/DeanLib_MemoryPool.h>
 //#include "MaterialComponent.h"
 #include "MeshComponent.h"
 #include "TransformComponent.h"
 #include "LightComponent.h"
 
-class ShaderManager;
 
+class ShaderManager;
 /***************************************************************************//**
  * @brief 	Stores collection of components.
  *

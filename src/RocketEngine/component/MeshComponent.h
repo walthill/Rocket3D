@@ -22,7 +22,6 @@
 
 #include <rkm/MathUtils.h>
 #include "Component.h"
-#include "../../RocketEngine/shader/ShaderManager.h"
 #include "../../RocketEngine/asset/Model.h"
 
 const static std::string modelFileLocation = "../../assets/models/";
@@ -128,7 +127,7 @@ class MeshComponent : public Component
 		 *
 		 * @param shaderMan A reference to the shader manager to set model matrix uniform
 		 *************************************************************************/
-		void render(ShaderManager* shaderMan);
+		void render();
 		
 	private: 
 		const std::string MATRIX_NAME = "model";

@@ -21,8 +21,7 @@
 #ifndef GAME_OBJ_H
 #define GAME_OBJ_H
 
-#include <rkm/Vector3.h>
-#include "../component/Component.h"
+#include "../util/EngineUtils.h"
 
 class MaterialComponent;
 class MeshComponent;

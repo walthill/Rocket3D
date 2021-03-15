@@ -19,23 +19,18 @@
 #ifndef GAME_OBJ_MAN_H
 #define GAME_OBJ_MAN_H
 
-#include <vector>
 #include <map>
 #include "../../RocketEngine/util/EngineUtils.h"
 #include <rkutil/DeanLib_MemoryPool.h>
-#include "GameObject.h"
 #include "../component/TransformComponent.h"
 #include "../component/MeshComponent.h"
 #include "../component/MaterialComponent.h"
 #include "../component/LightComponent.h"
 
-class ComponentManager;
-
-typedef uint32 GameObjectId;
+class GameObject;
 
 const GameObjectId PLAYER_OBJ_ID = 0;
 const uint32 INVALID_GAMEOBJECT_ID = UINT_MAX;
-
 
 /***************************************************************************//**
  * @brief 	The manager for all GameObjects.
@@ -119,8 +114,6 @@ class GameObjectManager : public rkutil::Trackable
 
 	private:
 		static GameObjectId msNextUnitId;
-
-		ComponentManager* mpComponentManagerHandle;
 
 		rkutil::MemoryPool mGameObjectPool;
 		std::map<GameObjectId, GameObject*> mGameObjMap;

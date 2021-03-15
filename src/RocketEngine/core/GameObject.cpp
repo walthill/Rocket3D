@@ -1,6 +1,8 @@
 #include "GameObject.h"
 #include "../../Rocket3d/core/GameApp.h"
 #include "EngineCore.h"
+#include "../component/TransformComponent.h"
+#include "../component/ComponentManager.h"
 
 GameObject::GameObject()
 {

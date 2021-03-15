@@ -5,6 +5,7 @@
 #include <sstream>
 #include "../logging/RK_Log.h"
 
+//TODO: abstract shader API calls
 
 RK_Shader::RK_Shader(std::string vertexPath, std::string fragmentPath)
 {

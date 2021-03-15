@@ -1,4 +1,5 @@
 #include "ComponentManager.h"
+#include "../shader/ShaderManager.h"
 
 ComponentId ComponentManager::msNextMaterialComponentId = 0;
 ComponentId ComponentManager::msNextMeshComponentId = 0;
@@ -350,6 +351,6 @@ void ComponentManager::processLightingComponents()
 void ComponentManager::renderMeshes()
 {
 	for (auto& it : mMeshComponentMap)
-		it.second->render(mpShaderManagerHandle);
+		it.second->render();
 }
 

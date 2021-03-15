@@ -23,16 +23,12 @@
 #define GAME_APP_H
 
 #include "../../RocketEngine/util/EngineUtils.h"
-#include <rkutil/MemoryTracker.h>
-#include <rkutil/PerformanceTracker.h>
-#include <string>
-#include "../../RocketEngine/logging/RK_Log.h"
-#include "Application.h"
+#include <rkutil/UtilDefines.h>
 
+class Application;
 class EngineCore;
 class Message;
 class MessageManager;
-class Timer;
 class GameObject;
 class GameObjectManager;
 class ComponentManager;

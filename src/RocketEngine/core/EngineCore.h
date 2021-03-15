@@ -19,19 +19,25 @@
 #ifndef ENGINE_CORE_H
 #define ENGINE_CORE_H
 
+//#include "../render/buffers/VertexArray.h"
+#include <rkm/MathUtils.h>
 #include "../util/EngineUtils.h"
-#include "GameObjectManager.h"
-#include "../component/ComponentManager.h"
-#include "../render/buffers/VertexArray.h"
-#include "../render/buffers/Texture.h"
-#include "../render/buffers/Buffer.h"
 
+class GameObjectManager;
+class ComponentManager;
 class Camera;
 class Window;
 class InputSystem;
 class ShaderManager;
 class RK_Shader;
 class Text;
+
+class Texture2D;
+class VertexBuffer;
+class IndexBuffer;
+class CubemapTexture;
+class VertexArray;
+class FrameBuffer;
 
 /***************************************************************************//**
  * @brief The central point for RocketEngine graphics and rendering functionality
