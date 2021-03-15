@@ -49,7 +49,7 @@ void EditorKeyDown::process(float deltaTime)
 			{
 				//TEMP - OBJ CREATION TEST
 				TransformData t = { rkm::Vector3(0.0f, 2.1f, -3.0f), rkm::Vector3::one * 0.5f, rkm::Vector3::up, 45.0f };
-				MeshComponentData meshData = { "cube", STANDARD_SHADER_KEY, pGameEditor->getRocketEngine()->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY) };
+				MeshComponentData meshData = { "cube.obj", STANDARD_SHADER_KEY, pGameEditor->getRocketEngine()->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY) };
 
 				obj = pGameEditor->getRocketEngine()->getGameObjectManager()->createGameObject(t, meshData);
 				id = obj->getId();
