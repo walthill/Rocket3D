@@ -23,7 +23,7 @@ void Mesh::drawMesh(RK_Shader* shader)
 	uint32 i;
 	for (i = 0; i < mMeshData.textures.size(); i++)
 	{
-		RenderCommand::setActiveTexture(Renderer::TextureChannel::TEX_CHANNEL0 + i); // activate proper texture unit before binding
+		RenderCommand::setActiveTexture(Renderer::TextureChannel::TEX_CHANNEL0, i); // activate proper texture unit before binding
 
 		std::string name = "";
 		// retrieve texture number (the N in diffuse_textureN)
