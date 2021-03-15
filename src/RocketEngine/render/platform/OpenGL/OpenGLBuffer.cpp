@@ -20,6 +20,25 @@ OpenGLVertexBuffer::OpenGLVertexBuffer(const float* vertices, uint32 size, DataT
 	}
 }
 
+OpenGLVertexBuffer::OpenGLVertexBuffer(const void* vertices, uint32 size, DataType usage) //size in bytes
+{
+	glGenBuffers(1, &mRendererId);
+	glBindBuffer(GL_ARRAY_BUFFER, mRendererId);
+
+	switch (usage)
+	{
+	case VertexBuffer::DataType::STATIC:
+		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+		break;
+	case VertexBuffer::DataType::DYNAMIC:
+		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_DYNAMIC_DRAW);
+		break;
+	case VertexBuffer::DataType::STREAM:
+		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STREAM_DRAW);
+		break;
+	}
+}
+
 OpenGLVertexBuffer::~OpenGLVertexBuffer()
 {
 	glDeleteBuffers(1, &mRendererId);

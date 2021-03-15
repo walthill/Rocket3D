@@ -1,5 +1,8 @@
 #include "Mesh.h"
-#include <glad/glad.h>
+#include "../core/RenderCore.h"
+#include "../shader/RK_Shader.h"
+#include "buffers/VertexArray.h"
+#include "buffers/Texture.h"
 
 Mesh::Mesh(MeshData data)
 {
@@ -12,67 +15,49 @@ Mesh::Mesh(MeshData data)
 void Mesh::drawMesh(RK_Shader* shader)
 {
 	// bind appropriate textures
-	unsigned int diffuseNr = 1;
-	unsigned int specularNr = 1;
-	unsigned int normalNr = 1;
-	unsigned int heightNr = 1;
+	uint32 diffuseNr = 1;
+	uint32 specularNr = 1;
+	uint32 normalNr = 1;
+	uint32 heightNr = 1;
 
-	unsigned int i;
+	uint32 i;
 	for (i = 0; i < mMeshData.textures.size(); i++)
 	{
-		glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
+		RenderCommand::setActiveTexture(Renderer::TextureChannel::TEX_CHANNEL0 + i); // activate proper texture unit before binding
+
+		std::string name = "";
 		// retrieve texture number (the N in diffuse_textureN)
-		std::string number;
-		std::string name = mMeshData.textures[i].type;
+		switch (mMeshData.textures[i]->getType())
+		{
+			case Renderer::TextureType::DIFFUSE:		name = mDIFFUSE_UNIFORM_NAME + std::to_string(diffuseNr++);		break;
+			case Renderer::TextureType::SPECULAR:		name = mSPECULAR_UNIFORM_NAME + std::to_string(specularNr++);	break;
+			case Renderer::TextureType::NORMAL:			name = mNORMAL_UNIFORM_NAME + std::to_string(normalNr++);		break;
+			//case Renderer::TextureType::SPRITE:		name = mDIFFUSE_UNIFORM_NAME + std::to_string(diffuseNr++); break;
+		}
 
-		if (name == "texture_diffuse")
-			number = std::to_string(diffuseNr++);
-		else if (name == "texture_specular")
-			number = std::to_string(specularNr++); // transfer unsigned int to stream
-		else if (name == "texture_normal")
-			number = std::to_string(normalNr++); // transfer unsigned int to stream
-		else if (name == "texture_height")
-			number = std::to_string(heightNr++); // transfer unsigned int to stream
-
-		shader->setFloat(name.append(number), (float)i); // now set the sampler to the correct texture unit
-		glBindTexture(GL_TEXTURE_2D, mMeshData.textures[i].id); // and finally bind the texture
+		shader->setFloat(name, (float)i); // now set the sampler to the correct texture unit
+		mMeshData.textures[i]->bind();
 	}
 
 	// draw mesh
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, mMeshData.indices.size(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-
-	// always good practice to set everything back to defaults once configured.
-	glActiveTexture(GL_TEXTURE0);
+	RenderCore::submit(mMeshVA);
+	RenderCommand::setActiveTexture(Renderer::TextureChannel::TEX_CHANNEL0);
 }
 
 void Mesh::initialize()
 {
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
+	std::shared_ptr<VertexBuffer> mMeshVB;
+	std::shared_ptr<IndexBuffer> mMeshIB;
 
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	mMeshVA.reset(VertexArray::create());
+	mMeshVB.reset(VertexBuffer::create(&mMeshData.vertices[0], sizeof(Vertex) * mMeshData.vertices.size()));
+	mMeshVB->setLayout(mMeshLayout);
+	mMeshVA->addVertexBuffer(mMeshVB);
+	mMeshVA->processVertexBuffers();
 
-	glBufferData(GL_ARRAY_BUFFER, mMeshData.vertices.size() * sizeof(Vertex), &mMeshData.vertices[0], GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mMeshData.indices.size() * sizeof(unsigned int),
-		&mMeshData.indices[0], GL_STATIC_DRAW);
-
-	// vertex positions
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-	// vertex normals
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
-	// vertex texture coords
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
-
-	glBindVertexArray(0);
+	mMeshIB.reset(IndexBuffer::create(&mMeshData.indices[0], mMeshData.indices.size() / sizeof(uint32)));
+	mMeshVA->setIndexBuffer(mMeshIB);
+	mMeshVA->unbind();
 }
 
 

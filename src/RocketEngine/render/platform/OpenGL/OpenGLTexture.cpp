@@ -4,8 +4,8 @@
 
 const int OpenGLTexture2D::BORDER_DEFAULT = 0;
 
-OpenGLTexture2D::OpenGLTexture2D(const std::string& path, int sWrapParam, int tWrapParam, int miniFilter, int magFilter, int detailReductionLevel)
-	: mPath(path)
+OpenGLTexture2D::OpenGLTexture2D(const std::string& path, int type, int sWrapParam, int tWrapParam, int miniFilter, int magFilter, int detailReductionLevel)
+	: mPath(path), mType(type)
 {
 	int width, height, channels;
 	

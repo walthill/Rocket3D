@@ -459,6 +459,11 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	mpShaderManager->setShaderVec3("cameraPos", *mpEditorCam->getPosition());
 	mSkyboxTex->bind();
 
+	mpShaderManager->useShaderByKey(standardLightingShaderId);
+	mpShaderManager->setShaderMat4("projection", proj);
+	mpShaderManager->setShaderMat4("view", view);
+
+
 	// floor
 	mpShaderManager->useShaderByKey("basicTexture");
 	mpShaderManager->setShaderMat4("projection", proj);
@@ -527,10 +532,11 @@ void EngineCore::render(int screenType)
 	mpComponentManager->renderMeshes();
 	renderText();
 	
-	mpWindowHandle->disableWindowFlags(CULL_FACE);
+	/*(mpWindowHandle->disableWindowFlags(CULL_FACE);
 	mpShaderManager->useShaderByKey("instanced");
 	RenderCore::submit(mInstancedQuadVA, 100);
 	mpWindowHandle->enableWindowFlags(CULL_FACE);
+	*/
 
 	endRender(screenType);
 }

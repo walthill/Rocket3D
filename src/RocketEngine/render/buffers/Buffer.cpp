@@ -13,6 +13,17 @@ VertexBuffer* VertexBuffer::create(const float* vertices, uint32 size, DataType 
 	return nullptr;
 }
 
+VertexBuffer* VertexBuffer::create(const void* data, uint32 size, DataType usage)
+{
+	switch (RenderCore::getAPI())
+	{
+	case Renderer::API::NONE:		return nullptr;
+	case Renderer::API::OPENGL:		return new OpenGLVertexBuffer(data, size, usage);
+	}
+	return nullptr;
+}
+
+
 IndexBuffer* IndexBuffer::create(uint32* indicies, uint32 count)
 {
 	switch (RenderCore::getAPI())

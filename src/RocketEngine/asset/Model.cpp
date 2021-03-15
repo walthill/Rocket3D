@@ -2,14 +2,27 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include "../logging/RK_Log.h"
-#include <stb_image.h>
-#include <glad/glad.h>
-
+#include "../render/Renderer.h"
 #include "../render/buffers/Texture.h"
+#include "../render/buffers/VertexArray.h"
 
 Model::Model(std::string path)
 {
 	initialize(path);
+}
+
+
+Model::~Model()
+{
+	clean();
+}
+
+void Model::clean()
+{
+	for (size_t i = 0; i < texturesLoaded.size(); i++)
+	{
+		delete texturesLoaded[i];
+	}
 }
 
 /*
@@ -106,11 +119,11 @@ Mesh Model::assimpToMesh(aiMesh* mesh, const aiScene* scene)
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
 		//Diffuse maps
-		std::vector<TextureData> diffuseMaps = getTexturesFromMaterial(material, aiTextureType_DIFFUSE, "texture_diffuse");
+		std::vector<Texture2D*> diffuseMaps = getTexturesFromMaterial(material, aiTextureType_DIFFUSE, Renderer::TextureType::DIFFUSE);
 		data.textures.insert(data.textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
 		//Specular maps
-		std::vector<TextureData> specularMaps = getTexturesFromMaterial(material, aiTextureType_SPECULAR, "texture_specular");
+		std::vector<Texture2D*> specularMaps = getTexturesFromMaterial(material, aiTextureType_SPECULAR, Renderer::TextureType::SPECULAR);
 		data.textures.insert(data.textures.end(), specularMaps.begin(), specularMaps.end());
 
 
@@ -123,9 +136,9 @@ Mesh Model::assimpToMesh(aiMesh* mesh, const aiScene* scene)
 /*
 	* Takes in a material object. Accesses & stores textures from that material
 */
-std::vector<TextureData> Model::getTexturesFromMaterial(aiMaterial* mat, aiTextureType type, std::string typeName)
+std::vector<Texture2D*> Model::getTexturesFromMaterial(aiMaterial* mat, aiTextureType type, int typeName)
 {
-	std::vector<TextureData> textures;
+	std::vector<Texture2D*> textures = std::vector<Texture2D*>();
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		aiString str;
@@ -135,7 +148,7 @@ std::vector<TextureData> Model::getTexturesFromMaterial(aiMaterial* mat, aiTextu
 		//Check if texture has alread been loaded and use that data if so
 		for (unsigned int j = 0; j < texturesLoaded.size(); j++)
 		{
-			if (std::strcmp(texturesLoaded[j].path.data(), str.C_Str()) == 0)
+			if (std::strcmp(texturesLoaded[j]->getPath().data(), str.C_Str()) == 0)
 			{
 				textures.push_back(texturesLoaded[j]);
 				loadFromMemory = true;
@@ -146,28 +159,14 @@ std::vector<TextureData> Model::getTexturesFromMaterial(aiMaterial* mat, aiTextu
 		//load in new texture from file
 		if (!loadFromMemory)
 		{
-			TextureData texture;
-			texture.id = LoadTextureFromFile(str.C_Str(), mModelData.directory);
-			texture.type = typeName;
-			texture.path = str.C_Str();
-			textures.push_back(texture);
-			texturesLoaded.push_back(texture);
+			std::string filename = (std::string)str.C_Str();
+			filename = mModelData.directory + '/' + filename;
+			
+			textures.push_back(Texture2D::create(filename, typeName, Texture::WrapType::REPEAT, Texture::WrapType::REPEAT,
+							   Texture::MinifyFilter::LINEAR_MIPMAP_LINEAR, Texture	::MagnifyFilter::MAG_LINEAR));
+			
+			texturesLoaded.push_back(textures[textures.size()-1]);
 		}
 	}
 	return textures;
-}
-
-/*
-	* Loads in textures from the given file path and
-	stores the textures in an OpenGL-compatible form
-*/
-unsigned int Model::LoadTextureFromFile(const char* path, const std::string& directory, bool gamma)
-{
-	std::string filename = (std::string)path;
-	filename = directory + '/' + filename;
-
-	std::shared_ptr<Texture2D> loadTex;
-	loadTex.reset(Texture2D::create(filename, Texture::WrapType::REPEAT, Texture::WrapType::REPEAT,
-												Texture::MinifyFilter::LINEAR_MIPMAP_LINEAR, Texture::MagnifyFilter::MAG_LINEAR));
-	return loadTex->getId();
 }

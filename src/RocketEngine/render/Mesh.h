@@ -21,13 +21,14 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include "../util/EngineUtils.h"
 #include <rkm/Vector2.h>
 #include <rkm/Vector3.h>
-#include <vector>
-#include <string>
-#include "../shader/RK_Shader.h"
+#include "buffers/Buffer.h"
 
-typedef unsigned int TextureId;
+class VertexArray;
+class Texture2D;
+class RK_Shader;
 
 /* Vertex Data */
 struct Vertex {
@@ -35,17 +36,11 @@ struct Vertex {
 	rkm::Vector2 texCoords;
 };
 
-/* Texture Data */
-struct TextureData {
-    TextureId id = -1;
-    std::string type, path;
-};
-
 /* Contains all the mesh's vertices, indices, & textures */
 struct MeshData {
 	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
-	std::vector<TextureData> textures;
+	std::vector<uint32> indices;
+	std::vector<Texture2D*> textures;
 };
 
 class Mesh
@@ -63,7 +58,17 @@ class Mesh
 
 	private:
 		MeshData mMeshData;
-		unsigned int VAO, VBO, EBO;
+		std::shared_ptr<VertexArray> mMeshVA;
+		
+		const std::string mDIFFUSE_UNIFORM_NAME = "diffuse";
+		const std::string mSPECULAR_UNIFORM_NAME = "specular";
+		const std::string mNORMAL_UNIFORM_NAME = "normal";
+
+		const BufferLayout mMeshLayout = {
+			{ShaderDataType::Float3, "aPos"},
+			{ShaderDataType::Float3, "aNormal"},
+			{ShaderDataType::Float2, "aTexCoords"}
+		};
 
 		/***
 			* Initializes mesh vertex positions, normals, and texture coordinates using OpenGL functions

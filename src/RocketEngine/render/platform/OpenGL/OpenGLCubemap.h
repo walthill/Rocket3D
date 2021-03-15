@@ -12,16 +12,18 @@ class OpenGLCubemap : public CubemapTexture
 
 		~OpenGLCubemap();
 
-		virtual uint32 getWidth()	const override { return mWidth; }
-		virtual uint32 getHeight()	const override { return mHeight; }
-		virtual uint32 getId()		const override { return mRendererId; }
+		virtual uint32 getWidth()		const override { return mWidth; }
+		virtual uint32 getHeight()		const override { return mHeight; }
+		virtual uint32 getId()			const override { return mRendererId; }
+		virtual uint32 getType()		const override { return mType; }
+		virtual std::string getPath()	const override { return mPath; }
 
 		virtual void bind()			const override;
 
 	private:
 		uint32 mWidth, mHeight;
 		std::string mPath;
-		uint32 mRendererId;
+		uint32 mRendererId, mType;
 		static const int BORDER_DEFAULT; //"this value must be zero"
 };
 

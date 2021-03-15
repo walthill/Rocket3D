@@ -11,7 +11,8 @@ class Renderer
 		enum CullFaceType { BACK = 0, FRONT, FRONT_AND_BACK };
 		enum BufferType { COLOR_BUFFER = 1, DEPTH_BUFFER = 2, ACCUM_BUFFER = 4, STENCIL_BUFFER = 8 };
 		enum BufferTestType { NEVER = 0, LESS, EQUAL, LESS_OR_EQUAL, GREATER, NOT_EQUAL, GREAT_OR_EQUAL, ALWAYS };
-
+		enum TextureChannel { TEX_CHANNEL0 = 0 };
+		enum TextureType { NONE = 0, DIFFUSE, SPECULAR, NORMAL, SPRITE };
 		/***
 			* Draw a color to the screen
 		****/
@@ -31,6 +32,8 @@ class Renderer
 
 		virtual void setStencilMask(int mask) PURE_VIRTUAL;
 		virtual void setStencilBuffer(int bufferComparison, int refValue, int mask) PURE_VIRTUAL;
+
+		virtual void setActiveTexture(int channel, int offset = 0) PURE_VIRTUAL;
 
 		virtual void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray) PURE_VIRTUAL;
 		virtual void drawTriangles(const std::shared_ptr<VertexArray>& vertexArray) PURE_VIRTUAL;

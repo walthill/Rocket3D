@@ -133,6 +133,7 @@ class VertexBuffer : public rkutil::Trackable
 		virtual const BufferLayout& getLayout() const PURE_VIRTUAL;
 
 		static VertexBuffer* create(const float* vertices, uint32 size, DataType usage = DataType::STATIC);
+		static VertexBuffer* create(const void* data, uint32 size, DataType usage = DataType::STATIC);
 	private:
 };
 

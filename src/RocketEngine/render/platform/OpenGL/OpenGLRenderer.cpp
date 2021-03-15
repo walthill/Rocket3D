@@ -81,6 +81,16 @@ void OpenGLRenderer::setStencilBuffer(int bufferComparison, int refValue, int ma
 	glStencilFunc(stencilComparisonType, refValue, mask);
 }
 
+void OpenGLRenderer::setActiveTexture(int channel, int offset)
+{
+	GLenum texChannel{};
+	switch (channel)
+	{
+		case TEX_CHANNEL0:		texChannel = GL_TEXTURE0 + offset;	break;
+	}
+
+	glActiveTexture(texChannel);
+}
 
 void OpenGLRenderer::drawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
 {

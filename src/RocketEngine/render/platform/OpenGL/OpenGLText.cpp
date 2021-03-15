@@ -79,7 +79,8 @@ OpenGLText::OpenGLText(std::string fontName, RK_Shader* shader)
 	// Configure VAO/VBO for texture quads
 	glyphVA.reset(VertexArray::create());
 
-	glyphVB.reset(VertexBuffer::create(nullptr, sizeof(GLfloat) * 6 * 4, VertexBuffer::DataType::DYNAMIC));
+	const float* f = {};
+	glyphVB.reset(VertexBuffer::create(f, sizeof(GLfloat) * 6 * 4, VertexBuffer::DataType::DYNAMIC));
 
 	BufferLayout layout = {
 		{ ShaderDataType::Float4, "vertex" }

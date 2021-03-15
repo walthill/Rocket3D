@@ -13,6 +13,7 @@ class OpenGLRenderer : public Renderer
 		virtual void setDepthBuffer(int depthBufferType) override;
 		virtual void setStencilMask(int mask) override;
 		virtual void setStencilBuffer(int bufferComparison, int refValue, int mask) override;
+		virtual void setActiveTexture(int channel, int offset = 0) override;
 
 		virtual void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray) override;
 		virtual void drawTriangles(const std::shared_ptr<VertexArray>& vertexArray) override;

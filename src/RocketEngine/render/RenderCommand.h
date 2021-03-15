@@ -41,6 +41,11 @@ class RenderCommand
 			spRendererAPI->setStencilMask(mask);
 		}
 
+		inline static void setActiveTexture(int channel, int offset = 0)
+		{
+			spRendererAPI->setActiveTexture(channel, offset);
+		}
+
 		inline static void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
 		{
 			spRendererAPI->drawIndexed(vertexArray);
