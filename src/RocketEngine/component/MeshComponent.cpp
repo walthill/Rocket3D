@@ -13,8 +13,11 @@ MeshComponent::~MeshComponent()
 
 void MeshComponent::load()
 {
-	if(mMeshData.modelName != "null" && mMeshData.modelName != "")
-		mMeshData.mesh = new Model(modelFileLocation + mMeshData.modelName + "/" + mMeshData.modelName + ".obj");
+	if (mMeshData.modelName != "null" && mMeshData.modelName != "")
+	{
+		std::string folderName = mMeshData.modelName.substr(0, mMeshData.modelName.find('.'));
+		mMeshData.mesh = new Model(modelFileLocation + folderName + "/" + mMeshData.modelName);
+	}
 }
 
 
