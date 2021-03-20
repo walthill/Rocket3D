@@ -123,7 +123,7 @@ class EngineCore : public rkutil::Trackable
 
 	private:
 		const std::string mMODEL_PATH = "../../assets/models/";
-		const int MAX_NUM_OBJECTS = 300, MAX_NUM_COMPONENETS = 1000, GAME_SCREEN = 0, EDITOR_SCREEN = 1;
+		const int MAX_NUM_OBJECTS = 10000, MAX_NUM_COMPONENETS = 20000, GAME_SCREEN = 0, EDITOR_SCREEN = 1;
 		int mAppWindowWidth = 0, mAppWindowHeight = 0;
 		float lastFrame = 0.0f; // Time of last frame
 		

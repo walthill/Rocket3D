@@ -27,6 +27,7 @@
 #include "RenderCore.h"
 #include "../render/Text.h"
 #include "Raycast.h"
+#include "../asset/AssetManager.h"
 
 //mouse selection: http://antongerdelan.net/opengl/raycasting.html
 // also helpful? https://www.bfilipek.com/2012/06/select-mouse-opengl.html
@@ -47,6 +48,7 @@ void EngineCore::clean()
 	delete mpShaderManager;
 	delete mpEditorCam;
 	delete mpGameCam;
+	AssetManager::cleanInstance();
 }
 
 
@@ -66,6 +68,9 @@ bool EngineCore::initialize()
 	mpWindowHandle = app->getAppWindow();
 	mAppWindowWidth = mpWindowHandle->getWidth();
 	mAppWindowHeight = mpWindowHandle->getHeight();
+
+	AssetManager::initInstance();
+	AssetManager::getInstance()->initialize();
 
 #pragma region Vertices Definitions
 	float cubeVertices[] = {
@@ -370,19 +375,24 @@ bool EngineCore::initialize()
 	mpShaderManager = new ShaderManager();
 
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
-	mpShaderManager->addShader(reflectiveSkyboxShaderId, new RK_Shader("vSkyboxReflective.glsl", "fSkyboxReflective.glsl"));
-	mpShaderManager->addShader("refractionShader", new RK_Shader("vSkyboxReflective.glsl", "fSkyboxRefraction.glsl"));
-	mpShaderManager->addShader("basicTexture", new RK_Shader("vFrameBuffer.glsl", "fTransparentTexture.glsl"));
-	mpShaderManager->addShader("stencil", new RK_Shader("vFrameBuffer.glsl", "fStencilBuffer.glsl"));
+	//mpShaderManager->addShader(reflectiveSkyboxShaderId, new RK_Shader("vSkyboxReflective.glsl", "fSkyboxReflective.glsl"));
+	//mpShaderManager->addShader("refractionShader", new RK_Shader("vSkyboxReflective.glsl", "fSkyboxRefraction.glsl"));
+	mpShaderManager->addShader("ts", new RK_Shader("vFrameBuffer.glsl", "fFrameBuffer.glsl"));
+	//mpShaderManager->addShader("basicTexture", new RK_Shader("vFrameBuffer.glsl", "fTransparentTexture.glsl"));
+	//mpShaderManager->addShader("stencil", new RK_Shader("vFrameBuffer.glsl", "fStencilBuffer.glsl"));
 	mpShaderManager->addShader("framebuffer", new RK_Shader("vFrameBufferScreen.glsl", "fFrameBufferScreen.glsl"));
-	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
+	//mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
 	mpShaderManager->addShader(textShaderId, new RK_Shader("vTextRender.glsl", "fTextRender.glsl"));
 	mpShaderManager->addShader(skyboxShaderId, new RK_Shader("vSkybox.glsl", "fSkybox.glsl"));
-	mpShaderManager->addShader("instanced", new RK_Shader("vSingleColorInstanceArray.glsl", "fSingleColor.glsl"));
+	//mpShaderManager->addShader("instanced", new RK_Shader("vSingleColorInstanceArray.glsl", "fSingleColor.glsl"));
 
-	initLighting();
-	mpShaderManager->useShaderByKey("basicTexture");
-	mpShaderManager->setShaderInt("texture1", 0);
+	//initLighting();
+
+	//mpShaderManager->useShaderByKey("ts");
+	//mpShaderManager->setShaderInt("texture_diffuse1", 0);
+
+	//mpShaderManager->useShaderByKey("basicTexture");
+	//mpShaderManager->setShaderInt("texture_diffuse1", 0);
 
 	mpShaderManager->useShaderByKey("framebuffer");
 	mpShaderManager->setShaderInt("screenTexture", 0);
@@ -461,14 +471,17 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	mpShaderManager->setShaderMat4("model", model);
 	mpShaderManager->setShaderVec3("cameraPos", *mpEditorCam->getPosition());
 	mSkyboxTex->bind();
-
+/*
 	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
-
+	*/
+	mpShaderManager->useShaderByKey("ts");
+	mpShaderManager->setShaderMat4("projection", proj);
+	mpShaderManager->setShaderMat4("view", view);
 
 	// floor
-	mpShaderManager->useShaderByKey("basicTexture");
+	/*mpShaderManager->useShaderByKey("basicTexture");
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
 
@@ -507,14 +520,14 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	
 	RenderCommand::setStencilMask(0xFF);
 	RenderCommand::setStencilBuffer(Renderer::BufferTestType::ALWAYS, 0, 0xFF);
-
+	*/
 	renderSkybox(view, proj);
 
 	// Light "emitters" are not affected by the lighting shader 
 	// and mark the location of the light sources
-	mpShaderManager->useShaderByKey(emitterShaderId);
+/*	mpShaderManager->useShaderByKey(emitterShaderId);
 	mpShaderManager->setShaderMat4("projection", proj);
-	mpShaderManager->setShaderMat4("view", view);
+	mpShaderManager->setShaderMat4("view", view);*/
 }
 
 
@@ -522,7 +535,6 @@ void EngineCore::beginRender(int screenType)
 {
 	RenderCommand::clearColor(Color::grey);
 	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER | Renderer::DEPTH_BUFFER | Renderer::STENCIL_BUFFER);
-
 	RenderCore::beginScene();	//placeholder for now will take data on camera, lighting, etc
 
 	prepFrambuffer(screenType);
@@ -533,7 +545,7 @@ void EngineCore::render(int screenType)
 {
 	beginRender(screenType);
 	mpComponentManager->renderMeshes();
-	renderText();
+	//renderText();
 	
 	/*(mpWindowHandle->disableWindowFlags(CULL_FACE);
 	mpShaderManager->useShaderByKey("instanced");
@@ -546,7 +558,7 @@ void EngineCore::render(int screenType)
 
 void EngineCore::endRender(int screenType)
 {
-	renderTransparentObjects(screenType);
+	//renderTransparentObjects(screenType);
 	RenderCore::endScene();	//placeholder for now
 
 	renderFramebufferScreen(screenType);

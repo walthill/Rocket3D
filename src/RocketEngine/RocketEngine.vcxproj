@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="asset\AssetManager.h" />
     <ClInclude Include="asset\Model.h" />
     <ClInclude Include="component\Component.h" />
     <ClInclude Include="component\ComponentManager.h" />
@@ -62,6 +63,7 @@
     <ClInclude Include="window\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="asset\AssetManager.cpp" />
     <ClCompile Include="asset\Model.cpp" />
     <ClCompile Include="component\Component.cpp" />
     <ClCompile Include="component\ComponentManager.cpp" />

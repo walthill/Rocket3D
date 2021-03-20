@@ -60,9 +60,9 @@ class Mesh
 		MeshData mMeshData;
 		std::shared_ptr<VertexArray> mMeshVA;
 		
-		const std::string mDIFFUSE_UNIFORM_NAME = "diffuse";
-		const std::string mSPECULAR_UNIFORM_NAME = "specular";
-		const std::string mNORMAL_UNIFORM_NAME = "normal";
+		const std::string mDIFFUSE_UNIFORM_NAME = "texture_diffuse";
+		const std::string mSPECULAR_UNIFORM_NAME = "texture_specular";
+		const std::string mNORMAL_UNIFORM_NAME = "texture_normal";
 
 		const BufferLayout mMeshLayout = {
 			{ShaderDataType::Float3, "aPos"},

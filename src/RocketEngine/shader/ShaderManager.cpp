@@ -116,6 +116,10 @@ RK_Shader* ShaderManager::getShaderByKey(const ShaderKey& key)
 	{
 		return iter->second;
 	}
+	else
+	{
+		RK_CORE_ERROR_ALL("RK_Shader::Shader name invalid: " + key);
+	}
 
 	return nullptr;
 }

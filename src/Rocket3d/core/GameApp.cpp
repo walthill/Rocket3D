@@ -50,8 +50,53 @@ bool GameApp::initialize()
 	//=========================================================================
 	//		Creating GameObjects
 	//=========================================================================
+	MeshComponentData asteroidMeshData = { "rock.obj", "ts", mpRocketEngine->getShaderManager()->getShaderByKey("ts") };
 
-	TransformData t = { rkm::Vector3(0, 1, -3), rkm::Vector3::one * 0.5f, rkm::Vector3::up, 45.0f };
+	MeshComponentData planetMeshData = { "planet.obj", "ts", mpRocketEngine->getShaderManager()->getShaderByKey("ts") };
+
+	const unsigned int amount = 1000;
+	srand(Application::getInstance()->getTime()); // initialize random seed	
+	float radius = 25.0;
+	float offset = 2.5f;
+	for (unsigned int i = 0; i < amount; i++)
+	{
+		rkm::Mat4 model = rkm::Mat4(1.0f);
+		// 1. translation: displace along circle with 'radius' in range [-offset, offset]
+		float angle = (float)i / (float)amount * 360.0f;
+		float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+		float x = sin(angle) * radius + displacement;
+		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+		float y = displacement * 0.4f; // keep height of field smaller compared to width of x and z
+		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+		float z = cos(angle) * radius + displacement;
+		rkm::Vector3 posVec = rkm::Vector3(x, y, z);
+
+		// 2. scale: scale between 0.05 and 0.25f
+		float scale = (rand() % 20) / 100.0f + 0.05;
+		rkm::Vector3 scaleVec = rkm::Vector3(scale, scale, scale);
+
+		// 3. rotation: add random rotation around a (semi)randomly picked rotation axis vector
+		float rotAngle = (rand() % 360);
+		rkm::Vector3 rotVec = rkm::Vector3(0.4f, 0.6f, 0.8f);
+
+		// 4. now add to list of matrices
+		TransformData t = {posVec, scaleVec,  rkm::Vector3(0.4f, 0.6f, 0.8f), rotAngle };
+		mpRocketEngine->getGameObjectManager()->createGameObject(t, asteroidMeshData);// , matData);
+	}
+
+	TransformData t = { rkm::Vector3(0, 1, -3), rkm::Vector3::one, rkm::Vector3::up, 45.0f };
+	
+	mpRocketEngine->getGameObjectManager()->createGameObject(t, planetMeshData);// , matData);
+	//GameObject* o2 = mpRocketEngine->getGameObjectManager()->createGameObject(t, asteroidMeshData);// , matData);
+
+
+	//TransformData asteroidTransform = { rkm::Vector3(0, 1, -3), rkm::Vector3::one, rkm::Vector3::up, 45.0f };
+/*	for (size_t i = 0; i < length; i++)
+	{
+
+	}
+	*/
+	/*TransformData t = { rkm::Vector3(0, 1, -3), rkm::Vector3::one * 0.5f, rkm::Vector3::up, 45.0f };
 	
 	//MeshComponentData meshData = { "cube", STANDARD_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY) };
 	MeshComponentData meshData = {"cube.obj", STANDARD_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY)};
@@ -119,14 +164,14 @@ bool GameApp::initialize()
 
 	//Spotlight light
 	GameObject* spotLight = mpRocketEngine->getGameObjectManager()->createGameObject();
-	mpRocketEngine->getGameObjectManager()->addSpotLight(spotLight->getId(), spotData);
+	mpRocketEngine->getGameObjectManager()->addSpotLight(spotLight->getId(), spotData);*/
 
 	//=========================================================================
 
 	pPerformanceTracker->stopTracking(mINIT_TRACKER_NAME);
 	RK_INFO_ALL("Time to init: " + std::to_string(pPerformanceTracker->getElapsedTime(mINIT_TRACKER_NAME)) + "ms\n");
 	
-	delete[] pointLightPositions;
+//	delete[] pointLightPositions;
 	delete pPerformanceTracker;
 
 	mpAppHandle = Application::getInstance();

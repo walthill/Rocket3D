@@ -1,6 +1,7 @@
 #include "MeshComponent.h"
 #include "MaterialComponent.h"
 #include "../shader/RK_Shader.h"
+#include "../asset/AssetManager.h"
 
 MeshComponent::MeshComponent(const ComponentId& id) :
 	Component(id)
@@ -17,14 +18,13 @@ void MeshComponent::load()
 	if (mMeshData.modelName != "null" && mMeshData.modelName != "")
 	{
 		std::string folderName = mMeshData.modelName.substr(0, mMeshData.modelName.find('.'));
-		mMeshData.mesh = new Model(modelFileLocation + folderName + "/" + mMeshData.modelName);
+		mMeshData.mesh = AssetManager::getInstance()->loadModelAsset(modelFileLocation + folderName + "/" + mMeshData.modelName);
 	}
 }
 
 
 void MeshComponent::cleanup()
 {
-	delete mMeshData.mesh;
 }
 
 Model* MeshComponent::getMesh()

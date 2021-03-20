@@ -144,6 +144,9 @@
     <ClInclude Include="render\platform\OpenGL\OpenGLCubemap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="asset\AssetManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\EngineCore.cpp">
@@ -261,6 +264,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="render\platform\OpenGL\OpenGLCubemap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="asset\AssetManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
