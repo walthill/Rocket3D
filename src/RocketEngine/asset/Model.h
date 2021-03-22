@@ -28,6 +28,11 @@
 #include "../render/Mesh.h"
 #include <assimp/scene.h>
 
+struct ModelData {
+	std::vector<Mesh> meshes;
+	std::string directory;
+};
+
 class Model : public rkutil::Trackable
 {
 	//TODO: add gamma correction code after lighting tutorial
@@ -35,7 +40,7 @@ class Model : public rkutil::Trackable
 		/*
 			* Constructor requires a path to the model for initialization
 		*/
-		Model(std::string path);
+		Model(std::string path, int instanceCount = 1, rkm::Mat4* matrices = nullptr);
 
 		~Model();
 
@@ -45,16 +50,14 @@ class Model : public rkutil::Trackable
 			* Render meshes to display model on-screen
 		*/
 		void drawModel(RK_Shader* shader);
-
-	private:
-		struct ModelData {
-			std::vector<Mesh> meshes;
-			std::string directory;
-		};
-
 		ModelData mModelData;
 
 		std::vector<Texture2D*> texturesLoaded;
+	private:
+		
+		int mInstanceCount;
+		rkm::Mat4* mMatrices;
+
 
 		/*
 			* Initialize model data and store in a ModelData struct 

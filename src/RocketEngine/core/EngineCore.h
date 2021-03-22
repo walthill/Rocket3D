@@ -31,7 +31,7 @@ class InputSystem;
 class ShaderManager;
 class RK_Shader;
 class Text;
-
+class Model;	//TEMP
 class Texture2D;
 class VertexBuffer;
 class IndexBuffer;
@@ -134,6 +134,10 @@ class EngineCore : public rkutil::Trackable
 
 		// screen quad VAO
 		unsigned int quadVAO, quadVBO;
+
+		//TODO: refactor
+		Model *mPlanet, *mRock;
+		uint32 amount = 1000;
 
 		std::shared_ptr<VertexArray> mQuadVA, mInstancedQuadVA, mPlaneVA, mSkyboxVA, mCubeVA, mTransparentVA;
 		std::shared_ptr<CubemapTexture> mSkyboxTex;

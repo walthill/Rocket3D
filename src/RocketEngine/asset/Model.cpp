@@ -6,7 +6,8 @@
 #include "../render/buffers/Texture.h"
 #include "../render/buffers/VertexArray.h"
 
-Model::Model(std::string path)
+Model::Model(std::string path, int instanceCount, rkm::Mat4* matrices) :
+	mInstanceCount(instanceCount), mMatrices(matrices)
 {
 	initialize(path);
 }
@@ -78,6 +79,9 @@ void Model::processNode(aiNode* node, const aiScene* scene)
 Mesh Model::assimpToMesh(aiMesh* mesh, const aiScene* scene)
 {
 	MeshData data;
+
+	data.instanceCount = mInstanceCount;
+	data.matrices = mMatrices;
 
 	Vertex vert;
 	rkm::Vector3 vector;

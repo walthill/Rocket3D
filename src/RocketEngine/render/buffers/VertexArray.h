@@ -2,7 +2,7 @@
 #define VERTEX_ARRAY_H
 
 #include "Buffer.h"
-
+//TODO: track instance count inside vertex array???
 class VertexArray : public rkutil::Trackable
 {
 	public:
@@ -10,7 +10,7 @@ class VertexArray : public rkutil::Trackable
 
 		virtual void bind() const PURE_VIRTUAL;
 		virtual void unbind() const PURE_VIRTUAL;
-
+		virtual uint32 getId() const PURE_VIRTUAL;
 		virtual void addVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) PURE_VIRTUAL;
 		virtual void setIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) PURE_VIRTUAL;
 

@@ -24,3 +24,10 @@ void RenderCore::submit(const std::shared_ptr<VertexArray>& vertexArray, uint32 
 	vertexArray->bind();
 	RenderCommand::drawInstancedTriangles(vertexArray, instanceCount);
 }
+
+void RenderCore::submitInstanced(const std::shared_ptr<VertexArray>& vertexArray, uint32 instanceCount)
+{
+	vertexArray->bind();
+	RenderCommand::drawInstanced(vertexArray, instanceCount);
+	vertexArray->unbind();
+}

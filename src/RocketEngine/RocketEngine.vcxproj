@@ -125,6 +125,7 @@
     <None Include="shader\glsl\fragment\fTransparentTexture.glsl" />
     <None Include="shader\glsl\vertex\vFrameBuffer.glsl" />
     <None Include="shader\glsl\vertex\vFrameBufferScreen.glsl" />
+    <None Include="shader\glsl\vertex\vInstancedMesh.glsl" />
     <None Include="shader\glsl\vertex\vLamp.glsl" />
     <None Include="shader\glsl\vertex\vLighting.glsl" />
     <None Include="shader\glsl\vertex\vShader.glsl" />

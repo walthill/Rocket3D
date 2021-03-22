@@ -106,3 +106,8 @@ void OpenGLRenderer::drawInstancedTriangles(const std::shared_ptr<VertexArray>& 
 {
 	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, instanceCount);
 }
+
+void OpenGLRenderer::drawInstanced(const std::shared_ptr<VertexArray>& vertexArray, int instanceCount)
+{
+	glDrawElementsInstanced(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0, instanceCount);
+}

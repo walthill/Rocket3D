@@ -60,6 +60,10 @@ class RenderCommand
 		{
 			spRendererAPI->drawInstancedTriangles(vertexArray, instanceCount);
 		}
+		inline static void drawInstanced(const std::shared_ptr<VertexArray>& vertexArray, int instanceCount)
+		{
+			spRendererAPI->drawInstanced(vertexArray, instanceCount);
+		}
 
 	private:
 		static Renderer* spRendererAPI;

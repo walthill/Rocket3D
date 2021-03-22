@@ -28,6 +28,7 @@
 #include "../render/Text.h"
 #include "Raycast.h"
 #include "../asset/AssetManager.h"
+#include <glad/glad.h>
 
 //mouse selection: http://antongerdelan.net/opengl/raycasting.html
 // also helpful? https://www.bfilipek.com/2012/06/select-mouse-opengl.html
@@ -43,6 +44,8 @@ EngineCore::~EngineCore()
 
 void EngineCore::clean()
 {
+	delete mPlanet;
+	delete mRock;
 	delete mpGameObjectManager;
 	delete mpComponentManager;
 	delete mpShaderManager;
@@ -251,9 +254,38 @@ bool EngineCore::initialize()
 
 #pragma endregion
 
+	rkm::Mat4* modelMatrices = new rkm::Mat4[amount];
+	srand(app->getTime()); // initialize random seed	
+	float radius = 50.0;
+	float offset = 2.5f;
+	for (unsigned int i = 0; i < amount; i++)
+	{
+		rkm::Mat4 model = rkm::Mat4::identity;
+		// translation: displace along circle with 'radius' in range [-offset, offset]
+		float angle = (float)i / (float)amount * 360.0f;
+		float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+		float x = sin(angle) * radius + displacement;
+		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+		float y = displacement * 0.4f; // keep height of field smaller compared to width of x and z
+		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+
+		float rotAngle = (rand() % 360);
+		model = rkm::Mat4::rotate(model, rotAngle, rkm::Vector3(0.4f, 0.6f, 0.8f));
+
+		float scale = (rand() % 20) / 100.0f + 0.05;
+		model = rkm::Mat4::scale(model, rkm::Vector3(scale, scale, scale));
+
+		float z = cos(angle) * radius + displacement;
+		model = rkm::Mat4::translate(model, rkm::Vector3(x, y, z));
+
+		modelMatrices[i] = rkm::Mat4::columnMajor(model);
+	};
+
+	//mPlanet = new Model("../../assets/models/planet/planet.obj");
+	mRock = new Model("../../assets/models/rock/rock.obj", amount, modelMatrices);
 
 	int index = 0;
-	float offset = 0.1f;
+	offset = 0.1f;
 	for (int y = -10; y < 10; y += 2)
 	{
 		for (int x = -10; x < 10; x += 2)
@@ -303,7 +335,7 @@ bool EngineCore::initialize()
 	//add buffer
 	mQuadVA->addVertexBuffer(mQuadVB);
 
-	mInstancingVB.reset(VertexBuffer::create(translations[0].toArray(), sizeof(rkm::Vector2) * 100));
+	/*mInstancingVB.reset(VertexBuffer::create(translations[0].toArray(), sizeof(rkm::Vector2) * 100));
 	mInstancingVB->setLayout(offsetLayout);
 
 	mInstancedQuadVB.reset(VertexBuffer::create(instancedQuadVertices, sizeof(instancedQuadVertices)));
@@ -341,12 +373,12 @@ bool EngineCore::initialize()
 	uint32 planeIndicies[6] = { 0,1,2,3,4,5 };
 	mPlaneIB.reset(IndexBuffer::create(planeIndicies, sizeof(planeIndicies) / sizeof(uint32)));
 	mPlaneVA->setIndexBuffer(mPlaneIB);
-	
+	*/
 	//Render texture init
 	mGameRenderTex.reset(FrameBuffer::create(mAppWindowWidth, mAppWindowHeight, 4));
 	mEditorRenderTex.reset(FrameBuffer::create(mAppWindowWidth, mAppWindowHeight, 4));
 
-	mFloorTex.reset(Texture2D::create("../../assets/textures/metal.png")); //	floorTexture = Model::TextureFromFile("metal.png", "../../assets/textures");
+/*	mFloorTex.reset(Texture2D::create("../../assets/textures/metal.png")); //	floorTexture = Model::TextureFromFile("metal.png", "../../assets/textures");
 
 	std::vector<std::string> faces
 	{
@@ -368,7 +400,7 @@ bool EngineCore::initialize()
 
 
 	mWindowTex.reset(Texture2D::create("../../assets/textures/blending_transparent_window.png", Texture2D::WrapType::CLAMP_EDGE, Texture2D::WrapType::CLAMP_EDGE));
-
+	*/
 	mpGameCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
 	mpEditorCam = new Camera(rkm::Vector3(-1.5f, -0.5f, 2.0f));
 
@@ -378,6 +410,7 @@ bool EngineCore::initialize()
 	//mpShaderManager->addShader(reflectiveSkyboxShaderId, new RK_Shader("vSkyboxReflective.glsl", "fSkyboxReflective.glsl"));
 	//mpShaderManager->addShader("refractionShader", new RK_Shader("vSkyboxReflective.glsl", "fSkyboxRefraction.glsl"));
 	mpShaderManager->addShader("ts", new RK_Shader("vFrameBuffer.glsl", "fFrameBuffer.glsl"));
+	mpShaderManager->addShader("ims", new RK_Shader("vInstancedMesh.glsl", "fFrameBuffer.glsl"));
 	//mpShaderManager->addShader("basicTexture", new RK_Shader("vFrameBuffer.glsl", "fTransparentTexture.glsl"));
 	//mpShaderManager->addShader("stencil", new RK_Shader("vFrameBuffer.glsl", "fStencilBuffer.glsl"));
 	mpShaderManager->addShader("framebuffer", new RK_Shader("vFrameBufferScreen.glsl", "fFrameBufferScreen.glsl"));
@@ -394,7 +427,7 @@ bool EngineCore::initialize()
 	//mpShaderManager->useShaderByKey("basicTexture");
 	//mpShaderManager->setShaderInt("texture_diffuse1", 0);
 
-	mpShaderManager->useShaderByKey("framebuffer");
+	/*mpShaderManager->useShaderByKey("framebuffer");
 	mpShaderManager->setShaderInt("screenTexture", 0);
 
 	mpShaderManager->useShaderByKey(reflectiveSkyboxShaderId);
@@ -405,8 +438,8 @@ bool EngineCore::initialize()
 
 	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);
 	mpComponentManager = new ComponentManager(MAX_NUM_COMPONENETS, mpShaderManager, STANDARD_SHADER_KEY);
-
-	textObj.reset(Text::create("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId)));
+	*/
+	/*textObj.reset(Text::create("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId)));
 	TextData data = { "This is sample text", Color(127, 204, 51), rkm::Vector2(25.0f, 25.0f), 1.0f };
 	textObj->initTextData(data);
 	
@@ -418,7 +451,7 @@ bool EngineCore::initialize()
 	rkm::Mat4 projection = rkm::MatProj::orthographic(0.0f, (float)mAppWindowWidth, 0.0f, (float)mAppWindowHeight);
 	mpShaderManager->useShaderByKey(textShaderId);
 	mpShaderManager->getShaderInUse()->setMat4("projection", projection);
-
+	*/
 	Raycast::initEditorRaycast(mpEditorCam);
 	RenderCommand::setStencilMask(0x00);	//disables writing to the stencil buffer
 
@@ -429,8 +462,8 @@ bool EngineCore::initialize()
 void EngineCore::update()
 {
 	calculateDeltaTime();
-	mpComponentManager->update(deltaTime);
-	mpGameObjectManager->updateAll(deltaTime);
+	//mpComponentManager->update(deltaTime);
+	//mpGameObjectManager->updateAll(deltaTime);
 }
 
 void EngineCore::calculateDeltaTime()
@@ -463,22 +496,40 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	}
 
 	mpShaderManager->useShaderByKey(reflectiveSkyboxShaderId);
-	proj = rkm::MatProj::perspective(fov, (float)app->getAppWindow()->getWidth() / (float)app->getAppWindow()->getHeight(), 0.1f, 100.0f);
+	proj = rkm::MatProj::perspective(fov, (float)app->getAppWindow()->getWidth() / (float)app->getAppWindow()->getHeight(), 0.1f, 1000.0f);
 	screenType == GAME_VIEW ? mpGameCam->storePerspectiveMatrix(proj)	: mpEditorCam->storePerspectiveMatrix(proj);
 
-	mpShaderManager->setShaderMat4("projection", proj);
+/*	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4 ("view", view);
 	mpShaderManager->setShaderMat4("model", model);
 	mpShaderManager->setShaderVec3("cameraPos", *mpEditorCam->getPosition());
 	mSkyboxTex->bind();
-/*
+
 	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
 	*/
-	mpShaderManager->useShaderByKey("ts");
+	//mpWindowHandle->disableWindowFlags(CULL_FACE);
+	/*	mpShaderManager->useShaderByKey("ts");
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
+	model = rkm::Mat4::identity;
+	model = rkm::Mat4::scale(model, rkm::Vector3(1, 1, -1));
+	model = rkm::Mat4::translate(model, rkm::Vector3(1, 1, -1));
+	mpShaderManager->setShaderMat4("model", model);
+	mPlanet->drawModel(mpShaderManager->getShaderInUse());*/
+
+	mpShaderManager->useShaderByKey("ims");
+	mpShaderManager->setShaderMat4("projection", proj);
+	mpShaderManager->setShaderMat4("view", view);
+	//for (size_t i = 0; i < amount; i++)
+	//{
+	mRock->drawModel(mpShaderManager->getShaderInUse());
+	//mpShaderManager->setShaderMat4("model", modelMatrices[i]);
+		//mRock->drawModel(mpShaderManager->getShaderInUse());
+	//}
+
+	//mpWindowHandle->enableWindowFlags(CULL_FACE);
 
 	// floor
 	/*mpShaderManager->useShaderByKey("basicTexture");
@@ -521,7 +572,7 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	RenderCommand::setStencilMask(0xFF);
 	RenderCommand::setStencilBuffer(Renderer::BufferTestType::ALWAYS, 0, 0xFF);
 	*/
-	renderSkybox(view, proj);
+	//renderSkybox(view, proj);
 
 	// Light "emitters" are not affected by the lighting shader 
 	// and mark the location of the light sources
@@ -544,7 +595,7 @@ void EngineCore::beginRender(int screenType)
 void EngineCore::render(int screenType)
 {
 	beginRender(screenType);
-	mpComponentManager->renderMeshes();
+	//mpComponentManager->renderMeshes();
 	//renderText();
 	
 	/*(mpWindowHandle->disableWindowFlags(CULL_FACE);

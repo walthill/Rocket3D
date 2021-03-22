@@ -12,6 +12,7 @@ class RenderCore : public rkutil::Trackable
 		static void endScene();
 		static void submit(const std::shared_ptr<VertexArray>& vertexArray);
 		static void submit(const std::shared_ptr<VertexArray>& vertexArray, uint32 instanceCount);
+		static void submitInstanced(const std::shared_ptr<VertexArray>& vertexArray, uint32 instanceCount);
 
 		inline static Renderer::API getAPI() { return Renderer::getAPI(); }
 	

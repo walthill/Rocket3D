@@ -279,6 +279,34 @@ namespace rkm {
 				m2 * (m3 * m7 - m4 * m6);
 	}
 
+	Mat4 Mat4::columnMajor(const Mat4& matrix)
+	{
+		rkm::Mat4 result = Mat4::identity;
+
+		result.mMatrixValues[0] = matrix.mMatrixValues[0];
+		result.mMatrixValues[4] = matrix.mMatrixValues[1];
+		result.mMatrixValues[8] = matrix.mMatrixValues[2];
+		result.mMatrixValues[12] = matrix.mMatrixValues[3];
+
+		result.mMatrixValues[1] = matrix.mMatrixValues[4];
+		result.mMatrixValues[5] = matrix.mMatrixValues[5];
+		result.mMatrixValues[9] = matrix.mMatrixValues[6];
+		result.mMatrixValues[13] = matrix.mMatrixValues[7];
+
+		result.mMatrixValues[2] = matrix.mMatrixValues[8];
+		result.mMatrixValues[6] = matrix.mMatrixValues[9];
+		result.mMatrixValues[10] = matrix.mMatrixValues[10];
+		result.mMatrixValues[14] = matrix.mMatrixValues[11];
+
+		result.mMatrixValues[3] = matrix.mMatrixValues[12];
+		result.mMatrixValues[7] = matrix.mMatrixValues[13];
+		result.mMatrixValues[11] = matrix.mMatrixValues[14];
+		result.mMatrixValues[15] = matrix.mMatrixValues[15];
+
+		return result;
+	}
+
+
 	//Written with help from https://learnopengl.com/code_viewer.php?code=getting-started/camera-exercise2
 	Mat4 Mat4::lookAt(Vector3 pos, Vector3 target, Vector3 worldUp)
 	{

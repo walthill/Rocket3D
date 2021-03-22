@@ -38,6 +38,7 @@ class Renderer
 		virtual void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray) PURE_VIRTUAL;
 		virtual void drawTriangles(const std::shared_ptr<VertexArray>& vertexArray) PURE_VIRTUAL;
 		virtual void drawInstancedTriangles(const std::shared_ptr<VertexArray>& vertexArray, int instanceCount) PURE_VIRTUAL;
+		virtual void drawInstanced(const std::shared_ptr<VertexArray>& vertexArray, int instanceCount) PURE_VIRTUAL;
 
 		inline static Renderer::API getAPI() { return msAPI; };
 
