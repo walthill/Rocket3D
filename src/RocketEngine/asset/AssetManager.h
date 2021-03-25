@@ -3,6 +3,7 @@
 
 #include "../util/EngineUtils.h"
 #include <map>
+#include <rkm/Mat4.h>
 
 class Model;
 
@@ -45,7 +46,7 @@ class AssetManager : public rkutil::Trackable
 
 		void clean();
 		
-		Model* loadModelAsset(std::string path); //take model name and make it the key, add to map if not there, else return model ref
+		Model* loadModelAsset(std::string path, int instanceCount = 1, rkm::Mat4* matrices = nullptr); //take model name and make it the key, add to map if not there, else return model ref
 
 	private:
 		static AssetManager* mpAssetManagerInstance;

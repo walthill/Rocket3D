@@ -126,10 +126,10 @@ void GameObjectManager::renderAllGameObjs() const
 
 void GameObjectManager::updateAll(float elapsedTime)
 {
-	for (auto it = mGameObjMap.begin(); it != mGameObjMap.end(); ++it)
+	for (auto const& it : mGameObjMap)
 	{
 		//no update function currently
-		it->second->update(elapsedTime);
+		it.second->update(elapsedTime);
 	}
 }
 

@@ -18,7 +18,7 @@ void MeshComponent::load()
 	if (mMeshData.modelName != "null" && mMeshData.modelName != "")
 	{
 		std::string folderName = mMeshData.modelName.substr(0, mMeshData.modelName.find('.'));
-		mMeshData.mesh = AssetManager::getInstance()->loadModelAsset(modelFileLocation + folderName + "/" + mMeshData.modelName);
+		mMeshData.mesh = AssetManager::getInstance()->loadModelAsset(modelFileLocation + folderName + "/" + mMeshData.modelName, mMeshData.instanceCount, mMeshData.instanceMatrices);
 	}
 }
 
@@ -46,7 +46,10 @@ void MeshComponent::render()
 	if (mMeshData.shader != nullptr)
 	{
 		mMeshData.shader->use();
-		mMeshData.shader->setMat4(MATRIX_NAME, modelMatrixValues);
+		if (mMeshData.instanceCount == 1)
+		{
+			mMeshData.shader->setMat4(MATRIX_NAME, modelMatrixValues);
+		}
 
 		if (mIsEnabled && mMeshData.mesh != nullptr)
 			mMeshData.mesh->drawModel(mMeshData.shader);

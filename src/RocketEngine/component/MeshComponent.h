@@ -37,16 +37,20 @@ struct MeshComponentData
 	bool isLoaded;			///< Flag to set when model is loaded
 	std::string modelName;  ///< Name of model to load
 	std::string shaderKey;	///< Shader identifier
+	
+	int instanceCount;
+	rkm::Mat4* instanceMatrices;
 
 	Model* mesh;			///< Reference to the model
 	RK_Shader* shader;		///< Reference to the mesh's shader
 
 	///Default constructor sets all values to zero
-	MeshComponentData() : isLoaded(false), mesh(nullptr), shader(nullptr), modelName(""), shaderKey("") {};
+	MeshComponentData() : 
+		isLoaded(false), mesh(nullptr), shader(nullptr), modelName(""), shaderKey(""), instanceCount(0), instanceMatrices(nullptr) {};
 
 	///Constructor that takes in values for struct variables
-	MeshComponentData(std::string name, std::string shaderKey, RK_Shader* s) :
-		isLoaded(false), mesh(nullptr), shader(s), shaderKey(shaderKey), modelName(name) {};
+	MeshComponentData(std::string name, std::string shaderKey, RK_Shader* s, int instanceAmount = 1, rkm::Mat4* matrices = nullptr) :
+		isLoaded(false), mesh(nullptr), shader(s), shaderKey(shaderKey), modelName(name), instanceCount(instanceAmount), instanceMatrices(matrices) {};
 };
 
 const MeshComponentData ZERO_MESH_DATA;

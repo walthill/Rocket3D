@@ -31,7 +31,7 @@ void AssetManager::clean()
 	}
 }
 
-Model* AssetManager::loadModelAsset(std::string path)
+Model* AssetManager::loadModelAsset(std::string path, int instanceCount, rkm::Mat4* matrices)
 {
 	auto key = path.substr(path.find_last_of('/')+1, path.find_last_of('.'));
 	auto iter = mModelAssetCache.find(key);
@@ -42,7 +42,7 @@ Model* AssetManager::loadModelAsset(std::string path)
 	}
 	else
 	{
-		Model* newModel = new Model(path);
+		Model* newModel = new Model(path, instanceCount, matrices);
 		mModelAssetCache[key] = newModel;
 
 		return newModel;
