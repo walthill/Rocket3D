@@ -1,7 +1,6 @@
 #ifndef TEXT_H
 #define TEXT_H
 
-#include <rkutil/Trackable.h>
 #include <rkm/Vector2.h>
 #include "Color.h"
 #include "../util/EngineUtils.h"

@@ -112,6 +112,8 @@ class RK_Shader
 		 *************************************************************************/
 		void setVec3(const std::string& name, const rkm::Vector3& value);
 
+		void setVec2(const std::string& name, const rkm::Vector2& value);
+
 		/**********************************************************************//**
 		 * Get uniform location, either from cache or an OpenGL call
 		 *

@@ -19,6 +19,7 @@
 #ifndef R3_SHADER_MAN_H
 #define R3_SHADER_MAN_H
 
+#include <rkm/Vector2.h>
 #include <rkm/Vector3.h>
 #include <rkm/Mat4.h>
 #include "../util/EngineUtils.h"
@@ -70,6 +71,8 @@ class ShaderManager : public rkutil::Trackable
 		void setShaderMat4(const std::string& matrixName, const rkm::Mat4 &mat);
 		void setShaderVec3(const std::string& vecName, float x, float y, float z); //Use three float values
 		void setShaderVec3(const std::string& vecName, const rkm::Vector3 &vec); //use Vector object in param
+		void setShaderVec2(const std::string& vecName, float x, float y); //Use three float values
+		void setShaderVec2(const std::string& vecName, const rkm::Vector2& vec); //use Vector object in param
 
 		/***
 			* Access currently used shader

@@ -21,13 +21,15 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include "../util/EngineUtils.h"
 #include <rkm/Vector2.h>
 #include <rkm/Vector3.h>
-#include <vector>
-#include <string>
-#include "../shader/RK_Shader.h"
+#include <rkm/Mat4.h>
+#include "buffers/Buffer.h"
 
-typedef unsigned int TextureId;
+class VertexArray;
+class Texture2D;
+class RK_Shader;
 
 /* Vertex Data */
 struct Vertex {
@@ -35,17 +37,13 @@ struct Vertex {
 	rkm::Vector2 texCoords;
 };
 
-/* Texture Data */
-struct TextureData {
-    TextureId id = -1;
-    std::string type, path;
-};
-
 /* Contains all the mesh's vertices, indices, & textures */
 struct MeshData {
+	int instanceCount = 0;
+	rkm::Mat4* matrices = nullptr;;
 	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
-	std::vector<TextureData> textures;
+	std::vector<uint32> indices;
+	std::vector<Texture2D*> textures;
 };
 
 class Mesh
@@ -60,10 +58,26 @@ class Mesh
 			* Render mesh triangles and set texture values on the fragment shader
 		***/
 		void drawMesh(RK_Shader* shader);
-
 	private:
+		const std::string mDIFFUSE_UNIFORM_NAME = "texture_diffuse";
+		const std::string mSPECULAR_UNIFORM_NAME = "texture_specular";
+		const std::string mNORMAL_UNIFORM_NAME = "texture_normal";
+
+		std::shared_ptr<VertexArray> mMeshVA;
 		MeshData mMeshData;
-		unsigned int VAO, VBO, EBO;
+
+		const BufferLayout mMeshLayout = {
+			{ShaderDataType::Float3, "aPos"},
+			{ShaderDataType::Float3, "aNormal"},
+			{ShaderDataType::Float2, "aTexCoords"}
+		};
+
+		const BufferLayout mInstancedLayout = {
+			{ShaderDataType::Float4, "aInstanceMatrix",1},
+			{ShaderDataType::Float4, "aInstanceMatrix",1},
+			{ShaderDataType::Float4, "aInstanceMatrix",1},
+			{ShaderDataType::Float4, "aInstanceMatrix",1}
+		};
 
 		/***
 			* Initializes mesh vertex positions, normals, and texture coordinates using OpenGL functions

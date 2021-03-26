@@ -1,4 +1,5 @@
 #include "ComponentManager.h"
+#include "../shader/ShaderManager.h"
 
 ComponentId ComponentManager::msNextMaterialComponentId = 0;
 ComponentId ComponentManager::msNextMeshComponentId = 0;
@@ -349,7 +350,25 @@ void ComponentManager::processLightingComponents()
 
 void ComponentManager::renderMeshes()
 {
+	MeshComponent* tempComponent = nullptr;
 	for (auto& it : mMeshComponentMap)
-		it.second->render(mpShaderManagerHandle);
+	{
+		if (tempComponent != nullptr)
+		{
+			//Check if the mesh is instanced
+			rkm::Mat4* pMatrices = tempComponent->getData()->instanceMatrices;
+			if (pMatrices != nullptr)
+			{
+				//If the previous instanced mesh matches the current one, don't call render on the current mesh
+				if (pMatrices == it.second->getData()->instanceMatrices)
+				{
+					continue;
+				}
+			}
+		}
+
+		tempComponent = it.second;
+		it.second->render();
+	}
 }
 

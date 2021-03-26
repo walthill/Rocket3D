@@ -144,6 +144,9 @@
     <ClInclude Include="render\platform\OpenGL\OpenGLCubemap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="asset\AssetManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\EngineCore.cpp">
@@ -263,6 +266,9 @@
     <ClCompile Include="render\platform\OpenGL\OpenGLCubemap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="asset\AssetManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md">
@@ -308,5 +314,9 @@
     <None Include="shader\glsl\vertex\vTextRender.glsl" />
     <None Include="shader\glsl\fragment\fStencilBuffer.glsl" />
     <None Include="shader\glsl\fragment\fTransparentTexture.glsl" />
+    <None Include="shader\glsl\fragment\fSingleColor.glsl" />
+    <None Include="shader\glsl\vertex\vSingleColorInstanced.glsl" />
+    <None Include="shader\glsl\vertex\vSingleColorInstanceArray.glsl" />
+    <None Include="shader\glsl\vertex\vInstancedMesh.glsl" />
   </ItemGroup>
 </Project>

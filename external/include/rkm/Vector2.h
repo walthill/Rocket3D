@@ -22,6 +22,8 @@ namespace rkm {
 			Vector2 operator!();
 			Vector2 operator-();
 
+			inline const float* toArray() const { return mVecArr; };
+
 			static float dot(Vector2 lhs, Vector2 rhs);
 
 			//comparison
@@ -42,13 +44,14 @@ namespace rkm {
 			//Output overload
 			friend std::ostream& operator<<(std::ostream& os, const Vector2& vec);
 
-			inline float getX() const { return mX; };
-			inline float getY() const { return mY; };
+			inline float getX() const { return mVecArr[X]; };
+			inline float getY() const { return mVecArr[Y]; };
 
 			static Vector2 left, right, up, down, one, zero;
 
 		private:
-			float mX, mY;
+			float mVecArr[2];
+			static const char X = 0, Y = 1;
 	};
 }
 #endif // !VEC2_H

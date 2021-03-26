@@ -27,9 +27,6 @@
 
 #include "../render/Mesh.h"
 #include <assimp/scene.h>
-#include <rkutil/Trackable.h>
-
-//unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
 
 struct ModelData {
 	std::vector<Mesh> meshes;
@@ -39,28 +36,28 @@ struct ModelData {
 class Model : public rkutil::Trackable
 {
 	//TODO: add gamma correction code after lighting tutorial
-
 	public:
 		/*
 			* Constructor requires a path to the model for initialization
 		*/
-		Model(std::string path);
+		Model(std::string path, int instanceCount = 1, rkm::Mat4* matrices = nullptr);
+
+		~Model();
+
+		void clean();
 
 		/*
 			* Render meshes to display model on-screen
 		*/
 		void drawModel(RK_Shader* shader);
-
-		/*
-			* Loads in textures from the given file path and stores the textures in an OpenGL-compatible form
-		*/
-		unsigned int LoadTextureFromFile(const char* path, const std::string& directory, bool gamma = false);
-
-
-	private:
 		ModelData mModelData;
 
-		std::vector<TextureData> texturesLoaded;
+		std::vector<Texture2D*> texturesLoaded;
+	private:
+		
+		int mInstanceCount;
+		rkm::Mat4* mMatrices;
+
 
 		/*
 			* Initialize model data and store in a ModelData struct 
@@ -81,7 +78,7 @@ class Model : public rkutil::Trackable
 		/*
 			* Takes in a material object. Accesses & stores textures from that material
 		*/
-		std::vector<TextureData> getTexturesFromMaterial(aiMaterial* mat, aiTextureType type, std::string typeName); 
+		std::vector<Texture2D*> getTexturesFromMaterial(aiMaterial* mat, aiTextureType type, int typeName);
 };
 
 #endif // !MODEL_H

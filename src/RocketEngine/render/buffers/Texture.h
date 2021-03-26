@@ -1,7 +1,6 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <rkutil/Trackable.h>
 #include "../../util/EngineUtils.h"
 
 class Texture : public rkutil::Trackable
@@ -20,11 +19,13 @@ class Texture : public rkutil::Trackable
 
 	public:
 		virtual ~Texture() {};
-		virtual uint32 getWidth()	const PURE_VIRTUAL;
-		virtual uint32 getHeight()	const PURE_VIRTUAL;
-		virtual uint32 getId()		const PURE_VIRTUAL;
+		virtual uint32 getWidth()		const PURE_VIRTUAL;
+		virtual uint32 getHeight()		const PURE_VIRTUAL;
+		virtual uint32 getId()			const PURE_VIRTUAL;
+		virtual std::string getPath()	const PURE_VIRTUAL;
+		virtual uint32 getType()		const PURE_VIRTUAL;
 
-		virtual void bind()			const PURE_VIRTUAL;
+		virtual void bind()				const PURE_VIRTUAL;
 
 	private:
 };
@@ -32,7 +33,7 @@ class Texture : public rkutil::Trackable
 class Texture2D : public Texture
 {
 	public:
-		static Texture2D* create(const std::string& path, int sWrapParam = WrapType::REPEAT, int tWrapParam = WrapType::REPEAT,
+		static Texture2D* create(const std::string& path, int type = 0, int sWrapParam = WrapType::REPEAT, int tWrapParam = WrapType::REPEAT,
 			int miniFilter = MinifyFilter::MIN_LINEAR, int magFilter = MagnifyFilter::MAG_LINEAR, int detailReductionLevel = 0);
 
 	private:

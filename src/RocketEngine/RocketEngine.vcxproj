@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="asset\AssetManager.h" />
     <ClInclude Include="asset\Model.h" />
     <ClInclude Include="component\Component.h" />
     <ClInclude Include="component\ComponentManager.h" />
@@ -62,6 +63,7 @@
     <ClInclude Include="window\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="asset\AssetManager.cpp" />
     <ClCompile Include="asset\Model.cpp" />
     <ClCompile Include="component\Component.cpp" />
     <ClCompile Include="component\ComponentManager.cpp" />
@@ -112,6 +114,7 @@
     <None Include="shader\glsl\fragment\fPointLight.glsl" />
     <None Include="shader\glsl\fragment\fLighting.glsl" />
     <None Include="shader\glsl\fragment\fShader.glsl" />
+    <None Include="shader\glsl\fragment\fSingleColor.glsl" />
     <None Include="shader\glsl\fragment\fSkybox.glsl" />
     <None Include="shader\glsl\fragment\fSkyboxReflective.glsl" />
     <None Include="shader\glsl\fragment\fSkyboxRefraction.glsl" />
@@ -122,9 +125,12 @@
     <None Include="shader\glsl\fragment\fTransparentTexture.glsl" />
     <None Include="shader\glsl\vertex\vFrameBuffer.glsl" />
     <None Include="shader\glsl\vertex\vFrameBufferScreen.glsl" />
+    <None Include="shader\glsl\vertex\vInstancedMesh.glsl" />
     <None Include="shader\glsl\vertex\vLamp.glsl" />
     <None Include="shader\glsl\vertex\vLighting.glsl" />
     <None Include="shader\glsl\vertex\vShader.glsl" />
+    <None Include="shader\glsl\vertex\vSingleColorInstanceArray.glsl" />
+    <None Include="shader\glsl\vertex\vSingleColorInstanced.glsl" />
     <None Include="shader\glsl\vertex\vSkybox.glsl" />
     <None Include="shader\glsl\vertex\vSkyboxReflective.glsl" />
     <None Include="shader\glsl\vertex\vTextRender.glsl" />

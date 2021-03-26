@@ -40,13 +40,13 @@ struct BufferElement
 {
 	std::string name;		//Passed to vertex shader for proper variable storage
 	ShaderDataType type;
-	uint32 offset, size;
+	uint32 offset, size, instanceIterations;
 	bool normalized;
 
 	BufferElement() {}	
 
-	BufferElement(ShaderDataType dataType, const std::string& elementName, bool isNormalized = false)
-		: name(elementName), type(dataType), size(ShaderDataTypeSize(dataType)), offset(0), normalized(isNormalized)
+	BufferElement(ShaderDataType dataType, const std::string& elementName, int instanceIterations = 0, bool isNormalized = false)
+		: name(elementName), type(dataType), size(ShaderDataTypeSize(dataType)), offset(0), instanceIterations(instanceIterations), normalized(isNormalized)
 	{	
 	}
 
@@ -119,7 +119,7 @@ class BufferLayout
 class VertexBuffer : public rkutil::Trackable
 {
 	public:
-		enum DataType { STATIC, DYNAMIC, STREAM };
+		enum class DataType { STATIC, DYNAMIC, STREAM };
 
 		virtual ~VertexBuffer() {}
 
@@ -132,7 +132,8 @@ class VertexBuffer : public rkutil::Trackable
 		virtual void setLayout(const BufferLayout& layout) PURE_VIRTUAL;
 		virtual const BufferLayout& getLayout() const PURE_VIRTUAL;
 
-		static VertexBuffer* create(float* vertices, uint32 size, DataType usage = DataType::STATIC);
+		static VertexBuffer* create(const float* vertices, uint32 size, DataType usage = DataType::STATIC);
+		static VertexBuffer* create(const void* data, uint32 size, DataType usage = DataType::STATIC);
 	private:
 };
 

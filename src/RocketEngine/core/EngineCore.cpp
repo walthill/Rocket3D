@@ -15,15 +15,20 @@
 
 ********/
 #include "EngineCore.h"
+#include "../render/buffers/Texture.h"
+#include "../render/buffers/Buffer.h"
 #include "../../Rocket3d/core/Application.h"
 #include "../render/Camera.h"
+#include "GameObjectManager.h"
+#include "../component/ComponentManager.h"
 //#include "../asset/image/RocketImgLoader.h"
 //#include "../shader/ShaderBuild.h"
 #include "../shader/ShaderManager.h"
-#include "../logging/RK_Log.h"
 #include "RenderCore.h"
 #include "../render/Text.h"
 #include "Raycast.h"
+#include "../asset/AssetManager.h"
+#include <glad/glad.h>
 
 //mouse selection: http://antongerdelan.net/opengl/raycasting.html
 // also helpful? https://www.bfilipek.com/2012/06/select-mouse-opengl.html
@@ -44,6 +49,7 @@ void EngineCore::clean()
 	delete mpShaderManager;
 	delete mpEditorCam;
 	delete mpGameCam;
+	AssetManager::cleanInstance();
 }
 
 
@@ -63,8 +69,11 @@ bool EngineCore::initialize()
 	mpWindowHandle = app->getAppWindow();
 	mAppWindowWidth = mpWindowHandle->getWidth();
 	mAppWindowHeight = mpWindowHandle->getHeight();
-	
-	#pragma region Vertices Definitions
+
+	AssetManager::initInstance();
+	AssetManager::getInstance()->initialize();
+
+#pragma region Vertices Definitions
 	float cubeVertices[] = {
 		// positions          // normals
 		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -128,16 +137,16 @@ bool EngineCore::initialize()
 	   -1.0f,  1.0f,  0.0f, 1.0f,
 		1.0f, -1.0f,  1.0f, 0.0f,
 		1.0f,  1.0f,  1.0f, 1.0f
-	};    
+	};
 	float transparentVertices[] = {
-			// positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
-			0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
-			0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
-			1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+		// positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
+		0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+		0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
+		1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
 
-			0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
-			1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
-			1.0f,  0.5f,  0.0f,  1.0f,  0.0f
+		0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+		1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+		1.0f,  0.5f,  0.0f,  1.0f,  0.0f
 	};
 
 	float skyboxVertices[] = {
@@ -229,11 +238,34 @@ bool EngineCore::initialize()
 	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 	};
 
-	#pragma endregion
 
+	float instancedQuadVertices[] = {
+		// positions     // colors
+		-0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
+		 0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
+		-0.05f, -0.05f,  0.0f, 0.0f, 1.0f,
+
+		-0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
+		 0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
+		 0.05f,  0.05f,  0.0f, 1.0f, 1.0f
+	};
+
+#pragma endregion
+
+	int index = 0;
+	float offset = 0.1f;
+	for (int y = -10; y < 10; y += 2)
+	{
+		for (int x = -10; x < 10; x += 2)
+		{
+			float newX = (float)x / 10.0f + offset;
+			float newY = (float)y / 10.0f + offset;
+			translations[index++] = rkm::Vector2(newX, newY);
+		}
+	}
 
 	std::shared_ptr<IndexBuffer> mPlaneIB;
-	std::shared_ptr<VertexBuffer> mQuadVB, mPlaneVB, mSkyboxVB, mCubeVB, mGrassVB;
+	std::shared_ptr<VertexBuffer> mQuadVB, mInstancedQuadVB, mInstancingVB, mPlaneVB, mSkyboxVB, mCubeVB, mGrassVB;
 
 	//init array
 	mQuadVA.reset(VertexArray::create());
@@ -245,69 +277,14 @@ bool EngineCore::initialize()
 		{ ShaderDataType::Float2, "aTexCoords" }
 	};
 
-	BufferLayout skyboxLayout = {
-		{ ShaderDataType::Float3, "aPos" },
-	};
-
-	BufferLayout cubeLayout = {
-		{ ShaderDataType::Float3, "aPos" },
-		{ ShaderDataType::Float3, "aNormal" },
-	};
-
 	//store buffer
 	mQuadVB->setLayout(layout);
 	//add buffer
 	mQuadVA->addVertexBuffer(mQuadVB);
 
-	mCubeVA.reset(VertexArray::create());
-	mCubeVB.reset(VertexBuffer::create(cubeVertices, sizeof(cubeVertices)));
-	mCubeVB->setLayout(cubeLayout);
-	mCubeVA->addVertexBuffer(mCubeVB);
-
-	mTransparentVA.reset(VertexArray::create());
-	mGrassVB.reset(VertexBuffer::create(transparentVertices, sizeof(transparentVertices)));
-	mGrassVB->setLayout(layout);
-	mTransparentVA->addVertexBuffer(mGrassVB);
-
-	mSkyboxVA.reset(VertexArray::create());
-	mSkyboxVB.reset(VertexBuffer::create(skyboxVertices, sizeof(skyboxVertices)));
-	mSkyboxVB->setLayout(skyboxLayout);
-	mSkyboxVA->addVertexBuffer(mSkyboxVB);
-
-	mPlaneVA.reset(VertexArray::create());	//glGenVertexArrays
-	mPlaneVB.reset(VertexBuffer::create(planeVertices, sizeof(planeVertices)));
-	mPlaneVB->setLayout(layout);
-	mPlaneVA->addVertexBuffer(mPlaneVB);	//glBindVertexArray
-
-	uint32 planeIndicies[6] = { 0,1,2,3,4,5 };
-	mPlaneIB.reset(IndexBuffer::create(planeIndicies, sizeof(planeIndicies) / sizeof(uint32)));
-	mPlaneVA->setIndexBuffer(mPlaneIB);
-	
 	//Render texture init
 	mGameRenderTex.reset(FrameBuffer::create(mAppWindowWidth, mAppWindowHeight, 4));
 	mEditorRenderTex.reset(FrameBuffer::create(mAppWindowWidth, mAppWindowHeight, 4));
-
-	mFloorTex.reset(Texture2D::create("../../assets/textures/metal.png")); //	floorTexture = Model::TextureFromFile("metal.png", "../../assets/textures");
-
-	std::vector<std::string> faces
-	{
-		"../../assets/textures/skybox/right.jpg",
-		"../../assets/textures/skybox/left.jpg",
-		"../../assets/textures/skybox/top.jpg",
-		"../../assets/textures/skybox/bottom.jpg",
-		"../../assets/textures/skybox/front.jpg",
-		"../../assets/textures/skybox/back.jpg"
-	};
-
-	mSkyboxTex.reset(CubemapTexture::create(faces));
-
-	windows.push_back(rkm::Vector3(-1.5f, -1.0f, -0.48f));
-	windows.push_back(rkm::Vector3(1.5f, -1.0f, 0.51f));
-	windows.push_back(rkm::Vector3(0.0f, -1.0f, 0.7f));
-	windows.push_back(rkm::Vector3(-0.3f, -1.0f, -2.3f));
-	windows.push_back(rkm::Vector3(0.5f, -1.0f, -0.6f));
-
-	mWindowTex.reset(Texture2D::create("../../assets/textures/blending_transparent_window.png", Texture2D::WrapType::CLAMP_EDGE, Texture2D::WrapType::CLAMP_EDGE));
 
 	mpGameCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
 	mpEditorCam = new Camera(rkm::Vector3(-1.5f, -0.5f, 2.0f));
@@ -315,33 +292,25 @@ bool EngineCore::initialize()
 	mpShaderManager = new ShaderManager();
 
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
-	mpShaderManager->addShader(reflectiveSkyboxShaderId, new RK_Shader("vSkyboxReflective.glsl", "fSkyboxReflective.glsl"));
-	mpShaderManager->addShader("refractionShader", new RK_Shader("vSkyboxReflective.glsl", "fSkyboxRefraction.glsl"));
-	mpShaderManager->addShader("basicTexture", new RK_Shader("vFrameBuffer.glsl", "fTransparentTexture.glsl"));
-	mpShaderManager->addShader("stencil", new RK_Shader("vFrameBuffer.glsl", "fStencilBuffer.glsl"));
+	//mpShaderManager->addShader(reflectiveSkyboxShaderId, new RK_Shader("vSkyboxReflective.glsl", "fSkyboxReflective.glsl"));
+	//mpShaderManager->addShader("refractionShader", new RK_Shader("vSkyboxReflective.glsl", "fSkyboxRefraction.glsl"));
+	mpShaderManager->addShader("ts", new RK_Shader("vFrameBuffer.glsl", "fFrameBuffer.glsl"));
+	mpShaderManager->addShader("ims", new RK_Shader("vInstancedMesh.glsl", "fFrameBuffer.glsl"));
+	//mpShaderManager->addShader("basicTexture", new RK_Shader("vFrameBuffer.glsl", "fTransparentTexture.glsl"));
+	//mpShaderManager->addShader("stencil", new RK_Shader("vFrameBuffer.glsl", "fStencilBuffer.glsl"));
 	mpShaderManager->addShader("framebuffer", new RK_Shader("vFrameBufferScreen.glsl", "fFrameBufferScreen.glsl"));
-	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
+	//mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
 	mpShaderManager->addShader(textShaderId, new RK_Shader("vTextRender.glsl", "fTextRender.glsl"));
 	mpShaderManager->addShader(skyboxShaderId, new RK_Shader("vSkybox.glsl", "fSkybox.glsl"));
+	//mpShaderManager->addShader("instanced", new RK_Shader("vSingleColorInstanceArray.glsl", "fSingleColor.glsl"));
 
+	//initLighting();
 
-	initLighting();
-	mpShaderManager->useShaderByKey("basicTexture");
-	mpShaderManager->setShaderInt("texture1", 0);
-
-	mpShaderManager->useShaderByKey("framebuffer");
-	mpShaderManager->setShaderInt("screenTexture", 0);
-
-	mpShaderManager->useShaderByKey(reflectiveSkyboxShaderId);
-	mpShaderManager->setShaderInt("skybox", 0);
-
-	mpShaderManager->useShaderByKey(skyboxShaderId);
-	mpShaderManager->setShaderInt("skybox", 0);
 
 	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);
 	mpComponentManager = new ComponentManager(MAX_NUM_COMPONENETS, mpShaderManager, STANDARD_SHADER_KEY);
 
-	textObj.reset(Text::create("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId)));
+	/*textObj.reset(Text::create("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId)));
 	TextData data = { "This is sample text", Color(127, 204, 51), rkm::Vector2(25.0f, 25.0f), 1.0f };
 	textObj->initTextData(data);
 	
@@ -353,7 +322,7 @@ bool EngineCore::initialize()
 	rkm::Mat4 projection = rkm::MatProj::orthographic(0.0f, (float)mAppWindowWidth, 0.0f, (float)mAppWindowHeight);
 	mpShaderManager->useShaderByKey(textShaderId);
 	mpShaderManager->getShaderInUse()->setMat4("projection", projection);
-
+	*/
 	Raycast::initEditorRaycast(mpEditorCam);
 	RenderCommand::setStencilMask(0x00);	//disables writing to the stencil buffer
 
@@ -398,61 +367,15 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	}
 
 	mpShaderManager->useShaderByKey(reflectiveSkyboxShaderId);
-	proj = rkm::MatProj::perspective(fov, (float)app->getAppWindow()->getWidth() / (float)app->getAppWindow()->getHeight(), 0.1f, 100.0f);
-	mpEditorCam->storePerspectiveMatrix(proj);
+	proj = rkm::MatProj::perspective(fov, (float)app->getAppWindow()->getWidth() / (float)app->getAppWindow()->getHeight(), 0.1f, 1000.0f);
+	screenType == GAME_VIEW ? mpGameCam->storePerspectiveMatrix(proj)	: mpEditorCam->storePerspectiveMatrix(proj);
 
-	mpShaderManager->setShaderMat4("projection", proj);
-	mpShaderManager->setShaderMat4 ("view", view);
-	mpShaderManager->setShaderMat4("model", model);
-	mpShaderManager->setShaderVec3("cameraPos", *mpEditorCam->getPosition());
-	mSkyboxTex->bind();
-
-	// floor
-	mpShaderManager->useShaderByKey("basicTexture");
+	mpShaderManager->useShaderByKey("ts");
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
 
-	RenderCommand::setStencilBuffer(Renderer::BufferTestType::ALWAYS, 1, 0xFF);
-	RenderCommand::setStencilMask(0xFF);
 
-	
-	model = rkm::Mat4::identity;
-	model = rkm::Mat4::scale(model, rkm::Vector3(1, 1, -1));
-	model = rkm::Mat4::translate(model, rkm::Vector3(0, -1, 0));
-
-	mFloorTex->bind(); 
-
-	mpShaderManager->setShaderMat4("model", model);
-
-	RenderCore::submit(mPlaneVA); 
-
-
-	//Stencil buffer - floor second render pass
-	RenderCommand::setStencilBuffer(Renderer::BufferTestType::NOT_EQUAL, 1, 0xFF);
-	RenderCommand::setStencilMask(0x00);
-	
-	mpShaderManager->useShaderByKey("stencil");
-	mpShaderManager->setShaderMat4("projection", proj);
-	mpShaderManager->setShaderMat4("view", view);
-	mFloorTex->bind();
-
-	float scale = 1.1f;
-	model = rkm::Mat4::identity;
-	model = rkm::Mat4::scale(model, rkm::Vector3(scale, scale, -scale));
-	model = rkm::Mat4::translate(model, rkm::Vector3(0, -1, 0));
-
-	mpShaderManager->setShaderMat4("model", model);
-	
-	RenderCore::submit(mPlaneVA); 
-	
-	RenderCommand::setStencilMask(0xFF);
-	RenderCommand::setStencilBuffer(Renderer::BufferTestType::ALWAYS, 0, 0xFF);
-
-	renderSkybox(view, proj);
-
-	// Light "emitters" are not affected by the lighting shader 
-	// and mark the location of the light sources
-	mpShaderManager->useShaderByKey(emitterShaderId);
+	mpShaderManager->useShaderByKey("ims");
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
 }
@@ -462,7 +385,6 @@ void EngineCore::beginRender(int screenType)
 {
 	RenderCommand::clearColor(Color::grey);
 	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER | Renderer::DEPTH_BUFFER | Renderer::STENCIL_BUFFER);
-
 	RenderCore::beginScene();	//placeholder for now will take data on camera, lighting, etc
 
 	prepFrambuffer(screenType);
@@ -473,13 +395,13 @@ void EngineCore::render(int screenType)
 {
 	beginRender(screenType);
 	mpComponentManager->renderMeshes();
-	renderText();
+	//renderText();
+
 	endRender(screenType);
 }
 
 void EngineCore::endRender(int screenType)
 {
-	renderTransparentObjects();
 	RenderCore::endScene();	//placeholder for now
 
 	renderFramebufferScreen(screenType);
@@ -495,7 +417,6 @@ void EngineCore::prepFrambuffer(int screenType)
 	RenderCommand::clearColor(Color::grey);
 	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER | Renderer::DEPTH_BUFFER);
 	mpWindowHandle->enableWindowFlags(DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
-
 }
 
 void EngineCore::renderFramebufferScreen(int screenType)
@@ -526,12 +447,15 @@ void EngineCore::renderFramebufferScreen(int screenType)
 }
 
 
-void EngineCore::renderTransparentObjects()
+void EngineCore::renderTransparentObjects(int screenType)
 {
+	rkm::Mat4 proj = screenType == GAME_VIEW ? mpGameCam->getPerspectiveMatrix() : mpEditorCam->getPerspectiveMatrix();
+	rkm::Mat4 view = screenType == GAME_VIEW ? mpGameCam->getViewMatrix() : mpEditorCam->getViewMatrix();
+
 	mpWindowHandle->disableWindowFlags(CULL_FACE);
 	mpShaderManager->useShaderByKey("basicTexture");
-	mpShaderManager->setShaderMat4("projection", mpEditorCam->getPerspectiveMatrix());
-	mpShaderManager->setShaderMat4("view", mpEditorCam->getViewMatrix());
+	mpShaderManager->setShaderMat4("projection", proj);
+	mpShaderManager->setShaderMat4("view", view);
 
 	//sort blended objects
 	std::map<float, rkm::Vector3> sorted;

@@ -81,6 +81,16 @@ void OpenGLRenderer::setStencilBuffer(int bufferComparison, int refValue, int ma
 	glStencilFunc(stencilComparisonType, refValue, mask);
 }
 
+void OpenGLRenderer::setActiveTexture(int channel, int offset)
+{
+	GLenum texChannel{};
+	switch (channel)
+	{
+		case TEX_CHANNEL0:		texChannel = GL_TEXTURE0 + offset;	break;
+	}
+
+	glActiveTexture(texChannel);
+}
 
 void OpenGLRenderer::drawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
 {
@@ -90,4 +100,14 @@ void OpenGLRenderer::drawIndexed(const std::shared_ptr<VertexArray>& vertexArray
 void OpenGLRenderer::drawTriangles(const std::shared_ptr<VertexArray>& vertexArray)
 {
 	glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
+void OpenGLRenderer::drawInstancedTriangles(const std::shared_ptr<VertexArray>& vertexArray, int instanceCount)
+{
+	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, instanceCount);
+}
+
+void OpenGLRenderer::drawInstanced(const std::shared_ptr<VertexArray>& vertexArray, int instanceCount)
+{
+	glDrawElementsInstanced(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0, instanceCount);
 }

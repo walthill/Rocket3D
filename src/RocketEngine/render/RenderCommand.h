@@ -41,6 +41,11 @@ class RenderCommand
 			spRendererAPI->setStencilMask(mask);
 		}
 
+		inline static void setActiveTexture(int channel, int offset = 0)
+		{
+			spRendererAPI->setActiveTexture(channel, offset);
+		}
+
 		inline static void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
 		{
 			spRendererAPI->drawIndexed(vertexArray);
@@ -49,6 +54,15 @@ class RenderCommand
 		inline static void drawTriangles(const std::shared_ptr<VertexArray>& vertexArray)
 		{
 			spRendererAPI->drawTriangles(vertexArray);
+		}
+
+		inline static void drawInstancedTriangles(const std::shared_ptr<VertexArray>& vertexArray, int instanceCount)
+		{
+			spRendererAPI->drawInstancedTriangles(vertexArray, instanceCount);
+		}
+		inline static void drawInstanced(const std::shared_ptr<VertexArray>& vertexArray, int instanceCount)
+		{
+			spRendererAPI->drawInstanced(vertexArray, instanceCount);
 		}
 
 	private:

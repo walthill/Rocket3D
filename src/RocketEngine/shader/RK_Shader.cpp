@@ -5,6 +5,7 @@
 #include <sstream>
 #include "../logging/RK_Log.h"
 
+//TODO: abstract shader API calls
 
 RK_Shader::RK_Shader(std::string vertexPath, std::string fragmentPath)
 {
@@ -170,6 +171,12 @@ void RK_Shader::setVec3(const std::string& name, const rkm::Vector3& value)
 {
 	rk_uniformLocation location = getUniformLocation(name);
 	glUniform3fv(location, MODIFY_SINGLE_OBJECT, value.toArray());
+}
+
+void RK_Shader::setVec2(const std::string& name, const rkm::Vector2& value)
+{
+	rk_uniformLocation location = getUniformLocation(name);
+	glUniform2fv(location, MODIFY_SINGLE_OBJECT, value.toArray());
 }
 
 rk_uniformLocation RK_Shader::getUniformLocation(std::string name) const

@@ -28,6 +28,7 @@ namespace rkm {
 	class Mat4
 	{
 		public:
+			Mat4() {};
 			Mat4(float arr[16]);
 			// initializes values on the matrix's diagonal
 			Mat4(float val);
@@ -44,6 +45,8 @@ namespace rkm {
 			static Mat4 rotate(Mat4 matrix, float angle, Vector3 rotationAxis);
 			static Mat4 translate(Mat4 matrix, const Vector3& translationVec);
 			static Mat4 invert(const Mat4& matrixToInvert);
+
+			static Mat4 columnMajor(const Mat4& matrix);
 
 			//Written with help from https://learnopengl.com/code_viewer.php?code=getting-started/camera-exercise2
 			static Mat4 lookAt(Vector3 pos, Vector3 target, Vector3 worldUp = Vector3::up);

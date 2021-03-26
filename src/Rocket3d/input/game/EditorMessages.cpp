@@ -8,9 +8,10 @@
 #include <rkm/Vector3.h>
 #include <core/GameObject.h>
 #include "../../../RocketEngine/component/TransformComponent.h"
-
+#include <shader/ShaderManager.h>
 #include <core/Raycast.h>
-#include <logging/RK_Log.h>
+#include <component/MeshComponent.h>
+#include <core/GameObjectManager.h>
 
 /*
 ===========================================================
@@ -48,7 +49,7 @@ void EditorKeyDown::process(float deltaTime)
 			{
 				//TEMP - OBJ CREATION TEST
 				TransformData t = { rkm::Vector3(0.0f, 2.1f, -3.0f), rkm::Vector3::one * 0.5f, rkm::Vector3::up, 45.0f };
-				MeshComponentData meshData = { "cube", STANDARD_SHADER_KEY, pGameEditor->getRocketEngine()->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY) };
+				MeshComponentData meshData = { "cube.obj", STANDARD_SHADER_KEY, pGameEditor->getRocketEngine()->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY) };
 
 				obj = pGameEditor->getRocketEngine()->getGameObjectManager()->createGameObject(t, meshData);
 				id = obj->getId();

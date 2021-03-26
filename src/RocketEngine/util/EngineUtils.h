@@ -28,6 +28,8 @@
 #include "../logging/RK_Log.h"
 
 typedef unsigned int uint32;
+typedef uint32 ComponentId;
+typedef uint32 GameObjectId;
 typedef std::string ShaderKey;
 const double FRAME_TIME_60FPS = 16.7;
 const double FRAME_TIME_30FPS = 33.3;
