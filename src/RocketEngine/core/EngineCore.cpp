@@ -58,7 +58,13 @@ void EngineCore::initLighting()
 	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	mpShaderManager->setShaderInt("material.diffuse", 0);
 	mpShaderManager->setShaderInt("material.specular", 1);
-	mpShaderManager->setShaderFloat("material.shininess", 32.0f);
+	mpShaderManager->setShaderFloat("material.shininess", 1);
+
+
+	mpShaderManager->useShaderByKey("litTexture");
+	mpShaderManager->setShaderInt("material.diffuse", 0);
+	mpShaderManager->setShaderInt("material.specular", 1);
+	mpShaderManager->setShaderFloat("material.shininess", 1);
 } 
 
 
@@ -119,14 +125,14 @@ bool EngineCore::initialize()
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 	};
 	float planeVertices[] = {
-		// positions          // texture Coords 
-		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
-		-5.0f, -0.5f,  5.0f,  0.0f, 0.0f,
-		-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
+		// positions            // normals         // texcoords
+		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+		-10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
 
-		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
-		-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
-		 5.0f, -0.5f, -5.0f,  2.0f, 2.0f
+		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+		 10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,  10.0f, 10.0f
 	};
 	float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
 	   // positions   // texCoords
@@ -252,17 +258,6 @@ bool EngineCore::initialize()
 
 #pragma endregion
 
-	int index = 0;
-	float offset = 0.1f;
-	for (int y = -10; y < 10; y += 2)
-	{
-		for (int x = -10; x < 10; x += 2)
-		{
-			float newX = (float)x / 10.0f + offset;
-			float newY = (float)y / 10.0f + offset;
-			translations[index++] = rkm::Vector2(newX, newY);
-		}
-	}
 
 	std::shared_ptr<IndexBuffer> mPlaneIB;
 	std::shared_ptr<VertexBuffer> mQuadVB, mInstancedQuadVB, mInstancingVB, mPlaneVB, mSkyboxVB, mCubeVB, mGrassVB;
@@ -276,39 +271,57 @@ bool EngineCore::initialize()
 		{ ShaderDataType::Float3, "aPos" },
 		{ ShaderDataType::Float2, "aTexCoords" }
 	};
+	BufferLayout planeLayout = {
+		{ ShaderDataType::Float3, "aPos" },
+		{ ShaderDataType::Float3, "aNormal" },
+		{ ShaderDataType::Float2, "aTexCoords" }
+	};
 
 	//store buffer
 	mQuadVB->setLayout(layout);
 	//add buffer
 	mQuadVA->addVertexBuffer(mQuadVB);
+	mQuadVA->processVertexBuffers();
+
+
+	mPlaneVA.reset(VertexArray::create());
+	mPlaneVB.reset(VertexBuffer::create(planeVertices, sizeof(planeVertices)));
+	mPlaneVB->setLayout(planeLayout);
+	mPlaneVA->addVertexBuffer(mPlaneVB);
+	mPlaneVA->processVertexBuffers();
+	mFloorTex.reset(Texture2D::create("../../assets/textures/wood.png"));
 
 	//Render texture init
 	mGameRenderTex.reset(FrameBuffer::create(mAppWindowWidth, mAppWindowHeight, 4));
 	mEditorRenderTex.reset(FrameBuffer::create(mAppWindowWidth, mAppWindowHeight, 4));
 
 	mpGameCam = new Camera(rkm::Vector3(0.0f, 0.0f, 3.0f));
-	mpEditorCam = new Camera(rkm::Vector3(-1.5f, -0.5f, 2.0f));
+	mpEditorCam = new Camera(rkm::Vector3(-.5f, 5.0f, 2.0f), rkm::Vector3::up, -88, -55);
 
 	mpShaderManager = new ShaderManager();
 
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
 	//mpShaderManager->addShader(reflectiveSkyboxShaderId, new RK_Shader("vSkyboxReflective.glsl", "fSkyboxReflective.glsl"));
 	//mpShaderManager->addShader("refractionShader", new RK_Shader("vSkyboxReflective.glsl", "fSkyboxRefraction.glsl"));
+	mpShaderManager->addShader("litTexture", new RK_Shader("vBasicTexture.glsl", "fLitTexture.glsl"));
 	mpShaderManager->addShader("ts", new RK_Shader("vFrameBuffer.glsl", "fFrameBuffer.glsl"));
 	mpShaderManager->addShader("ims", new RK_Shader("vInstancedMesh.glsl", "fFrameBuffer.glsl"));
 	//mpShaderManager->addShader("basicTexture", new RK_Shader("vFrameBuffer.glsl", "fTransparentTexture.glsl"));
 	//mpShaderManager->addShader("stencil", new RK_Shader("vFrameBuffer.glsl", "fStencilBuffer.glsl"));
 	mpShaderManager->addShader("framebuffer", new RK_Shader("vFrameBufferScreen.glsl", "fFrameBufferScreen.glsl"));
-	//mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
+	mpShaderManager->addShader(emitterShaderId, new RK_Shader("vLamp.glsl", "fLamp.glsl"));
 	mpShaderManager->addShader(textShaderId, new RK_Shader("vTextRender.glsl", "fTextRender.glsl"));
 	mpShaderManager->addShader(skyboxShaderId, new RK_Shader("vSkybox.glsl", "fSkybox.glsl"));
 	//mpShaderManager->addShader("instanced", new RK_Shader("vSingleColorInstanceArray.glsl", "fSingleColor.glsl"));
 
-	//initLighting();
+	initLighting();
 
 
 	mpGameObjectManager = new GameObjectManager(MAX_NUM_OBJECTS);
-	mpComponentManager = new ComponentManager(MAX_NUM_COMPONENETS, mpShaderManager, STANDARD_SHADER_KEY);
+	mpComponentManager = new ComponentManager(MAX_NUM_COMPONENETS, mpShaderManager, "litTexture");
+
+	mpShaderManager->useShaderByKey("litTexture");
+	mpShaderManager->setShaderInt("texture1", 0);
 
 	/*textObj.reset(Text::create("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId)));
 	TextData data = { "This is sample text", Color(127, 204, 51), rkm::Vector2(25.0f, 25.0f), 1.0f };
@@ -360,22 +373,32 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 		fov = rkm::degToRad(mpGameCam->getFov());
 		view = mpGameCam->getViewMatrix();
 	}
-	else if(screenType == EDITOR_VIEW)
+	else if (screenType == EDITOR_VIEW)
 	{
 		fov = rkm::degToRad(mpEditorCam->getFov());
 		view = mpEditorCam->getViewMatrix();
 	}
 
-	mpShaderManager->useShaderByKey(reflectiveSkyboxShaderId);
+//	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	proj = rkm::MatProj::perspective(fov, (float)app->getAppWindow()->getWidth() / (float)app->getAppWindow()->getHeight(), 0.1f, 1000.0f);
-	screenType == GAME_VIEW ? mpGameCam->storePerspectiveMatrix(proj)	: mpEditorCam->storePerspectiveMatrix(proj);
+	screenType == GAME_VIEW ? mpGameCam->storePerspectiveMatrix(proj) : mpEditorCam->storePerspectiveMatrix(proj);
 
-	mpShaderManager->useShaderByKey("ts");
+	mpWindowHandle->disableWindowFlags(CULL_FACE);
+	mpShaderManager->useShaderByKey("litTexture");
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
+	mpShaderManager->setShaderVec3("viewPos", *mpEditorCam->getPosition());
+	model = rkm::Mat4::scale(model, rkm::Vector3(1,1,-1));
+	model = rkm::Mat4::translate(model, rkm::Vector3(0,-1,0));
+	mpShaderManager->setShaderMat4("model", model);
 
 
-	mpShaderManager->useShaderByKey("ims");
+	mFloorTex->bind();
+	RenderCore::submit(mPlaneVA);
+	mpWindowHandle->enableWindowFlags(CULL_FACE);
+
+
+	mpShaderManager->useShaderByKey("emitter");
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
 }
@@ -383,7 +406,7 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 
 void EngineCore::beginRender(int screenType)
 {
-	RenderCommand::clearColor(Color::grey);
+	RenderCommand::clearColor(Color::black);
 	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER | Renderer::DEPTH_BUFFER | Renderer::STENCIL_BUFFER);
 	RenderCore::beginScene();	//placeholder for now will take data on camera, lighting, etc
 
@@ -414,7 +437,7 @@ void EngineCore::prepFrambuffer(int screenType)
 
 	//rk_blue 102,153,153
 	//rk_orange 224,172,51
-	RenderCommand::clearColor(Color::grey);
+	RenderCommand::clearColor(Color::black);
 	RenderCommand::clearBuffer(Renderer::COLOR_BUFFER | Renderer::DEPTH_BUFFER);
 	mpWindowHandle->enableWindowFlags(DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
 }

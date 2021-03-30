@@ -318,5 +318,7 @@
     <None Include="shader\glsl\vertex\vSingleColorInstanced.glsl" />
     <None Include="shader\glsl\vertex\vSingleColorInstanceArray.glsl" />
     <None Include="shader\glsl\vertex\vInstancedMesh.glsl" />
+    <None Include="shader\glsl\vertex\vBasicTexture.glsl" />
+    <None Include="shader\glsl\fragment\fLitTexture.glsl" />
   </ItemGroup>
 </Project>

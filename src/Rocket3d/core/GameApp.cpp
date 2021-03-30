@@ -50,51 +50,6 @@ bool GameApp::initialize()
 	//=========================================================================
 	//		Creating GameObjects
 	//=========================================================================
-
-	int amount = 1500;
-	rkm::Mat4* modelMatrices = new rkm::Mat4[amount];
-	std::vector<TransformData> transforms;
-	srand(Application::getInstance()->getTime()); // initialize random seed	
-	float radius = 50.0;
-	float offset = 2.5f;
-	for (unsigned int i = 0; i < amount; i++)
-	{
-		rkm::Mat4 model = rkm::Mat4::identity;
-		// translation: displace along circle with 'radius' in range [-offset, offset]
-		float angle = (float)i / (float)amount * 360.0f;
-		float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-		float x = sin(angle) * radius + displacement;
-		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-		float y = displacement * 0.4f; // keep height of field smaller compared to width of x and z
-		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-
-		float rotAngle = (rand() % 360);
-		rkm::Vector3 rotVec = rkm::Vector3(0.4f, 0.6f, 0.8f);
-		model = rkm::Mat4::rotate(model, rotAngle, rotVec);
-
-		float scale = (rand() % 20) / 100.0f + 0.05;
-		rkm::Vector3 scaleVec = rkm::Vector3(scale, scale, scale);
-		model = rkm::Mat4::scale(model, scaleVec);
-
-		float z = cos(angle) * radius + displacement;
-		rkm::Vector3 posVec = rkm::Vector3(x, y, z);
-		model = rkm::Mat4::translate(model, posVec);
-
-		modelMatrices[i] = rkm::Mat4::columnMajor(model);
-		transforms.push_back({ posVec, scaleVec, rotVec, rotAngle });
-	};
-
-	MeshComponentData planetMeshData = { "planet.obj", "ts", mpRocketEngine->getShaderManager()->getShaderByKey("ts") };
-	TransformData t = { rkm::Vector3(0, 1, -3), rkm::Vector3::one, rkm::Vector3::up, 45.0f };
-
-	mpRocketEngine->getGameObjectManager()->createGameObject(t, planetMeshData);// , matData);
-
-	MeshComponentData asteroidMeshData = { "rock.obj", "ims", mpRocketEngine->getShaderManager()->getShaderByKey("ims"), amount, modelMatrices };
-	for (size_t i = 0; i < amount; i++)
-	{
-		mpRocketEngine->getGameObjectManager()->createGameObject(transforms[i], asteroidMeshData);
-	}
-
 	
 	//MeshComponentData meshData = { "cube", STANDARD_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY) };
 	//MeshComponentData meshData = {"cube.obj", STANDARD_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(STANDARD_SHADER_KEY)};
@@ -103,23 +58,22 @@ bool GameApp::initialize()
 
 
 	//Lighting GameObjects
-/*	TransformData t2 = { rkm::Vector3(1.5f,  -1.5f, -2.5f), rkm::Vector3::one * 0.1f, rkm::Vector3::up, 0 };
+	TransformData t2 = { rkm::Vector3(1.5f,  -1.5f, -2.5f), rkm::Vector3::one * 0.1f, rkm::Vector3::up, 0 };
 
 	MeshComponentData lightMeshData = { "cube.obj", EMITTER_SHADER_KEY, mpRocketEngine->getShaderManager()->getShaderByKey(EMITTER_SHADER_KEY) };
 	
 	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f;
 
 	//TODO: have these values stored as Color objects
-	rkm::Vector3	ambient = rkm::Vector3(0.075f, 0.075f, 0.075f),
-			diffuse = rkm::Vector3(0.8f, 0.8f, 0.8f),
+	rkm::Vector3	ambient = rkm::Vector3(0.000f, 0.000f, 0.000f),
+			diffuse = rkm::Vector3(1.8f, 1.8f, 1.8f),
 			specular = rkm::Vector3(0.5f, 0.5f, 0.5f);
 	rkm::Vector3* pointLightPositions;
 	
 	pointLightPositions = new rkm::Vector3[4]{
-		rkm::Vector3(0.7f,  2.2f,  2.0f),
-		rkm::Vector3(2.3f, -1.3f, -4.0f),
-		rkm::Vector3(-4.0f,  4.0f, -12.0f),
-		rkm::Vector3(0.0f,  1.0f, -1.0f)
+		rkm::Vector3(0.0f,  0.0f,  2.0f),
+		rkm::Vector3(2.3f,	1.5f, -4.0f),
+		rkm::Vector3(0.7f,  1.5f,  2.0f)
 	};
 
 	BaseLightData baseLightData = { ambient, diffuse, specular };
@@ -146,7 +100,7 @@ bool GameApp::initialize()
 	spotData.mpCamHandle = mpRocketEngine->getGameCamera();
 
 	//Point lights
-	for (size_t i = 0; i < 4; i++)
+	for (size_t i = 0; i < 1; i++)
 	{
 		t2.position = pointLightPositions[i];
 		GameObject* pointLight = mpRocketEngine->getGameObjectManager()->createGameObject(t2, lightMeshData);
@@ -155,19 +109,19 @@ bool GameApp::initialize()
 	}
 
 	//Directional light
-	GameObject* dirLight = mpRocketEngine->getGameObjectManager()->createGameObject(t2, lightMeshData);
-	mpRocketEngine->getGameObjectManager()->addDirectionalLight(dirLight->getId(), dirData);
+	//GameObject* dirLight = mpRocketEngine->getGameObjectManager()->createGameObject(t2, lightMeshData);
+	//mpRocketEngine->getGameObjectManager()->addDirectionalLight(dirLight->getId(), dirData);
 
 	//Spotlight light
-	GameObject* spotLight = mpRocketEngine->getGameObjectManager()->createGameObject();
-	mpRocketEngine->getGameObjectManager()->addSpotLight(spotLight->getId(), spotData);*/
+	//GameObject* spotLight = mpRocketEngine->getGameObjectManager()->createGameObject();
+	//mpRocketEngine->getGameObjectManager()->addSpotLight(spotLight->getId(), spotData);
 	
 	//=========================================================================
 
 	pPerformanceTracker->stopTracking(mINIT_TRACKER_NAME);
 	RK_INFO_ALL("Time to init: " + std::to_string(pPerformanceTracker->getElapsedTime(mINIT_TRACKER_NAME)) + "ms\n");
 	
-//	delete[] pointLightPositions;
+	delete[] pointLightPositions;
 	delete pPerformanceTracker;
 
 	mpAppHandle = Application::getInstance();
