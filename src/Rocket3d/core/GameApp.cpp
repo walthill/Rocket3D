@@ -99,10 +99,11 @@ bool GameApp::initialize()
 	spotData.mOuterCutoff = cos(rkm::degToRad(17.5f));
 	spotData.mpCamHandle = mpRocketEngine->getGameCamera();
 
+	//TODO: fix z-axis for gameobjects to match shader Z axis??
 	//Point lights
 	for (size_t i = 0; i < 1; i++)
 	{
-		t2.position = pointLightPositions[i];
+		t2.position = rkm::Vector3(pointLightPositions[i].getX(), pointLightPositions[i].getY(), -pointLightPositions[i].getZ());
 		GameObject* pointLight = mpRocketEngine->getGameObjectManager()->createGameObject(t2, lightMeshData);
 		pointLightData.mPosition = pointLightPositions[i];
 		mpRocketEngine->getGameObjectManager()->addPointLight(pointLight->getId(), pointLightData);
