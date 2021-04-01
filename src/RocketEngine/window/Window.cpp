@@ -100,6 +100,10 @@ void Window::enableWindowFlags(int settingsToEnable)
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
+	if (settingsToEnable & GAMMA_CORRECT)
+	{
+		glEnable(GL_FRAMEBUFFER_SRGB);
+	}
 }
 
 void Window::disableWindowFlags(int settingsToDisable)
@@ -114,6 +118,8 @@ void Window::disableWindowFlags(int settingsToDisable)
 		glDisable(GL_CULL_FACE);
 	if (settingsToDisable & BLEND)
 		glDisable(GL_BLEND);
+	if (settingsToDisable & GAMMA_CORRECT)
+		glDisable(GL_FRAMEBUFFER_SRGB);
 }
 
 void Window::setViewport(int x, int y)

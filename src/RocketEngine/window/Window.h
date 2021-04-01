@@ -28,7 +28,7 @@ struct GLFWwindow;
 
 enum WindowDrawMode { WIREFRAME = 1, VERTICES, FILL };
 enum WindowDrawFace { FRONT = 1, BACK, FRONT_AND_BACK };
-enum WindowCapabilityFlags { AA_MULTISAMPLE = 1, DEPTH_TEST = 2, STENCIL_TEST = 4, CULL_FACE = 8, BLEND = 16};
+enum WindowCapabilityFlags { AA_MULTISAMPLE = 1, DEPTH_TEST = 2, STENCIL_TEST = 4, CULL_FACE = 8, BLEND = 16, GAMMA_CORRECT = 32};
 
 //TODO: move window flags and draw mode code into render command
 
