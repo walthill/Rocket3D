@@ -321,5 +321,6 @@
     <None Include="shader\glsl\vertex\vBasicTexture.glsl" />
     <None Include="shader\glsl\fragment\fLitTexture.glsl" />
     <None Include="shader\glsl\fragment\fBlinnPhongTest.glsl" />
+    <None Include="shader\glsl\fragment\fGammaTest.glsl" />
   </ItemGroup>
 </Project>

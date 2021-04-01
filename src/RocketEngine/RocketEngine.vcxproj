@@ -111,6 +111,7 @@
     <None Include="shader\glsl\fragment\fDirectionalLight.glsl" />
     <None Include="shader\glsl\fragment\fFrameBuffer.glsl" />
     <None Include="shader\glsl\fragment\fFrameBufferScreen.glsl" />
+    <None Include="shader\glsl\fragment\fGammaTest.glsl" />
     <None Include="shader\glsl\fragment\fLamp.glsl" />
     <None Include="shader\glsl\fragment\fPointLight.glsl" />
     <None Include="shader\glsl\fragment\fLighting.glsl" />

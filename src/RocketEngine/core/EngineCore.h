@@ -134,7 +134,7 @@ class EngineCore : public rkutil::Trackable
 		unsigned int floorTexture;
 		unsigned int planeVAO, planeVBO;
 
-		bool isBlinnLighting = false;
+		bool isBlinnLighting = false, isGammaCorrected = false;
 
 		// screen quad VAO
 		unsigned int quadVAO, quadVBO;

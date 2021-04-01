@@ -1,6 +1,7 @@
 #include "OpenGLTexture.h"
 #include <glad/glad.h>
 #include <stb_image.h>
+#include "../../Renderer.h"
 
 const int OpenGLTexture2D::BORDER_DEFAULT = 0;
 
@@ -23,11 +24,23 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path, int type, int sWrapPar
 
 	GLenum format = GL_RGB;
 	if (channels == 1)
+	{
 		format = GL_RED;
+	}
 	else if (channels == 3)
-		format = GL_RGB;
+	{		
+		if(type == Renderer::TextureType::DIFFUSE)
+			format = GL_SRGB;
+		else
+			format = GL_RGB;
+	}
 	else if (channels == 4)
-		format = GL_RGBA;
+	{
+		if (type == Renderer::TextureType::DIFFUSE)
+			format = GL_SRGB_ALPHA;
+		else
+			format = GL_RGBA;
+	}
 
 	glTexImage2D(GL_TEXTURE_2D, detailReductionLevel, format, mWidth, mHeight, BORDER_DEFAULT, format, GL_UNSIGNED_BYTE, data);
 

@@ -8,7 +8,6 @@ struct Material {
 
 struct PointLight {
 	vec3 position, ambient, diffuse, specular;
-	float constant, linear, quadratic;
 };
 #define MAX_NUM_POINT_LIGHTS 30
 
@@ -23,6 +22,7 @@ uniform Material material;
 uniform PointLight pointLights[MAX_NUM_POINT_LIGHTS];
 uniform sampler2D texture1;
 uniform float gamma; 
+uniform bool gammaCorrected; 
 
 vec3 BlinnPhong(vec3 normal, vec3 fragPos, vec3 lightPos, vec3 lightColor)
 {
@@ -40,7 +40,9 @@ vec3 BlinnPhong(vec3 normal, vec3 fragPos, vec3 lightPos, vec3 lightColor)
     // simple attenuation
     float max_distance = 1.5;
     float dist = length(lightPos - fragPos);
-    float attenuation = 1.0 / dist * dist;
+
+    //NOTE:  no need for the constant linear and quadratic factors anymore
+    float attenuation = 1.0 / (gammaCorrected ? dist * dist : dist);
     
     diffuse *= attenuation;
     specular *= attenuation;
@@ -54,13 +56,12 @@ void main()
 	vec3 color = texture(texture1, TexCoords).rgb;
     vec3 lighting = vec3(0.0);
 
-    for(int i = 0; i < 4; ++i)
-        lighting += BlinnPhong(normalize(Normal), FragPos, pointLights[i].position, pointLights[i].ambient);
+    lighting += BlinnPhong(normalize(Normal), FragPos, pointLights[0].position, pointLights[0].ambient);
 
     color *= lighting;
-    
-    //gamma correction
-    color = pow(color, vec3(1.0/gamma));
+
+    if(gammaCorrected)
+        color = pow(color, vec3(1.0/gamma));
 
     FragColor = vec4(color, 1.0);
 };

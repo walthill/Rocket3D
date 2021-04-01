@@ -64,7 +64,7 @@ void EngineCore::initLighting()
 	mpShaderManager->useShaderByKey("litTexture");
 	mpShaderManager->setShaderInt("material.diffuse", 0);
 	mpShaderManager->setShaderInt("material.specular", 1);
-	mpShaderManager->setShaderFloat("material.shininess", 8);
+	mpShaderManager->setShaderFloat("material.shininess", 16);
 } 
 
 
@@ -303,7 +303,7 @@ bool EngineCore::initialize()
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
 	//mpShaderManager->addShader(reflectiveSkyboxShaderId, new RK_Shader("vSkyboxReflective.glsl", "fSkyboxReflective.glsl"));
 	//mpShaderManager->addShader("refractionShader", new RK_Shader("vSkyboxReflective.glsl", "fSkyboxRefraction.glsl"));
-	mpShaderManager->addShader("litTexture", new RK_Shader("vBasicTexture.glsl", "fBlinnPhongTest.glsl"));
+	mpShaderManager->addShader("litTexture", new RK_Shader("vBasicTexture.glsl", "fLitTexture.glsl"));
 	mpShaderManager->addShader("ts", new RK_Shader("vFrameBuffer.glsl", "fFrameBuffer.glsl"));
 	mpShaderManager->addShader("ims", new RK_Shader("vInstancedMesh.glsl", "fFrameBuffer.glsl"));
 	//mpShaderManager->addShader("basicTexture", new RK_Shader("vFrameBuffer.glsl", "fTransparentTexture.glsl"));
@@ -321,7 +321,9 @@ bool EngineCore::initialize()
 	mpComponentManager = new ComponentManager(MAX_NUM_COMPONENETS, mpShaderManager, "litTexture");
 
 	mpShaderManager->useShaderByKey("litTexture");
-	mpShaderManager->setShaderBool("blinn", isBlinnLighting);
+	//	mpShaderManager->setShaderBool("blinn", isBlinnLighting);
+	//mpShaderManager->setShaderBool("gammaCorrected", isGammaCorrected);
+	mpShaderManager->setShaderFloat("gamma", 2.2);
 	mpShaderManager->setShaderInt("texture1", 0);
 
 	/*textObj.reset(Text::create("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId)));
@@ -388,8 +390,9 @@ void EngineCore::processViewProjectionMatrices(int screenType)
 	mpShaderManager->useShaderByKey("litTexture");
 	mpShaderManager->setShaderMat4("projection", proj);
 	mpShaderManager->setShaderMat4("view", view);
+
 	mpShaderManager->setShaderVec3("viewPos", *mpEditorCam->getPosition());
-	model = rkm::Mat4::scale(model, rkm::Vector3(1,1,-1));
+	model = rkm::Mat4::scale(model, rkm::Vector3(1,1,1));
 	model = rkm::Mat4::translate(model, rkm::Vector3(0,-1,0));
 	mpShaderManager->setShaderMat4("model", model);
 
@@ -557,8 +560,11 @@ void EngineCore::toggleWireframe(bool showWireframe)
 
 void EngineCore::toggleLightingType()
 {
-	RK_LOG_C("lighting");
 	mpShaderManager->useShaderByKey("litTexture");
-	mpShaderManager->setShaderBool("blinn", !isBlinnLighting);
-	isBlinnLighting = !isBlinnLighting;
+	mpShaderManager->setShaderBool("gammaCorrected", !isGammaCorrected);
+	isGammaCorrected = !isGammaCorrected;
+	RK_LOG_C(isGammaCorrected ? "Gamma enabled" : "Gamma disabled");
+
+	//mpShaderManager->setShaderBool("blinn", !isBlinnLighting);
+	//isBlinnLighting = !isBlinnLighting;
 }

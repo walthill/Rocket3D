@@ -65,15 +65,16 @@ bool GameApp::initialize()
 	float constant = 1.0f, linear = 0.09f, quadratic = 0.032f;
 
 	//TODO: have these values stored as Color objects
-	rkm::Vector3	ambient = rkm::Vector3(0.000f, 0.000f, 0.000f),
-			diffuse = rkm::Vector3(1.8f, 1.8f, 1.8f),
+	rkm::Vector3	ambient = rkm::Vector3(0.1f, 0.1f, 0.1f),
+			diffuse = rkm::Vector3(0.5f, 0.5f, 0.5f),
 			specular = rkm::Vector3(0.5f, 0.5f, 0.5f);
 	rkm::Vector3* pointLightPositions;
 	
 	pointLightPositions = new rkm::Vector3[4]{
-		rkm::Vector3(0.0f,  0.0f,  2.0f),
-		rkm::Vector3(2.3f,	1.5f, -4.0f),
-		rkm::Vector3(0.7f,  1.5f,  2.0f)
+		rkm::Vector3(-3.0f,  0.0f,  -2.0f),
+		rkm::Vector3(-1.0f,  0.0f,  -2.0f),
+		rkm::Vector3(1.0f,  0.0f,  -2.0f),
+		rkm::Vector3(3.0f,  0.0f,  -2.0f)
 	};
 
 	BaseLightData baseLightData = { ambient, diffuse, specular };
@@ -99,11 +100,10 @@ bool GameApp::initialize()
 	spotData.mOuterCutoff = cos(rkm::degToRad(17.5f));
 	spotData.mpCamHandle = mpRocketEngine->getGameCamera();
 
-	//TODO: fix z-axis for gameobjects to match shader Z axis??
 	//Point lights
-	for (size_t i = 0; i < 1; i++)
+	for (size_t i = 0; i < 4; i++)
 	{
-		t2.position = rkm::Vector3(pointLightPositions[i].getX(), pointLightPositions[i].getY(), -pointLightPositions[i].getZ());
+		t2.position = rkm::Vector3(pointLightPositions[i].getX(), pointLightPositions[i].getY(), pointLightPositions[i].getZ());
 		GameObject* pointLight = mpRocketEngine->getGameObjectManager()->createGameObject(t2, lightMeshData);
 		pointLightData.mPosition = pointLightPositions[i];
 		mpRocketEngine->getGameObjectManager()->addPointLight(pointLight->getId(), pointLightData);
