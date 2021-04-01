@@ -169,6 +169,11 @@ void EditorKeyDown::process(float deltaTime)
 		{
 			pGameEditor->setSceneToWireFrame();
 		}
+		if (mKeyCode == KEY_B)
+		{
+			EngineCore* pEngine = pGameEditor->getRocketEngine();
+			pEngine->toggleLightingType();
+		}
 	}
 }
 

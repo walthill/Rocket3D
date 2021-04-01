@@ -121,6 +121,8 @@ class EngineCore : public rkutil::Trackable
 		// Time between current frame and last frame
 		float deltaTime = 0.0f;	
 
+		void toggleLightingType();
+
 	private:
 		const std::string mMODEL_PATH = "../../assets/models/";
 		const int MAX_NUM_OBJECTS = 10000, MAX_NUM_COMPONENETS = 20000, GAME_SCREEN = 0, EDITOR_SCREEN = 1;
@@ -131,6 +133,8 @@ class EngineCore : public rkutil::Trackable
 		unsigned int textureColorbuffer, textureColorbuffer2;
 		unsigned int floorTexture;
 		unsigned int planeVAO, planeVBO;
+
+		bool isBlinnLighting = false;
 
 		// screen quad VAO
 		unsigned int quadVAO, quadVBO;

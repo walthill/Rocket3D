@@ -35,7 +35,7 @@ uniform DirectionalLight dirLight;
 uniform PointLight pointLights[MAX_NUM_POINT_LIGHTS];
 uniform SpotLight spotLight;
 uniform sampler2D texture1;
-
+uniform bool blinn;
 
 
 void main()
@@ -43,21 +43,29 @@ void main()
 	vec3 color = texture(texture1, TexCoords).rgb;
     // ambient
     vec3 ambient = pointLights[0].ambient * color;
-
     // diffuse
     vec3 lightDir = normalize(pointLights[0].position - FragPos);
     
     vec3 normal = normalize(Normal);
     float diff = max(dot(lightDir, normal), 0.0);
     vec3 diffuse = diff * color;
-
-    // specular - Blinn-Phong
+    // specular
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 halfwayDir = normalize(lightDir + viewDir);
-
+    vec3 reflectDir = reflect(-lightDir, normal);
     float spec = 0.0;
-    spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess*2);
-    vec3 specular = vec3(0.3) * spec; // assuming bright white light color
+    vec3 specular = vec3(0);
+    
+    if(!blinn)
+    {
+        spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+        specular = vec3(0.3) * spec; // assuming bright white light color
+    }
+    else
+    {
+        spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess*2);
+        specular = vec3(0.3) * spec; // assuming bright white light color
+    }
     
     FragColor = vec4(ambient + diffuse + specular, 1.0);
 };

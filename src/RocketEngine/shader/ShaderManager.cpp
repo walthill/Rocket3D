@@ -54,7 +54,7 @@ void ShaderManager::useShaderByKey(const ShaderKey& key)
 {
 	if (key != mShaderInUse)
 	{
-		std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(key);
+		const auto& iter= mShaderList.find(key);
 
 		if (iter != mShaderList.end())
 		{
@@ -110,7 +110,7 @@ void ShaderManager::setShaderVec2(const std::string& vecName, const rkm::Vector2
 
 RK_Shader* ShaderManager::getShaderByKey(const ShaderKey& key)
 {
-	std::map<ShaderKey, RK_Shader*>::iterator iter = mShaderList.find(key);
+	const auto& iter = mShaderList.find(key);
 
 	if (iter != mShaderList.end())
 	{

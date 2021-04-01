@@ -58,13 +58,13 @@ void EngineCore::initLighting()
 	mpShaderManager->useShaderByKey(standardLightingShaderId);
 	mpShaderManager->setShaderInt("material.diffuse", 0);
 	mpShaderManager->setShaderInt("material.specular", 1);
-	mpShaderManager->setShaderFloat("material.shininess", 1);
+	mpShaderManager->setShaderFloat("material.shininess", 8);
 
 
 	mpShaderManager->useShaderByKey("litTexture");
 	mpShaderManager->setShaderInt("material.diffuse", 0);
 	mpShaderManager->setShaderInt("material.specular", 1);
-	mpShaderManager->setShaderFloat("material.shininess", 1);
+	mpShaderManager->setShaderFloat("material.shininess", 8);
 } 
 
 
@@ -303,7 +303,7 @@ bool EngineCore::initialize()
 	mpShaderManager->addShader(standardLightingShaderId, new RK_Shader("vLighting.glsl", "fLighting.glsl"));
 	//mpShaderManager->addShader(reflectiveSkyboxShaderId, new RK_Shader("vSkyboxReflective.glsl", "fSkyboxReflective.glsl"));
 	//mpShaderManager->addShader("refractionShader", new RK_Shader("vSkyboxReflective.glsl", "fSkyboxRefraction.glsl"));
-	mpShaderManager->addShader("litTexture", new RK_Shader("vBasicTexture.glsl", "fLitTexture.glsl"));
+	mpShaderManager->addShader("litTexture", new RK_Shader("vBasicTexture.glsl", "fBlinnPhongTest.glsl"));
 	mpShaderManager->addShader("ts", new RK_Shader("vFrameBuffer.glsl", "fFrameBuffer.glsl"));
 	mpShaderManager->addShader("ims", new RK_Shader("vInstancedMesh.glsl", "fFrameBuffer.glsl"));
 	//mpShaderManager->addShader("basicTexture", new RK_Shader("vFrameBuffer.glsl", "fTransparentTexture.glsl"));
@@ -321,6 +321,7 @@ bool EngineCore::initialize()
 	mpComponentManager = new ComponentManager(MAX_NUM_COMPONENETS, mpShaderManager, "litTexture");
 
 	mpShaderManager->useShaderByKey("litTexture");
+	mpShaderManager->setShaderBool("blinn", isBlinnLighting);
 	mpShaderManager->setShaderInt("texture1", 0);
 
 	/*textObj.reset(Text::create("calibri.ttf", mpShaderManager->getShaderByKey(textShaderId)));
@@ -552,4 +553,12 @@ void EngineCore::moveCameraBack()
 void EngineCore::toggleWireframe(bool showWireframe)
 {
 	mpWindowHandle->toggleWireframe(showWireframe);
+}
+
+void EngineCore::toggleLightingType()
+{
+	RK_LOG_C("lighting");
+	mpShaderManager->useShaderByKey("litTexture");
+	mpShaderManager->setShaderBool("blinn", !isBlinnLighting);
+	isBlinnLighting = !isBlinnLighting;
 }
